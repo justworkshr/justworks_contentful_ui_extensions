@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Core extensions CSS from Contentful. -->
+  <link rel="stylesheet" href="//contentful.github.io/ui-extensions-sdk/cf-extension.css">
+
+</head>
+<body>
+
+<!-- Extension DOM Elements -->
+<div class="cf-form-field">
+  <input type="color" class="colour-picker">
+  <input type="text" class="cf-form-input draft-text">
+  <div class="default-cp-color" data-value="#515151">
+    <label>Black</label>
+    <div style="background-color: #515151;">
+
+    </div>
+  </div>
+  <div class="default-cp-color" data-value="#ffffff">
+    <label>White</label>
+    <div style="background-color: #ffffff;">
+
+    </div>
+  </div>
+  <div class="default-cp-color" data-value="#8199A3">
+    <label>Concrete</label>
+    <div style="background-color: #8199A3;">
+
+    </div>
+  </div>
+  <div class="default-cp-color" data-value="#39B6E9">
+    <label>Cerulean</label>
+    <div style="background-color: #39B6E9;">
+
+    </div>
+  </div>
+  <div class="default-cp-color" data-value="#EC5453">
+    <label>Strawberry</label>
+    <div style="background-color: #EC5453;">
+
+    </div>
+  </div>
+  <div class="default-cp-color" data-value="#243F69">
+    <label>Navy</label>
+    <div style="background-color: #243F69;">
+
+    </div>
+  </div>
+</div>
+
+<!-- Contenful UI Extensions SDK API -->
+<script src="https://contentful.github.io/ui-extensions-sdk/cf-extension-api.js"></script>
+
+<style>
+  div.default-cp-color {
+    cursor: pointer;
+    display: inline-block;
+    min-width: 75px;
+    padding: 4px;
+  }
+
+  div.default-cp-color:hover div {
+    box-shadow: 1px 1px 2px 2px #8199A3;
+  }
+
+  div.default-cp-color label {
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  div.default-cp-color div {
+    border: 1px solid #515151;
+    height: 25px;
+    width: 25px;
+  }
+
+  input[type="color"] {
+    height: 50px;
+    width: 50px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+</style>
+
+<!-- Colour Picker UI Extension -->
+<script>
+
+  function cpExtension(extensionsApi) {
+
+    extensionsApi.window.startAutoResizer();
+
+    // Hex Colour RegExp
+    var hexColour = new RegExp(/^#(?:[0-9a-f]{3}){1,2}$/i);
+
+    // DOM elements.
+    var draftTextEl = document.querySelector('.draft-text');
+    var colourPickerEl = document.querySelector('.colour-picker');
+    var defaultColorEls = document.querySelectorAll('.default-cp-color')
+    // Disable the input as we need to wait for an async call to load the published entry.
+    draftTextEl.disabled = true;
+
+    var entry = extensionsApi.entry;
+    var field = extensionsApi.field;
+
+    // Currently published version of entry.
+    var publishedVersion = extensionsApi.entry.getSys().publishedVersion;
+    var publishedValue;
+
+    // Current locale
+    var fieldLocale = extensionsApi.field.locale;
+    var fieldId = extensionsApi.field.id;
+
+    // Callbacks for changes on the field or the entry.sys object.
+    // Detach functions will be used to clean up the callbacks.
+    var detachValueChanged = field.onValueChanged(onValueChanged);
+    var detachSysChanged = entry.onSysChanged(onSysChanged);
+
+    // Add in event listeners
+    window.addEventListener('onbeforeunload', onBeforeUnloadHandler);
+    draftTextEl.addEventListener('input', keyboardInputHandler);
+    colourPickerEl.addEventListener('change', updateField);
+    defaultColorEls.forEach( el => {
+      el.addEventListener('click', updateFieldFromButton)
+    })
+
+    // Check for published version
+    if (publishedVersion) {
+      // Load published value from CDA.
+      loadPublishedValue(entry.getSys().id)
+          .then(function (entries) {
+                console.log(JSON.stringify(entries))
+                publishedValue = entries.items[0].fields[fieldId][fieldLocale];
+                draftTextEl.disabled = false;
+                colourPickerEl.disabled = false;
+                renderColour();
+              }
+          )
+          .catch(function (error) {
+            console.log(error)
+          });
+    } else {
+        draftTextEl.disabled = false;
+        colourPickerEl.disabled = false;
+        renderColourOnly();
+    }
+
+    /**
+     * Event handler for keyboard input.
+     * @param event The event object.
+     */
+    function keyboardInputHandler(event) {
+      renderColour();
+    }
+
+
+    /**
+     * Event handler triggered before the window unloads.
+     * @param event The event object.
+     */
+    function onBeforeUnloadHandler(event) {
+      field.setValue(draftTextEl.value);
+      window.removeEventListener('onbeforeunload', onBeforeUnloadHandler);
+      draftTextEl.removeEventListener('input', keyboardInputHandler);
+      colourPickerEl.removeEventListener('change', updateField);
+      defaultColorEls.forEach( el => {
+        el.removeEventListener('click', updateFieldFromButton)
+      })
+      detachValueChanged();
+      detachSysChanged();
+    }
+
+
+    /**
+     * Gets the published value from the API.
+     * @param entryId The id of the entry to retrieve.
+     * @return Promise A Promise object of the call.
+     */
+    function loadPublishedValue(entryId) {
+      return extensionsApi.space.getPublishedEntries({'sys.id': entryId});
+    }
+
+    /**
+     * Calls the callback every time the value of the field is changed by some external event
+     * (e.g. when multiple editors are working on the same entry).
+     * @param val The newly changed value.
+     */
+    function onValueChanged(val) {
+      if (val) {
+        draftTextEl.value = val;
+      }
+    }
+
+    /**
+     * Calls the callback every time the value of the system object is changed
+     * @param sys The sys object of the entry.
+     */
+    function onSysChanged(sys) {
+      if (sys.publishedVersion && publishedVersion !== sys.publishedVersion) {
+        publishedValue = draftTextEl.value;
+        publishedVersion = sys.publishedVersion;
+        return renderColour();
+      }
+    }
+
+    /**
+     * Render a new colour in the colour input and update value
+     */
+    function renderColour() {
+        if (hexColour.test(draftTextEl.value)){
+          colourPickerEl.value = draftTextEl.value;
+        }
+        return field.setValue(draftTextEl.value);
+    }
+
+    /**
+     * Render a new colour in the colour input
+     */
+    function renderColourOnly() {
+        if (hexColour.test(draftTextEl.value)){
+          colourPickerEl.value = draftTextEl.value;
+        }
+    }
+
+    /**
+     * Update field value based on colour picker value
+     */
+    function updateField() {
+        draftTextEl.value = colourPickerEl.value;
+        return field.setValue(draftTextEl.value);
+    }
+
+    function updateFieldFromButton(e) {
+        var color = e.currentTarget.dataset.value
+        colourPickerEl.value = color
+        draftTextEl.value = color;
+        return field.setValue(draftTextEl.value);
+    }
+  }
+  window.contentfulExtension.init(cpExtension);
+</script>
+
+</body>
+</html>
