@@ -1,0 +1,6 @@
+{
+  "id": "deep_delete_sidebar",
+  "name": "deep_delete_sidebar",
+  "srcdoc": "./build/index.html",
+  "sidebar": true
+}

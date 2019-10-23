@@ -141,6 +141,7 @@ export class SidebarExtension extends React.Component {
           ['en-US']: references
         };
       } else {
+        // Assets, all other fields
         fields[key] = {
           ['en-US']: parsedValue
         };
