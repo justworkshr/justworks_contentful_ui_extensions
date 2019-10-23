@@ -99,7 +99,6 @@ export class SidebarExtension extends React.Component {
   };
 
   constructFields = async (entry, contentType, name) => {
-    console.log('hi');
     const fields = {};
     let multiReferenceCount = {};
     for (let [key, value] of Object.entries(entry.fields)) {
