@@ -1,6 +1,0 @@
-{
-  "id": "deep_copy_sidebar",
-  "name": "deep_copy_sidebar",
-  "srcdoc": "./build/index.html",
-  "sidebar": true
-}
