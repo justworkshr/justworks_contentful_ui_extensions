@@ -1,0 +1,6 @@
+{
+  "id": "deep_action_sidebar",
+  "name": "deep_action_sidebar",
+  "srcdoc": "./build/index.html",
+  "sidebar": true
+}
