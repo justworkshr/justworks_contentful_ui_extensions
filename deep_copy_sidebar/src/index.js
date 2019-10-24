@@ -119,7 +119,10 @@ export class SidebarExtension extends React.Component {
         fields[key] = {
           ['en-US']: this.constructLink(clonedEntry)
         };
-      } else if (value.type === 'Array' && value.items && value.items.type === 'Link') {
+      } else if (
+        (value.type === 'Array' && value.items && value.items.type === 'Link') ||
+        Array.isArray(value['en-US'])
+      ) {
         // Multi Reference
         const references = await Promise.all(
           parsedValue.map(async link => {
