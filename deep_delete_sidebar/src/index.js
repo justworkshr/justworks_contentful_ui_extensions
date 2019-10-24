@@ -85,49 +85,52 @@ export class SidebarExtension extends React.Component {
   };
 
   deleteAllLinkedEntriesBeforeSelf = async entry => {
-    for (let [key, value] of Object.entries(entry.fields)) {
-      let parsedValue = value['en-US'] || value._fieldLocales['en-US']._value;
+    await Promise.all(
+      Object.entries(entry.fields).map(async ([key, value]) => {
+        let parsedValue = value['en-US'] || value._fieldLocales['en-US']._value;
 
-      if (
-        parsedValue.sys &&
-        parsedValue.sys.type === 'Link' &&
-        parsedValue.sys.linkType === 'Entry'
-      ) {
-        // Single reference
-        const linkEntry = await this.getEntry(parsedValue.sys.id);
-        const entrySys = linkEntry.sys || linkEntry.getSys();
-        const linkedEntries = await this.props.sdk.space.getEntries({
-          links_to_entry: entrySys.id
-        });
-
-        console.log('linked: ', linkedEntries);
-        if (linkedEntries.total <= 1) {
-          await this.deleteAllLinkedEntriesBeforeSelf(linkEntry);
-        }
-      } else if (value.type === 'Array' && value.items && value.items.type === 'Link') {
-        // Multi Reference
-        await parsedValue.map(async link => {
-          const linkEntry = await this.getEntry(link.sys.id);
+        if (
+          parsedValue.sys &&
+          parsedValue.sys.type === 'Link' &&
+          parsedValue.sys.linkType === 'Entry'
+        ) {
+          // Single reference
+          const linkEntry = await this.getEntry(parsedValue.sys.id);
           const entrySys = linkEntry.sys || linkEntry.getSys();
           const linkedEntries = await this.props.sdk.space.getEntries({
             links_to_entry: entrySys.id
           });
 
-          console.log('linked: ', linkedEntries);
-          if (linkedEntries.total <= 1) {
+          if (linkedEntries.items && linkedEntries.items.length <= 1) {
             await this.deleteAllLinkedEntriesBeforeSelf(linkEntry);
           }
-        });
-      }
-    }
+        } else if (
+          (value.type === 'Array' && value.items && value.items.type === 'Link') ||
+          Array.isArray(value['en-US'])
+        ) {
+          // Multi Reference
+          await parsedValue.map(async link => {
+            const linkEntry = await this.getEntry(link.sys.id);
+            const entrySys = linkEntry.sys || linkEntry.getSys();
+            const linkedEntries = await this.props.sdk.space.getEntries({
+              links_to_entry: entrySys.id
+            });
+
+            if (linkedEntries.items && linkedEntries.items.length <= 1) {
+              await this.deleteAllLinkedEntriesBeforeSelf(linkEntry);
+            }
+          });
+        }
+      })
+    );
 
     const entrySys = entry.sys || entry.getSys();
     const linkedEntries = await this.props.sdk.space.getEntries({
       links_to_entry: entrySys.id
     });
 
-    console.log('linked bottom: ', linkedEntries);
-    if (linkedEntries.total <= 1) {
+    console.log('LINKS: ', linkedEntries);
+    if (linkedEntries.items && linkedEntries.items.length <= 1) {
       return await this.deleteEntry(entry);
     } else {
       return entry;
