@@ -165,7 +165,7 @@ export class SidebarExtension extends React.Component {
       const contentType = this.props.sdk.entry.getSys().contentType.sys.id;
       const entriesWithName = await this.props.sdk.space.getEntries({
         content_type: contentType,
-        'fields.internalName': name.trim()
+        'fields.name': name.trim()
       });
 
       if (entriesWithName.items && !entriesWithName.items.length) {
