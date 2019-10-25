@@ -77,7 +77,7 @@ export class SidebarExtension extends React.Component {
       width: 800,
       title: 'Preparing to Deep Publish...',
       message:
-        'Will publish all linked entries, even if linked elsewhere. Will NOT publish entries with errors in them. Will NOT publish this entry. '
+        'Will publish all linked entries, even if linked elsewhere. Will NOT publish entries with errors in them. Will NOT publish this entry. Please reload the page when the deep action is finished.'
     });
 
     if (confirm) {
@@ -97,7 +97,7 @@ export class SidebarExtension extends React.Component {
 
         const results = await publishAllEntries(this.props.sdk.space, resolvedEntries);
         if (!results.errors.length) {
-          this.props.sdk.notifier.success('All entries published!');
+          this.props.sdk.notifier.success('All entries published! Please reload the page.');
           this.props.sdk.navigator.openEntry(this.props.sdk.entry.getSys().id);
           this.resetState();
         } else {
@@ -116,7 +116,8 @@ export class SidebarExtension extends React.Component {
     const confirm = await this.props.sdk.dialogs.openConfirm({
       width: 800,
       title: 'Preparing to Deep Unpublish...',
-      message: 'Will unpublish this entry and all linked entries, unless they are linked elsewhere.'
+      message:
+        'Will unpublish this entry and all linked entries, unless they are linked elsewhere. Please reload the page when the deep action is finished.'
     });
 
     if (confirm) {
@@ -136,7 +137,7 @@ export class SidebarExtension extends React.Component {
 
         const results = await unpublishAllEntries(this.props.sdk.space, resolvedEntries);
         if (!results.errors.length) {
-          this.props.sdk.notifier.success('All entries unpublished!');
+          this.props.sdk.notifier.success('All entries unpublished! Please reload the page.');
           this.props.sdk.navigator.openEntry(this.props.sdk.entry.getSys().id);
           this.resetState();
         } else {
@@ -198,7 +199,7 @@ export class SidebarExtension extends React.Component {
       width: 800,
       title: 'Preparing to Deep Archive...',
       message:
-        'Deep archive will archive this entry and all linked entries, unless that entry is linked to other entries',
+        'Deep archive will archive this entry and all linked entries, unless that entry is linked to other entries. Please reload the page when the deep action is finished.',
       intent: 'positive'
     });
 
@@ -222,7 +223,7 @@ export class SidebarExtension extends React.Component {
         );
 
         if (!results.errors.length) {
-          this.props.sdk.notifier.success('All entries archived!');
+          this.props.sdk.notifier.success('All entries archived! Please reload the page.');
           this.props.sdk.navigator.openEntry(this.props.sdk.entry.getSys().id);
           this.resetState();
         } else {
@@ -238,7 +239,7 @@ export class SidebarExtension extends React.Component {
   };
 
   displayErrorDialog = async (message, results) => {
-    this.props.sdk.notifier.error('Completed with errors.');
+    this.props.sdk.notifier.error('Completed with errors. Please reload the page.');
     await this.props.sdk.dialogs.openAlert({
       title: 'Errors Found',
       message: `${message} Errors found:${results.errors.map((error, index) => {
@@ -276,9 +277,11 @@ export class SidebarExtension extends React.Component {
         }>
         <DropdownList>
           <DropdownListItem isTitle>Deep Actions</DropdownListItem>
-          <DropdownListItem onClick={this.onPublishButtonClick}>Semi-Deep Publish</DropdownListItem>
-          <DropdownListItem onClick={this.onCopyButtonClick}>Deep Copy</DropdownListItem>
+          <DropdownListItem onClick={this.onPublishButtonClick}>
+            Mostly-Deep Publish
+          </DropdownListItem>
           <DropdownListItem onClick={this.onUnpublishButtonClick}>Deep Unpublish</DropdownListItem>
+          <DropdownListItem onClick={this.onCopyButtonClick}>Deep Copy</DropdownListItem>
           <DropdownListItem onClick={this.onArchiveButtonClick}>Deep Archive</DropdownListItem>
         </DropdownList>
       </Dropdown>
