@@ -24,6 +24,7 @@ export const getResolvedEntries = async ({
       let parsedValue = value['en-US'] || value._fieldLocales['en-US']._value;
 
       if (
+        parsedValue &&
         parsedValue.sys &&
         parsedValue.sys.type === 'Link' &&
         parsedValue.sys.linkType === 'Entry'

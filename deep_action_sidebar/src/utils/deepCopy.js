@@ -19,6 +19,7 @@ const constructFields = async (space, entry, contentType, name) => {
         : value['en-US'] || value._fieldLocales['en-US']._value;
 
     if (
+      parsedValue &&
       parsedValue.sys &&
       parsedValue.sys.type === 'Link' &&
       parsedValue.sys.linkType === 'Entry'
