@@ -260,12 +260,11 @@ export class App extends React.Component {
     this.setState({
       draggingObject: undefined
     });
-
-    console.log(this.state.draggingObject, this.state.dragTargetObject);
   };
 
   onDragEnter = (e, roleKey, id) => {
     if ((this.state.draggingObject || {}).id === id) return null;
+    console.log(this.state.draggingObject, this.state.dragTargetObject);
     e.stopPropagation();
     e.preventDefault();
     this.setState({
@@ -312,11 +311,12 @@ export class App extends React.Component {
             <div className="entry-group" key={`group--${index}`}>
               <div className="entry-group__header-section">
                 <Heading>{groupKey}</Heading>
-                <Paragraph>({contentTypeGroups[groupKey].length})</Paragraph>
+                <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
               </div>
               <div className="entry-container">
-                {contentTypeGroups[groupKey].map((entry, index) => {
-                  const roleKey = this.getRoleKeyFromId(entry.sys.id);
+                {Object.keys(contentTypeGroups[groupKey]).map((roleKey, index) => {
+                  const entry = contentTypeGroups[groupKey][roleKey];
+
                   return (
                     <div
                       key={index}

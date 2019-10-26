@@ -24,15 +24,20 @@ export const constructLink = entry => {
 // Groups an array of objects by key
 export const groupByContentType = (internalMapping, entries) => {
   if (!Object.keys(internalMapping).length) return {};
-  const groups = Object.assign(
-    {},
-    ...Object.keys(internalMapping).map(key => ({ [internalMapping[key].contentType]: [] }))
-  );
+  const groups = {};
+
+  Object.keys(internalMapping).forEach(key => {
+    groups[internalMapping[key].contentType] = {
+      ...groups[internalMapping[key].contentType],
+      [key]: undefined
+    };
+  });
 
   if (!Object.keys(entries).length) return groups;
   Object.keys(entries).forEach(key => {
-    groups[entries[key].sys.contentType.sys.id].push(entries[key]);
+    groups[entries[key].sys.contentType.sys.id][key] = entries[key];
   });
 
+  console.log(groups);
   return groups;
 };
