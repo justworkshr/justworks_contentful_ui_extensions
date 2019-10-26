@@ -133,15 +133,14 @@ export class App extends React.Component {
     }));
   };
 
-  onRemoveClick = entry => {
-    if (!entry) return null;
-    this.removeEntry(entry);
+  onRemoveClick = roleKey => {
+    if (!roleKey) return null;
+    this.removeEntry(roleKey);
   };
 
-  removeEntry = entry => {
+  removeEntry = roleKey => {
     const thisEntry = this.props.sdk.entry;
-    const roleKey = this.getRoleKeyFromId(entry.sys.id);
-
+    const entry = this.state.entries[roleKey];
     const updatedEntryList = thisEntry.fields.entries
       .getValue()
       .filter(e => e.sys.id !== entry.sys.id);
@@ -234,21 +233,16 @@ export class App extends React.Component {
     }
   };
 
-  fetchEntryById = async id => {
-    const entryRoleKey = this.getRoleKeyFromId(id);
-
-    return await this.fetchEntryByRoleKey(entryRoleKey);
-  };
-
-  getRoleKeyFromId = id => {
-    return Object.keys(this.state.entryInternalMapping).find(
-      roleKey => this.state.entryInternalMapping[roleKey] === id
-    );
-  };
-
   fetchNavigatedTo = () => {
     if (!this.state.rolesNavigatedTo.length) return;
-    this.loadEntries();
+    this.setState(
+      {
+        rolesNavigatedTo: []
+      },
+      () => {
+        this.loadEntries();
+      }
+    );
   };
 
   onChange = e => {
@@ -310,7 +304,6 @@ export class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.loadingEntries, this.state.entries);
     const contentTypeGroups = groupByContentType(this.state.internalMapping, this.state.entries);
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
@@ -370,7 +363,7 @@ export class App extends React.Component {
                               <DropdownListItem onClick={() => this.onEditClick(entry)}>
                                 Edit
                               </DropdownListItem>
-                              <DropdownListItem onClick={() => this.onRemoveClick(entry)}>
+                              <DropdownListItem onClick={() => this.onRemoveClick(roleKey)}>
                                 Remove
                               </DropdownListItem>
                             </DropdownList>
