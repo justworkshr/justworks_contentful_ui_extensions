@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
   Button,
+  DropdownList,
+  DropdownListItem,
   EntityListItem,
   Heading,
   Paragraph,
@@ -30,21 +32,22 @@ export class App extends React.Component {
       loadingEntries: {},
       entryInternalMapping: JSON.parse(props.sdk.entry.fields.internalMapping.getValue()),
       internalMapping: internal_mappings[template && template.toLowerCase()] || {},
-      template: template,
+      template,
       value: props.sdk.field.getValue() || '',
       navigatedTo: []
     };
 
+    this.versionAttempts = 0;
+    this.MAX_VERSION_ATTEMPTS = 3;
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
   }
 
   componentDidMount() {
     this.props.sdk.window.startAutoResizer();
-    // debugger;
     // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
     this.detachExternalChangeHandler = this.props.sdk.field.onValueChanged(this.onExternalChange);
     this.props.sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
-
+    this.props.sdk.entry.onSysChanged(this.onSysChanged);
     this.loadEntries();
   }
 
@@ -54,9 +57,34 @@ export class App extends React.Component {
     }
   }
 
+  onSysChanged = sysValue => {
+    const template = this.props.sdk.entry.fields.template.getValue();
+    this.setState({
+      template,
+      entryInternalMapping: JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
+      internalMapping: internal_mappings[template && template.toLowerCase()] || {}
+    });
+
+    // get new entry by deduction if added
+
+    const newEntries = this.props.sdk.entry.fields.entries
+      .getValue()
+      .filter(
+        entry =>
+          !Object.keys(this.state.entries).some(
+            key => this.state.entries[key].sys.id === entry.sys.id
+          )
+      );
+
+    newEntries.forEach(entry => {
+      this.fetchEntryById(entry.sys.id);
+    });
+  };
+
   onExternalChange = value => {
-    console.log('hiiiii');
-    this.setState({ value });
+    this.setState({
+      value
+    });
   };
 
   onTemplateChange = template => {
@@ -66,15 +94,109 @@ export class App extends React.Component {
     });
   };
 
-  onEntityClick = async entry => {
+  constructLink(entry) {
+    return {
+      sys: {
+        type: 'Link',
+        linkType: entry.sys.type,
+        id: entry.sys.id
+      }
+    };
+  }
+
+  onAddEntryClick = async (roleKey, contentType) => {
+    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
+
+    const updatedEntryList = [
+      ...this.props.sdk.entry.fields.entries.getValue(),
+      this.constructLink(entry)
+    ];
+    const updatedInternalMapping = JSON.stringify({
+      ...this.state.entryInternalMapping,
+      [roleKey]: entry.sys.id
+    });
+    this.updateEntry(updatedEntryList, updatedInternalMapping);
+  };
+
+  onEditClick = async entry => {
     if (!entry) return null;
     await this.props.sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
     this.setState(prevState => ({ navigatedTo: [...prevState.navigatedTo, entry.sys.id] }));
   };
 
-  onAddEntryClick = async (roleKey, contentType) => {
-    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
-    console.log(entry);
+  onRemoveClick = entry => {
+    if (!entry) return null;
+    this.removeEntry(entry);
+  };
+
+  removeEntry = entry => {
+    const thisEntry = this.props.sdk.entry;
+    const roleKey = this.getRoleKeyFromId(entry.sys.id);
+
+    const updatedEntryList = thisEntry.fields.entries
+      .getValue()
+      .filter(e => e.sys.id !== entry.sys.id);
+
+    const internalMapping = {
+      ...this.state.entryInternalMapping
+    };
+
+    delete internalMapping[roleKey];
+    const updatedInternalMapping = JSON.stringify(internalMapping);
+
+    this.updateEntry(updatedEntryList, updatedInternalMapping).then(() => {
+      this.setState(prevState => {
+        const prevStateLoadingEntries = { ...prevState.loadingEntries };
+        const prevStateEntries = { ...prevState.entries };
+        delete prevStateLoadingEntries[roleKey];
+        delete prevStateEntries[roleKey];
+        return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
+      });
+    });
+  };
+
+  updateEntry = async (updatedEntryList, updatedInternalMapping, version = 0) => {
+    // Clones sys and fields object
+    // adds new Entry list
+    // adds new internalMapping JSON
+    const newEntry = {
+      sys: {
+        ...this.props.sdk.entry.getSys(),
+        version: version ? version : this.props.sdk.entry.getSys().version
+      },
+      fields: Object.assign(
+        {},
+        ...Object.keys(this.props.sdk.entry.fields).map(key => ({
+          [key]: { 'en-US': this.props.sdk.entry.fields[key].getValue() },
+          entries: { 'en-US': updatedEntryList },
+          internalMapping: { 'en-US': updatedInternalMapping }
+        }))
+      )
+    };
+
+    try {
+      await this.props.sdk.space.updateEntry(newEntry);
+      this.versionAttempts = 0;
+    } catch (err) {
+      console.log(err);
+      if (err.code === 'VersionMismatch') {
+        if (this.versionAttempts < this.MAX_VERSION_ATTEMPTS) {
+          this.versionAttempts += 1;
+          await this.updateEntry(
+            updatedEntryList,
+            updatedInternalMapping,
+            version ? version + 1 : this.props.sdk.entry.getSys().version + 1
+          );
+        } else {
+          this.props.sdk.notifier.error(
+            'This entry needs to be refreshed. Please refresh the page.'
+          );
+        }
+      } else {
+        this.props.sdk.notifier.error('An error occured. Please try again.');
+        this.loadEntries();
+      }
+    }
   };
 
   loadEntries = () => {
@@ -98,11 +220,15 @@ export class App extends React.Component {
   };
 
   fetchEntryById = async id => {
-    const entryRoleKey = Object.keys(this.state.entryInternalMapping).find(
-      roleKey => this.state.entryInternalMapping[roleKey] === id
-    );
+    const entryRoleKey = this.getRoleKeyFromId(id);
 
     return await this.fetchEntryByRoleKey(entryRoleKey);
+  };
+
+  getRoleKeyFromId = id => {
+    return Object.keys(this.state.entryInternalMapping).find(
+      roleKey => this.state.entryInternalMapping[roleKey] === id
+    );
   };
 
   fetchNavigatedTo = () => {
@@ -142,12 +268,15 @@ export class App extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div onClick={this.fetchNavigatedTo}>
-        {/* <Button buttonType="muted" onClick={this.loadEntries} size="small">
-          Refresh Entries
-        </Button> */}
+        <Button
+          buttonType="muted"
+          className="extension__refresh"
+          onClick={this.loadEntries}
+          size="small">
+          Refresh List
+        </Button>
         {Object.keys(this.state.internalMapping).map((roleKey, index) => {
           return (
             <div key={index} className="role-section">
@@ -157,15 +286,30 @@ export class App extends React.Component {
                   isLoading={!!this.state.loadingEntries[roleKey]}
                   className="role-section__entity"
                   title={
-                    !!this.state.entries[roleKey] &&
-                    this.state.entries[roleKey].fields.name['en-US']
+                    this.state.entries[roleKey]
+                      ? this.state.entries[roleKey].fields.name['en-US']
+                      : 'Loading...'
                   }
                   contentType={
-                    !!this.state.entries[roleKey] &&
-                    this.state.entries[roleKey].sys.contentType.sys.id
+                    this.state.entries[roleKey]
+                      ? this.state.entries[roleKey].sys.contentType.sys.id
+                      : null
                   }
                   status={this.getStatus(this.state.entries[roleKey])}
-                  onClick={() => this.onEntityClick(this.state.entries[roleKey])}
+                  onClick={() => this.onEditClick(this.state.entries[roleKey])}
+                  dropdownListElements={
+                    <DropdownList>
+                      <DropdownListItem isTitle>Actions</DropdownListItem>
+                      <DropdownListItem
+                        onClick={() => this.onEditClick(this.state.entries[roleKey])}>
+                        Edit
+                      </DropdownListItem>
+                      <DropdownListItem
+                        onClick={() => this.onRemoveClick(this.state.entries[roleKey])}>
+                        Remove
+                      </DropdownListItem>
+                    </DropdownList>
+                  }
                 />
               ) : (
                 <ToggleButton
@@ -182,16 +326,6 @@ export class App extends React.Component {
         })}
       </div>
     );
-    // return (
-    //   <TextInput
-    //     width="large"
-    //     type="text"
-    //     id="my-field"
-    //     testId="my-field"
-    //     value={this.state.value}
-    //     onChange={this.onChange}
-    //   />
-    // );
   }
 }
 

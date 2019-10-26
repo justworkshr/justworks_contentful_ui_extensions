@@ -26,6 +26,10 @@ div {
   margin: 40px 0 20px;
 }
 
+.extension__refresh {
+  margin: 40px 0;
+}
+
 .text-left {
   text-align: left;
 }
