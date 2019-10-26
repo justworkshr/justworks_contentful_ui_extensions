@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import classnames from 'classnames';
 import {
   Button,
   DropdownList,
   DropdownListItem,
-  EntityListItem,
+  EntryCard,
+  SectionHeading,
   Heading,
   Paragraph,
   ToggleButton
@@ -13,6 +15,7 @@ import {
 import { init } from 'contentful-ui-extensions-sdk';
 
 import { internal_mappings } from './internal_mappings';
+import { getStatus, constructLink, groupByContentType } from './utils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -94,22 +97,12 @@ export class App extends React.Component {
     });
   };
 
-  constructLink(entry) {
-    return {
-      sys: {
-        type: 'Link',
-        linkType: entry.sys.type,
-        id: entry.sys.id
-      }
-    };
-  }
-
   onAddEntryClick = async (roleKey, contentType) => {
     const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
 
     const updatedEntryList = [
       ...this.props.sdk.entry.fields.entries.getValue(),
-      this.constructLink(entry)
+      constructLink(entry)
     ];
     const updatedInternalMapping = JSON.stringify({
       ...this.state.entryInternalMapping,
@@ -254,22 +247,59 @@ export class App extends React.Component {
     }
   };
 
-  getStatus = entry => {
-    if (!entry) return null;
-    if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
-      return 'published';
-    } else if (entry.sys.publishedAt && entry.sys.publishedAt !== entry.sys.updatedAt) {
-      return 'changed';
-    } else if (entry.sys.archivedAt) {
-      return 'archived';
-    } else {
-      return 'draft';
+  onDragStart = (e, roleKey, id) => {
+    console.log('START', id);
+
+    this.setState({
+      draggingObject: { roleKey, id }
+    });
+  };
+
+  onDragEnd = e => {
+    console.log('END');
+    this.setState({
+      draggingObject: undefined
+    });
+
+    console.log(this.state.draggingObject, this.state.dragTargetObject);
+  };
+
+  onDragEnter = (e, roleKey, id) => {
+    if ((this.state.draggingObject || {}).id === id) return null;
+    e.stopPropagation();
+    e.preventDefault();
+    this.setState({
+      dragTargetObject: { roleKey, id }
+    });
+  };
+
+  onDragLeave = (e, id) => {
+    if ((this.state.draggingObject || {}).id === id) return null;
+    console.log('LEAVE', id, this.state.draggingObject);
+    this.setState({
+      dragTargetObject: undefined
+    });
+  };
+
+  onDrop = e => {
+    console.log('DROP');
+    if (this.state.draggingObject && this.state.dragTargetObject) {
+      this.swapElements(this.state.draggingObject, this.state.dragTargetObject);
+      this.setState({
+        draggingObject: undefined,
+        dragTargetObject: undefined
+      });
     }
   };
 
+  swapElements = (element1, element2) => {
+    console.log('SWAP: ', element1, element2);
+  };
+
   render() {
+    const contentTypeGroups = groupByContentType(this.state.internalMapping, this.state.entries);
     return (
-      <div onClick={this.fetchNavigatedTo}>
+      <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         <Button
           buttonType="muted"
           className="extension__refresh"
@@ -277,50 +307,79 @@ export class App extends React.Component {
           size="small">
           Refresh List
         </Button>
-        {Object.keys(this.state.internalMapping).map((roleKey, index) => {
+        {Object.keys(contentTypeGroups).map((groupKey, index) => {
           return (
-            <div key={index} className="role-section">
-              <Heading element="h1">{roleKey}</Heading>
-              {this.state.entryInternalMapping[roleKey] ? (
-                <EntityListItem
-                  isLoading={!!this.state.loadingEntries[roleKey]}
-                  className="role-section__entity"
-                  title={
-                    this.state.entries[roleKey]
-                      ? this.state.entries[roleKey].fields.name['en-US']
-                      : 'Loading...'
-                  }
-                  contentType={
-                    this.state.entries[roleKey]
-                      ? this.state.entries[roleKey].sys.contentType.sys.id
-                      : null
-                  }
-                  status={this.getStatus(this.state.entries[roleKey])}
-                  onClick={() => this.onEditClick(this.state.entries[roleKey])}
-                  dropdownListElements={
-                    <DropdownList>
-                      <DropdownListItem isTitle>Actions</DropdownListItem>
-                      <DropdownListItem
-                        onClick={() => this.onEditClick(this.state.entries[roleKey])}>
-                        Edit
-                      </DropdownListItem>
-                      <DropdownListItem
-                        onClick={() => this.onRemoveClick(this.state.entries[roleKey])}>
-                        Remove
-                      </DropdownListItem>
-                    </DropdownList>
-                  }
-                />
-              ) : (
-                <ToggleButton
-                  className="role-section__add-button"
-                  onClick={() =>
-                    this.onAddEntryClick(roleKey, this.state.internalMapping[roleKey].contentType)
-                  }>
-                  + Add Entry
-                </ToggleButton>
-              )}
-              <Paragraph element="p">{this.state.internalMapping[roleKey].description}</Paragraph>
+            <div className="entry-group" key={`group--${index}`}>
+              <div className="entry-group__header-section">
+                <Heading>{groupKey}</Heading>
+                <Paragraph>({contentTypeGroups[groupKey].length})</Paragraph>
+              </div>
+              <div className="entry-container">
+                {contentTypeGroups[groupKey].map((entry, index) => {
+                  const roleKey = this.getRoleKeyFromId(entry.sys.id);
+                  return (
+                    <div
+                      key={index}
+                      className={classnames('role-section', {
+                        highlighted:
+                          !!this.state.draggingObject &&
+                          this.state.internalMapping[this.state.draggingObject.roleKey]
+                            .contentType === this.state.internalMapping[roleKey].contentType,
+                        unhighlighted:
+                          !!this.state.draggingObject &&
+                          this.state.internalMapping[this.state.draggingObject.roleKey]
+                            .contentType !== this.state.internalMapping[roleKey].contentType
+                      })}>
+                      <SectionHeading element="h1">{roleKey}</SectionHeading>
+                      {this.state.entryInternalMapping[roleKey] ? (
+                        <EntryCard
+                          draggable
+                          loading={!!this.state.loadingEntries[roleKey]}
+                          className={classnames('role-section__entity')}
+                          size="small"
+                          title={entry ? entry.fields.name['en-US'] : 'Loading...'}
+                          contentType={entry ? entry.sys.contentType.sys.id : null}
+                          status={getStatus(entry)}
+                          withDragHandle={true}
+                          isDragActive={entry ? this.state.draggingObject === entry.sys.id : false}
+                          onDragStart={e => this.onDragStart(e, roleKey, entry.sys.id)}
+                          onDragEnd={e => this.onDragEnd(e)}
+                          onDragEnter={e => this.onDragEnter(e, roleKey, entry.sys.id)}
+                          onDragOver={e => this.onDragEnter(e, roleKey, entry.sys.id)}
+                          onDragLeave={e => this.onDragLeave(e, entry.sys.id)}
+                          onDrop={e => this.onDrop(e)}
+                          onClick={() => this.onEditClick(entry)}
+                          dropdownListElements={
+                            <DropdownList>
+                              <DropdownListItem isTitle>Actions</DropdownListItem>
+                              <DropdownListItem onClick={() => this.onEditClick(entry)}>
+                                Edit
+                              </DropdownListItem>
+                              <DropdownListItem onClick={() => this.onRemoveClick(entry)}>
+                                Remove
+                              </DropdownListItem>
+                            </DropdownList>
+                          }
+                        />
+                      ) : (
+                        <ToggleButton
+                          className="role-section__add-button"
+                          onClick={() =>
+                            this.onAddEntryClick(
+                              roleKey,
+                              this.state.internalMapping[roleKey].contentType
+                            )
+                          }>
+                          + Add Entry
+                        </ToggleButton>
+                      )}
+                      <Paragraph element="p">
+                        {this.state.internalMapping[roleKey].description}
+                      </Paragraph>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })}

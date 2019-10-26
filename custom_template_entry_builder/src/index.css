@@ -9,9 +9,39 @@ div {
   vertical-align: baseline;
 }
 
+.custom-template-entry-builder {
+  box-sizing: border-box;
+  padding: 0 4px;
+}
+
+.entry-group__header-section h1,
+.entry-group__header-section p {
+  display: inline-block;
+  margin-right: 10px;
+  text-transform: capitalize;
+}
+
+.entry-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .role-section {
-  margin-bottom: 100px;
+  margin-bottom: 40px;
   text-align: left;
+  padding: 4px;
+  box-sizing: border-box;
+  flex: 0 0 50%;
+  width: 50%;
+}
+
+.highlighted {
+  /* background-color: rgba(74, 144, 226, 0.2); */
+  /* border-left: 2px solid #4a90e2; */
+}
+
+.unhighlighted {
+  background-color: rgba(200, 200, 200, 0.5);
 }
 
 .role-section:last-child {
