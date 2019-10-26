@@ -37,7 +37,7 @@ export class App extends React.Component {
       internalMapping: internal_mappings[template && template.toLowerCase()] || {},
       template,
       value: props.sdk.field.getValue() || '',
-      navigatedTo: []
+      rolesNavigatedTo: []
     };
 
     this.versionAttempts = 0;
@@ -113,14 +113,24 @@ export class App extends React.Component {
       [roleKey]: entry.sys.id
     });
 
-    console.log(updatedEntryList, updatedInternalMapping);
     this.updateEntry(updatedEntryList, updatedInternalMapping);
   };
 
   onEditClick = async entry => {
     if (!entry) return null;
     await this.props.sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
-    this.setState(prevState => ({ navigatedTo: [...prevState.navigatedTo, entry.sys.id] }));
+    const rolesNavigatedTo = [
+      ...this.props.sdk.entry.fields.entries
+        .getValue()
+        .filter(e => e.sys.id === entry.sys.id)
+        .map(e =>
+          Object.keys(this.state.entries).find(key => this.state.entries[key].sys.id === e.sys.id)
+        )
+    ];
+
+    this.setState(prevState => ({
+      rolesNavigatedTo: [...prevState.rolesNavigatedTo, ...rolesNavigatedTo]
+    }));
   };
 
   onRemoveClick = entry => {
@@ -237,16 +247,8 @@ export class App extends React.Component {
   };
 
   fetchNavigatedTo = () => {
-    if (!this.state.navigatedTo.length) return;
-
-    this.state.navigatedTo.forEach(async id => {
-      await this.fetchEntryById(id);
-      this.setState(prevState => ({
-        navigatedTo: prevState.navigatedTo.filter(el => el !== id)
-      }));
-    });
-
-    return;
+    if (!this.state.rolesNavigatedTo.length) return;
+    this.loadEntries();
   };
 
   onChange = e => {
