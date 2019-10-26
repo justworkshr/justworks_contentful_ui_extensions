@@ -1,0 +1,31 @@
+html,
+body,
+div {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.role-section {
+  margin-bottom: 100px;
+  text-align: left;
+}
+
+.role-section:last-child {
+  margin-bottom: 20px;
+}
+
+.role-section__entity {
+  cursor: pointer;
+}
+
+.role-section__add-button {
+  margin: 40px 0 20px;
+}
+
+.text-left {
+  text-align: left;
+}

@@ -1,0 +1,8 @@
+{
+  "id": "custom_template_entry_builder",
+  "name": "custom_template_entry_builder",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": [
+    "Entries"
+  ]
+}
