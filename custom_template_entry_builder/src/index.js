@@ -60,7 +60,15 @@ export class App extends React.Component {
     }
   }
 
+  onExternalChange = value => {
+    console.log('VAL');
+    this.setState({
+      value
+    });
+  };
+
   onSysChanged = sysValue => {
+    console.log('SYS');
     const template = this.props.sdk.entry.fields.template.getValue();
     this.setState(
       {
@@ -77,6 +85,12 @@ export class App extends React.Component {
         rolesToFetch.forEach(roleKey => {
           this.fetchEntryByRoleKey(roleKey);
         });
+
+        if (this.isValid(JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()))) {
+          this.props.sdk.field.setInvalid(false);
+        } else {
+          this.props.sdk.field.setInvalid(true);
+        }
       }
     );
   };
@@ -87,12 +101,6 @@ export class App extends React.Component {
       key => !Object.keys(oldEntries).some(k => k === key)
     );
   }
-
-  onExternalChange = value => {
-    this.setState({
-      value
-    });
-  };
 
   onTemplateChange = template => {
     this.setState({
@@ -178,7 +186,8 @@ export class App extends React.Component {
         ...Object.keys(this.props.sdk.entry.fields).map(key => ({
           [key]: { 'en-US': this.props.sdk.entry.fields[key].getValue() },
           entries: { 'en-US': updatedEntryList },
-          internalMapping: { 'en-US': updatedInternalMapping }
+          internalMapping: { 'en-US': updatedInternalMapping },
+          isValid: { 'en-US': this.returnValidationValue(updatedInternalMapping) }
         }))
       )
     };
@@ -211,6 +220,27 @@ export class App extends React.Component {
         this.loadEntries();
       }
     }
+  };
+
+  isValid(internalMapping) {
+    const missingRequiredRoles = this.missingRequiredRoles(internalMapping);
+    return !missingRequiredRoles.length;
+  }
+
+  returnValidationValue = internalMappingJson => {
+    const internalMapping = JSON.parse(internalMappingJson);
+    return this.isValid(internalMapping) ? 'Yes' : 'No';
+  };
+
+  missingRequiredRoles = updatedInternalMapping => {
+    const missingRequiredRoles = [];
+    Object.keys(this.state.internalMapping).forEach(roleKey => {
+      if (!!this.state.internalMapping[roleKey].required && !updatedInternalMapping[roleKey]) {
+        missingRequiredRoles.push(roleKey);
+      }
+    });
+
+    return missingRequiredRoles;
   };
 
   loadEntries = () => {
@@ -322,71 +352,80 @@ export class App extends React.Component {
                 <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
               </div>
               <div className="entry-container">
-                {Object.keys(contentTypeGroups[groupKey]).map((roleKey, index) => {
-                  const entry = contentTypeGroups[groupKey][roleKey];
+                {Object.keys(contentTypeGroups[groupKey])
+                  .sort((a, b) => this.state.internalMapping[b].required)
+                  .map((roleKey, index) => {
+                    const entry = contentTypeGroups[groupKey][roleKey];
 
-                  return (
-                    <div
-                      key={index}
-                      className={classnames('role-section', {
-                        highlighted:
-                          !!this.state.draggingObject &&
-                          this.state.internalMapping[this.state.draggingObject.roleKey]
-                            .contentType === this.state.internalMapping[roleKey].contentType,
-                        unhighlighted:
-                          !!this.state.draggingObject &&
-                          this.state.internalMapping[this.state.draggingObject.roleKey]
-                            .contentType !== this.state.internalMapping[roleKey].contentType
-                      })}>
-                      <SectionHeading element="h1">{roleKey}</SectionHeading>
-                      {this.state.entryInternalMapping[roleKey] ? (
-                        <EntryCard
-                          draggable
-                          loading={!!this.state.loadingEntries[roleKey]}
-                          className={classnames('role-section__entity')}
-                          size="small"
-                          title={entry ? entry.fields.name['en-US'] : 'Loading...'}
-                          contentType={entry ? entry.sys.contentType.sys.id : null}
-                          status={getStatus(entry)}
-                          withDragHandle={true}
-                          isDragActive={entry ? this.state.draggingObject === entry.sys.id : false}
-                          onDragStart={e => this.onDragStart(e, roleKey, entry.sys.id)}
-                          onDragEnd={e => this.onDragEnd(e)}
-                          onDragEnter={e => this.onDragEnter(e, roleKey, entry.sys.id)}
-                          onDragOver={e => this.onDragEnter(e, roleKey, entry.sys.id)}
-                          onDragLeave={e => this.onDragLeave(e, entry.sys.id)}
-                          onDrop={e => this.onDrop(e)}
-                          onClick={() => this.onEditClick(entry)}
-                          dropdownListElements={
-                            <DropdownList>
-                              <DropdownListItem isTitle>Actions</DropdownListItem>
-                              <DropdownListItem onClick={() => this.onEditClick(entry)}>
-                                Edit
-                              </DropdownListItem>
-                              <DropdownListItem onClick={() => this.onRemoveClick(roleKey)}>
-                                Remove
-                              </DropdownListItem>
-                            </DropdownList>
-                          }
-                        />
-                      ) : (
-                        <ToggleButton
-                          className="role-section__add-button"
-                          onClick={() =>
-                            this.onAddEntryClick(
-                              roleKey,
-                              this.state.internalMapping[roleKey].contentType
-                            )
-                          }>
-                          + Add Entry
-                        </ToggleButton>
-                      )}
-                      <Paragraph element="p">
-                        {this.state.internalMapping[roleKey].description}
-                      </Paragraph>
-                    </div>
-                  );
-                })}
+                    return (
+                      <div
+                        key={index}
+                        className={classnames('role-section', {
+                          highlighted:
+                            !!this.state.draggingObject &&
+                            this.state.internalMapping[this.state.draggingObject.roleKey]
+                              .contentType === this.state.internalMapping[roleKey].contentType,
+                          unhighlighted:
+                            !!this.state.draggingObject &&
+                            this.state.internalMapping[this.state.draggingObject.roleKey]
+                              .contentType !== this.state.internalMapping[roleKey].contentType
+                        })}>
+                        <SectionHeading element="h1">
+                          {roleKey}
+                          {this.state.internalMapping[roleKey].required && (
+                            <span className="required-text">* (Required)</span>
+                          )}
+                        </SectionHeading>
+                        {this.state.entryInternalMapping[roleKey] ? (
+                          <EntryCard
+                            draggable
+                            loading={!!this.state.loadingEntries[roleKey]}
+                            className={classnames('role-section__entity')}
+                            size="small"
+                            title={entry ? entry.fields.name['en-US'] : 'Loading...'}
+                            contentType={entry ? entry.sys.contentType.sys.id : null}
+                            status={getStatus(entry)}
+                            withDragHandle={true}
+                            isDragActive={
+                              entry ? this.state.draggingObject === entry.sys.id : false
+                            }
+                            onDragStart={e => this.onDragStart(e, roleKey, entry.sys.id)}
+                            onDragEnd={e => this.onDragEnd(e)}
+                            onDragEnter={e => this.onDragEnter(e, roleKey, entry.sys.id)}
+                            onDragOver={e => this.onDragEnter(e, roleKey, entry.sys.id)}
+                            onDragLeave={e => this.onDragLeave(e, entry.sys.id)}
+                            onDrop={e => this.onDrop(e)}
+                            onClick={() => this.onEditClick(entry)}
+                            dropdownListElements={
+                              <DropdownList>
+                                <DropdownListItem isTitle>Actions</DropdownListItem>
+                                <DropdownListItem onClick={() => this.onEditClick(entry)}>
+                                  Edit
+                                </DropdownListItem>
+                                <DropdownListItem onClick={() => this.onRemoveClick(roleKey)}>
+                                  Remove
+                                </DropdownListItem>
+                              </DropdownList>
+                            }
+                          />
+                        ) : (
+                          <ToggleButton
+                            className="role-section__add-button"
+                            onClick={() =>
+                              this.onAddEntryClick(
+                                roleKey,
+                                this.state.internalMapping[roleKey].contentType
+                              )
+                            }>
+                            + Add Entry
+                          </ToggleButton>
+                        )}
+                        <Paragraph element="p">
+                          {this.state.internalMapping[roleKey].description}
+                        </Paragraph>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           );

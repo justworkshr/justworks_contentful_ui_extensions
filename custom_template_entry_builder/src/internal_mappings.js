@@ -17,15 +17,15 @@ const constructRole = ({ contentType = '', description = '', required = true } =
 
 export const internal_mappings = {
   'card block': {
-    text: constructRole({
-      contentType: 'text',
-      required: true,
-      description: 'Primary markdown text to display on the left half section.'
-    }),
     link: constructRole({
       contentType: 'link',
       required: false,
       description: 'Optional link to supply for when a user clicks on the card.'
+    }),
+    text: constructRole({
+      contentType: 'text',
+      required: true,
+      description: 'Primary markdown text to display on the left half section.'
     }),
     cta_text: constructRole({
       contentType: 'text',
