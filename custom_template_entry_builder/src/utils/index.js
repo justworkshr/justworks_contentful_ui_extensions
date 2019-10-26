@@ -38,6 +38,5 @@ export const groupByContentType = (internalMapping, entries) => {
     groups[entries[key].sys.contentType.sys.id][key] = entries[key];
   });
 
-  console.log(groups);
   return groups;
 };

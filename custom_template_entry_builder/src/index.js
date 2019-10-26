@@ -62,27 +62,31 @@ export class App extends React.Component {
 
   onSysChanged = sysValue => {
     const template = this.props.sdk.entry.fields.template.getValue();
-    this.setState({
-      template,
-      entryInternalMapping: JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
-      internalMapping: internal_mappings[template && template.toLowerCase()] || {}
-    });
-
-    // get new entry by deduction if added
-
-    const newEntries = this.props.sdk.entry.fields.entries
-      .getValue()
-      .filter(
-        entry =>
-          !Object.keys(this.state.entries).some(
-            key => this.state.entries[key].sys.id === entry.sys.id
-          )
-      );
-
-    newEntries.forEach(entry => {
-      this.fetchEntryById(entry.sys.id);
-    });
+    this.setState(
+      {
+        template,
+        entryInternalMapping: JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
+        internalMapping: internal_mappings[template && template.toLowerCase()] || {}
+      },
+      () => {
+        const rolesToFetch = this.getRolesToFetch(
+          this.state.entryInternalMapping,
+          this.state.entries
+        );
+        //
+        rolesToFetch.forEach(roleKey => {
+          this.fetchEntryByRoleKey(roleKey);
+        });
+      }
+    );
   };
+
+  getRolesToFetch(newInternalMapping, oldEntries) {
+    // if newInternalMapping has more keys than oldEntries, return those extra keys
+    return Object.keys(newInternalMapping).filter(
+      key => !Object.keys(oldEntries).some(k => k === key)
+    );
+  }
 
   onExternalChange = value => {
     this.setState({
@@ -108,6 +112,8 @@ export class App extends React.Component {
       ...this.state.entryInternalMapping,
       [roleKey]: entry.sys.id
     });
+
+    console.log(updatedEntryList, updatedInternalMapping);
     this.updateEntry(updatedEntryList, updatedInternalMapping);
   };
 
@@ -137,15 +143,16 @@ export class App extends React.Component {
     delete internalMapping[roleKey];
     const updatedInternalMapping = JSON.stringify(internalMapping);
 
-    this.updateEntry(updatedEntryList, updatedInternalMapping).then(() => {
-      this.setState(prevState => {
+    this.setState(
+      prevState => {
         const prevStateLoadingEntries = { ...prevState.loadingEntries };
         const prevStateEntries = { ...prevState.entries };
         delete prevStateLoadingEntries[roleKey];
         delete prevStateEntries[roleKey];
         return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
-      });
-    });
+      },
+      () => this.updateEntry(updatedEntryList, updatedInternalMapping)
+    );
   };
 
   updateEntry = async (updatedEntryList, updatedInternalMapping, version = 0) => {
@@ -184,6 +191,11 @@ export class App extends React.Component {
           this.props.sdk.notifier.error(
             'This entry needs to be refreshed. Please refresh the page.'
           );
+
+          this.props.sdk.dialogs.openAlert({
+            title: 'Please refresh the page.',
+            message: 'This entry needs to be refreshed. Please refresh the page.'
+          });
         }
       } else {
         this.props.sdk.notifier.error('An error occured. Please try again.');
@@ -296,6 +308,7 @@ export class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.loadingEntries, this.state.entries);
     const contentTypeGroups = groupByContentType(this.state.internalMapping, this.state.entries);
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
