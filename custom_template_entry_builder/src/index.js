@@ -30,10 +30,14 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     const template = props.sdk.entry.fields.template.getValue();
+    const internalMappingValue = props.sdk.entry.fields.internalMapping.getValue();
+
     this.state = {
       entries: {},
       loadingEntries: {},
-      entryInternalMapping: JSON.parse(props.sdk.entry.fields.internalMapping.getValue()),
+      entryInternalMapping: internalMappingValue
+        ? JSON.parse(props.sdk.entry.fields.internalMapping.getValue())
+        : {},
       internalMapping: internal_mappings[template && template.toLowerCase()] || {},
       template,
       value: props.sdk.field.getValue() || '',
@@ -70,10 +74,14 @@ export class App extends React.Component {
   onSysChanged = sysValue => {
     console.log('SYS');
     const template = this.props.sdk.entry.fields.template.getValue();
+    const internalMappingValue = this.props.sdk.entry.fields.internalMapping.getValue();
+    if (!internalMappingValue) return;
     this.setState(
       {
         template,
-        entryInternalMapping: JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
+        entryInternalMapping: internalMappingValue
+          ? JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue())
+          : {},
         internalMapping: internal_mappings[template && template.toLowerCase()] || {}
       },
       () => {
@@ -86,7 +94,10 @@ export class App extends React.Component {
           this.fetchEntryByRoleKey(roleKey);
         });
 
-        if (this.isValid(JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()))) {
+        if (
+          internalMappingValue &&
+          this.isValid(JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()))
+        ) {
           this.props.sdk.field.setInvalid(false);
         } else {
           this.props.sdk.field.setInvalid(true);
@@ -111,11 +122,8 @@ export class App extends React.Component {
 
   onAddEntryClick = async (roleKey, contentType) => {
     const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
-
-    const updatedEntryList = [
-      ...this.props.sdk.entry.fields.entries.getValue(),
-      constructLink(entry)
-    ];
+    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
+    const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
     const updatedInternalMapping = JSON.stringify({
       ...this.state.entryInternalMapping,
       [roleKey]: entry.sys.id
