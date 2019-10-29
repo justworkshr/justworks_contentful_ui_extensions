@@ -21,6 +21,20 @@ export const constructLink = entry => {
   };
 };
 
+export const constructEntryName = (parentName, entryDescriptor) => {
+  return `${parentName} ${entryDescriptor}`;
+};
+
+export const createEntry = async (space, contentType, name) => {
+  const newEntry = await space.createEntry(contentType, {
+    fields: {
+      name: { 'en-US': name }
+    }
+  });
+
+  return newEntry;
+};
+
 // Groups an array of objects by key
 export const groupByContentType = (internalMapping, entries) => {
   if (!Object.keys(internalMapping).length) return {};
@@ -34,9 +48,11 @@ export const groupByContentType = (internalMapping, entries) => {
   });
 
   if (!Object.keys(entries).length) return groups;
-  Object.keys(entries).forEach(key => {
-    groups[entries[key].sys.contentType.sys.id][key] = entries[key];
-  });
+  Object.keys(entries)
+    .filter(entryKey => !!internalMapping[entryKey])
+    .forEach(key => {
+      groups[entries[key].sys.contentType.sys.id][key] = entries[key];
+    });
 
   return groups;
 };

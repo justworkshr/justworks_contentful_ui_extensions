@@ -10,12 +10,20 @@ import {
   SectionHeading,
   Heading,
   Paragraph,
-  ToggleButton
+  ToggleButton,
+  Icon,
+  TextLink
 } from '@contentful/forma-36-react-components';
 import { init } from 'contentful-ui-extensions-sdk';
 
 import { internal_mappings } from './internal_mappings';
-import { getStatus, constructLink, groupByContentType } from './utils';
+import {
+  getStatus,
+  constructLink,
+  groupByContentType,
+  createEntry,
+  constructEntryName
+} from './utils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -121,7 +129,14 @@ export class App extends React.Component {
   };
 
   onAddEntryClick = async (roleKey, contentType) => {
-    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
+    const newEntryName = constructEntryName(this.props.sdk.entry.fields.name.getValue(), roleKey);
+    const newEntry = await createEntry(this.props.sdk.space, contentType, newEntryName);
+
+    await this.linkEntryToTemplate(newEntry, roleKey);
+    this.props.sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+  };
+
+  linkEntryToTemplate = (entry, roleKey) => {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
     const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
     const updatedInternalMapping = JSON.stringify({
@@ -130,6 +145,11 @@ export class App extends React.Component {
     });
 
     this.updateEntry(updatedEntryList, updatedInternalMapping);
+  };
+
+  onLinkEntryClick = async (roleKey, contentType) => {
+    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
+    this.linkEntryToTemplate(entry, roleKey);
   };
 
   onEditClick = async entry => {
@@ -243,7 +263,8 @@ export class App extends React.Component {
   missingRequiredRoles = updatedInternalMapping => {
     const missingRequiredRoles = [];
     Object.keys(this.state.internalMapping).forEach(roleKey => {
-      if (!!this.state.internalMapping[roleKey].required && !updatedInternalMapping[roleKey]) {
+      const internalMappingEntry = this.state.internalMapping[roleKey] || {};
+      if (!!internalMappingEntry.required && !updatedInternalMapping[roleKey]) {
         missingRequiredRoles.push(roleKey);
       }
     });
@@ -361,10 +382,10 @@ export class App extends React.Component {
               </div>
               <div className="entry-container">
                 {Object.keys(contentTypeGroups[groupKey])
-                  .sort((a, b) => this.state.internalMapping[b].required)
+                  .sort((a, b) => (this.state.internalMapping[b] || {}).required)
                   .map((roleKey, index) => {
                     const entry = contentTypeGroups[groupKey][roleKey];
-
+                    const internalMappingObject = this.state.internalMapping[roleKey] || {};
                     return (
                       <div
                         key={index}
@@ -380,7 +401,7 @@ export class App extends React.Component {
                         })}>
                         <SectionHeading element="h1">
                           {roleKey}
-                          {this.state.internalMapping[roleKey].required && (
+                          {internalMappingObject.required && (
                             <span className="required-text">* (Required)</span>
                           )}
                         </SectionHeading>
@@ -417,20 +438,34 @@ export class App extends React.Component {
                             }
                           />
                         ) : (
-                          <ToggleButton
-                            className="role-section__add-button"
-                            onClick={() =>
-                              this.onAddEntryClick(
-                                roleKey,
-                                this.state.internalMapping[roleKey].contentType
-                              )
-                            }>
-                            + Add Entry
-                          </ToggleButton>
+                          <div>
+                            <TextLink
+                              className="role-section__add-button"
+                              icon="Plus"
+                              linkType="primary"
+                              onClick={() =>
+                                this.onAddEntryClick(
+                                  roleKey,
+                                  this.state.internalMapping[roleKey].contentType
+                                )
+                              }>
+                              Create new entry
+                            </TextLink>
+                            <TextLink
+                              className="role-section__add-button"
+                              icon="Link"
+                              linkType="primary"
+                              onClick={() =>
+                                this.onLinkEntryClick(
+                                  roleKey,
+                                  this.state.internalMapping[roleKey].contentType
+                                )
+                              }>
+                              Link existing entry
+                            </TextLink>
+                          </div>
                         )}
-                        <Paragraph element="p">
-                          {this.state.internalMapping[roleKey].description}
-                        </Paragraph>
+                        <Paragraph element="p">{internalMappingObject.description}</Paragraph>
                       </div>
                     );
                   })}

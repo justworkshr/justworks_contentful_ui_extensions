@@ -17,12 +17,12 @@ const constructRole = ({ contentType = '', description = '', required = true } =
 
 export const internal_mappings = {
   'card block': {
-    link: constructRole({
+    card_link: constructRole({
       contentType: 'link',
       required: false,
       description: 'Optional link to supply for when a user clicks on the card.'
     }),
-    text: constructRole({
+    left_text: constructRole({
       contentType: 'text',
       required: true,
       description: 'Primary markdown text to display on the left half section.'
@@ -37,7 +37,7 @@ export const internal_mappings = {
       required: false,
       description: 'Text for the optional tag on the upper right corner of the card.'
     }),
-    media: constructRole({
+    right_media: constructRole({
       contentType: 'media',
       required: false,
       description: 'Optional media (image or video) to display on the right half section.'

@@ -57,7 +57,9 @@ div {
 }
 
 .role-section__add-button {
-  margin: 40px 0 20px;
+  box-sizing: border-box;
+  padding: 40px 10px 20px 0px;
+  width: 50%;
 }
 
 .extension__refresh {
