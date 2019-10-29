@@ -401,8 +401,10 @@ export class App extends React.Component {
                         })}>
                         <SectionHeading element="h1">
                           {roleKey}
-                          {internalMappingObject.required && (
+                          {internalMappingObject.required ? (
                             <span className="required-text">* (Required)</span>
+                          ) : (
+                            <span className="optional-text"> (optional)</span>
                           )}
                         </SectionHeading>
                         {this.state.entryInternalMapping[roleKey] ? (
