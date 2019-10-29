@@ -18,7 +18,6 @@ div {
 .entry-group__header-section p {
   display: inline-block;
   margin-right: 10px;
-  text-transform: capitalize;
 }
 
 .entry-container {

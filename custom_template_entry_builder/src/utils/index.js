@@ -1,3 +1,11 @@
+export const constructRole = ({ contentType = '', description = '', required = true } = {}) => {
+  return {
+    contentType,
+    required,
+    description
+  };
+};
+
 export const getStatus = entry => {
   if (!entry) return null;
   if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
@@ -40,6 +48,9 @@ export const groupByContentType = (internalMapping, entries) => {
   if (!Object.keys(internalMapping).length) return {};
   const groups = {};
 
+  // { <"contentType">: {<"mappingId">: <"entryId">}...}
+  // or:
+  // { "text": {"left_text": "1234"}...}
   Object.keys(internalMapping).forEach(key => {
     groups[internalMapping[key].contentType] = {
       ...groups[internalMapping[key].contentType],
@@ -51,8 +62,20 @@ export const groupByContentType = (internalMapping, entries) => {
   Object.keys(entries)
     .filter(entryKey => !!internalMapping[entryKey])
     .forEach(key => {
-      groups[entries[key].sys.contentType.sys.id][key] = entries[key];
+      const contentTypeKey = internalMapping[key].contentType;
+      groups[contentTypeKey][key] = entries[key];
     });
 
   return groups;
+};
+
+export const displayContentType = contentType => {
+  return contentType
+    .split(',')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' or ');
+};
+
+export const displayRoleName = contentType => {
+  return contentType.split('_').join(' ');
 };

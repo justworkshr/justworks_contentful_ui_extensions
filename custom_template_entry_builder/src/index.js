@@ -10,8 +10,6 @@ import {
   SectionHeading,
   Heading,
   Paragraph,
-  ToggleButton,
-  Icon,
   TextLink
 } from '@contentful/forma-36-react-components';
 import { init } from 'contentful-ui-extensions-sdk';
@@ -22,7 +20,9 @@ import {
   constructLink,
   groupByContentType,
   createEntry,
-  constructEntryName
+  constructEntryName,
+  displayContentType,
+  displayRoleName
 } from './utils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -148,7 +148,8 @@ export class App extends React.Component {
   };
 
   onLinkEntryClick = async (roleKey, contentType) => {
-    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: [contentType] });
+    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: contentType });
+    if (!entry) return;
     this.linkEntryToTemplate(entry, roleKey);
   };
 
@@ -377,7 +378,7 @@ export class App extends React.Component {
           return (
             <div className="entry-group" key={`group--${index}`}>
               <div className="entry-group__header-section">
-                <Heading>{groupKey}</Heading>
+                <Heading>{displayContentType(groupKey)}</Heading>
                 <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
               </div>
               <div className="entry-container">
@@ -400,7 +401,7 @@ export class App extends React.Component {
                               .contentType !== this.state.internalMapping[roleKey].contentType
                         })}>
                         <SectionHeading element="h1">
-                          {roleKey}
+                          {displayRoleName(roleKey)}
                           {internalMappingObject.required ? (
                             <span className="required-text">* (Required)</span>
                           ) : (
