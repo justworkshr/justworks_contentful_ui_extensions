@@ -9,6 +9,7 @@ export const cardBlock = {
     }),
     left_text: constructRole({
       contentType: ['text', 'customTemplate'],
+      allowedCustomTemplates: ['text collection'],
       required: true,
       description: 'Primary markdown text to display on the left half section.'
     }),
@@ -47,7 +48,7 @@ export const cardBlock = {
     card_style: constructRole({
       contentType: 'style',
       required: false,
-      description: 'Custom style applied directly to the card - background color, spacing, etc.'
+      description: 'Custom style applied directly to the card - background color, text color, etc.'
     })
   }
 };

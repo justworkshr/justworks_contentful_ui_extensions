@@ -26,7 +26,10 @@ import {
   constructEntryName,
   displayContentType,
   displayRoleName,
-  getContentTypeArray
+  getContentTypeArray,
+  linkHasCircularReference,
+  getEntryContentTypeId,
+  linkHasInvalidCustomTemplateType
 } from './utils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -156,7 +159,17 @@ export class App extends React.Component {
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
     });
+
     if (!entry) return;
+    if (linkHasCircularReference(this.props.sdk.entry.getSys().id, entry)) {
+      return this.props.sdk.notifier.error('Linked entry has a circular reference to this entry.');
+    } else if (linkHasInvalidCustomTemplateType(this.state.internalMapping[roleKey], entry)) {
+      return this.props.sdk.notifier.error(
+        `Only the following Custom Template types are allowed: ${this.state.internalMapping[
+          roleKey
+        ].allowedCustomTemplates.join(', ')}`
+      );
+    }
     this.linkEntryToTemplate(entry, roleKey);
   };
 
@@ -430,7 +443,7 @@ export class App extends React.Component {
                             className={classnames('role-section__entity')}
                             size="small"
                             title={entry ? entry.fields.name['en-US'] : 'Loading...'}
-                            contentType={entry ? entry.sys.contentType.sys.id : null}
+                            contentType={entry ? getEntryContentTypeId(entry) : null}
                             status={getStatus(entry)}
                             withDragHandle={true}
                             isDragActive={

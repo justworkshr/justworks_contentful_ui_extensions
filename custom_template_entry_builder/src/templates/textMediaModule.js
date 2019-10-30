@@ -4,18 +4,20 @@ export const textMediaModule = {
   'text media module': {
     left_content: constructRole({
       contentType: ['text', 'media', 'customTemplate'],
-      required: true,
-      description: 'Text for the top of collection'
+      description: 'Text, Media, or Custom Template [Text Collection].',
+      allowedCustomTemplates: ['text collection'],
+      required: true
     }),
     right_content: constructRole({
       contentType: ['text', 'media', 'customTemplate'],
-      required: true,
-      description: 'Text for the top of collection'
+      description: 'Text, Media, or Custom Template [Text Collection].',
+      allowedCustomTemplates: ['text collection'],
+      required: true
     }),
     module_style: constructRole({
       contentType: 'style',
-      required: false,
-      description: 'Global style for the module.'
+      description: 'Global style for this module.',
+      required: false
     })
   }
 };
