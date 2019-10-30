@@ -10,7 +10,6 @@ import {
   SectionHeading,
   Heading,
   Paragraph,
-  TextLink,
   HelpText,
   ValidationMessage
 } from '@contentful/forma-36-react-components';
@@ -31,12 +30,10 @@ import {
   displayContentType,
   displayRoleName,
   getContentTypeArray,
-  linkHasCircularReference,
-  getEntryContentTypeId,
-  linkHasInvalidCustomTemplateType
+  getEntryContentTypeId
 } from './utils';
 
-import { templateIsValid, getTemplateErrors } from './utils/validations';
+import { validateLinkedEntry, templateIsValid, getTemplateErrors } from './utils/validations';
 
 import { cloneEntry } from '../../shared/utilities/deepCopy';
 
@@ -58,8 +55,8 @@ export class App extends React.Component {
     const entries = {};
     this.state = {
       entries: entries,
-      errors: {},
-      loadingEntries: {},
+      errors: {}, // object { roleKey: array[{message: <string>}]}
+      loadingEntries: {}, // object { roleKey: id }
       entryInternalMapping: internalMappingValue
         ? JSON.parse(props.sdk.entry.fields.internalMapping.getValue())
         : {},
@@ -167,14 +164,14 @@ export class App extends React.Component {
     });
 
     if (!entry) return;
-    if (linkHasCircularReference(this.props.sdk.entry.getSys().id, entry)) {
-      return this.props.sdk.notifier.error('Linked entry has a circular reference to this entry.');
-    } else if (linkHasInvalidCustomTemplateType(this.state.internalMapping[roleKey], entry)) {
-      return this.props.sdk.notifier.error(
-        `Only the following Custom Template types are allowed: ${this.state.internalMapping[
-          roleKey
-        ].allowedCustomTemplates.join(', ')}`
-      );
+    const linkedEntryValidation = validateLinkedEntry(
+      entry,
+      roleKey,
+      this.props.sdk.entry.getSys().id,
+      this.state.internalMapping
+    );
+    if (linkedEntryValidation) {
+      return this.props.sdk.notifier.error(linkedEntryValidation);
     }
     this.linkEntryToTemplate(entry, roleKey);
   };
@@ -191,18 +188,34 @@ export class App extends React.Component {
   };
 
   onDeepCloneLinkClick = async (roleKey, contentType) => {
+    this.setState(prevState => ({
+      loadingEntries: { ...prevState.loadingEntries, [roleKey]: true }
+    }));
     const entry = await this.props.sdk.dialogs.selectSingleEntry({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
     });
 
-    const clonedEntry = await cloneEntry(
-      this.props.sdk.space,
+    const linkedEntryValidation = validateLinkedEntry(
       entry,
-      `${this.props.sdk.entry.fields.name.getValue()} ${roleKey}`
+      roleKey,
+      this.props.sdk.entry.getSys().id,
+      this.state.internalMapping
     );
+    if (linkedEntryValidation) {
+      return this.props.sdk.notifier.error(linkedEntryValidation);
+    }
 
-    this.linkEntryToTemplate(clonedEntry, roleKey);
+    if (entry) {
+      const clonedEntry = await cloneEntry(
+        this.props.sdk.space,
+        entry,
+        `${this.props.sdk.entry.fields.name.getValue()} ${roleKey}`
+      );
+
+      await this.linkEntryToTemplate(clonedEntry, roleKey);
+      this.props.sdk.notifier.success('Deep copy completed. New entry is now linked.');
+    }
   };
 
   onEditClick = async entry => {
@@ -488,7 +501,8 @@ export class App extends React.Component {
                             <span className="optional-text"> (optional)</span>
                           )}
                         </SectionHeading>
-                        {this.state.entryInternalMapping[roleKey] ? (
+                        {this.state.entryInternalMapping[roleKey] ||
+                        this.state.loadingEntries[roleKey] ? (
                           <EntryCard
                             draggable
                             loading={!!this.state.loadingEntries[roleKey]}

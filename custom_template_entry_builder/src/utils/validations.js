@@ -57,6 +57,44 @@ export const templateIsValid = errorObject => {
   return !Object.keys(errorObject).length;
 };
 
-// Deep clone submenu
-// Custom Template type submenu
-// swap
+export const validateLinkedEntry = (entry, roleKey, parentEntryId, internalMapping) => {
+  if (!entry) return;
+  let message = '';
+  if (linkHasCircularReference(parentEntryId, entry)) {
+    message = 'Linked entry has a circular reference to this entry.';
+  } else if (linkHasInvalidCustomTemplateType(internalMapping[roleKey], entry)) {
+    message = `Only the following Custom Template types are allowed: ${internalMapping[
+      roleKey
+    ].allowedCustomTemplates.join(', ')}`;
+  }
+
+  return message;
+};
+
+export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
+  if (!linkedEntry) return false;
+  let circularReferenceFound = false;
+  if (linkedEntry === thisEntryId) {
+    circularReferenceFound = true;
+  } else if (
+    getEntryContentTypeId(linkedEntry) === 'customTemplate' &&
+    !!linkedEntry.fields.entries
+  ) {
+    linkedEntry.fields.entries['en-US'].forEach(e => {
+      if (e.sys.id === thisEntryId) {
+        circularReferenceFound = true;
+      }
+    });
+  }
+
+  return circularReferenceFound;
+};
+
+export const linkHasInvalidCustomTemplateType = (role, linkedEntry) => {
+  if (getEntryContentTypeId(linkedEntry) !== 'customTemplate') return false;
+  const template = linkedEntry.fields.template['en-US'];
+  return (
+    !!role.allowedCustomTemplates.length &&
+    !role.allowedCustomTemplates.includes(template ? template.toLowerCase() : undefined)
+  );
+};

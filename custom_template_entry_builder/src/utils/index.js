@@ -86,34 +86,6 @@ export const getContentTypeArray = stringOrArray => {
   return Array.isArray(stringOrArray) ? stringOrArray : [stringOrArray];
 };
 
-export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
-  if (!linkedEntry) return false;
-  let circularReferenceFound = false;
-  if (linkedEntry === thisEntryId) {
-    circularReferenceFound = true;
-  } else if (
-    getEntryContentTypeId(linkedEntry) === 'customTemplate' &&
-    !!linkedEntry.fields.entries
-  ) {
-    linkedEntry.fields.entries['en-US'].forEach(e => {
-      if (e.sys.id === thisEntryId) {
-        circularReferenceFound = true;
-      }
-    });
-  }
-
-  return circularReferenceFound;
-};
-
-export const linkHasInvalidCustomTemplateType = (role, linkedEntry) => {
-  if (getEntryContentTypeId(linkedEntry) !== 'customTemplate') return false;
-  const template = linkedEntry.fields.template['en-US'];
-  return (
-    !!role.allowedCustomTemplates.length &&
-    !role.allowedCustomTemplates.includes(template ? template.toLowerCase() : undefined)
-  );
-};
-
 export const getEntryContentTypeId = entry => {
   if (!entry.sys) return;
   return entry.sys.contentType.sys.id;
