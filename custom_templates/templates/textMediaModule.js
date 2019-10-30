@@ -5,13 +5,13 @@ export const textMediaModule = {
   [c.TEXT_MEDIA_MODULE]: {
     left_content: constructRole({
       contentType: ['text', 'media', 'customTemplate'],
-      description: 'Text, Media, or Custom Template [Text Collection].',
+      description: `Text, Media, or Custom Template [${c.TEXT_COLLECTION}].`,
       allowedCustomTemplates: [c.TEXT_COLLECTION],
       required: true
     }),
     right_content: constructRole({
       contentType: ['text', 'media', 'customTemplate'],
-      description: 'Text, Media, or Custom Template [Text Collection].',
+      description: `Text, Media, or Custom Template [${c.TEXT_COLLECTION}].`,
       allowedCustomTemplates: [c.TEXT_COLLECTION],
       required: true
     }),

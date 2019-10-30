@@ -10,7 +10,9 @@ import {
   SectionHeading,
   Heading,
   Paragraph,
-  TextLink
+  TextLink,
+  HelpText,
+  ValidationMessage
 } from '@contentful/forma-36-react-components';
 
 import CreateNewLink from './components/CreateNewLink';
@@ -33,6 +35,8 @@ import {
   linkHasInvalidCustomTemplateType
 } from './utils';
 
+import { templateIsValid, getTemplateErrors } from './utils/validations';
+
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
 
@@ -46,15 +50,17 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     const template = props.sdk.entry.fields.template.getValue();
+    const templateMapping = customTemplates[template && template.toLowerCase()] || {};
     const internalMappingValue = props.sdk.entry.fields.internalMapping.getValue();
-
+    const entries = {};
     this.state = {
-      entries: {},
+      entries: entries,
+      errors: {},
       loadingEntries: {},
       entryInternalMapping: internalMappingValue
         ? JSON.parse(props.sdk.entry.fields.internalMapping.getValue())
         : {},
-      internalMapping: customTemplates[template && template.toLowerCase()] || {},
+      internalMapping: templateMapping,
       template,
       value: props.sdk.field.getValue() || '',
       rolesNavigatedTo: []
@@ -65,14 +71,14 @@ export class App extends React.Component {
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     this.props.sdk.window.startAutoResizer();
     // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
     this.detachExternalChangeHandler = this.props.sdk.field.onValueChanged(this.onExternalChange);
     this.props.sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
     this.props.sdk.entry.onSysChanged(this.onSysChanged);
-    this.loadEntries();
-  }
+    await this.loadEntries();
+  };
 
   componentWillUnmount() {
     if (this.detachExternalChangeHandler) {
@@ -81,14 +87,12 @@ export class App extends React.Component {
   }
 
   onExternalChange = value => {
-    console.log('VAL');
     this.setState({
       value
     });
   };
 
   onSysChanged = sysValue => {
-    console.log('SYS');
     const template = this.props.sdk.entry.fields.template.getValue();
     const internalMappingValue = this.props.sdk.entry.fields.internalMapping.getValue();
     if (!internalMappingValue) return;
@@ -100,19 +104,28 @@ export class App extends React.Component {
           : {},
         internalMapping: customTemplates[template && template.toLowerCase()] || {}
       },
-      () => {
+      async () => {
         const rolesToFetch = this.getRolesToFetch(
           this.state.entryInternalMapping,
           this.state.entries
         );
         //
-        rolesToFetch.forEach(roleKey => {
-          this.fetchEntryByRoleKey(roleKey);
-        });
+        await Promise.all(
+          await rolesToFetch.map(async roleKey => {
+            await this.fetchEntryByRoleKey(roleKey);
+          })
+        );
 
         if (
+          Object.keys(this.state.entries).length &&
           internalMappingValue &&
-          this.isValid(JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()))
+          templateIsValid(
+            getTemplateErrors(
+              this.state.internalMapping,
+              JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
+              this.state.entries
+            )
+          )
         ) {
           this.props.sdk.field.setInvalid(false);
         } else {
@@ -223,10 +236,17 @@ export class App extends React.Component {
     );
   };
 
-  updateEntry = async (updatedEntryList, updatedInternalMapping, version = 0) => {
+  updateEntry = async (updatedEntryList, updatedInternalMappingJson, version = 0) => {
     // Clones sys and fields object
     // adds new Entry list
     // adds new internalMapping JSON
+    const errors = getTemplateErrors(
+      this.state.internalMapping,
+      JSON.parse(updatedInternalMappingJson),
+      this.state.entries
+    );
+    const isValid = templateIsValid(errors);
+
     const newEntry = {
       sys: {
         ...this.props.sdk.entry.getSys(),
@@ -237,8 +257,10 @@ export class App extends React.Component {
         ...Object.keys(this.props.sdk.entry.fields).map(key => ({
           [key]: { 'en-US': this.props.sdk.entry.fields[key].getValue() },
           entries: { 'en-US': updatedEntryList },
-          internalMapping: { 'en-US': updatedInternalMapping },
-          isValid: { 'en-US': this.returnValidationValue(updatedInternalMapping) }
+          internalMapping: { 'en-US': updatedInternalMappingJson },
+          isValid: {
+            'en-US': isValid ? 'Yes' : 'No'
+          }
         }))
       )
     };
@@ -246,6 +268,9 @@ export class App extends React.Component {
     try {
       await this.props.sdk.space.updateEntry(newEntry);
       this.versionAttempts = 0;
+      this.setState({
+        errors
+      });
     } catch (err) {
       console.log(err);
       if (err.code === 'VersionMismatch') {
@@ -253,7 +278,7 @@ export class App extends React.Component {
           this.versionAttempts += 1;
           await this.updateEntry(
             updatedEntryList,
-            updatedInternalMapping,
+            updatedInternalMappingJson,
             version ? version + 1 : this.props.sdk.entry.getSys().version + 1
           );
         } else {
@@ -268,37 +293,42 @@ export class App extends React.Component {
         }
       } else {
         this.props.sdk.notifier.error('An error occured. Please try again.');
-        this.loadEntries();
+        await this.loadEntries();
       }
     }
   };
 
-  isValid(internalMapping) {
-    const missingRequiredRoles = this.missingRequiredRoles(internalMapping);
-    return !missingRequiredRoles.length;
-  }
+  loadEntries = async () => {
+    await Promise.all(
+      await Object.keys(this.state.entryInternalMapping).map(async roleKey => {
+        await this.fetchEntryByRoleKey(roleKey);
+      })
+    );
 
-  returnValidationValue = internalMappingJson => {
-    const internalMapping = JSON.parse(internalMappingJson);
-    return this.isValid(internalMapping) ? 'Yes' : 'No';
+    await this.validateTemplate();
   };
 
-  missingRequiredRoles = updatedInternalMapping => {
-    const missingRequiredRoles = [];
-    Object.keys(this.state.internalMapping).forEach(roleKey => {
-      const internalMappingEntry = this.state.internalMapping[roleKey] || {};
-      if (!!internalMappingEntry.required && !updatedInternalMapping[roleKey]) {
-        missingRequiredRoles.push(roleKey);
+  validateTemplate = async () => {
+    const errors = await getTemplateErrors(
+      this.state.internalMapping,
+      this.state.entryInternalMapping,
+      this.state.entries
+    );
+
+    const isValid = templateIsValid(errors);
+
+    this.setState(
+      {
+        errors
+      },
+      () => {
+        if (isValid) {
+          this.props.sdk.field.setInvalid(false);
+        } else {
+          this.props.sdk.field.setInvalid(true);
+        }
       }
-    });
-
-    return missingRequiredRoles;
-  };
-
-  loadEntries = () => {
-    Object.keys(this.state.entryInternalMapping).forEach(roleKey => {
-      this.fetchEntryByRoleKey(roleKey);
-    });
+    );
   };
 
   fetchEntryByRoleKey = async roleKey => {
@@ -313,12 +343,15 @@ export class App extends React.Component {
           this.removeEntry(roleKey);
         }
       });
+
     if (entry) {
       this.setState(prevState => ({
         entries: { ...prevState.entries, [roleKey]: entry },
         loadingEntries: { ...prevState.loadingEntries, [roleKey]: false }
       }));
     }
+
+    return entry;
   };
 
   fetchNavigatedTo = () => {
@@ -490,7 +523,15 @@ export class App extends React.Component {
                             </TextLink>
                           </div>
                         )}
-                        <Paragraph element="p">{internalMappingObject.description}</Paragraph>
+                        <HelpText>{internalMappingObject.description}</HelpText>
+                        {!!(this.state.errors[roleKey] || {}).length &&
+                          this.state.errors[roleKey].map((error, index) => {
+                            return (
+                              <ValidationMessage key={`error-${roleKey}-${index}`}>
+                                {error.message}
+                              </ValidationMessage>
+                            );
+                          })}
                       </div>
                     );
                   })}

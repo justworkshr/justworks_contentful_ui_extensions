@@ -12,7 +12,7 @@ export const cardBlock = {
       contentType: ['text', 'customTemplate'],
       allowedCustomTemplates: [c.TEXT_COLLECTION],
       required: true,
-      description: 'Primary markdown text to display on the left half section.'
+      description: `Text or Custom Template [${[c.TEXT_COLLECTION]}]. Primary markdown text to display on the left half section.`
     }),
     cta_text: constructRole({
       contentType: 'text',
