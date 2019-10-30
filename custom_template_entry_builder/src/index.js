@@ -16,6 +16,7 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import CreateNewLink from './components/CreateNewLink';
+import LinkExisting from './components/LinkExisting';
 
 import { init } from 'contentful-ui-extensions-sdk';
 
@@ -36,6 +37,8 @@ import {
 } from './utils';
 
 import { templateIsValid, getTemplateErrors } from './utils/validations';
+
+import { cloneEntry } from '../../shared/utilities/deepCopy';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -157,17 +160,6 @@ export class App extends React.Component {
     this.props.sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
   };
 
-  linkEntryToTemplate = (entry, roleKey) => {
-    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
-    const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
-    const updatedInternalMapping = JSON.stringify({
-      ...this.state.entryInternalMapping,
-      [roleKey]: entry.sys.id
-    });
-
-    this.updateEntry(updatedEntryList, updatedInternalMapping);
-  };
-
   onLinkEntryClick = async (roleKey, contentType) => {
     const entry = await this.props.sdk.dialogs.selectSingleEntry({
       locale: 'en-US',
@@ -185,6 +177,32 @@ export class App extends React.Component {
       );
     }
     this.linkEntryToTemplate(entry, roleKey);
+  };
+
+  linkEntryToTemplate = (entry, roleKey) => {
+    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
+    const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
+    const updatedInternalMapping = JSON.stringify({
+      ...this.state.entryInternalMapping,
+      [roleKey]: entry.sys.id
+    });
+
+    this.updateEntry(updatedEntryList, updatedInternalMapping);
+  };
+
+  onDeepCloneLinkClick = async (roleKey, contentType) => {
+    const entry = await this.props.sdk.dialogs.selectSingleEntry({
+      locale: 'en-US',
+      contentTypes: getContentTypeArray(contentType)
+    });
+
+    const clonedEntry = await cloneEntry(
+      this.props.sdk.space,
+      entry,
+      `${this.props.sdk.entry.fields.name.getValue()} ${roleKey}`
+    );
+
+    this.linkEntryToTemplate(clonedEntry, roleKey);
   };
 
   onEditClick = async entry => {
@@ -512,18 +530,12 @@ export class App extends React.Component {
                               contentTypes={this.state.internalMapping[roleKey].contentType}
                               roleKey={roleKey}
                             />
-
-                            <TextLink
-                              icon="Link"
-                              linkType="primary"
-                              onClick={() =>
-                                this.onLinkEntryClick(
-                                  roleKey,
-                                  this.state.internalMapping[roleKey].contentType
-                                )
-                              }>
-                              Link existing entry
-                            </TextLink>
+                            <LinkExisting
+                              onLinkEntryClick={this.onLinkEntryClick}
+                              onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+                              contentTypes={this.state.internalMapping[roleKey].contentType}
+                              roleKey={roleKey}
+                            />
                           </div>
                         )}
                         <HelpText>{internalMappingObject.description}</HelpText>

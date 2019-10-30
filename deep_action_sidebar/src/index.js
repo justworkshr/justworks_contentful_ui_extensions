@@ -11,7 +11,7 @@ import { init, locations } from 'contentful-ui-extensions-sdk';
 import tokens from '@contentful/forma-36-tokens';
 
 import { archiveAllLinkedEntriesBeforeSelf } from './utils/deepArchive';
-import { cloneEntry } from './utils/deepCopy';
+import { cloneEntry } from '../../shared/utilities/deepCopy';
 import { publishAllEntries } from './utils/deepPublish';
 import { unpublishAllEntries } from './utils/deepUnpublish';
 import { getResolvedEntries } from './utils/shared';

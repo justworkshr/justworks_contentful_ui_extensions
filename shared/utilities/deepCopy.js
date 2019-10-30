@@ -1,4 +1,7 @@
-import { getEntry } from './shared';
+export const getEntry = async (space, id) => {
+  return await space.getEntry(id);
+};
+
 
 export const cloneEntry = async (space, entry, name) => {
   const entrySys = entry.sys || entry.getSys();
