@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AssetCard, SectionHeading } from '@contentful/forma-36-react-components';
+import { Button, AssetCard, SectionHeading } from '@contentful/forma-36-react-components';
 
 class TemplateDisplay extends React.Component {
   constructor(props) {
@@ -50,7 +50,8 @@ TemplateDisplay.defaultProps = {
 TemplateDisplay.propTypes = {
   currentTemplateKey: PropTypes.object,
   templates: PropTypes.object,
-  onTemplateCardClick: PropTypes.func
+  onTemplateCardClick: PropTypes.func,
+  onSwitchButtonClick: PropTypes.func
 };
 
 export default TemplateDisplay;

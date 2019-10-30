@@ -20,13 +20,13 @@ div {
 
 .palette__switch-button {
   margin: 20px auto;
-  width: 100%;
 }
 
 .template-display {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  min-height: 240px;
 }
 
 .template-display__card {

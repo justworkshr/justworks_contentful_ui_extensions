@@ -58,6 +58,7 @@ export class App extends React.Component {
   };
 
   onSwitchButtonClick = async () => {
+    if (this.state.displayingTemplates) return this.toggleDisplay();
     const confirm = await this.props.sdk.dialogs.openConfirm({
       title: 'Warning',
       message:
@@ -97,11 +98,21 @@ export class App extends React.Component {
     if (!this.state.templateMapping)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
     return this.state.displayingTemplates ? (
-      <TemplateDisplay
-        currentTemplateKey={this.state.value.toLowerCase()}
-        onTemplateCardClick={this.onTemplateCardClick}
-        templates={customTemplates}
-      />
+      <div>
+        <TemplateDisplay
+          currentTemplateKey={this.state.value.toLowerCase()}
+          onTemplateCardClick={this.onTemplateCardClick}
+          templates={customTemplates}
+        />
+        <Button
+          className="palette__switch-button"
+          isFullWidth={true}
+          size="small"
+          buttonType="muted"
+          onClick={this.onSwitchButtonClick}>
+          Cancel
+        </Button>
+      </div>
     ) : (
       <div className="custom-template__palette">
         <img
@@ -121,6 +132,7 @@ export class App extends React.Component {
           buttonType="primary"
           className="palette__switch-button"
           size="small"
+          isFullWidth={true}
           onClick={this.onSwitchButtonClick}>
           Switch Template
         </Button>
