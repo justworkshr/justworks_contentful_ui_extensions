@@ -79,3 +79,7 @@ export const displayContentType = contentType => {
 export const displayRoleName = contentType => {
   return contentType.split('_').join(' ');
 };
+
+export const getContentTypeArray = stringOrArray => {
+  return Array.isArray(stringOrArray) ? stringOrArray : [stringOrArray];
+};

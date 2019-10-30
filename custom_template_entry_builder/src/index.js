@@ -22,7 +22,8 @@ import {
   createEntry,
   constructEntryName,
   displayContentType,
-  displayRoleName
+  displayRoleName,
+  getContentTypeArray
 } from './utils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -148,7 +149,10 @@ export class App extends React.Component {
   };
 
   onLinkEntryClick = async (roleKey, contentType) => {
-    const entry = await this.props.sdk.dialogs.selectSingleEntry({ contentTypes: contentType });
+    const entry = await this.props.sdk.dialogs.selectSingleEntry({
+      locale: 'en-US',
+      contentTypes: getContentTypeArray(contentType)
+    });
     if (!entry) return;
     this.linkEntryToTemplate(entry, roleKey);
   };

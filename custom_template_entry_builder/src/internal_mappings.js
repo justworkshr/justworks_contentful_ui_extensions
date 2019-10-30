@@ -1,4 +1,5 @@
 import { cardBlock } from './templates/cardBlock';
+import { textCollection } from './templates/textCollection';
 
 /////////////////
 // Instructions
@@ -10,5 +11,6 @@ import { cardBlock } from './templates/cardBlock';
 ////////////////
 
 export const internal_mappings = {
-  ...cardBlock
+  ...cardBlock,
+  ...textCollection
 };
