@@ -121,7 +121,7 @@ export class App extends React.Component {
           internalMappingValue &&
           templateIsValid(
             getTemplateErrors(
-              this.state.internalMapping,
+              this.state.internalMapping.roles,
               JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
               this.state.entries
             )
@@ -168,7 +168,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       this.props.sdk.entry.getSys().id,
-      this.state.internalMapping
+      this.state.internalMapping.roles
     );
     if (linkedEntryValidation) {
       return this.props.sdk.notifier.error(linkedEntryValidation);
@@ -200,7 +200,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       this.props.sdk.entry.getSys().id,
-      this.state.internalMapping
+      this.state.internalMapping.roles
     );
     if (linkedEntryValidation) {
       return this.props.sdk.notifier.error(linkedEntryValidation);
@@ -272,7 +272,7 @@ export class App extends React.Component {
     // adds new Entry list
     // adds new internalMapping JSON
     const errors = getTemplateErrors(
-      this.state.internalMapping,
+      this.state.internalMapping.roles,
       JSON.parse(updatedInternalMappingJson),
       this.state.entries
     );
@@ -341,7 +341,7 @@ export class App extends React.Component {
 
   validateTemplate = async () => {
     const errors = await getTemplateErrors(
-      this.state.internalMapping,
+      this.state.internalMapping.roles,
       this.state.entryInternalMapping,
       this.state.entries
     );
@@ -456,7 +456,10 @@ export class App extends React.Component {
   };
 
   render() {
-    const contentTypeGroups = groupByContentType(this.state.internalMapping, this.state.entries);
+    const contentTypeGroups = groupByContentType(
+      this.state.internalMapping.roles,
+      this.state.entries
+    );
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         <Button
@@ -476,22 +479,23 @@ export class App extends React.Component {
               <div className="entry-container">
                 {Object.keys(contentTypeGroups[groupKey])
                   .reverse()
-                  .sort((a, b) => (this.state.internalMapping[b] || {}).required)
+                  .sort((a, b) => (this.state.internalMapping.roles[b] || {}).required)
                   .map((roleKey, index) => {
                     const entry = contentTypeGroups[groupKey][roleKey];
-                    const internalMappingObject = this.state.internalMapping[roleKey] || {};
+                    const internalMappingObject = this.state.internalMapping.roles[roleKey] || {};
                     return (
                       <div
                         key={index}
                         className={classnames('role-section', {
                           highlighted:
                             !!this.state.draggingObject &&
-                            this.state.internalMapping[this.state.draggingObject.roleKey]
-                              .contentType === this.state.internalMapping[roleKey].contentType,
+                            this.state.internalMapping.roles[this.state.draggingObject.roleKey]
+                              .contentType ===
+                              this.state.internalMapping.roles[roleKey].contentType,
                           unhighlighted:
                             !!this.state.draggingObject &&
-                            this.state.internalMapping[this.state.draggingObject.roleKey]
-                              .contentType !== this.state.internalMapping[roleKey].contentType
+                            this.state.internalMapping.roles[this.state.draggingObject.roleKey]
+                              .contentType !== this.state.internalMapping.roles[roleKey].contentType
                         })}>
                         <SectionHeading element="h1">
                           {displayRoleName(roleKey)}
@@ -538,16 +542,16 @@ export class App extends React.Component {
                           <div className="link-entries-row">
                             <CreateNewLink
                               allowedCustomTemplates={
-                                this.state.internalMapping[roleKey].allowedCustomTemplates
+                                this.state.internalMapping.roles[roleKey].allowedCustomTemplates
                               }
                               onAddEntryClick={this.onAddEntryClick}
-                              contentTypes={this.state.internalMapping[roleKey].contentType}
+                              contentTypes={this.state.internalMapping.roles[roleKey].contentType}
                               roleKey={roleKey}
                             />
                             <LinkExisting
                               onLinkEntryClick={this.onLinkEntryClick}
                               onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                              contentTypes={this.state.internalMapping[roleKey].contentType}
+                              contentTypes={this.state.internalMapping.roles[roleKey].contentType}
                               roleKey={roleKey}
                             />
                           </div>
