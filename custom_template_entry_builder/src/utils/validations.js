@@ -56,3 +56,7 @@ export const templateIsValid = errorObject => {
 
   return !Object.keys(errorObject).length;
 };
+
+// Deep clone submenu
+// Custom Template type submenu
+// swap

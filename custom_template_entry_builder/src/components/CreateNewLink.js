@@ -37,9 +37,30 @@ class CreateNewLink extends React.Component {
         <DropdownList>
           <DropdownListItem isTitle>All Content Types</DropdownListItem>
           {this.props.contentTypes.map((contentType, index) => {
-            return (
+            return contentType === 'customTemplate' &&
+              !!this.props.allowedCustomTemplates.length ? (
+              <Dropdown key={`dropdown-${index}`} position="right" submenuToggleLabel={contentType}>
+                <DropdownList>
+                  {this.props.allowedCustomTemplates.map((allowedTemplate, index) => {
+                    return (
+                      <DropdownListItem
+                        key={`allowed-${index}`}
+                        onClick={() =>
+                          this.props.onAddEntryClick(
+                            this.props.roleKey,
+                            contentType,
+                            allowedTemplate
+                          )
+                        }>
+                        {allowedTemplate}
+                      </DropdownListItem>
+                    );
+                  })}
+                </DropdownList>
+              </Dropdown>
+            ) : (
               <DropdownListItem
-                key={index}
+                key={`dropdown-${index}`}
                 onClick={() => this.props.onAddEntryClick(this.props.roleKey, contentType)}>
                 {contentType}
               </DropdownListItem>
@@ -58,10 +79,15 @@ class CreateNewLink extends React.Component {
   }
 }
 
+CreateNewLink.defaultProps = {
+  allowedCustomTemplates: []
+};
+
 CreateNewLink.propTypes = {
   onAddEntryClick: PropTypes.func,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
-  roleKey: PropTypes.string
+  roleKey: PropTypes.string,
+  allowedCustomTemplates: PropTypes.array
 };
 
 export default CreateNewLink;

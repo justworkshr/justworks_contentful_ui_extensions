@@ -149,9 +149,9 @@ export class App extends React.Component {
     });
   };
 
-  onAddEntryClick = async (roleKey, contentType) => {
+  onAddEntryClick = async (roleKey, contentType, template = undefined) => {
     const newEntryName = constructEntryName(this.props.sdk.entry.fields.name.getValue(), roleKey);
-    const newEntry = await createEntry(this.props.sdk.space, contentType, newEntryName);
+    const newEntry = await createEntry(this.props.sdk.space, contentType, newEntryName, template);
 
     await this.linkEntryToTemplate(newEntry, roleKey);
     this.props.sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
@@ -505,6 +505,9 @@ export class App extends React.Component {
                         ) : (
                           <div className="link-entries-row">
                             <CreateNewLink
+                              allowedCustomTemplates={
+                                this.state.internalMapping[roleKey].allowedCustomTemplates
+                              }
                               onAddEntryClick={this.onAddEntryClick}
                               contentTypes={this.state.internalMapping[roleKey].contentType}
                               roleKey={roleKey}

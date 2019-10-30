@@ -25,12 +25,22 @@ export const constructEntryName = (parentName, entryDescriptor) => {
   return `${parentName} ${entryDescriptor}`;
 };
 
-export const createEntry = async (space, contentType, name) => {
-  const newEntry = await space.createEntry(contentType, {
+export const createEntry = async (space, contentType, name, template = undefined) => {
+  let data = {
     fields: {
       name: { 'en-US': name }
     }
-  });
+  };
+
+  if (template) {
+    template = template
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    data = { ...data, fields: { ...data.fields, template: { 'en-US': template } } };
+  }
+  console.log(data);
+  const newEntry = await space.createEntry(contentType, data);
 
   return newEntry;
 };
