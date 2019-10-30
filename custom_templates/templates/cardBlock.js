@@ -4,7 +4,8 @@ import * as c from '../constants';
 export const cardBlock = {
   [c.CARD_BLOCK]: {
     meta: {
-      imageUrl: "https://images.ctfassets.net/mnc2gcng0j8q/5pdJcFDuIBnItoXMFz1Uan/cb0e4626cfce261f21529a0d622110cd/Screenshot_from_2019-10-30_12-49-17.png?h=250"
+      description: 'A full-width & self-contained card module configured for text on the left and media (image or video) on the right. Collapses into a card on mobile.',
+      imageUrl: "https://images.ctfassets.net/mnc2gcng0j8q/5pdJcFDuIBnItoXMFz1Uan/cb0e4626cfce261f21529a0d622110cd/Screenshot_from_2019-10-30_12-49-17.png"
     },
     roles: {
       card_link: constructRole({

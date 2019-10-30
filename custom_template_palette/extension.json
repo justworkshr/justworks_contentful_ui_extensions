@@ -1,0 +1,8 @@
+{
+  "id": "custom_template_palette",
+  "name": "custom_template_palette",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": [
+    "Symbol"
+  ]
+}

@@ -15,6 +15,10 @@ https://www.contentful.com/developers/docs/references/content-delivery-api/
 ## Useful commands
 
 ```
+// in root, creates new extension
+npx @contentful/create-contentful-extension my-extension
+
+
 // Configures the current space / environment for the extension and commands
 npm run configure
 

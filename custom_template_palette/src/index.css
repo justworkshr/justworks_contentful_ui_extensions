@@ -1,0 +1,47 @@
+html,
+body,
+div {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.palette__meta {
+  box-sizing: border-box;
+}
+
+.palette__example-image {
+  height: auto;
+  width: 100%;
+}
+
+.palette__switch-button {
+  margin: 20px auto;
+  width: 100%;
+}
+
+.template-display {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.template-display__card {
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 10px;
+  flex: 0 0 25%;
+}
+
+.template-display__card.selected {
+  background-color: #4a90e2;
+  cursor: initial;
+  color: white;
+}
+
+.template-display__card.selected h3 {
+  color: white;
+}
