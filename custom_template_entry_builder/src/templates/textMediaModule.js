@@ -3,12 +3,12 @@ import { constructRole } from '../utils';
 export const textMediaModule = {
   'text media module': {
     left_content: constructRole({
-      contentType: ['text', 'customTemplate', 'media'],
+      contentType: ['text', 'media', 'customTemplate'],
       required: true,
       description: 'Text for the top of collection'
     }),
     right_content: constructRole({
-      contentType: ['text', 'customTemplate', 'media'],
+      contentType: ['text', 'media', 'customTemplate'],
       required: true,
       description: 'Text for the top of collection'
     }),

@@ -397,6 +397,7 @@ export class App extends React.Component {
               </div>
               <div className="entry-container">
                 {Object.keys(contentTypeGroups[groupKey])
+                  .reverse()
                   .sort((a, b) => (this.state.internalMapping[b] || {}).required)
                   .map((roleKey, index) => {
                     const entry = contentTypeGroups[groupKey][roleKey];
