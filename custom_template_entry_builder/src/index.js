@@ -12,6 +12,9 @@ import {
   Paragraph,
   TextLink
 } from '@contentful/forma-36-react-components';
+
+import CreateNewLink from './components/CreateNewLink';
+
 import { init } from 'contentful-ui-extensions-sdk';
 
 import { internal_mappings } from './internal_mappings';
@@ -181,10 +184,11 @@ export class App extends React.Component {
 
   removeEntry = roleKey => {
     const thisEntry = this.props.sdk.entry;
-    const entry = this.state.entries[roleKey];
+    const entry = this.state.entries[roleKey] || {};
     const updatedEntryList = thisEntry.fields.entries
       .getValue()
-      .filter(e => e.sys.id !== entry.sys.id);
+      .filter(e => e)
+      .filter(e => e.sys.id !== (entry.sys || {}).id);
 
     const internalMapping = {
       ...this.state.entryInternalMapping
@@ -288,7 +292,13 @@ export class App extends React.Component {
       loadingEntries: { ...prevState.loadingEntries, [roleKey]: true }
     }));
 
-    const entry = await this.props.sdk.space.getEntry(this.state.entryInternalMapping[roleKey]);
+    const entry = await this.props.sdk.space
+      .getEntry(this.state.entryInternalMapping[roleKey])
+      .catch(err => {
+        if (err.code === 'NotFound') {
+          this.removeEntry(roleKey);
+        }
+      });
     if (entry) {
       this.setState(prevState => ({
         entries: { ...prevState.entries, [roleKey]: entry },
@@ -445,21 +455,14 @@ export class App extends React.Component {
                             }
                           />
                         ) : (
-                          <div>
+                          <div className="link-entries-row">
+                            <CreateNewLink
+                              onAddEntryClick={this.onAddEntryClick}
+                              contentTypes={this.state.internalMapping[roleKey].contentType}
+                              roleKey={roleKey}
+                            />
+
                             <TextLink
-                              className="role-section__add-button"
-                              icon="Plus"
-                              linkType="primary"
-                              onClick={() =>
-                                this.onAddEntryClick(
-                                  roleKey,
-                                  this.state.internalMapping[roleKey].contentType
-                                )
-                              }>
-                              Create new entry
-                            </TextLink>
-                            <TextLink
-                              className="role-section__add-button"
                               icon="Link"
                               linkType="primary"
                               onClick={() =>

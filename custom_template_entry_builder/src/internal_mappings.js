@@ -1,5 +1,6 @@
 import { cardBlock } from './templates/cardBlock';
 import { textCollection } from './templates/textCollection';
+import { textMediaModule } from './templates/textMediaModule';
 
 /////////////////
 // Instructions
@@ -12,5 +13,6 @@ import { textCollection } from './templates/textCollection';
 
 export const internal_mappings = {
   ...cardBlock,
+  ...textMediaModule,
   ...textCollection
 };
