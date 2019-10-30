@@ -1,7 +1,8 @@
 import { constructRole } from '../utils';
+import * as c from '../constants';
 
 export const textCollection = {
-  'text collection': {
+  [c.TEXT_COLLECTION]: {
     text_1: constructRole({
       contentType: 'text',
       required: true,

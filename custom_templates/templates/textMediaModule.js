@@ -1,17 +1,18 @@
 import { constructRole } from '../utils';
+import * as c from '../constants';
 
 export const textMediaModule = {
-  'text media module': {
+  [c.TEXT_MEDIA_MODULE]: {
     left_content: constructRole({
       contentType: ['text', 'media', 'customTemplate'],
       description: 'Text, Media, or Custom Template [Text Collection].',
-      allowedCustomTemplates: ['text collection'],
+      allowedCustomTemplates: [c.TEXT_COLLECTION],
       required: true
     }),
     right_content: constructRole({
       contentType: ['text', 'media', 'customTemplate'],
       description: 'Text, Media, or Custom Template [Text Collection].',
-      allowedCustomTemplates: ['text collection'],
+      allowedCustomTemplates: [c.TEXT_COLLECTION],
       required: true
     }),
     module_style: constructRole({

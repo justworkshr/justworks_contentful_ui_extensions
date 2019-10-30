@@ -11,7 +11,7 @@ import { textMediaModule } from './templates/textMediaModule';
 // Warning 2) NEVER change a content type name without changing the name here too.
 ////////////////
 
-export const internal_mappings = {
+export const customTemplates = {
   ...cardBlock,
   ...textMediaModule,
   ...textCollection

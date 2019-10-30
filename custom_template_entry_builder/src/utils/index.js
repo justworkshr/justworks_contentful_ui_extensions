@@ -1,17 +1,3 @@
-export const constructRole = ({
-  contentType = '',
-  description = '',
-  allowedCustomTemplates = [],
-  required = true
-} = {}) => {
-  return {
-    contentType,
-    description,
-    allowedCustomTemplates,
-    required
-  };
-};
-
 export const getStatus = entry => {
   if (!entry) return null;
   if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {

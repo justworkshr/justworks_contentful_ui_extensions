@@ -1,7 +1,8 @@
 import { constructRole } from '../utils';
+import * as c from '../constants';
 
 export const cardBlock = {
-  'card block': {
+  [c.CARD_BLOCK]: {
     card_link: constructRole({
       contentType: 'link',
       required: false,
@@ -9,7 +10,7 @@ export const cardBlock = {
     }),
     left_text: constructRole({
       contentType: ['text', 'customTemplate'],
-      allowedCustomTemplates: ['text collection'],
+      allowedCustomTemplates: [c.TEXT_COLLECTION],
       required: true,
       description: 'Primary markdown text to display on the left half section.'
     }),

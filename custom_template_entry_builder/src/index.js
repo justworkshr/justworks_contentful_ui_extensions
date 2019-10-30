@@ -17,7 +17,8 @@ import CreateNewLink from './components/CreateNewLink';
 
 import { init } from 'contentful-ui-extensions-sdk';
 
-import { internal_mappings } from './internal_mappings';
+import { customTemplates } from '../../custom_templates/';
+
 import {
   getStatus,
   constructLink,
@@ -53,7 +54,7 @@ export class App extends React.Component {
       entryInternalMapping: internalMappingValue
         ? JSON.parse(props.sdk.entry.fields.internalMapping.getValue())
         : {},
-      internalMapping: internal_mappings[template && template.toLowerCase()] || {},
+      internalMapping: customTemplates[template && template.toLowerCase()] || {},
       template,
       value: props.sdk.field.getValue() || '',
       rolesNavigatedTo: []
@@ -97,7 +98,7 @@ export class App extends React.Component {
         entryInternalMapping: internalMappingValue
           ? JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue())
           : {},
-        internalMapping: internal_mappings[template && template.toLowerCase()] || {}
+        internalMapping: customTemplates[template && template.toLowerCase()] || {}
       },
       () => {
         const rolesToFetch = this.getRolesToFetch(
@@ -131,7 +132,7 @@ export class App extends React.Component {
   onTemplateChange = template => {
     this.setState({
       template,
-      internalMapping: internal_mappings[template && template.toLowerCase()] || {}
+      internalMapping: customTemplates[template && template.toLowerCase()] || {}
     });
   };
 
