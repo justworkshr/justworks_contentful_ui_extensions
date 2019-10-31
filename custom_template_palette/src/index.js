@@ -10,6 +10,11 @@ import TemplateDisplay from './components/TemplateDisplay';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
 
+const templatePlaceholder = {
+  meta: {},
+  roles: {}
+};
+
 export class App extends React.Component {
   static propTypes = {
     sdk: PropTypes.object.isRequired
@@ -23,7 +28,7 @@ export class App extends React.Component {
     const value = props.sdk.field.getValue() || '';
     this.state = {
       value: value,
-      templateMapping: customTemplates[value.toLowerCase()],
+      templateMapping: customTemplates[value.toLowerCase()] || templatePlaceholder,
       displayingTemplates: false
     };
 
@@ -44,7 +49,12 @@ export class App extends React.Component {
   }
 
   onExternalChange = value => {
-    this.setState({ value, templateMapping: customTemplates[value.toLowerCase()] });
+    if (value) {
+      this.setState({
+        value,
+        templateMapping: customTemplates[value.toLowerCase()] || templatePlaceholder
+      });
+    }
   };
 
   onChange = e => {
@@ -95,8 +105,9 @@ export class App extends React.Component {
   };
 
   render() {
-    if (!this.state.templateMapping)
+    if (!!this.state.value && !this.state.templateMapping)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
+
     return this.state.displayingTemplates ? (
       <div>
         <TemplateDisplay
@@ -115,12 +126,14 @@ export class App extends React.Component {
       </div>
     ) : (
       <div className="custom-template__palette">
-        <img
-          className="palette__example-image"
-          src={this.state.templateMapping.meta.imageUrl + '?w=800'}
-          alt="Template example."
-          onLoad={() => this.props.sdk.window.updateHeight()}
-        />
+        {this.state.templateMapping.meta.imageUrl && (
+          <img
+            className="palette__example-image"
+            src={this.state.templateMapping.meta.imageUrl + '?w=800'}
+            alt="Template example."
+            onLoad={() => this.props.sdk.window.updateHeight()}
+          />
+        )}
 
         <EmptyState
           className="palette__meta"
