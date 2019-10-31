@@ -19,7 +19,7 @@ import LinkExisting from './components/LinkExisting';
 
 import { init } from 'contentful-ui-extensions-sdk';
 
-import { customTemplates } from '../../custom_templates/';
+import { customTemplates, templatePlaceholder } from '../../custom_templates/';
 
 import {
   getStatus,
@@ -50,7 +50,8 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     const template = props.sdk.entry.fields.template.getValue();
-    const templateMapping = customTemplates[template && template.toLowerCase()] || {};
+    const templateMapping =
+      customTemplates[template && template.toLowerCase()] || templatePlaceholder;
     const internalMappingValue = props.sdk.entry.fields.internalMapping.getValue();
     const entries = {};
     this.state = {
@@ -102,7 +103,7 @@ export class App extends React.Component {
         entryInternalMapping: internalMappingValue
           ? JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue())
           : {},
-        internalMapping: customTemplates[template && template.toLowerCase()] || {}
+        internalMapping: customTemplates[template && template.toLowerCase()] || templatePlaceholder
       },
       async () => {
         const rolesToFetch = this.getRolesToFetch(
@@ -145,7 +146,7 @@ export class App extends React.Component {
   onTemplateChange = template => {
     this.setState({
       template,
-      internalMapping: customTemplates[template && template.toLowerCase()] || {}
+      internalMapping: customTemplates[template && template.toLowerCase()] || templatePlaceholder
     });
   };
 

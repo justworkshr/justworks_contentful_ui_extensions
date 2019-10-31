@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { Button, DisplayText, EmptyState } from '@contentful/forma-36-react-components';
 import { init } from 'contentful-ui-extensions-sdk';
-import { customTemplates } from '../../custom_templates';
+import { customTemplates, templatePlaceholder } from '../../custom_templates';
 
 import TemplateDisplay from './components/TemplateDisplay';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
-
-const templatePlaceholder = {
-  meta: {},
-  roles: {}
-};
 
 export class App extends React.Component {
   static propTypes = {

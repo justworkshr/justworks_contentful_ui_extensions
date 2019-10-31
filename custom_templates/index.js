@@ -17,3 +17,8 @@ export const customTemplates = {
   ...textMediaModule,
   ...textCollection
 };
+
+export const templatePlaceholder = {
+  meta: {},
+  roles: {}
+};
