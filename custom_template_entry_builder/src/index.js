@@ -454,7 +454,7 @@ export class App extends React.Component {
   onFieldChange = (e, roleKey) => {
     const value = e.currentTarget.value;
     if (typeof value === 'string') {
-      const updatedInternalMapping = this.state.entryInternalMapping;
+      let updatedInternalMapping = this.state.entryInternalMapping;
       updatedInternalMapping[roleKey] = value;
 
       const updatedEntries = {

@@ -8,15 +8,7 @@ export default class InternalMapping {
     Object.keys(object).forEach(key => {
       this[`_${key}`] = object[key];
 
-      Object.defineProperty(this, key, {
-        get: () => {
-          return (this[`_${key}`] || {}).type ? (this[`_${key}`] || {}).value : this[`_${key}`]; // returns {}.value or value
-        },
-
-        set: value => {
-          this[`_${key}`] = this.entryMapping({ type: this[`_${key}`].type, value });
-        }
-      });
+      this.defineGetterSetters(key);
     });
   }
 
@@ -35,32 +27,57 @@ export default class InternalMapping {
     return JSON.parse(json);
   }
 
-  entryMapping({ type, value } = {}) {
+  entryMapping({ type, value = '' } = {}) {
     return {
       type,
       value
     };
   }
 
+  defineGetterSetters(key) {
+    if (!this.hasOwnProperty(key)) {
+      Object.defineProperty(this, key, {
+        get: () => {
+          return (this[`_${key}`] || {}).type ? (this[`_${key}`] || {}).value : this[`_${key}`]; // returns {}.value or value
+        },
+
+        set: value => {
+          this[`_${key}`] = this.entryMapping({ type: this[`_${key}`].type, value });
+        }
+      });
+    }
+  }
+
   addEntry(key, value) {
+    this.defineGetterSetters(key);
     this[`_${key}`] = this.entryMapping({ type: InternalMapping.ENTRY, value });
   }
 
   addTextField(key, value = '') {
+    this.defineGetterSetters(key);
     this[`_${key}`] = this.entryMapping({ type: InternalMapping.TEXT, value });
   }
 
   addMarkdownField(key, value = '') {
+    this.defineGetterSetters(key);
     this[`_${key}`] = this.entryMapping({ type: InternalMapping.MARKDOWN, value });
   }
 
   addField(key, type, value) {
+    this.defineGetterSetters(key);
     this[`_${key}`] = this.entryMapping({ type: type, value });
   }
 
   asJSON() {
     return JSON.stringify(
-      Object.assign({}, ...Object.keys(this).map(key => ({ [key.slice(1)]: this[key] })))
+      Object.assign(
+        {},
+        ...Object.keys(this).map(key => {
+          return {
+            [key.charAt(0) === '_' ? key.slice(1) : key]: this[key]
+          };
+        })
+      )
     );
   }
 

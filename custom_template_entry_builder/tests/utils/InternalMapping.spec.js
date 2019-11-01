@@ -47,12 +47,20 @@ describe('InternalMapping', () => {
     });
 
     describe('addEntry', () => {
-      const json = JSON.stringify({ hi: { type: 'text', value: 'hello' } });
-      const internalMapping = new InternalMapping(json);
-
-      internalMapping.addEntry('hi', 'bye');
-
       it('sets the type and sets the value', () => {
+        const json = JSON.stringify({ hi: { type: 'text', value: 'hello' } });
+        const internalMapping = new InternalMapping(json);
+
+        internalMapping.addEntry('hi', 'bye');
+        expect(internalMapping._hi.type).toEqual('entry');
+        expect(internalMapping._hi.value).toEqual('bye');
+      });
+
+      it('with blank start - sets the type and sets the value', () => {
+        const json = JSON.stringify({});
+        const internalMapping = new InternalMapping(json);
+        internalMapping.addField('entry', 'hi');
+        internalMapping.addEntry('hi', 'bye');
         expect(internalMapping._hi.type).toEqual('entry');
         expect(internalMapping._hi.value).toEqual('bye');
       });
