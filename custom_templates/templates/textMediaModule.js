@@ -4,7 +4,7 @@ import * as c from '../constants';
 export const textMediaModule = {
   [c.TEXT_MEDIA_MODULE]: {
     meta: {
-      description: 'A full-width row configurable for any combination of text or media on either half. In mobile, a right-sided image will appear above left sided text.',
+      description: 'copy pending',
       imageUrl: "https://images.ctfassets.net/mnc2gcng0j8q/3xn8AvsyundHautmUuOKhJ/b7f3bd11eb55910ca7b3e34920099f39/Screenshot_from_2019-10-30_12-49-03.png"
     },
     roles: {

@@ -4,7 +4,7 @@ import * as c from '../constants';
 export const textCollection = {
   [c.TEXT_COLLECTION]: {
     meta: {
-      description: 'A template containing 3 optional slots for text and style. Best used within other modules.',
+      description: 'copy pending',
       imageUrl: "https://images.ctfassets.net/mnc2gcng0j8q/2fTQlSqACoJQavUL6wq5Bg/1fa3038c0b79d26e55fd8c3a62a4cef0/Screenshot_from_2019-10-30_12-48-45.png"
     },
     roles: {
