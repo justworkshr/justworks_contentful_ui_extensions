@@ -298,15 +298,17 @@ export class App extends React.Component {
   onRemoveClick = roleKey => {
     if (!roleKey) return null;
     const thisEntry = this.props.sdk.entry;
+    const entriesValue = thisEntry.fields.entries.getValue();
     const entry = this.state.entries[roleKey] || {};
-    const updatedEntryList = thisEntry.fields.entries
-      .getValue()
-      .filter(e => e)
-      .filter(e => e.sys.id !== (entry.sys || {}).id);
-
     const internalMapping = this.state.entryInternalMapping;
     internalMapping.removeEntry(roleKey);
 
+    const firstEntryInstance = entriesValue.find(e => e.sys.id === entry.sys.id);
+    const firstEntryIndex = entriesValue.indexOf(firstEntryInstance);
+    const updatedEntryList = [
+      ...entriesValue.slice(0, firstEntryIndex),
+      ...entriesValue.slice(firstEntryIndex + 1, entriesValue.length)
+    ];
     const updatedInternalMapping = internalMapping.asJSON();
     this.setState(
       prevState => {
