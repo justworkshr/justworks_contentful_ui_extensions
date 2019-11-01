@@ -43,7 +43,8 @@ export default class InternalMapping {
 
         set: value => {
           this[`_${key}`] = this.entryMapping({ type: this[`_${key}`].type, value });
-        }
+        },
+        configurable: true
       });
     }
   }
@@ -94,6 +95,7 @@ export default class InternalMapping {
   }
 
   removeEntry(key) {
-    this[`_${key}`] = undefined;
+    delete this[`_${key}`];
+    delete this[key];
   }
 }

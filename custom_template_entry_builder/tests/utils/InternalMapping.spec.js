@@ -113,10 +113,11 @@ describe('InternalMapping', () => {
     const json = JSON.stringify({ hi: { type: 'entry', value: 'hello' } });
     const internalMapping = new InternalMapping(json);
 
-    it('removes the role', () => {
+    it('removes the role and key', () => {
       expect(internalMapping.hi).toEqual('hello');
       internalMapping.removeEntry('hi');
       expect(internalMapping.hi).toBeUndefined();
+      expect(internalMapping.keys()).not.toContain('hi');
     });
   });
 });

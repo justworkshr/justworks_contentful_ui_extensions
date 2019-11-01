@@ -183,10 +183,13 @@ export class App extends React.Component {
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeEntry(roleKey);
 
-    const updatedEntries = {
-      ...this.state.entries,
-      [roleKey]: undefined
-    };
+    // Removes key from this.state.entries
+    const updatedEntries = Object.assign(
+      {},
+      ...Object.keys(this.state.entries)
+        .filter(key => updatedInternalMapping.keys().includes(key))
+        .map(key => ({ [key]: this.state.entries[key] }))
+    );
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
       this.updateEntry(
