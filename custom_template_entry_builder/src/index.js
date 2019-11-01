@@ -8,7 +8,9 @@ import {
   Heading,
   Paragraph,
   HelpText,
-  ValidationMessage
+  ValidationMessage,
+  TextLink,
+  IconButton
 } from '@contentful/forma-36-react-components';
 
 import CreateNewLink from './components/CreateNewLink';
@@ -133,8 +135,6 @@ export class App extends React.Component {
         }
       }
     );
-
-    console.log(this.state.entryInternalMapping);
   };
 
   getRolesToFetch(newInternalMapping, oldEntries) {
@@ -149,6 +149,49 @@ export class App extends React.Component {
         this.props.customTemplates[template && template.toLowerCase()] ||
         this.prpos.templatePlaceholder
     });
+  };
+
+  onAddFieldClick = (roleKey, fieldType) => {
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    switch (fieldType) {
+      case InternalMapping.TEXT:
+        updatedInternalMapping.addTextField(roleKey);
+        break;
+      case InternalMapping.MARKDOWN:
+        updatedInternalMapping.addMarkdownField(roleKey);
+        break;
+      default:
+        break;
+    }
+
+    const updatedEntries = {
+      ...this.state.entries,
+      [roleKey]: constructFieldEntry(updatedInternalMapping.getType(roleKey))
+    };
+
+    this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
+      this.updateEntry(
+        this.props.sdk.entry.fields.entries.getValue(),
+        updatedInternalMapping.asJSON()
+      )
+    );
+  };
+
+  onRemoveFieldClick = roleKey => {
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.removeEntry(roleKey);
+
+    const updatedEntries = {
+      ...this.state.entries,
+      [roleKey]: undefined
+    };
+
+    this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
+      this.updateEntry(
+        this.props.sdk.entry.fields.entries.getValue(),
+        updatedInternalMapping.asJSON()
+      )
+    );
   };
 
   onAddEntryClick = async (roleKey, contentType, template = undefined) => {
@@ -243,7 +286,6 @@ export class App extends React.Component {
   removeEntry = roleKey => {
     const thisEntry = this.props.sdk.entry;
     const entry = this.state.entries[roleKey] || {};
-    console.log(thisEntry.fields.entries.getValue());
     const updatedEntryList = thisEntry.fields.entries
       .getValue()
       .filter(e => e)
@@ -411,28 +453,29 @@ export class App extends React.Component {
 
   onFieldChange = (e, roleKey) => {
     const value = e.currentTarget.value;
-    if (value) {
+    if (typeof value === 'string') {
       const updatedInternalMapping = this.state.entryInternalMapping;
       updatedInternalMapping[roleKey] = value;
+
       const updatedEntries = {
-        ...this.entries,
-        [roleKey]: constructFieldEntry(
-          updatedInternalMapping.getType(roleKey),
-          updatedInternalMapping[roleKey]
-        )
+        ...this.state.entries,
+        [roleKey]: constructFieldEntry(updatedInternalMapping.getType(roleKey), value)
       };
 
-      this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-        clearTimeout(this.sendUpdateRequestTimeout);
-        this.sendUpdateRequestTimeout = setTimeout(
-          () =>
-            this.updateEntry(
-              this.props.sdk.entry.fields.entries.getValue(),
-              updatedInternalMapping.asJSON()
-            ),
-          1000
-        );
-      });
+      this.setState(
+        { entries: updatedEntries, entryInternalMapping: updatedInternalMapping },
+        () => {
+          clearTimeout(this.sendUpdateRequestTimeout);
+          this.sendUpdateRequestTimeout = setTimeout(
+            () =>
+              this.updateEntry(
+                this.props.sdk.entry.fields.entries.getValue(),
+                updatedInternalMapping.asJSON()
+              ),
+            1000
+          );
+        }
+      );
     }
   };
 
@@ -489,7 +532,7 @@ export class App extends React.Component {
       (this.state.templateMapping || {}).roles,
       this.state.entries
     );
-    console.log(this.state);
+
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         <Button
@@ -526,16 +569,26 @@ export class App extends React.Component {
                             this.state.templateMapping.roles[this.state.draggingObject.roleKey]
                               .contentType !== this.state.templateMapping.roles[roleKey].contentType
                         })}>
-                        <SectionHeading element="h1">
-                          {displayRoleName(roleKey)}
-                          {internalMappingObject.required ? (
-                            <span className="required-text">* (Required)</span>
-                          ) : (
-                            <span className="optional-text"> (optional)</span>
+                        <div className="role-section__header-section ">
+                          <SectionHeading className="role-section__heading" element="h1">
+                            {displayRoleName(roleKey)}
+                            {internalMappingObject.required ? (
+                              <span className="required-text">* (Required)</span>
+                            ) : (
+                              <span className="optional-text"> (optional)</span>
+                            )}
+                          </SectionHeading>
+                          {!!entry && entry.sys.type === 'Field' && (
+                            <IconButton
+                              className="role-section__remove-field"
+                              iconProps={{ icon: 'Close', size: 'large' }}
+                              buttonType="negative"
+                              label="Remove Field"
+                              onClick={() => this.onRemoveFieldClick(roleKey)}
+                            />
                           )}
-                        </SectionHeading>
-                        {this.state.entryInternalMapping[roleKey] ||
-                        this.state.loadingEntries[roleKey] ? (
+                        </div>
+                        {!!this.state.entries[roleKey] || this.state.loadingEntries[roleKey] ? (
                           <EntryField
                             entry={entry}
                             isLoading={!!this.state.loadingEntries[roleKey]}
@@ -549,6 +602,20 @@ export class App extends React.Component {
                           />
                         ) : (
                           <div className="link-entries-row">
+                            {!!this.state.templateMapping.roles[roleKey].fieldType && (
+                              <TextLink
+                                icon="Quote"
+                                linkType="primary"
+                                className="link-entries-row__button"
+                                onClick={() =>
+                                  this.onAddFieldClick(
+                                    roleKey,
+                                    this.state.templateMapping.roles[roleKey].fieldType
+                                  )
+                                }>
+                                Add field
+                              </TextLink>
+                            )}
                             <CreateNewLink
                               allowedCustomTemplates={
                                 this.state.templateMapping.roles[roleKey].allowedCustomTemplates

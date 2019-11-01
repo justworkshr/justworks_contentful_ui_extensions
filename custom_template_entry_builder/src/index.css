@@ -30,8 +30,14 @@ div {
   text-align: left;
   padding: 4px;
   box-sizing: border-box;
-  flex: 0 0 50%;
-  width: 50%;
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.role-section__header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .required-text {
@@ -62,9 +68,13 @@ div {
 .link-entries-row {
   display: flex;
   align-items: flex-start;
-  justify-content: space-around;
+  justify-content: flex-start;
   padding: 40px 0;
   box-sizing: border-box;
+}
+
+.link-entries-row .link-entries-row__button {
+  margin-right: 10px;
 }
 
 .extension__refresh {

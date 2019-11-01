@@ -10,12 +10,14 @@ export const textMediaModule = {
     roles: {
       left_content: constructRole({
         contentType: ['text', 'media', 'customTemplate'],
+        fieldType: 'markdown',
         description: `Text, Media, or Custom Template [${c.TEXT_COLLECTION}].`,
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true
       }),
       right_content: constructRole({
         contentType: ['text', 'media', 'customTemplate'],
+        fieldType: 'markdown',
         description: `Text, Media, or Custom Template [${c.TEXT_COLLECTION}].`,
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true

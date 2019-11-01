@@ -99,7 +99,7 @@ export const getEntryOrField = async (space, internalMapping, roleKey) => {
   }
 };
 
-export const constructFieldEntry = (type, value) => {
+export const constructFieldEntry = (type, value = '') => {
   return {
     sys: {
       type: 'Field'

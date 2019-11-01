@@ -27,6 +27,7 @@ class CreateNewLink extends React.Component {
   render() {
     return Array.isArray(this.props.contentTypes) ? (
       <Dropdown
+        className="link-entries-row__button"
         toggleElement={
           <TextLink icon="Plus" linkType="primary">
             Create new entry
@@ -72,6 +73,7 @@ class CreateNewLink extends React.Component {
       <TextLink
         icon="Plus"
         linkType="primary"
+        className="link-entries-row__button"
         onClick={() => this.props.onAddEntryClick(this.props.roleKey, this.props.contentTypes)}>
         Create new entry
       </TextLink>

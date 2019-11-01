@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactMde from 'react-mde';
+import InternalMapping from '../utils/InternalMapping';
+import 'react-mde/lib/styles/css/react-mde-all.css';
 
 import {
   TextInput,
@@ -59,12 +62,28 @@ class EntryField extends React.Component {
       );
     };
 
+    const renderMarkdownField = value => {
+      return (
+        <ReactMde
+          selectedTab="write"
+          onChange={newValue => {
+            console.log(newValue);
+            this.props.onFieldChange({ currentTarget: { value: newValue } }, this.props.roleKey);
+          }}
+          value={value}
+        />
+      );
+    };
+
     return (
       <div className="custom-template-entry-field">
         {this.props.entry.sys.type === 'Entry' && renderEntryCard()}
         {this.props.entry.sys.type === 'Field' &&
-          this.props.entry.fields.type === 'text' &&
+          this.props.entry.fields.type === InternalMapping.TEXT &&
           renderTextField(this.props.entry.fields.value)}
+        {this.props.entry.sys.type === 'Field' &&
+          this.props.entry.fields.type === InternalMapping.MARKDOWN &&
+          renderMarkdownField(this.props.entry.fields.value)}
       </div>
     );
   }

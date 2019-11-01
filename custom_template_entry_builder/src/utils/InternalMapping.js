@@ -10,7 +10,7 @@ export default class InternalMapping {
 
       Object.defineProperty(this, key, {
         get: () => {
-          return (this[`_${key}`] || {}).value || this[`_${key}`]; // returns {}.value or value
+          return (this[`_${key}`] || {}).type ? (this[`_${key}`] || {}).value : this[`_${key}`]; // returns {}.value or value
         },
 
         set: value => {
@@ -46,12 +46,16 @@ export default class InternalMapping {
     this[`_${key}`] = this.entryMapping({ type: InternalMapping.ENTRY, value });
   }
 
-  addTextField(key, value) {
+  addTextField(key, value = '') {
     this[`_${key}`] = this.entryMapping({ type: InternalMapping.TEXT, value });
   }
 
-  addMarkdownField(key, value) {
+  addMarkdownField(key, value = '') {
     this[`_${key}`] = this.entryMapping({ type: InternalMapping.MARKDOWN, value });
+  }
+
+  addField(key, type, value) {
+    this[`_${key}`] = this.entryMapping({ type: type, value });
   }
 
   asJSON() {

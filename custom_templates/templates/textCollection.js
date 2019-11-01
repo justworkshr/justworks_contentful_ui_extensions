@@ -11,16 +11,19 @@ export const textCollection = {
 
       text_1: constructRole({
         contentType: 'text',
+        fieldType: 'markdown',
         required: true,
         description: 'Text for the top of collection'
       }),
       text_2: constructRole({
         contentType: 'text',
+        fieldType: 'markdown',
         required: false,
         description: 'Text for the middle of collection'
       }),
       text_3: constructRole({
         contentType: 'text',
+        fieldType: 'markdown',
         required: false,
         description: 'Text for the bottom of collection'
       }),

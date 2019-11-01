@@ -2,12 +2,14 @@ export const constructRole = ({
   contentType = '',
   description = '',
   allowedCustomTemplates = [],
-  required = true
+  required = true,
+  fieldType = ''
 } = {}) => {
   return {
     contentType,
     description,
     allowedCustomTemplates,
-    required
+    required,
+    fieldType
   };
 };

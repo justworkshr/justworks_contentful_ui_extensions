@@ -27,6 +27,7 @@ class LinkExisting extends React.Component {
   render() {
     return (
       <Dropdown
+        className="link-entries-row__button"
         toggleElement={
           <TextLink icon="Link" linkType="primary">
             Link existing entry

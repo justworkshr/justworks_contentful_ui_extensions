@@ -10,22 +10,26 @@ export const cardBlock = {
     roles: {
       card_link: constructRole({
         contentType: 'link',
+        fieldType: 'text',
         required: false,
         description: 'Optional link to supply for when a user clicks on the card.'
       }),
       left_text: constructRole({
         contentType: ['text', 'customTemplate'],
+        fieldType: 'markdown',
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true,
         description: `Text or Custom Template [${[c.TEXT_COLLECTION]}]. Primary markdown text to display on the left half section.`
       }),
       cta_text: constructRole({
         contentType: 'text',
+        fieldType: 'text',
         required: false,
         description: 'Text for the optional CTA'
       }),
       tag_text: constructRole({
         contentType: 'text',
+        fieldType: 'text',
         required: false,
         description: 'Text for the optional tag on the upper right corner of the card.'
       }),
