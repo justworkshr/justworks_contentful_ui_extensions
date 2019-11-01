@@ -93,10 +93,11 @@ export class App extends React.Component {
     });
   };
 
-  onSysChanged = sysValue => {
+  onSysChanged = async sysValue => {
     const template = this.props.sdk.entry.fields.template.getValue();
     const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
     if (!internalMappingJson) return;
+
     this.setState(
       {
         template,
@@ -141,13 +142,15 @@ export class App extends React.Component {
     return newInternalMapping.keys().filter(key => !Object.keys(oldEntries).some(k => k === key));
   }
 
-  onTemplateChange = template => {
-    this.setState({
-      template,
-      templateMapping:
-        this.props.customTemplates[template && template.toLowerCase()] ||
-        this.prpos.templatePlaceholder
-    });
+  onTemplateChange = async template => {
+    if (template !== this.state.template) {
+      this.setState({
+        template,
+        templateMapping:
+          this.props.customTemplates[template && template.toLowerCase()] ||
+          this.props.templatePlaceholder
+      });
+    }
   };
 
   onAddFieldClick = (roleKey, fieldType) => {
@@ -222,6 +225,7 @@ export class App extends React.Component {
 
   linkEntryToTemplate = (entry, roleKey) => {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
+
     const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.addEntry(roleKey, entry.sys.id);
@@ -229,10 +233,14 @@ export class App extends React.Component {
     this.updateEntry(updatedEntryList, updatedInternalMapping.asJSON());
   };
 
-  onDeepCloneLinkClick = async (roleKey, contentType) => {
+  setEntryLoading(roleKey, value) {
     this.setState(prevState => ({
-      loadingEntries: { ...prevState.loadingEntries, [roleKey]: true }
+      loadingEntries: { ...prevState.loadingEntries, [roleKey]: value }
     }));
+  }
+
+  onDeepCloneLinkClick = async (roleKey, contentType) => {
+    this.setEntryLoading(roleKey, true);
     const entry = await this.props.sdk.dialogs.selectSingleEntry({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
@@ -249,6 +257,7 @@ export class App extends React.Component {
     }
 
     if (entry) {
+      this.setEntryLoading(roleKey, true);
       const clonedEntry = await cloneEntry(
         this.props.sdk.space,
         entry,
@@ -396,9 +405,7 @@ export class App extends React.Component {
   };
 
   fetchEntryByRoleKey = async roleKey => {
-    this.setState(prevState => ({
-      loadingEntries: { ...prevState.loadingEntries, [roleKey]: true }
-    }));
+    this.setEntryLoading(roleKey, true);
 
     const entry = await getEntryOrField(
       this.props.sdk.space,
@@ -412,9 +419,9 @@ export class App extends React.Component {
 
     if (entry) {
       this.setState(prevState => ({
-        entries: { ...prevState.entries, [roleKey]: entry },
-        loadingEntries: { ...prevState.loadingEntries, [roleKey]: false }
+        entries: { ...prevState.entries, [roleKey]: entry }
       }));
+      this.setEntryLoading(roleKey, false);
     }
 
     return entry;
