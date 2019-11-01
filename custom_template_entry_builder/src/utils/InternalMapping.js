@@ -93,14 +93,6 @@ export default class InternalMapping {
     return this[`_${key}`].type === InternalMapping.ENTRY;
   }
 
-  isText(key) {
-    return this[`_${key}`].type === InternalMapping.TEXT;
-  }
-
-  isMarkdown(key) {
-    return this[`_${key}`].type === InternalMapping.MARKDOWN;
-  }
-
   removeEntry(key) {
     this[`_${key}`] = undefined;
   }

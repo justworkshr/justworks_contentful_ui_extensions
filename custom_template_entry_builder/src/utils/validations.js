@@ -1,8 +1,7 @@
 import { getEntryContentTypeId } from './index';
 
 const addError = (errorArray, message) => {
-  const error = { message: message };
-  return Array.isArray(errorArray) ? errorArray.push(error) : [error];
+  return Array.isArray(errorArray) ? errorArray.push({ message: message }) : [{ message: message }];
 };
 
 const missingRequiredRoles = (errors, templateMapping, internalMapping) => {
@@ -40,8 +39,6 @@ const hasInvalidCustomTemplateType = (errors, templateMapping, entries) => {
 };
 
 export const getTemplateErrors = (templateMapping, updatedInternalMapping, entries) => {
-  if (!templateMapping) return {};
-
   let errors = {};
   errors = missingRequiredRoles(errors, templateMapping, updatedInternalMapping);
   errors = hasInvalidCustomTemplateType(errors, templateMapping, entries);

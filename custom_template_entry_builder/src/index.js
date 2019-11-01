@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import classnames from 'classnames';
 import {
   Button,
   SectionHeading,
@@ -42,7 +41,9 @@ import './index.css';
 
 export class App extends React.Component {
   static propTypes = {
-    sdk: PropTypes.object.isRequired
+    sdk: PropTypes.object.isRequired,
+    customTemplates: PropTypes.object.isRequired,
+    templatePlaceholder: PropTypes.object
   };
 
   detachExternalChangeHandler = null;
@@ -60,8 +61,6 @@ export class App extends React.Component {
       loadingEntries: {}, // object { roleKey: id }
       entryInternalMapping: new InternalMapping(internalMappingJson),
       templateMapping: templateMapping,
-      template,
-      value: props.sdk.field.getValue() || '',
       rolesNavigatedTo: []
     };
 
@@ -280,10 +279,6 @@ export class App extends React.Component {
 
   onRemoveClick = roleKey => {
     if (!roleKey) return null;
-    this.removeEntry(roleKey);
-  };
-
-  removeEntry = roleKey => {
     const thisEntry = this.props.sdk.entry;
     const entry = this.state.entries[roleKey] || {};
     const updatedEntryList = thisEntry.fields.entries
@@ -355,10 +350,6 @@ export class App extends React.Component {
             version ? version + 1 : this.props.sdk.entry.getSys().version + 1
           );
         } else {
-          this.props.sdk.notifier.error(
-            'This entry needs to be refreshed. Please refresh the page.'
-          );
-
           this.props.sdk.dialogs.openAlert({
             title: 'Please refresh the page.',
             message: 'This entry needs to be refreshed. Please refresh the page.'
@@ -415,7 +406,7 @@ export class App extends React.Component {
       roleKey
     ).catch(err => {
       if (err.code === 'NotFound') {
-        this.removeEntry(roleKey);
+        this.onRemoveClick(roleKey);
       }
     });
 
@@ -479,53 +470,53 @@ export class App extends React.Component {
     }
   };
 
-  onDragStart = (e, roleKey, id) => {
-    console.log('START', id);
+  // onDragStart = (e, roleKey, id) => {
+  //   console.log('START', id);
+  //
+  //   this.setState({
+  //     draggingObject: { roleKey, id }
+  //   });
+  // };
+  //
+  // onDragEnd = e => {
+  //   console.log('END');
+  //   this.setState({
+  //     draggingObject: undefined
+  //   });
+  // };
+  //
+  // onDragEnter = (e, roleKey, id) => {
+  //   if ((this.state.draggingObject || {}).id === id) return null;
+  //   console.log(this.state.draggingObject, this.state.dragTargetObject);
+  //   e.stopPropagation();
+  //   e.preventDefault();
+  //   this.setState({
+  //     dragTargetObject: { roleKey, id }
+  //   });
+  // };
+  //
+  // onDragLeave = (e, id) => {
+  //   if ((this.state.draggingObject || {}).id === id) return null;
+  //   console.log('LEAVE', id, this.state.draggingObject);
+  //   this.setState({
+  //     dragTargetObject: undefined
+  //   });
+  // };
+  //
+  // onDrop = e => {
+  //   console.log('DROP');
+  //   if (this.state.draggingObject && this.state.dragTargetObject) {
+  //     this.swapElements(this.state.draggingObject, this.state.dragTargetObject);
+  //     this.setState({
+  //       draggingObject: undefined,
+  //       dragTargetObject: undefined
+  //     });
+  //   }
+  // };
 
-    this.setState({
-      draggingObject: { roleKey, id }
-    });
-  };
-
-  onDragEnd = e => {
-    console.log('END');
-    this.setState({
-      draggingObject: undefined
-    });
-  };
-
-  onDragEnter = (e, roleKey, id) => {
-    if ((this.state.draggingObject || {}).id === id) return null;
-    console.log(this.state.draggingObject, this.state.dragTargetObject);
-    e.stopPropagation();
-    e.preventDefault();
-    this.setState({
-      dragTargetObject: { roleKey, id }
-    });
-  };
-
-  onDragLeave = (e, id) => {
-    if ((this.state.draggingObject || {}).id === id) return null;
-    console.log('LEAVE', id, this.state.draggingObject);
-    this.setState({
-      dragTargetObject: undefined
-    });
-  };
-
-  onDrop = e => {
-    console.log('DROP');
-    if (this.state.draggingObject && this.state.dragTargetObject) {
-      this.swapElements(this.state.draggingObject, this.state.dragTargetObject);
-      this.setState({
-        draggingObject: undefined,
-        dragTargetObject: undefined
-      });
-    }
-  };
-
-  swapElements = (element1, element2) => {
-    console.log('SWAP: ', element1, element2);
-  };
+  // swapElements = (element1, element2) => {
+  //   console.log('SWAP: ', element1, element2);
+  // };
 
   render() {
     const contentTypeGroups = groupByContentType(
@@ -545,10 +536,10 @@ export class App extends React.Component {
         {Object.keys(contentTypeGroups).map((groupKey, index) => {
           return (
             <div className="entry-group" key={`group--${index}`}>
-              <div className="entry-group__header-section">
+              {/* <div className="entry-group__header-section">
                 <Heading>{displayContentType(groupKey)}</Heading>
                 <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
-              </div>
+              </div> */}
               <div className="entry-container">
                 {Object.keys(contentTypeGroups[groupKey])
                   .sort((a, b) => (!this.state.templateMapping.roles[b] || {}).required)
@@ -558,17 +549,13 @@ export class App extends React.Component {
                     return (
                       <div
                         key={index}
-                        className={classnames('role-section', {
-                          highlighted:
-                            !!this.state.draggingObject &&
-                            this.state.templateMapping.roles[this.state.draggingObject.roleKey]
-                              .contentType ===
-                              this.state.templateMapping.roles[roleKey].contentType,
-                          unhighlighted:
-                            !!this.state.draggingObject &&
-                            this.state.templateMapping.roles[this.state.draggingObject.roleKey]
-                              .contentType !== this.state.templateMapping.roles[roleKey].contentType
-                        })}>
+                        className={`role-section ${
+                          !!this.state.draggingObject &&
+                          this.state.templateMapping.roles[this.state.draggingObject.roleKey]
+                            .contentType !== this.state.templateMapping.roles[roleKey].contentType
+                            ? 'unhighlighted'
+                            : ''
+                        }`}>
                         <div className="role-section__header-section ">
                           <SectionHeading className="role-section__heading" element="h1">
                             {displayRoleName(roleKey)}
@@ -659,11 +646,3 @@ init(sdk => {
     document.getElementById('root')
   );
 });
-
-/**
- * By default, iframe of the extension is fully reloaded on every save of a source file.
- * If you want to use HMR (hot module reload) instead of full reload, uncomment the following lines
- */
-// if (module.hot) {
-//   module.hot.accept();
-// }

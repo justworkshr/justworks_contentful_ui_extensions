@@ -1,5 +1,4 @@
 export const getStatus = entry => {
-  if (!entry) return null;
   if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
     return 'published';
   } else if (entry.sys.publishedAt && entry.sys.publishedAt !== entry.sys.updatedAt) {

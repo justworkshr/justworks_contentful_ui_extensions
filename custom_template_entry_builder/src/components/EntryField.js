@@ -12,82 +12,59 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import { getStatus, getEntryContentTypeId } from '../utils';
-import classnames from 'classnames';
 
-class EntryField extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const renderEntryCard = () => {
-      return (
-        <EntryCard
-          draggable
-          loading={this.props.isLoading}
-          className={classnames('role-section__entity')}
-          size="small"
-          title={this.props.entry ? this.props.entry.fields.name['en-US'] : 'Loading...'}
-          contentType={
-            this.props.entry.sys.contentType ? getEntryContentTypeId(this.props.entry) : null
-          }
-          status={getStatus(this.props.entry)}
-          withDragHandle={true}
-          isDragActive={this.props.isDragActive}
-          onDragStart={e => this.onDragStart(e, this.props.roleKey, this.props.entry.sys.id)}
-          onDragEnd={e => this.onDragEnd(e)}
-          onDragEnter={e => this.onDragEnter(e, this.props.roleKey, this.props.entry.sys.id)}
-          onDragOver={e => this.onDragEnter(e, this.props.roleKey, this.props.entry.sys.id)}
-          onDragLeave={e => this.onDragLeave(e, this.props.entry.sys.id)}
-          onDrop={e => this.onDrop(e)}
-          onClick={() => this.props.onEditClick(this.props.entry)}
-          dropdownListElements={
-            <DropdownList>
-              <DropdownListItem isTitle>Actions</DropdownListItem>
-              <DropdownListItem onClick={() => this.props.onEditClick(this.props.entry)}>
-                Edit
-              </DropdownListItem>
-              <DropdownListItem onClick={() => this.props.onRemoveClick(this.props.roleKey)}>
-                Remove
-              </DropdownListItem>
-            </DropdownList>
-          }
-        />
-      );
-    };
-
-    const renderTextField = value => {
-      return (
-        <TextInput onChange={e => this.props.onFieldChange(e, this.props.roleKey)} value={value} />
-      );
-    };
-
-    const renderMarkdownField = value => {
-      return (
-        <ReactMde
-          selectedTab="write"
-          onChange={newValue => {
-            console.log(newValue);
-            this.props.onFieldChange({ currentTarget: { value: newValue } }, this.props.roleKey);
-          }}
-          value={value}
-        />
-      );
-    };
-
+export const EntryField = props => {
+  const renderEntryCard = () => {
     return (
-      <div className="custom-template-entry-field">
-        {this.props.entry.sys.type === 'Entry' && renderEntryCard()}
-        {this.props.entry.sys.type === 'Field' &&
-          this.props.entry.fields.type === InternalMapping.TEXT &&
-          renderTextField(this.props.entry.fields.value)}
-        {this.props.entry.sys.type === 'Field' &&
-          this.props.entry.fields.type === InternalMapping.MARKDOWN &&
-          renderMarkdownField(this.props.entry.fields.value)}
-      </div>
+      <EntryCard
+        draggable
+        loading={props.isLoading}
+        className="role-section__entity"
+        size="small"
+        title={props.entry ? props.entry.fields.name['en-US'] : 'Loading...'}
+        contentType={props.entry.sys.contentType ? getEntryContentTypeId(props.entry) : null}
+        status={getStatus(props.entry)}
+        withDragHandle={true}
+        isDragActive={props.isDragActive}
+        onClick={() => props.onEditClick(props.entry)}
+        dropdownListElements={
+          <DropdownList>
+            <DropdownListItem isTitle>Actions</DropdownListItem>
+            <DropdownListItem onClick={() => props.onEditClick(props.entry)}>Edit</DropdownListItem>
+            <DropdownListItem onClick={() => props.onRemoveClick(props.roleKey)}>
+              Remove
+            </DropdownListItem>
+          </DropdownList>
+        }
+      />
     );
-  }
-}
+  };
+  const renderTextField = value => {
+    return <TextInput onChange={e => props.onFieldChange(e, props.roleKey)} value={value} />;
+  };
+  const renderMarkdownField = value => {
+    return (
+      <ReactMde
+        selectedTab="write"
+        onChange={newValue => {
+          props.onFieldChange({ currentTarget: { value: newValue } }, props.roleKey);
+        }}
+        value={value}
+      />
+    );
+  };
+  return (
+    <div className="custom-template-entry-field">
+      {props.entry.sys.type === 'Entry' && renderEntryCard()}
+      {props.entry.sys.type === 'Field' &&
+        props.entry.fields.type === InternalMapping.TEXT &&
+        renderTextField(props.entry.fields.value)}
+      {props.entry.sys.type === 'Field' &&
+        props.entry.fields.type === InternalMapping.MARKDOWN &&
+        renderMarkdownField(props.entry.fields.value)}
+    </div>
+  );
+};
 EntryField.defaultProps = {
   entry: {
     sys: {}
