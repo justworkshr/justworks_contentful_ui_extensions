@@ -35,7 +35,7 @@ class LinkExisting extends React.Component {
         onClick={this.toggleDropdown}
         isOpen={this.state.isOpen}>
         <DropdownList>
-          <DropdownListItem isTitle>Method</DropdownListItem>
+          <DropdownListItem isTitle>Actions</DropdownListItem>
           <DropdownListItem
             onClick={() =>
               this.props.onLinkEntryClick(this.props.roleKey, this.props.contentTypes)
@@ -46,7 +46,7 @@ class LinkExisting extends React.Component {
             onClick={() =>
               this.props.onDeepCloneLinkClick(this.props.roleKey, this.props.contentTypes)
             }>
-            Deep clone
+            Deep copy
           </DropdownListItem>
         </DropdownList>
       </Dropdown>

@@ -51,17 +51,17 @@ export class App extends React.Component {
     super(props);
     const template = props.sdk.entry.fields.template.getValue();
     const templateMapping =
-      customTemplates[template && template.toLowerCase()] || templatePlaceholder;
+      props.customTemplates[template && template.toLowerCase()] || props.templatePlaceholder;
     const internalMappingValue = props.sdk.entry.fields.internalMapping.getValue();
-    const entries = {};
+
     this.state = {
-      entries: entries,
+      entries: {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
       entryInternalMapping: internalMappingValue
         ? JSON.parse(props.sdk.entry.fields.internalMapping.getValue())
         : {},
-      internalMapping: templateMapping,
+      templateMapping: templateMapping,
       template,
       value: props.sdk.field.getValue() || '',
       rolesNavigatedTo: []
@@ -103,7 +103,9 @@ export class App extends React.Component {
         entryInternalMapping: internalMappingValue
           ? JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue())
           : {},
-        internalMapping: customTemplates[template && template.toLowerCase()] || templatePlaceholder
+        templateMapping:
+          this.props.customTemplates[template && template.toLowerCase()] ||
+          this.props.templatePlaceholder
       },
       async () => {
         const rolesToFetch = this.getRolesToFetch(
@@ -122,7 +124,7 @@ export class App extends React.Component {
           internalMappingValue &&
           templateIsValid(
             getTemplateErrors(
-              this.state.internalMapping.roles,
+              this.state.templateMapping.roles,
               JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
               this.state.entries
             )
@@ -146,7 +148,9 @@ export class App extends React.Component {
   onTemplateChange = template => {
     this.setState({
       template,
-      internalMapping: customTemplates[template && template.toLowerCase()] || templatePlaceholder
+      templateMapping:
+        this.props.customTemplates[template && template.toLowerCase()] ||
+        this.prpos.templatePlaceholder
     });
   };
 
@@ -169,7 +173,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       this.props.sdk.entry.getSys().id,
-      this.state.internalMapping.roles
+      this.state.templateMapping.roles
     );
     if (linkedEntryValidation) {
       return this.props.sdk.notifier.error(linkedEntryValidation);
@@ -201,7 +205,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       this.props.sdk.entry.getSys().id,
-      this.state.internalMapping.roles
+      this.state.templateMapping.roles
     );
     if (linkedEntryValidation) {
       return this.props.sdk.notifier.error(linkedEntryValidation);
@@ -273,7 +277,7 @@ export class App extends React.Component {
     // adds new Entry list
     // adds new internalMapping JSON
     const errors = getTemplateErrors(
-      this.state.internalMapping.roles,
+      this.state.templateMapping.roles,
       JSON.parse(updatedInternalMappingJson),
       this.state.entries
     );
@@ -342,7 +346,7 @@ export class App extends React.Component {
 
   validateTemplate = async () => {
     const errors = await getTemplateErrors(
-      this.state.internalMapping.roles,
+      this.state.templateMapping.roles,
       this.state.entryInternalMapping,
       this.state.entries
     );
@@ -458,7 +462,7 @@ export class App extends React.Component {
 
   render() {
     const contentTypeGroups = groupByContentType(
-      this.state.internalMapping.roles,
+      (this.state.templateMapping || {}).roles,
       this.state.entries
     );
     return (
@@ -479,23 +483,23 @@ export class App extends React.Component {
               </div>
               <div className="entry-container">
                 {Object.keys(contentTypeGroups[groupKey])
-                  .sort((a, b) => (!this.state.internalMapping.roles[b] || {}).required)
+                  .sort((a, b) => (!this.state.templateMapping.roles[b] || {}).required)
                   .map((roleKey, index) => {
                     const entry = contentTypeGroups[groupKey][roleKey];
-                    const internalMappingObject = this.state.internalMapping.roles[roleKey] || {};
+                    const internalMappingObject = this.state.templateMapping.roles[roleKey] || {};
                     return (
                       <div
                         key={index}
                         className={classnames('role-section', {
                           highlighted:
                             !!this.state.draggingObject &&
-                            this.state.internalMapping.roles[this.state.draggingObject.roleKey]
+                            this.state.templateMapping.roles[this.state.draggingObject.roleKey]
                               .contentType ===
-                              this.state.internalMapping.roles[roleKey].contentType,
+                              this.state.templateMapping.roles[roleKey].contentType,
                           unhighlighted:
                             !!this.state.draggingObject &&
-                            this.state.internalMapping.roles[this.state.draggingObject.roleKey]
-                              .contentType !== this.state.internalMapping.roles[roleKey].contentType
+                            this.state.templateMapping.roles[this.state.draggingObject.roleKey]
+                              .contentType !== this.state.templateMapping.roles[roleKey].contentType
                         })}>
                         <SectionHeading element="h1">
                           {displayRoleName(roleKey)}
@@ -542,16 +546,16 @@ export class App extends React.Component {
                           <div className="link-entries-row">
                             <CreateNewLink
                               allowedCustomTemplates={
-                                this.state.internalMapping.roles[roleKey].allowedCustomTemplates
+                                this.state.templateMapping.roles[roleKey].allowedCustomTemplates
                               }
                               onAddEntryClick={this.onAddEntryClick}
-                              contentTypes={this.state.internalMapping.roles[roleKey].contentType}
+                              contentTypes={this.state.templateMapping.roles[roleKey].contentType}
                               roleKey={roleKey}
                             />
                             <LinkExisting
                               onLinkEntryClick={this.onLinkEntryClick}
                               onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                              contentTypes={this.state.internalMapping.roles[roleKey].contentType}
+                              contentTypes={this.state.templateMapping.roles[roleKey].contentType}
                               roleKey={roleKey}
                             />
                           </div>
@@ -578,7 +582,10 @@ export class App extends React.Component {
 }
 
 init(sdk => {
-  ReactDOM.render(<App sdk={sdk} />, document.getElementById('root'));
+  ReactDOM.render(
+    <App sdk={sdk} customTemplates={customTemplates} templatePlaceholder={templatePlaceholder} />,
+    document.getElementById('root')
+  );
 });
 
 /**

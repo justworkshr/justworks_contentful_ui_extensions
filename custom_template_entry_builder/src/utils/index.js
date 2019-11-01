@@ -39,7 +39,7 @@ export const createEntry = async (space, contentType, name, template = undefined
       .join(' ');
     data = { ...data, fields: { ...data.fields, template: { 'en-US': template } } };
   }
-  console.log(data);
+
   const newEntry = await space.createEntry(contentType, data);
 
   return newEntry;
@@ -47,7 +47,7 @@ export const createEntry = async (space, contentType, name, template = undefined
 
 // Groups an array of objects by key
 export const groupByContentType = (internalMapping, entries) => {
-  if (!Object.keys(internalMapping).length) return {};
+  if (!internalMapping || !Object.keys(internalMapping).length) return {};
   const groups = {};
 
   // { <"contentType">: {<"mappingId">: <"entryId">}...}

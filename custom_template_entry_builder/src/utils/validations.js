@@ -40,6 +40,8 @@ const hasInvalidCustomTemplateType = (errors, templateMapping, entries) => {
 };
 
 export const getTemplateErrors = (templateMapping, updatedInternalMapping, entries) => {
+  if (!templateMapping) return {};
+
   let errors = {};
   errors = missingRequiredRoles(errors, templateMapping, updatedInternalMapping);
   errors = hasInvalidCustomTemplateType(errors, templateMapping, entries);
