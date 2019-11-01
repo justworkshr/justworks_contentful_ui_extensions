@@ -73,11 +73,12 @@ export class App extends React.Component {
   }
 
   componentDidMount = async () => {
-    this.props.sdk.window.startAutoResizer();
+    const sdk = this.props.sdk;
+    sdk.window.startAutoResizer();
     // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
-    this.detachExternalChangeHandler = this.props.sdk.field.onValueChanged(this.onExternalChange);
-    this.props.sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
-    this.props.sdk.entry.onSysChanged(this.onSysChanged);
+    this.detachExternalChangeHandler = sdk.field.onValueChanged(this.onExternalChange);
+    sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
+    sdk.entry.onSysChanged(this.onSysChanged);
     await this.loadEntries();
   };
 
@@ -94,8 +95,9 @@ export class App extends React.Component {
   };
 
   onSysChanged = async sysValue => {
-    const template = this.props.sdk.entry.fields.template.getValue();
-    const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
+    const sdk = this.props.sdk;
+    const template = sdk.entry.fields.template.getValue();
+    const internalMappingJson = sdk.entry.fields.internalMapping.getValue();
     if (!internalMappingJson) return;
 
     this.setState(
@@ -124,14 +126,14 @@ export class App extends React.Component {
           templateIsValid(
             getTemplateErrors(
               this.state.templateMapping.roles,
-              JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue()),
+              JSON.parse(sdk.entry.fields.internalMapping.getValue()),
               this.state.entries
             )
           )
         ) {
-          this.props.sdk.field.setInvalid(false);
+          sdk.field.setInvalid(false);
         } else {
-          this.props.sdk.field.setInvalid(true);
+          sdk.field.setInvalid(true);
         }
       }
     );
@@ -200,15 +202,17 @@ export class App extends React.Component {
   };
 
   onAddEntryClick = async (roleKey, contentType, template = undefined) => {
-    const newEntryName = constructEntryName(this.props.sdk.entry.fields.name.getValue(), roleKey);
-    const newEntry = await createEntry(this.props.sdk.space, contentType, newEntryName, template);
+    const sdk = this.props.sdk;
+    const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
+    const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
     await this.linkEntryToTemplate(newEntry, roleKey);
-    this.props.sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+    sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
   };
 
   onLinkEntryClick = async (roleKey, contentType) => {
-    const entry = await this.props.sdk.dialogs.selectSingleEntry({
+    const sdk = this.props.sdk;
+    const entry = await sdk.dialogs.selectSingleEntry({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
     });
@@ -217,11 +221,11 @@ export class App extends React.Component {
     const linkedEntryValidation = validateLinkedEntry(
       entry,
       roleKey,
-      this.props.sdk.entry.getSys().id,
+      sdk.entry.getSys().id,
       this.state.templateMapping.roles
     );
     if (linkedEntryValidation) {
-      return this.props.sdk.notifier.error(linkedEntryValidation);
+      return sdk.notifier.error(linkedEntryValidation);
     }
     this.linkEntryToTemplate(entry, roleKey);
   };
@@ -243,8 +247,9 @@ export class App extends React.Component {
   }
 
   onDeepCloneLinkClick = async (roleKey, contentType) => {
+    const sdk = this.props.sdk;
     this.setEntryLoading(roleKey, true);
-    const entry = await this.props.sdk.dialogs.selectSingleEntry({
+    const entry = await sdk.dialogs.selectSingleEntry({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
     });
@@ -252,31 +257,32 @@ export class App extends React.Component {
     const linkedEntryValidation = validateLinkedEntry(
       entry,
       roleKey,
-      this.props.sdk.entry.getSys().id,
+      sdk.entry.getSys().id,
       this.state.templateMapping.roles
     );
     if (linkedEntryValidation) {
-      return this.props.sdk.notifier.error(linkedEntryValidation);
+      return sdk.notifier.error(linkedEntryValidation);
     }
 
     if (entry) {
       this.setEntryLoading(roleKey, true);
       const clonedEntry = await cloneEntry(
-        this.props.sdk.space,
+        sdk.space,
         entry,
-        `${this.props.sdk.entry.fields.name.getValue()} ${roleKey}`
+        `${sdk.entry.fields.name.getValue()} ${roleKey}`
       );
 
       await this.linkEntryToTemplate(clonedEntry, roleKey);
-      this.props.sdk.notifier.success('Deep copy completed. New entry is now linked.');
+      sdk.notifier.success('Deep copy completed. New entry is now linked.');
     }
   };
 
   onEditClick = async entry => {
+    const sdk = this.props.sdk;
     if (!entry) return null;
-    await this.props.sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
+    await sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
     const rolesNavigatedTo = [
-      ...this.props.sdk.entry.fields.entries
+      ...sdk.entry.fields.entries
         .getValue()
         .filter(e => e.sys.id === entry.sys.id)
         .map(e =>
@@ -315,6 +321,7 @@ export class App extends React.Component {
   };
 
   updateEntry = async (updatedEntryList, updatedInternalMappingJson, version = 0) => {
+    const sdk = this.props.sdk;
     // Clones sys and fields object
     // adds new Entry list
     // adds new internalMapping JSON
@@ -327,13 +334,13 @@ export class App extends React.Component {
 
     const newEntry = {
       sys: {
-        ...this.props.sdk.entry.getSys(),
-        version: version ? version : this.props.sdk.entry.getSys().version
+        ...sdk.entry.getSys(),
+        version: version ? version : sdk.entry.getSys().version
       },
       fields: Object.assign(
         {},
-        ...Object.keys(this.props.sdk.entry.fields).map(key => ({
-          [key]: { 'en-US': this.props.sdk.entry.fields[key].getValue() },
+        ...Object.keys(sdk.entry.fields).map(key => ({
+          [key]: { 'en-US': sdk.entry.fields[key].getValue() },
           entries: {
             'en-US': updatedEntryList
           },
@@ -346,7 +353,7 @@ export class App extends React.Component {
     };
 
     try {
-      await this.props.sdk.space.updateEntry(newEntry);
+      await sdk.space.updateEntry(newEntry);
       this.versionAttempts = 0;
       this.setState({
         errors
@@ -359,16 +366,16 @@ export class App extends React.Component {
           await this.updateEntry(
             updatedEntryList,
             updatedInternalMappingJson,
-            version ? version + 1 : this.props.sdk.entry.getSys().version + 1
+            version ? version + 1 : sdk.entry.getSys().version + 1
           );
         } else {
-          this.props.sdk.dialogs.openAlert({
+          sdk.dialogs.openAlert({
             title: 'Please refresh the page.',
             message: 'This entry needs to be refreshed. Please refresh the page.'
           });
         }
       } else {
-        this.props.sdk.notifier.error('An error occured. Please try again.');
+        sdk.notifier.error('An error occured. Please try again.');
         await this.loadEntries();
       }
     }
@@ -385,6 +392,7 @@ export class App extends React.Component {
   };
 
   validateTemplate = async () => {
+    const sdk = this.props.sdk;
     const errors = await getTemplateErrors(
       this.state.templateMapping.roles,
       this.state.entryInternalMapping,
@@ -399,9 +407,9 @@ export class App extends React.Component {
       },
       () => {
         if (isValid) {
-          this.props.sdk.field.setInvalid(false);
+          sdk.field.setInvalid(false);
         } else {
-          this.props.sdk.field.setInvalid(true);
+          sdk.field.setInvalid(true);
         }
       }
     );
@@ -443,12 +451,13 @@ export class App extends React.Component {
   };
 
   onChange = e => {
+    const sdk = this.props.sdk;
     const value = e.currentTarget.value;
     this.setState({ value });
     if (value) {
-      this.props.sdk.field.setValue(value);
+      sdk.field.setValue(value);
     } else {
-      this.props.sdk.field.removeValue();
+      sdk.field.removeValue();
     }
   };
 
