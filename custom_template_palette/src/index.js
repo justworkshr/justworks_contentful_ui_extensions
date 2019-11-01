@@ -12,7 +12,9 @@ import './index.css';
 
 export class App extends React.Component {
   static propTypes = {
-    sdk: PropTypes.object.isRequired
+    sdk: PropTypes.object.isRequired,
+    customTemplates: PropTypes.object,
+    templatePlaceholder: PropTypes.object
   };
 
   detachExternalChangeHandler = null;
@@ -23,8 +25,8 @@ export class App extends React.Component {
     const value = props.sdk.field.getValue() || '';
     this.state = {
       value: value,
-      templateMapping: customTemplates[value.toLowerCase()] || templatePlaceholder,
-      displayingTemplates: false
+      templateMapping: props.customTemplates[value.toLowerCase()] || props.templatePlaceholder,
+      displayingTemplates: !props.customTemplates[value.toLowerCase()]
     };
 
     this.onSwitchButtonClick = this.onSwitchButtonClick.bind(this);
@@ -47,7 +49,8 @@ export class App extends React.Component {
     if (value) {
       this.setState({
         value,
-        templateMapping: customTemplates[value.toLowerCase()] || templatePlaceholder
+        templateMapping:
+          this.props.customTemplates[value.toLowerCase()] || this.props.templatePlaceholder
       });
     }
   };
@@ -64,17 +67,19 @@ export class App extends React.Component {
 
   onSwitchButtonClick = async () => {
     if (this.state.displayingTemplates) return this.toggleDisplay();
-    const confirm = await this.props.sdk.dialogs.openConfirm({
-      title: 'Warning',
-      message:
-        'Selecting a new template in the next screen will remove all entries that are linked to this template below. They will not be archived or deleted.',
-      confirmLabel: 'Ok',
-      cancelLabel: 'Cancel',
-      intent: 'negative'
-    });
+    if (this.props.customTemplates[this.state.value.toLowerCase()]) {
+      const confirm = await this.props.sdk.dialogs.openConfirm({
+        title: 'Warning',
+        message:
+          'Selecting a new template in the next screen will remove all entries that are linked to this template below. They will not be archived or deleted.',
+        confirmLabel: 'Ok',
+        cancelLabel: 'Cancel',
+        intent: 'negative'
+      });
 
-    if (confirm) {
-      this.toggleDisplay();
+      if (confirm) {
+        this.toggleDisplay();
+      }
     }
   };
 
@@ -108,7 +113,7 @@ export class App extends React.Component {
         <TemplateDisplay
           currentTemplateKey={this.state.value.toLowerCase()}
           onTemplateCardClick={this.onTemplateCardClick}
-          templates={customTemplates}
+          templates={this.props.customTemplates}
         />
         <Button
           className="palette__switch-button"
@@ -160,7 +165,10 @@ export class App extends React.Component {
 }
 
 init(sdk => {
-  ReactDOM.render(<App sdk={sdk} />, document.getElementById('root'));
+  ReactDOM.render(
+    <App customTemplates={customTemplates} templatePlaceholder={templatePlaceholder} sdk={sdk} />,
+    document.getElementById('root')
+  );
 });
 
 /**
