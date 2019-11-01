@@ -4,9 +4,6 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import {
   Button,
-  DropdownList,
-  DropdownListItem,
-  EntryCard,
   SectionHeading,
   Heading,
   Paragraph,
@@ -16,13 +13,13 @@ import {
 
 import CreateNewLink from './components/CreateNewLink';
 import LinkExisting from './components/LinkExisting';
-
+import EntryField from './components/EntryField';
 import { init } from 'contentful-ui-extensions-sdk';
 
 import { customTemplates, templatePlaceholder } from '../../custom_templates/';
+import InternalMapping from './utils/InternalMapping';
 
 import {
-  getStatus,
   constructLink,
   groupByContentType,
   createEntry,
@@ -30,7 +27,8 @@ import {
   displayContentType,
   displayRoleName,
   getContentTypeArray,
-  getEntryContentTypeId
+  getEntryOrField,
+  constructFieldEntry
 } from './utils';
 
 import { validateLinkedEntry, templateIsValid, getTemplateErrors } from './utils/validations';
@@ -52,24 +50,25 @@ export class App extends React.Component {
     const template = props.sdk.entry.fields.template.getValue();
     const templateMapping =
       props.customTemplates[template && template.toLowerCase()] || props.templatePlaceholder;
-    const internalMappingValue = props.sdk.entry.fields.internalMapping.getValue();
+    const internalMappingJson = props.sdk.entry.fields.internalMapping.getValue();
 
     this.state = {
       entries: {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
-      entryInternalMapping: internalMappingValue
-        ? JSON.parse(props.sdk.entry.fields.internalMapping.getValue())
-        : {},
+      entryInternalMapping: new InternalMapping(internalMappingJson),
       templateMapping: templateMapping,
       template,
       value: props.sdk.field.getValue() || '',
       rolesNavigatedTo: []
     };
 
+    this.sendUpdateRequestTimeout = undefined;
+
     this.versionAttempts = 0;
     this.MAX_VERSION_ATTEMPTS = 3;
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
+    this.onFieldChange = this.onFieldChange.bind(this);
   }
 
   componentDidMount = async () => {
@@ -95,14 +94,12 @@ export class App extends React.Component {
 
   onSysChanged = sysValue => {
     const template = this.props.sdk.entry.fields.template.getValue();
-    const internalMappingValue = this.props.sdk.entry.fields.internalMapping.getValue();
-    if (!internalMappingValue) return;
+    const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
+    if (!internalMappingJson) return;
     this.setState(
       {
         template,
-        entryInternalMapping: internalMappingValue
-          ? JSON.parse(this.props.sdk.entry.fields.internalMapping.getValue())
-          : {},
+        entryInternalMapping: new InternalMapping(internalMappingJson),
         templateMapping:
           this.props.customTemplates[template && template.toLowerCase()] ||
           this.props.templatePlaceholder
@@ -121,7 +118,7 @@ export class App extends React.Component {
 
         if (
           Object.keys(this.state.entries).length &&
-          internalMappingValue &&
+          internalMappingJson &&
           templateIsValid(
             getTemplateErrors(
               this.state.templateMapping.roles,
@@ -136,13 +133,13 @@ export class App extends React.Component {
         }
       }
     );
+
+    console.log(this.state.entryInternalMapping);
   };
 
   getRolesToFetch(newInternalMapping, oldEntries) {
     // if newInternalMapping has more keys than oldEntries, return those extra keys
-    return Object.keys(newInternalMapping).filter(
-      key => !Object.keys(oldEntries).some(k => k === key)
-    );
+    return newInternalMapping.keys().filter(key => !Object.keys(oldEntries).some(k => k === key));
   }
 
   onTemplateChange = template => {
@@ -184,12 +181,10 @@ export class App extends React.Component {
   linkEntryToTemplate = (entry, roleKey) => {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
     const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
-    const updatedInternalMapping = JSON.stringify({
-      ...this.state.entryInternalMapping,
-      [roleKey]: entry.sys.id
-    });
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.addEntry(roleKey, entry.sys.id);
 
-    this.updateEntry(updatedEntryList, updatedInternalMapping);
+    this.updateEntry(updatedEntryList, updatedInternalMapping.asJSON());
   };
 
   onDeepCloneLinkClick = async (roleKey, contentType) => {
@@ -248,18 +243,16 @@ export class App extends React.Component {
   removeEntry = roleKey => {
     const thisEntry = this.props.sdk.entry;
     const entry = this.state.entries[roleKey] || {};
+    console.log(thisEntry.fields.entries.getValue());
     const updatedEntryList = thisEntry.fields.entries
       .getValue()
       .filter(e => e)
       .filter(e => e.sys.id !== (entry.sys || {}).id);
 
-    const internalMapping = {
-      ...this.state.entryInternalMapping
-    };
+    const internalMapping = this.state.entryInternalMapping;
+    internalMapping.removeEntry(roleKey);
 
-    delete internalMapping[roleKey];
-    const updatedInternalMapping = JSON.stringify(internalMapping);
-
+    const updatedInternalMapping = internalMapping.asJSON();
     this.setState(
       prevState => {
         const prevStateLoadingEntries = { ...prevState.loadingEntries };
@@ -292,7 +285,9 @@ export class App extends React.Component {
         {},
         ...Object.keys(this.props.sdk.entry.fields).map(key => ({
           [key]: { 'en-US': this.props.sdk.entry.fields[key].getValue() },
-          entries: { 'en-US': updatedEntryList },
+          entries: {
+            'en-US': updatedEntryList
+          },
           internalMapping: { 'en-US': updatedInternalMappingJson },
           isValid: {
             'en-US': isValid ? 'Yes' : 'No'
@@ -336,7 +331,7 @@ export class App extends React.Component {
 
   loadEntries = async () => {
     await Promise.all(
-      await Object.keys(this.state.entryInternalMapping).map(async roleKey => {
+      await this.state.entryInternalMapping.keys().map(async roleKey => {
         await this.fetchEntryByRoleKey(roleKey);
       })
     );
@@ -372,13 +367,15 @@ export class App extends React.Component {
       loadingEntries: { ...prevState.loadingEntries, [roleKey]: true }
     }));
 
-    const entry = await this.props.sdk.space
-      .getEntry(this.state.entryInternalMapping[roleKey])
-      .catch(err => {
-        if (err.code === 'NotFound') {
-          this.removeEntry(roleKey);
-        }
-      });
+    const entry = await getEntryOrField(
+      this.props.sdk.space,
+      this.state.entryInternalMapping,
+      roleKey
+    ).catch(err => {
+      if (err.code === 'NotFound') {
+        this.removeEntry(roleKey);
+      }
+    });
 
     if (entry) {
       this.setState(prevState => ({
@@ -409,6 +406,33 @@ export class App extends React.Component {
       this.props.sdk.field.setValue(value);
     } else {
       this.props.sdk.field.removeValue();
+    }
+  };
+
+  onFieldChange = (e, roleKey) => {
+    const value = e.currentTarget.value;
+    if (value) {
+      const updatedInternalMapping = this.state.entryInternalMapping;
+      updatedInternalMapping[roleKey] = value;
+      const updatedEntries = {
+        ...this.entries,
+        [roleKey]: constructFieldEntry(
+          updatedInternalMapping.getType(roleKey),
+          updatedInternalMapping[roleKey]
+        )
+      };
+
+      this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+        clearTimeout(this.sendUpdateRequestTimeout);
+        this.sendUpdateRequestTimeout = setTimeout(
+          () =>
+            this.updateEntry(
+              this.props.sdk.entry.fields.entries.getValue(),
+              updatedInternalMapping.asJSON()
+            ),
+          1000
+        );
+      });
     }
   };
 
@@ -465,6 +489,7 @@ export class App extends React.Component {
       (this.state.templateMapping || {}).roles,
       this.state.entries
     );
+    console.log(this.state);
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         <Button
@@ -511,36 +536,16 @@ export class App extends React.Component {
                         </SectionHeading>
                         {this.state.entryInternalMapping[roleKey] ||
                         this.state.loadingEntries[roleKey] ? (
-                          <EntryCard
-                            draggable
-                            loading={!!this.state.loadingEntries[roleKey]}
-                            className={classnames('role-section__entity')}
-                            size="small"
-                            title={entry ? entry.fields.name['en-US'] : 'Loading...'}
-                            contentType={entry ? getEntryContentTypeId(entry) : null}
-                            status={getStatus(entry)}
-                            withDragHandle={true}
+                          <EntryField
+                            entry={entry}
+                            isLoading={!!this.state.loadingEntries[roleKey]}
                             isDragActive={
                               entry ? this.state.draggingObject === entry.sys.id : false
                             }
-                            onDragStart={e => this.onDragStart(e, roleKey, entry.sys.id)}
-                            onDragEnd={e => this.onDragEnd(e)}
-                            onDragEnter={e => this.onDragEnter(e, roleKey, entry.sys.id)}
-                            onDragOver={e => this.onDragEnter(e, roleKey, entry.sys.id)}
-                            onDragLeave={e => this.onDragLeave(e, entry.sys.id)}
-                            onDrop={e => this.onDrop(e)}
-                            onClick={() => this.onEditClick(entry)}
-                            dropdownListElements={
-                              <DropdownList>
-                                <DropdownListItem isTitle>Actions</DropdownListItem>
-                                <DropdownListItem onClick={() => this.onEditClick(entry)}>
-                                  Edit
-                                </DropdownListItem>
-                                <DropdownListItem onClick={() => this.onRemoveClick(roleKey)}>
-                                  Remove
-                                </DropdownListItem>
-                              </DropdownList>
-                            }
+                            roleKey={roleKey}
+                            onEditClick={this.onEditClick}
+                            onRemoveClick={this.onRemoveClick}
+                            onFieldChange={this.onFieldChange}
                           />
                         ) : (
                           <div className="link-entries-row">

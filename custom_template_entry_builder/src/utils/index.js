@@ -46,25 +46,25 @@ export const createEntry = async (space, contentType, name, template = undefined
 };
 
 // Groups an array of objects by key
-export const groupByContentType = (internalMapping, entries) => {
-  if (!internalMapping || !Object.keys(internalMapping).length) return {};
+export const groupByContentType = (templateRoles, entries) => {
+  if (!templateRoles || !Object.keys(templateRoles).length) return {};
   const groups = {};
 
   // { <"contentType">: {<"mappingId">: <"entryId">}...}
   // or:
   // { "text": {"left_text": "1234"}...}
-  Object.keys(internalMapping).forEach(key => {
-    groups[internalMapping[key].contentType] = {
-      ...groups[internalMapping[key].contentType],
+  Object.keys(templateRoles).forEach(key => {
+    groups[templateRoles[key].contentType] = {
+      ...groups[templateRoles[key].contentType],
       [key]: undefined
     };
   });
 
   if (!Object.keys(entries).length) return groups;
   Object.keys(entries)
-    .filter(entryKey => !!internalMapping[entryKey])
+    .filter(entryKey => !!templateRoles[entryKey])
     .forEach(key => {
-      const contentTypeKey = internalMapping[key].contentType;
+      const contentTypeKey = templateRoles[key].contentType;
       groups[contentTypeKey][key] = entries[key];
     });
 
@@ -87,6 +87,26 @@ export const getContentTypeArray = stringOrArray => {
 };
 
 export const getEntryContentTypeId = entry => {
-  if (!entry.sys) return;
+  if (!entry.sys || !entry.sys.contentType) return;
   return entry.sys.contentType.sys.id;
+};
+
+export const getEntryOrField = async (space, internalMapping, roleKey) => {
+  if (internalMapping.isEntry(roleKey)) {
+    return await space.getEntry(internalMapping[roleKey]);
+  } else {
+    return constructFieldEntry(internalMapping.getType(roleKey), internalMapping[roleKey]);
+  }
+};
+
+export const constructFieldEntry = (type, value) => {
+  return {
+    sys: {
+      type: 'Field'
+    },
+    fields: {
+      type,
+      value
+    }
+  };
 };
