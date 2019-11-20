@@ -1,5 +1,6 @@
 export const constructRole = ({
   contentType = '',
+  linkAsset = false,
   description = '',
   allowedCustomTemplates = [],
   required = true,
@@ -7,6 +8,7 @@ export const constructRole = ({
 } = {}) => {
   return {
     contentType,
+    linkAsset,
     description,
     allowedCustomTemplates,
     required,

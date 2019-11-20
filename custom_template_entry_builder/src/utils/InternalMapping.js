@@ -15,11 +15,25 @@ export default class InternalMapping {
   static get TEXT() {
     return 'text';
   }
+
   static get MARKDOWN() {
     return 'markdown';
   }
+
   static get ENTRY() {
     return 'entry';
+  }
+
+  static get ASSET() {
+    return 'asset';
+  }
+
+  static get FIELDSYS() {
+    return 'Field';
+  }
+
+  static get ASSETSYS() {
+    return 'Asset';
   }
 
   loadInternalMapping(json) {
@@ -47,6 +61,11 @@ export default class InternalMapping {
         configurable: true
       });
     }
+  }
+
+  addAsset(key, value) {
+    this.defineGetterSetters(key);
+    this[`_${key}`] = this.entryMapping({ type: InternalMapping.ASSET, value });
   }
 
   addEntry(key, value) {

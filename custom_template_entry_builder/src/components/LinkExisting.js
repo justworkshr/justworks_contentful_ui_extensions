@@ -30,7 +30,7 @@ class LinkExisting extends React.Component {
         className="link-entries-row__button"
         toggleElement={
           <TextLink icon="Link" linkType="primary">
-            Link existing entry
+            Link existing
           </TextLink>
         }
         onClick={this.toggleDropdown}
@@ -41,8 +41,13 @@ class LinkExisting extends React.Component {
             onClick={() =>
               this.props.onLinkEntryClick(this.props.roleKey, this.props.contentTypes)
             }>
-            Link
+            Link Entry
           </DropdownListItem>
+          {this.props.linkAsset && (
+            <DropdownListItem onClick={() => this.props.onLinkAssetClick(this.props.roleKey)}>
+              Link Asset
+            </DropdownListItem>
+          )}
           <DropdownListItem
             onClick={() =>
               this.props.onDeepCloneLinkClick(this.props.roleKey, this.props.contentTypes)
@@ -55,10 +60,17 @@ class LinkExisting extends React.Component {
   }
 }
 
+LinkExisting.defaultProps = {
+  contentTypes: [],
+  linkAsset: false
+};
+
 LinkExisting.propTypes = {
+  onLinkAssetClick: PropTypes.func,
   onLinkEntryClick: PropTypes.func,
   onDeepCloneLinkClick: PropTypes.func,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  linkAsset: PropTypes.bool,
   roleKey: PropTypes.string
 };
 

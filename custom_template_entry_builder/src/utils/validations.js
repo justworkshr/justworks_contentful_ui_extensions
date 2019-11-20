@@ -56,6 +56,16 @@ export const templateIsValid = errorObject => {
   return !Object.keys(errorObject).length;
 };
 
+export const validateLinkedAsset = entry => {
+  if (!entry) return;
+  let message = '';
+  if (entry.fields.file['en-US'].contentType !== 'image/png') {
+    message = 'Only image assets are allowed.';
+  }
+
+  return message;
+};
+
 export const validateLinkedEntry = (entry, roleKey, parentEntryId, internalMapping) => {
   if (!entry) return;
   let message = '';

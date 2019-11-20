@@ -8,7 +8,8 @@ import {
   TextInput,
   DropdownList,
   DropdownListItem,
-  EntryCard
+  EntryCard,
+  AssetCard
 } from '@contentful/forma-36-react-components';
 
 import { getStatus, getEntryContentTypeId } from '../utils';
@@ -39,6 +40,30 @@ export const EntryField = props => {
       />
     );
   };
+
+  const renderAssetCard = () => {
+    return (
+      <AssetCard
+        draggable
+        className="role-section__entity"
+        size="default"
+        title={props.entry ? props.entry.fields.title['en-US'] : 'Loading...'}
+        src={props.entry ? props.entry.fields.file['en-US'].url : ''}
+        status={getStatus(props.entry)}
+        withDragHandle={true}
+        isDragActive={props.isDragActive}
+        dropdownListElements={
+          <DropdownList>
+            <DropdownListItem isTitle>Actions</DropdownListItem>
+            <DropdownListItem onClick={() => props.onRemoveFieldClick(props.roleKey)}>
+              Remove
+            </DropdownListItem>
+          </DropdownList>
+        }
+      />
+    );
+  };
+
   const renderTextField = value => {
     return <TextInput onChange={e => props.onFieldChange(e, props.roleKey)} value={value} />;
   };
@@ -53,8 +78,10 @@ export const EntryField = props => {
       />
     );
   };
+
   return (
     <div className="custom-template-entry-field">
+      {props.entry.sys.type === 'Asset' && renderAssetCard()}
       {props.entry.sys.type === 'Entry' && renderEntryCard()}
       {props.entry.sys.type === 'Field' &&
         props.entry.fields.type === InternalMapping.TEXT &&
@@ -83,6 +110,7 @@ EntryField.propTypes = {
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
+  onRemoveFieldClick: PropTypes.func,
   onFieldChange: PropTypes.func
 };
 

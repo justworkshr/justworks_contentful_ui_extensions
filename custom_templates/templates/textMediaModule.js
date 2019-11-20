@@ -9,16 +9,18 @@ export const textMediaModule = {
     },
     roles: {
       left_content: constructRole({
-        contentType: ['text', 'media', 'customTemplate'],
+        linkAsset: true,
+        contentType: ['text', 'media'],
         fieldType: 'markdown',
-        description: `Text, Media, or Custom Template [${c.TEXT_COLLECTION}].`,
+        description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true
       }),
       right_content: constructRole({
-        contentType: ['text', 'media', 'customTemplate'],
+        linkAsset: true,
+        contentType: ['text', 'media'],
         fieldType: 'markdown',
-        description: `Text, Media, or Custom Template [${c.TEXT_COLLECTION}].`,
+        description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true
       }),

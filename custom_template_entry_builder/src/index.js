@@ -32,7 +32,12 @@ import {
   constructFieldEntry
 } from './utils';
 
-import { validateLinkedEntry, templateIsValid, getTemplateErrors } from './utils/validations';
+import {
+  validateLinkedEntry,
+  validateLinkedAsset,
+  templateIsValid,
+  getTemplateErrors
+} from './utils/validations';
 
 import { cloneEntry } from '../../shared/utilities/deepCopy';
 
@@ -170,7 +175,10 @@ export class App extends React.Component {
 
     const updatedEntries = {
       ...this.state.entries,
-      [roleKey]: constructFieldEntry(updatedInternalMapping.getType(roleKey))
+      [roleKey]: constructFieldEntry(
+        InternalMapping.FIELDSYS,
+        updatedInternalMapping.getType(roleKey)
+      )
     };
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
@@ -208,6 +216,34 @@ export class App extends React.Component {
 
     await this.linkEntryToTemplate(newEntry, roleKey);
     sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+  };
+
+  onLinkAssetClick = async roleKey => {
+    const sdk = this.props.sdk;
+    const entry = await sdk.dialogs.selectSingleAsset({
+      locale: 'en-US'
+    });
+
+    if (!entry) return;
+    const linkedEntryValidation = validateLinkedAsset(
+      entry,
+      roleKey,
+      sdk.entry.getSys().id,
+      this.state.templateMapping.roles
+    );
+    if (linkedEntryValidation) {
+      return sdk.notifier.error(linkedEntryValidation);
+    }
+    this.linkAssetToTemplate(entry, roleKey);
+  };
+
+  linkAssetToTemplate = (entry, roleKey) => {
+    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
+
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.addAsset(roleKey, entry.sys.id);
+
+    this.updateEntry(entriesFieldValue, updatedInternalMapping.asJSON());
   };
 
   onLinkEntryClick = async (roleKey, contentType) => {
@@ -471,7 +507,11 @@ export class App extends React.Component {
 
       const updatedEntries = {
         ...this.state.entries,
-        [roleKey]: constructFieldEntry(updatedInternalMapping.getType(roleKey), value)
+        [roleKey]: constructFieldEntry(
+          InternalMapping.FIELDSYS,
+          updatedInternalMapping.getType(roleKey),
+          value
+        )
       };
 
       this.setState(
@@ -606,6 +646,7 @@ export class App extends React.Component {
                             roleKey={roleKey}
                             onEditClick={this.onEditClick}
                             onRemoveClick={this.onRemoveClick}
+                            onRemoveFieldClick={this.onRemoveFieldClick}
                             onFieldChange={this.onFieldChange}
                           />
                         ) : (
@@ -633,6 +674,8 @@ export class App extends React.Component {
                               roleKey={roleKey}
                             />
                             <LinkExisting
+                              linkAsset={this.state.templateMapping.roles[roleKey].linkAsset}
+                              onLinkAssetClick={this.onLinkAssetClick}
                               onLinkEntryClick={this.onLinkEntryClick}
                               onDeepCloneLinkClick={this.onDeepCloneLinkClick}
                               contentTypes={this.state.templateMapping.roles[roleKey].contentType}

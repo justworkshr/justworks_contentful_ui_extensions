@@ -1,3 +1,5 @@
+import InternalMapping from './InternalMapping';
+
 export const getStatus = entry => {
   if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
     return 'published';
@@ -91,17 +93,23 @@ export const getEntryContentTypeId = entry => {
 };
 
 export const getEntryOrField = async (space, internalMapping, roleKey) => {
-  if (internalMapping.isEntry(roleKey)) {
+  const fieldType = internalMapping.getType(roleKey);
+  if (fieldType === InternalMapping.ENTRY) {
     return await space.getEntry(internalMapping[roleKey]);
+  } else if (fieldType === InternalMapping.ASSET) {
+    return await space.getAsset(internalMapping[roleKey]);
   } else {
-    return constructFieldEntry(internalMapping.getType(roleKey), internalMapping[roleKey]);
+    const sysType =
+      fieldType === InternalMapping.ASSET ? InternalMapping.ASSETSYS : InternalMapping.FIELDSYS;
+
+    return constructFieldEntry(sysType, fieldType, internalMapping[roleKey]);
   }
 };
 
-export const constructFieldEntry = (type, value = '') => {
+export const constructFieldEntry = (sysType, type, value = '') => {
   return {
     sys: {
-      type: 'Field'
+      type: sysType
     },
     fields: {
       type,
