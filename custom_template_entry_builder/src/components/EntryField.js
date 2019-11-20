@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMde from 'react-mde';
 import InternalMapping from '../utils/InternalMapping';
-import 'react-mde/lib/styles/css/react-mde-all.css';
 
 import {
   TextInput,
@@ -12,7 +11,12 @@ import {
   AssetCard
 } from '@contentful/forma-36-react-components';
 
+import { displayRoleName } from '../utils';
+
 import { getStatus, getEntryContentTypeId } from '../utils';
+import StyleEditor from './StyleEditor/index.js';
+
+import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
   const renderEntryCard = () => {
@@ -89,6 +93,12 @@ export const EntryField = props => {
       {props.entry.sys.type === 'Field' &&
         props.entry.fields.type === InternalMapping.MARKDOWN &&
         renderMarkdownField(props.entry.fields.value)}
+      {props.entry.sys.type === 'Field' && (
+        <StyleEditor
+          title={displayRoleName(props.roleKey) + ' Style'}
+          type={props.entry.fields.type}
+        />
+      )}
     </div>
   );
 };

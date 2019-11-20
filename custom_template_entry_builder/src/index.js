@@ -636,6 +636,7 @@ export class App extends React.Component {
                             />
                           )}
                         </div>
+                        <HelpText>{internalMappingObject.description}</HelpText>
                         {!!this.state.entries[roleKey] || this.state.loadingEntries[roleKey] ? (
                           <EntryField
                             entry={entry}
@@ -683,7 +684,6 @@ export class App extends React.Component {
                             />
                           </div>
                         )}
-                        <HelpText>{internalMappingObject.description}</HelpText>
                         {!!(this.state.errors[roleKey] || {}).length &&
                           this.state.errors[roleKey].map((error, index) => {
                             return (

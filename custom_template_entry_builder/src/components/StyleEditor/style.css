@@ -1,0 +1,20 @@
+/* style editor */
+
+.style-editor {
+  margin: 40px 0;
+}
+
+.style-editor__heading {
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.style-editor__heading:hover {
+  text-decoration: underline;
+}
+
+.style-editor__heading--icon {
+  margin-right: 10px;
+}
