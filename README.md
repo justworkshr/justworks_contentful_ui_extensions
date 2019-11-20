@@ -18,10 +18,45 @@ https://www.contentful.com/developers/docs/references/content-delivery-api/
 // in root, creates new extension
 npx @contentful/create-contentful-extension my-extension
 
+// Add extra packages needed for self-hosted builds
+npm i webpack webpack-cli babel-core babel-loader @babel/preset-env @babel/preset-react style-loader css-loader html-webpack-inline-source-plugin html-webpack-plugin --save-dev
+
 
 // Configures the current space / environment for the extension and commands
 npm run configure
 
 // Builds and deploys to configured space
 npm run deploy
+```
+
+Create a `webpack.config.js` file at the root
+
+```
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    path: __dirname + '/static',
+    filename: '[name].[chunkhash:8].js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env']
+          }
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
+  }
+};
+
 ```
