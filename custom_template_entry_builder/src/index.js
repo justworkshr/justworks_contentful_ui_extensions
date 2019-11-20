@@ -75,6 +75,7 @@ export class App extends React.Component {
     this.MAX_VERSION_ATTEMPTS = 3;
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
+    this.updateEntryStyle = this.updateEntryStyle.bind(this);
   }
 
   componentDidMount = async () => {
@@ -516,19 +517,40 @@ export class App extends React.Component {
       this.setState(
         { entries: updatedEntries, entryInternalMapping: updatedInternalMapping },
         () => {
-          clearTimeout(this.sendUpdateRequestTimeout);
-          this.sendUpdateRequestTimeout = setTimeout(
-            () =>
-              this.updateEntry(
-                this.props.sdk.entry.fields.entries.getValue(),
-                updatedInternalMapping.asJSON()
-              ),
-            1000
-          );
+          this.timeoutUpdateEntry(updatedInternalMapping, 1000);
         }
       );
     }
   };
+
+  updateEntryStyle(roleKey, styleClasses) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
+
+    const updatedEntries = {
+      ...this.state.entries,
+      [roleKey]: constructFieldEntry(
+        InternalMapping.FIELDSYS,
+        InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], styleClasses })
+      )
+    };
+
+    this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () => {
+      this.timeoutUpdateEntry(updatedInternalMapping, 50);
+    });
+  }
+
+  timeoutUpdateEntry(updatedInternalMapping, milliseconds) {
+    clearTimeout(this.sendUpdateRequestTimeout);
+    this.sendUpdateRequestTimeout = setTimeout(
+      () =>
+        this.updateEntry(
+          this.props.sdk.entry.fields.entries.getValue(),
+          updatedInternalMapping.asJSON()
+        ),
+      milliseconds
+    );
+  }
 
   // onDragStart = (e, roleKey, id) => {
   //   console.log('START', id);
@@ -648,6 +670,7 @@ export class App extends React.Component {
                             onRemoveClick={this.onRemoveClick}
                             onRemoveFieldClick={this.onRemoveFieldClick}
                             onFieldChange={this.onFieldChange}
+                            updateStyle={this.updateEntryStyle}
                           />
                         ) : (
                           <div className="link-entries-row">

@@ -2,6 +2,7 @@ module.exports = {
   verbose: true,
   moduleNameMapper: {
     '^../../custom_templates/$': '<rootDir>/tests/MockImports.js',
+    '/custom_templates/constants$': '<rootDir>/tests/MockImports.js',
     '^../../shared/utilities/deepCopy$': '<rootDir>/tests/MockImports.js',
     '^@contentful/forma-36-react-components/dist/styles.css$': '<rootDir>/tests/MockImports.js',
     '^./style.css$': '<rootDir>/tests/MockImports.js',

@@ -95,6 +95,9 @@ export const EntryField = props => {
         renderMarkdownField(props.entry.fields.value)}
       {props.entry.sys.type === 'Field' && (
         <StyleEditor
+          roleKey={props.roleKey}
+          updateStyle={props.updateStyle}
+          entryStyleClasses={props.entry.fields.styleClasses}
           title={displayRoleName(props.roleKey) + ' Style'}
           type={props.entry.fields.type}
         />
@@ -121,7 +124,8 @@ EntryField.propTypes = {
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onRemoveFieldClick: PropTypes.func,
-  onFieldChange: PropTypes.func
+  onFieldChange: PropTypes.func,
+  updateStyle: PropTypes.func
 };
 
 export default EntryField;

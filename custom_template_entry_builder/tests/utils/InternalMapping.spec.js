@@ -33,12 +33,12 @@ describe('InternalMapping', () => {
 
   describe('setters', () => {
     describe('default', () => {
-      const json = JSON.stringify({ hi: { type: 'entry', value: 'hello' } });
-      const internalMapping = new InternalMapping(json);
-
-      internalMapping.hi = 'bye';
-
       it('preserves the type and sets the value', () => {
+        const json = JSON.stringify({ hi: { type: 'entry', value: 'hello' } });
+        const internalMapping = new InternalMapping(json);
+
+        internalMapping.hi = 'bye';
+
         expect(internalMapping._hi.type).toEqual('entry');
         expect(internalMapping._hi.value).toEqual('bye');
         expect(internalMapping._hi.styleClasses).toEqual('');
@@ -139,6 +139,26 @@ describe('InternalMapping', () => {
       const styleClass = 'hiClass';
       internalMapping.addStyleClass('hi', styleClass);
       expect(internalMapping._hi.styleClasses).toEqual('helloClass hiClass');
+    });
+  });
+
+  describe('setStyleClasses', () => {
+    it('adds style classes to empty value', () => {
+      const json = JSON.stringify({ hi: { type: 'entry', value: 'hello', styleClasses: '' } });
+      const internalMapping = new InternalMapping(json);
+      const styleClass = 'hiClass';
+      internalMapping.setStyleClasses('hi', styleClass);
+      expect(internalMapping._hi.styleClasses).toEqual(styleClass);
+    });
+
+    it('overwrites an existing value', () => {
+      const json = JSON.stringify({
+        hi: { type: 'entry', value: 'hello', styleClasses: 'helloClass' }
+      });
+      const internalMapping = new InternalMapping(json);
+      const styleClass = 'hiClass';
+      internalMapping.setStyleClasses('hi', styleClass);
+      expect(internalMapping._hi.styleClasses).toEqual(styleClass);
     });
   });
 

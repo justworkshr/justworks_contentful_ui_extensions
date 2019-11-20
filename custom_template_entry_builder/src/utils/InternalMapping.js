@@ -93,6 +93,10 @@ export default class InternalMapping {
     this[`_${key}`] = InternalMapping.entryMapping({ type: type, value });
   }
 
+  setStyleClasses(key, styleClasses) {
+    this[`_${key}`].styleClasses = styleClasses;
+  }
+
   addStyleClass(key, styleClass) {
     const classes = this[`_${key}`].styleClasses.split(' ').filter(e => e);
     this[`_${key}`].styleClasses = [...classes, styleClass].join(' ');
