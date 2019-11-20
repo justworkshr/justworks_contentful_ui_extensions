@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import {
   Button,
   SectionHeading,
-  Heading,
-  Paragraph,
+  FieldGroup,
+  FormLabel,
   HelpText,
   ValidationMessage,
   TextLink,
@@ -639,14 +639,12 @@ export class App extends React.Component {
                             : ''
                         }`}>
                         <div className="role-section__header-section ">
-                          <SectionHeading className="role-section__heading" element="h1">
+                          <FormLabel
+                            className="role-section__heading"
+                            htmlFor=""
+                            required={internalMappingObject.required}>
                             {displayRoleName(roleKey)}
-                            {internalMappingObject.required ? (
-                              <span className="required-text">* (Required)</span>
-                            ) : (
-                              <span className="optional-text"> (optional)</span>
-                            )}
-                          </SectionHeading>
+                          </FormLabel>
                           {!!entry && entry.sys.type === 'Field' && (
                             <IconButton
                               className="role-section__remove-field"

@@ -18,3 +18,27 @@
 .style-editor__heading--icon {
   margin-right: 10px;
 }
+
+.style-editor__input-section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.style-editor__radio-section {
+  margin-right: 20px;
+}
+
+.style-editor__color-radio {
+  min-width: 100px;
+}
+.style-editor__color-section {
+  display: inline-flex;
+  margin-left: 10px;
+}
+
+.style-editor__color-box {
+  height: 16px;
+  border: 1px solid black;
+  margin-right: 4px;
+  width: 16px;
+}

@@ -5,7 +5,8 @@ import {
   SectionHeading,
   FieldGroup,
   FormLabel,
-  RadioButtonField
+  RadioButtonField,
+  Paragraph
 } from '@contentful/forma-36-react-components';
 import InternalMapping from '../../utils/InternalMapping';
 import * as c from '../../../../custom_templates/constants';
@@ -46,25 +47,94 @@ const StyleEditor = props => {
       <div>
         <div className="style-editor__section">
           <FieldGroup>
-            <FormLabel>Text Alignment</FormLabel>
-            {c.TEXT_ALIGNMENT_CLASSES.map((classObject, index) => {
-              return (
-                <RadioButtonField
-                  key={`text-alignment-section-${index}`}
-                  id={`radio-${classObject.className}`}
-                  checked={entryStyleClasses
-                    .split(' ')
-                    .filter(e => e)
-                    .includes(classObject.className)}
-                  labelText={classObject.label}
-                  value={classObject.className}
-                  labelIsLight={true}
-                  onChange={e =>
-                    updateStyleExclusive(e, entryStyleClasses, c.TEXT_ALIGNMENT_CLASSES)
-                  }
-                />
-              );
-            })}
+            <FormLabel htmlFor="">Text Alignment</FormLabel>
+            <div className="style-editor__input-section">
+              {c.TEXT_ALIGNMENT_CLASSES.map((classObject, index) => {
+                const fieldId = `radio-${classObject.className}`;
+                return (
+                  <div
+                    className="style-editor__radio-section"
+                    key={`text-alignment-section-${index}`}>
+                    <RadioButtonField
+                      id={fieldId}
+                      checked={entryStyleClasses
+                        .split(' ')
+                        .filter(e => e)
+                        .includes(classObject.className)}
+                      labelText={classObject.label}
+                      value={classObject.className}
+                      labelIsLight={true}
+                      onChange={e =>
+                        updateStyleExclusive(e, entryStyleClasses, c.TEXT_ALIGNMENT_CLASSES)
+                      }
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </FieldGroup>
+          <FieldGroup>
+            <FormLabel htmlFor="">Text Transform</FormLabel>
+            <div className="style-editor__input-section">
+              {c.TEXT_TRANSFORM_CLASSES.map((classObject, index) => {
+                const fieldId = `radio-${classObject.className}`;
+                return (
+                  <div
+                    className="style-editor__radio-section"
+                    key={`text-transform-section-${index}`}>
+                    <RadioButtonField
+                      id={fieldId}
+                      checked={entryStyleClasses
+                        .split(' ')
+                        .filter(e => e)
+                        .includes(classObject.className)}
+                      labelText={classObject.label}
+                      value={classObject.className}
+                      labelIsLight={true}
+                      onChange={e =>
+                        updateStyleExclusive(e, entryStyleClasses, c.TEXT_TRANSFORM_CLASSES)
+                      }
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </FieldGroup>
+          <FieldGroup>
+            <FormLabel htmlFor="">Text Color</FormLabel>
+            <div className="style-editor__input-section">
+              {c.TEXT_COLOR_CLASSES.map((classObject, index) => {
+                const color = c.COLORS.find(color => color.label === classObject.label);
+                const fieldId = `radio-${classObject.className}`;
+                return (
+                  <div className="style-editor__radio-section" key={`text-color-section-${index}`}>
+                    <RadioButtonField
+                      id={fieldId}
+                      className="style-editor__color-radio"
+                      checked={entryStyleClasses
+                        .split(' ')
+                        .filter(e => e)
+                        .includes(classObject.className)}
+                      helpText={color.hexValue}
+                      labelText={classObject.label}
+                      value={classObject.className}
+                      labelIsLight={true}
+                      onChange={e =>
+                        updateStyleExclusive(e, entryStyleClasses, c.TEXT_COLOR_CLASSES)
+                      }
+                    />
+                    <div className="style-editor__color-section">
+                      <div
+                        className="style-editor__color-box"
+                        style={{
+                          backgroundColor: color.hexValue
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </FieldGroup>
         </div>
       </div>
