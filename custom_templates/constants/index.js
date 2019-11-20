@@ -1,3 +1,16 @@
+// Custom templates
 export const CARD_BLOCK = 'card block'
 export const TEXT_COLLECTION = 'text collection'
 export const TEXT_MEDIA_MODULE = 'text media module'
+
+// Content types
+export const CONTENT_TYPE_TEXT = 'text'
+export const CONTENT_TYPE_MEDIA = 'media'
+export const CONTENT_TYPE_CUSTOM_TEMPLATE = 'customTemplate'
+export const CONTENT_TYPE_STYLE = 'style'
+export const CONTENT_TYPE_LINK = 'link'
+
+// Field types
+
+export const FIELD_TYPE_TEXT = 'text'
+export const FIELD_TYPE_MARKDOWN = 'markdown'

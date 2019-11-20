@@ -177,7 +177,7 @@ export class App extends React.Component {
       ...this.state.entries,
       [roleKey]: constructFieldEntry(
         InternalMapping.FIELDSYS,
-        updatedInternalMapping.getType(roleKey)
+        InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey] })
       )
     };
 
@@ -509,8 +509,7 @@ export class App extends React.Component {
         ...this.state.entries,
         [roleKey]: constructFieldEntry(
           InternalMapping.FIELDSYS,
-          updatedInternalMapping.getType(roleKey),
-          value
+          InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], value })
         )
       };
 

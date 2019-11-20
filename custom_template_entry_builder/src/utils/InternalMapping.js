@@ -36,27 +36,32 @@ export default class InternalMapping {
     return 'Asset';
   }
 
+  static entryMapping({ type, styleClasses = '', value = '' } = {}) {
+    return {
+      type,
+      styleClasses,
+      value
+    };
+  }
+
   loadInternalMapping(json) {
     if (!json || !typeof json === 'string') return {};
     return JSON.parse(json);
-  }
-
-  entryMapping({ type, value = '' } = {}) {
-    return {
-      type,
-      value
-    };
   }
 
   defineGetterSetters(key) {
     if (!this.hasOwnProperty(key)) {
       Object.defineProperty(this, key, {
         get: () => {
-          return (this[`_${key}`] || {}).type ? (this[`_${key}`] || {}).value : this[`_${key}`]; // returns {}.value or value
+          return InternalMapping.entryMapping({ ...this[`_${key}`] });
         },
 
         set: value => {
-          this[`_${key}`] = this.entryMapping({ type: this[`_${key}`].type, value });
+          this[`_${key}`] = InternalMapping.entryMapping({
+            type: this[`_${key}`].type,
+            style: this[`_${key}`].style,
+            value
+          });
         },
         configurable: true
       });
@@ -65,27 +70,40 @@ export default class InternalMapping {
 
   addAsset(key, value) {
     this.defineGetterSetters(key);
-    this[`_${key}`] = this.entryMapping({ type: InternalMapping.ASSET, value });
+    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.ASSET, value });
   }
 
   addEntry(key, value) {
     this.defineGetterSetters(key);
-    this[`_${key}`] = this.entryMapping({ type: InternalMapping.ENTRY, value });
+    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.ENTRY, value });
   }
 
   addTextField(key, value = '') {
     this.defineGetterSetters(key);
-    this[`_${key}`] = this.entryMapping({ type: InternalMapping.TEXT, value });
+    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.TEXT, value });
   }
 
   addMarkdownField(key, value = '') {
     this.defineGetterSetters(key);
-    this[`_${key}`] = this.entryMapping({ type: InternalMapping.MARKDOWN, value });
+    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.MARKDOWN, value });
   }
 
   addField(key, type, value) {
     this.defineGetterSetters(key);
-    this[`_${key}`] = this.entryMapping({ type: type, value });
+    this[`_${key}`] = InternalMapping.entryMapping({ type: type, value });
+  }
+
+  addStyleClass(key, styleClass) {
+    const classes = this[`_${key}`].styleClasses.split(' ').filter(e => e);
+    this[`_${key}`].styleClasses = [...classes, styleClass].join(' ');
+  }
+
+  removeStyleClass(key, styleClass) {
+    const classes = this[`_${key}`].styleClasses
+      .split(' ')
+      .filter(e => e)
+      .filter(c => c !== styleClass);
+    this[`_${key}`].styleClasses = [...classes].join(' ');
   }
 
   asJSON() {
