@@ -82,6 +82,7 @@ export class App extends React.Component {
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
     this.updateEntryStyle = this.updateEntryStyle.bind(this);
+    this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
     this.updateTemplateStyleExclusive = this.updateTemplateStyleExclusive.bind(this);
   }
@@ -584,6 +585,15 @@ export class App extends React.Component {
     });
   }
 
+  updateAssetFormatting(roleKey, formattingObject) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.setImageFormatting(roleKey, formattingObject);
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.timeoutUpdateEntry(updatedInternalMapping, 1000);
+    });
+  }
+
   timeoutUpdateEntry(updatedInternalMapping, milliseconds) {
     clearTimeout(this.sendUpdateRequestTimeout);
     this.sendUpdateRequestTimeout = setTimeout(
@@ -607,53 +617,8 @@ export class App extends React.Component {
     this.updateTemplateStyle(classString);
   }
 
-  // onDragStart = (e, roleKey, id) => {
-  //   console.log('START', id);
-  //
-  //   this.setState({
-  //     draggingObject: { roleKey, id }
-  //   });
-  // };
-  //
-  // onDragEnd = e => {
-  //   console.log('END');
-  //   this.setState({
-  //     draggingObject: undefined
-  //   });
-  // };
-  //
-  // onDragEnter = (e, roleKey, id) => {
-  //   if ((this.state.draggingObject || {}).id === id) return null;
-  //   console.log(this.state.draggingObject, this.state.dragTargetObject);
-  //   e.stopPropagation();
-  //   e.preventDefault();
-  //   this.setState({
-  //     dragTargetObject: { roleKey, id }
-  //   });
-  // };
-  //
-  // onDragLeave = (e, id) => {
-  //   if ((this.state.draggingObject || {}).id === id) return null;
-  //   console.log('LEAVE', id, this.state.draggingObject);
-  //   this.setState({
-  //     dragTargetObject: undefined
-  //   });
-  // };
-  //
-  // onDrop = e => {
-  //   console.log('DROP');
-  //   if (this.state.draggingObject && this.state.dragTargetObject) {
-  //     this.swapElements(this.state.draggingObject, this.state.dragTargetObject);
-  //     this.setState({
-  //       draggingObject: undefined,
-  //       dragTargetObject: undefined
-  //     });
-  //   }
-  // };
-
-  // swapElements = (element1, element2) => {
-  //   console.log('SWAP: ', element1, element2);
-  // };
+  // TODO - work with assets field on model
+  // - add / remove assets from field programmatically
 
   render() {
     const contentTypeGroups = groupByContentType(
@@ -747,6 +712,7 @@ export class App extends React.Component {
                                 roleMapping={roleMappingObject}
                                 internalMappingObject={internalMappingObject}
                                 updateStyle={this.updateEntryStyle}
+                                updateAssetFormatting={this.updateAssetFormatting}
                                 entry={entry}
                                 title={displayRoleName(roleKey) + ' Style'}
                                 type={

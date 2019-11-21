@@ -11,10 +11,7 @@ import {
   AssetCard
 } from '@contentful/forma-36-react-components';
 
-import { displayRoleName } from '../utils';
-
 import { getStatus, getEntryContentTypeId } from '../utils';
-import FieldStyleEditor from './FieldStyleEditor/index.js';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 

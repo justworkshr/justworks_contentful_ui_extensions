@@ -49,7 +49,13 @@ const FieldStyleEditor = props => {
   };
 
   const renderImageStyle = formattingObject => {
-    return <ImageStyle formattingObject={formattingObject} />;
+    return (
+      <ImageStyle
+        roleKey={props.roleKey}
+        formattingObject={formattingObject}
+        onChange={props.updateAssetFormatting}
+      />
+    );
   };
 
   const renderMarkdownStyle = (entryStyleClasses, entryValue) => {
@@ -88,6 +94,7 @@ FieldStyleEditor.propTypes = {
   roleMapping: PropTypes.object,
   internalMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
+  updateAssetFormatting: PropTypes.func,
   type: PropTypes.string,
   entry: PropTypes.object
 };

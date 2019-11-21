@@ -78,7 +78,7 @@ export default class InternalMapping {
     if (!this.hasOwnProperty(key)) {
       Object.defineProperty(this, key, {
         get: () => {
-          if (this.fieldRoles[key].type === 'asset') {
+          if (this.fieldRoles[key].type === InternalMapping.ASSET) {
             return InternalMapping.assetMapping({ ...this.fieldRoles[key] });
           } else {
             return InternalMapping.entryMapping({ ...this.fieldRoles[key] });
@@ -86,7 +86,7 @@ export default class InternalMapping {
         },
 
         set: value => {
-          if (this.fieldRoles[key].type === 'asset') {
+          if (this.fieldRoles[key].type === InternalMapping.ASSET) {
             this.fieldRoles[key] = InternalMapping.assetMapping({
               ...this.fieldRoles[key],
               value
