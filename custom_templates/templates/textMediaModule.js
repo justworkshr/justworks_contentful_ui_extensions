@@ -10,13 +10,12 @@ export const textMediaModule = {
     style: {
       ...defaultStyleTypes()
     },
-    roles: {
+    fieldRoles: {
       left_content: constructRole({
         linkAsset: true,
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA], // TODO - contantize these, add asset, and create a component which displays the allowed configurations based on this role.
         fieldType: c.FIELD_TYPE_MARKDOWN,
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
-        allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true
       }),
       right_content: constructRole({
@@ -24,7 +23,6 @@ export const textMediaModule = {
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA],
         fieldType: c.FIELD_TYPE_MARKDOWN,
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
-        allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true
       }),
       module_style: constructRole({

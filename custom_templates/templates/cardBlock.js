@@ -7,7 +7,7 @@ export const cardBlock = {
       description: 'copy pending',
       imageUrl: "https://images.ctfassets.net/mnc2gcng0j8q/5pdJcFDuIBnItoXMFz1Uan/cb0e4626cfce261f21529a0d622110cd/Screenshot_from_2019-10-30_12-49-17.png"
     },
-    roles: {
+    fieldRoles: {
       card_link: constructRole({
         contentType: c.CONTENT_TYPE_LINK,
         fieldType: c.FIELD_TYPE_TEXT,

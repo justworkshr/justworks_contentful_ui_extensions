@@ -118,6 +118,7 @@ export const constructFieldEntry = (sysType, fieldObject = InternalMapping.entry
 };
 
 export const cleanStyleClasses = (styleClasses, entryValue) => {
+  if (!styleClasses) return styleClasses;
   // Removes Heading classes if no heading of type is present in markdown
   if (!entryValue.match(/(^|\n)# \b/)) styleClasses = removeSectionClass(styleClasses, 'h1');
   if (!entryValue.match(/(^|\n)## \b/)) styleClasses = removeSectionClass(styleClasses, 'h2');

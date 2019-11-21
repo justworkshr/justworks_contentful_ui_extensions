@@ -137,7 +137,7 @@ export class App extends React.Component {
           internalMappingJson &&
           templateIsValid(
             getTemplateErrors(
-              this.state.templateMapping.roles,
+              this.state.templateMapping.fieldRoles,
               JSON.parse(sdk.entry.fields.internalMapping.getValue()),
               this.state.entries
             )
@@ -238,7 +238,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       sdk.entry.getSys().id,
-      this.state.templateMapping.roles
+      this.state.templateMapping.fieldRoles
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -267,7 +267,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       sdk.entry.getSys().id,
-      this.state.templateMapping.roles
+      this.state.templateMapping.fieldRoles
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -303,7 +303,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       sdk.entry.getSys().id,
-      this.state.templateMapping.roles
+      this.state.templateMapping.fieldRoles
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -336,7 +336,7 @@ export class App extends React.Component {
     ];
 
     this.setState(prevState => ({
-      rolesNavigatedTo: [...prevState.rolesNavigatedTo, ...rolesNavigatedTo]
+      rolesNavigatedTo: [...prevState.fieldRolesNavigatedTo, ...fieldRolesNavigatedTo]
     }));
   };
 
@@ -373,7 +373,7 @@ export class App extends React.Component {
     // adds new Entry list
     // adds new internalMapping JSON
     const errors = getTemplateErrors(
-      this.state.templateMapping.roles,
+      this.state.templateMapping.fieldRoles,
       JSON.parse(updatedInternalMappingJson),
       this.state.entries
     );
@@ -441,7 +441,7 @@ export class App extends React.Component {
   validateTemplate = async () => {
     const sdk = this.props.sdk;
     const errors = await getTemplateErrors(
-      this.state.templateMapping.roles,
+      this.state.templateMapping.fieldRoles,
       this.state.entryInternalMapping,
       this.state.entries
     );
@@ -486,7 +486,7 @@ export class App extends React.Component {
   };
 
   fetchNavigatedTo = () => {
-    if (!this.state.rolesNavigatedTo.length) return;
+    if (this.state.fieldRolesNavigatedTo && !this.state.fieldRolesNavigatedTo.length) return;
     this.setState(
       {
         rolesNavigatedTo: []
@@ -645,7 +645,7 @@ export class App extends React.Component {
 
   render() {
     const contentTypeGroups = groupByContentType(
-      (this.state.templateMapping || {}).roles,
+      (this.state.templateMapping || {}).fieldRoles,
       this.state.entries
     );
 
@@ -675,17 +675,19 @@ export class App extends React.Component {
               </div> */}
               <div className="entry-container">
                 {Object.keys(contentTypeGroups[groupKey])
-                  .sort((a, b) => (!this.state.templateMapping.roles[b] || {}).required)
+                  .sort((a, b) => (!this.state.templateMapping.fieldRoles[b] || {}).required)
                   .map((roleKey, index) => {
                     const entry = contentTypeGroups[groupKey][roleKey];
-                    const internalMappingObject = this.state.templateMapping.roles[roleKey] || {};
+                    const internalMappingObject =
+                      this.state.templateMapping.fieldRoles[roleKey] || {};
                     return (
                       <div
                         key={index}
                         className={`role-section ${
                           !!this.state.draggingObject &&
-                          this.state.templateMapping.roles[this.state.draggingObject.roleKey]
-                            .contentType !== this.state.templateMapping.roles[roleKey].contentType
+                          this.state.templateMapping.fieldRoles[this.state.draggingObject.roleKey]
+                            .contentType !==
+                            this.state.templateMapping.fieldRoles[roleKey].contentType
                             ? 'unhighlighted'
                             : ''
                         }`}>
@@ -723,7 +725,7 @@ export class App extends React.Component {
                           />
                         ) : (
                           <div className="link-entries-row">
-                            {!!this.state.templateMapping.roles[roleKey].fieldType && (
+                            {!!this.state.templateMapping.fieldRoles[roleKey].fieldType && (
                               <TextLink
                                 icon="Quote"
                                 linkType="primary"
@@ -731,7 +733,7 @@ export class App extends React.Component {
                                 onClick={() =>
                                   this.onAddFieldClick(
                                     roleKey,
-                                    this.state.templateMapping.roles[roleKey].fieldType
+                                    this.state.templateMapping.fieldRoles[roleKey].fieldType
                                   )
                                 }>
                                 Add field
@@ -739,18 +741,23 @@ export class App extends React.Component {
                             )}
                             <CreateNewLink
                               allowedCustomTemplates={
-                                this.state.templateMapping.roles[roleKey].allowedCustomTemplates
+                                this.state.templateMapping.fieldRoles[roleKey]
+                                  .allowedCustomTemplates
                               }
                               onAddEntryClick={this.onAddEntryClick}
-                              contentTypes={this.state.templateMapping.roles[roleKey].contentType}
+                              contentTypes={
+                                this.state.templateMapping.fieldRoles[roleKey].contentType
+                              }
                               roleKey={roleKey}
                             />
                             <LinkExisting
-                              linkAsset={this.state.templateMapping.roles[roleKey].linkAsset}
+                              linkAsset={this.state.templateMapping.fieldRoles[roleKey].linkAsset}
                               onLinkAssetClick={this.onLinkAssetClick}
                               onLinkEntryClick={this.onLinkEntryClick}
                               onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                              contentTypes={this.state.templateMapping.roles[roleKey].contentType}
+                              contentTypes={
+                                this.state.templateMapping.fieldRoles[roleKey].contentType
+                              }
                               roleKey={roleKey}
                             />
                           </div>
