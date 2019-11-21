@@ -250,7 +250,7 @@ export class App extends React.Component {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
 
     const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.addAsset(roleKey, entry.sys.id);
+    updatedInternalMapping.addAsset(roleKey, entry.sys.id, entry.fields.file['en-US'].url);
 
     this.updateEntry(entriesFieldValue, updatedInternalMapping.asJSON());
   };
