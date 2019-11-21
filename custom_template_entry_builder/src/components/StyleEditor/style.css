@@ -4,6 +4,10 @@
   margin: 40px 0;
 }
 
+.style-editor__section {
+  margin-top: 20px;
+}
+
 .style-editor__heading {
   outline: none;
   cursor: pointer;
@@ -25,7 +29,16 @@
 }
 
 .style-editor__radio-section {
-  margin-right: 20px;
+  margin-right: 40px;
+}
+
+.style-editor__radio-field input,
+.style-editor__radio-field label {
+  cursor: pointer;
+}
+
+.style-editor__radio-field:hover label {
+  text-decoration: underline;
 }
 
 .style-editor__color-radio {

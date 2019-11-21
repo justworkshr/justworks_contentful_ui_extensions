@@ -98,6 +98,7 @@ export const EntryField = props => {
           roleKey={props.roleKey}
           updateStyle={props.updateStyle}
           entryStyleClasses={props.entry.fields.styleClasses}
+          entryValue={props.entry.fields.value}
           title={displayRoleName(props.roleKey) + ' Style'}
           type={props.entry.fields.type}
         />

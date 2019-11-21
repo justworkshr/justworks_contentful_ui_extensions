@@ -33,15 +33,17 @@ describe('InternalMapping', () => {
 
   describe('setters', () => {
     describe('default', () => {
-      it('preserves the type and sets the value', () => {
-        const json = JSON.stringify({ hi: { type: 'entry', value: 'hello' } });
+      it('preserves other attributes and sets the value', () => {
+        const json = JSON.stringify({
+          hi: { type: 'entry', value: 'hello', styleClasses: 'hiClass' }
+        });
         const internalMapping = new InternalMapping(json);
 
         internalMapping.hi = 'bye';
 
-        expect(internalMapping._hi.type).toEqual('entry');
-        expect(internalMapping._hi.value).toEqual('bye');
-        expect(internalMapping._hi.styleClasses).toEqual('');
+        expect(internalMapping.hi.type).toEqual('entry');
+        expect(internalMapping.hi.value).toEqual('bye');
+        expect(internalMapping.hi.styleClasses).toEqual('hiClass');
       });
     });
 

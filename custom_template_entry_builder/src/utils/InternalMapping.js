@@ -59,7 +59,7 @@ export default class InternalMapping {
         set: value => {
           this[`_${key}`] = InternalMapping.entryMapping({
             type: this[`_${key}`].type,
-            style: this[`_${key}`].style,
+            styleClasses: this[`_${key}`].styleClasses,
             value
           });
         },
