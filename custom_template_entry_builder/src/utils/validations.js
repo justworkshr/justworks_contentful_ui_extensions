@@ -56,11 +56,16 @@ export const templateIsValid = errorObject => {
   return !Object.keys(errorObject).length;
 };
 
-export const validateLinkedAsset = entry => {
+const validateAssetType = (entry, type) => {
+  console.log(entry.fields.file, type);
+  return entry.fields.file['en-US'].contentType.includes(type);
+};
+
+export const validateLinkedAsset = (entry, roleObject) => {
   if (!entry) return;
   let message = '';
-  if (entry.fields.file['en-US'].contentType !== 'image/png') {
-    message = 'Only image assets are allowed.';
+  if (!validateAssetType(entry, roleObject.asset.type)) {
+    message = `Only ${roleObject.asset.type} assets are allowed.`;
   }
 
   return message;

@@ -51,10 +51,12 @@ export const EntryField = props => {
         draggable
         className="role-section__entity"
         size="default"
-        title={props.entry ? props.entry.fields.title['en-US'] : 'Loading...'}
-        src={props.entry ? props.entry.fields.file['en-US'].url : ''}
+        title={props.entry.fields.title['en-US']}
+        src={props.entry.fields.file['en-US'].url}
+        type={props.roleMapping.asset.type}
         status={getStatus(props.entry)}
         withDragHandle={true}
+        onClick={() => props.onEditClick(props.entry, 'asset')}
         isDragActive={props.isDragActive}
         dropdownListElements={
           <DropdownList>
@@ -111,6 +113,7 @@ EntryField.defaultProps = {
     sys: {}
   },
   roleKey: '',
+  roleMapping: {},
   isLoading: false,
   isDragActive: false,
   onEditClick: () => {},
@@ -120,6 +123,7 @@ EntryField.defaultProps = {
 EntryField.propTypes = {
   entry: PropTypes.object,
   roleKey: PropTypes.string,
+  roleMapping: PropTypes.object,
   isDragActive: PropTypes.bool,
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,

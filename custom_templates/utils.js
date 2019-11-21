@@ -2,7 +2,7 @@ import * as c from './constants'
 
 export const constructRole = ({
   contentType = '',
-  linkAsset = false,
+  asset = undefined,
   description = '',
   allowedCustomTemplates = [],
   required = true,
@@ -10,7 +10,7 @@ export const constructRole = ({
 } = {}) => {
   return {
     contentType,
-    linkAsset,
+    asset,
     description,
     allowedCustomTemplates,
     required,

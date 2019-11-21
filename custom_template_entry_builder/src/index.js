@@ -236,9 +236,7 @@ export class App extends React.Component {
     if (!entry) return;
     const linkedEntryValidation = validateLinkedAsset(
       entry,
-      roleKey,
-      sdk.entry.getSys().id,
-      this.state.templateMapping.fieldRoles
+      this.state.templateMapping.fieldRoles[roleKey]
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -322,10 +320,14 @@ export class App extends React.Component {
     }
   };
 
-  onEditClick = async entry => {
+  onEditClick = async (entry, type = 'entry') => {
     const sdk = this.props.sdk;
     if (!entry) return null;
-    await sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
+    if (type === 'entry') {
+      await sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
+    } else if (type === 'asset') {
+      await sdk.navigator.openAsset(entry.sys.id, { slideIn: true });
+    }
     const rolesNavigatedTo = [
       ...sdk.entry.fields.entries
         .getValue()
@@ -717,6 +719,7 @@ export class App extends React.Component {
                               entry ? this.state.draggingObject === entry.sys.id : false
                             }
                             roleKey={roleKey}
+                            roleMapping={internalMappingObject}
                             onEditClick={this.onEditClick}
                             onRemoveClick={this.onRemoveClick}
                             onRemoveFieldClick={this.onRemoveFieldClick}
@@ -751,7 +754,7 @@ export class App extends React.Component {
                               roleKey={roleKey}
                             />
                             <LinkExisting
-                              linkAsset={this.state.templateMapping.fieldRoles[roleKey].linkAsset}
+                              linkAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
                               onLinkAssetClick={this.onLinkAssetClick}
                               onLinkEntryClick={this.onLinkEntryClick}
                               onDeepCloneLinkClick={this.onDeepCloneLinkClick}

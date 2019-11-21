@@ -21,3 +21,9 @@ export * from './styleClasses'
 // Style types
 
 export const STYLE_TYPE_BACKGROUND_COLOR = 'backgroundColor'
+
+// Asset types
+
+export const ASSET_TYPE_IMAGE = 'image'
+export const ASSET_TYPE_VIDEO = 'video'
+export const ASSET_TYPE_PDF = 'pdf'
