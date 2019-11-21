@@ -14,7 +14,7 @@ import {
 import { displayRoleName } from '../utils';
 
 import { getStatus, getEntryContentTypeId } from '../utils';
-import StyleEditor from './StyleEditor/index.js';
+import FieldStyleEditor from './FieldStyleEditor/index.js';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
@@ -94,7 +94,7 @@ export const EntryField = props => {
         props.entry.fields.type === InternalMapping.MARKDOWN &&
         renderMarkdownField(props.entry.fields.value)}
       {props.entry.sys.type === 'Field' && (
-        <StyleEditor
+        <FieldStyleEditor
           roleKey={props.roleKey}
           updateStyle={props.updateStyle}
           entryStyleClasses={props.entry.fields.styleClasses}

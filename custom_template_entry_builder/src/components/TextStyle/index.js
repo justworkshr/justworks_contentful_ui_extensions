@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../custom_templates/constants';
+
+import ColorStyle from '../ColorStyle';
 
 import {
   Tabs,
@@ -10,16 +12,16 @@ import {
   RadioButtonField
 } from '@contentful/forma-36-react-components';
 
-import { getSectionLabel, getSectionedClassName, isGlobalSection } from '../utils';
+import {
+  getSectionLabel,
+  getSectionedClassName,
+  isGlobalSection,
+  getSectionValue
+} from '../utils/styleEditorUtils';
 
 const TextStyle = props => {
   const sections = ['', ...props.sections.filter(e => e)]; // adds blank section for global
   const [selected, setSelected] = useState(sections[0]);
-  const getValue = (e, section) => {
-    const targetValue = e.target.value;
-    const prefix = isGlobalSection(section) ? '' : `${section}-`;
-    return prefix + targetValue;
-  };
 
   return (
     <div className="text-style">
@@ -68,7 +70,7 @@ const TextStyle = props => {
                             labelIsLight={true}
                             onChange={e =>
                               props.updateStyleExclusive(
-                                getValue(e, section),
+                                getSectionValue(e, section),
                                 props.entryStyleClasses,
                                 c.TEXT_ALIGNMENT_CLASSES.map(classObject => ({
                                   ...classObject,
@@ -104,7 +106,7 @@ const TextStyle = props => {
                           labelIsLight={true}
                           onChange={e =>
                             props.updateStyleExclusive(
-                              getValue(e, section),
+                              getSectionValue(e, section),
                               props.entryStyleClasses,
                               c.TEXT_TRANSFORM_CLASSES.map(classObject => ({
                                 ...classObject,
@@ -120,48 +122,12 @@ const TextStyle = props => {
               </FieldGroup>
               <FieldGroup>
                 <FormLabel htmlFor="">Text Color ({sectionLabel})</FormLabel>
-                <div className="style-editor__input-section">
-                  {c.TEXT_COLOR_CLASSES.map((classObject, index) => {
-                    const color = c.COLORS.find(color => color.label === classObject.label);
-                    const fieldId = `radio-${classObject.className}`;
-                    return (
-                      <div
-                        className="style-editor__radio-section"
-                        key={`text-color-section-${index}`}>
-                        <RadioButtonField
-                          id={fieldId}
-                          className="style-editor__radio-field style-editor__color-radio"
-                          checked={props.entryStyleClasses
-                            .split(' ')
-                            .filter(e => e)
-                            .includes(getSectionedClassName(section, classObject.className))}
-                          helpText={color.hexValue}
-                          labelText={classObject.label}
-                          value={classObject.className}
-                          labelIsLight={true}
-                          onChange={e =>
-                            props.updateStyleExclusive(
-                              getValue(e, section),
-                              props.entryStyleClasses,
-                              c.TEXT_COLOR_CLASSES.map(classObject => ({
-                                ...classObject,
-                                className: getSectionedClassName(section, classObject.className)
-                              }))
-                            )
-                          }
-                        />
-                        <div className="style-editor__color-section">
-                          <div
-                            className="style-editor__color-box"
-                            style={{
-                              backgroundColor: color.hexValue
-                            }}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <ColorStyle
+                  colorClassType="text"
+                  onChange={props.updateStyleExclusive}
+                  classString={props.entryStyleClasses}
+                  section={section}
+                />
               </FieldGroup>
             </div>
           )

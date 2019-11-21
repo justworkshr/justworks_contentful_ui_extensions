@@ -116,3 +116,28 @@ export const constructFieldEntry = (sysType, fieldObject = InternalMapping.entry
     }
   };
 };
+
+export const cleanStyleClasses = (styleClasses, entryValue) => {
+  // Removes Heading classes if no heading of type is present in markdown
+  if (!entryValue.match(/(^|\n)# \b/)) styleClasses = removeSectionClass(styleClasses, 'h1');
+  if (!entryValue.match(/(^|\n)## \b/)) styleClasses = removeSectionClass(styleClasses, 'h2');
+  if (!entryValue.match(/(^|\n)### \b/)) styleClasses = removeSectionClass(styleClasses, 'h3');
+  if (!entryValue.match(/(^|\n)#### \b/)) styleClasses = removeSectionClass(styleClasses, 'h4');
+  if (!entryValue.match(/(^|\n)##### \b/)) styleClasses = removeSectionClass(styleClasses, 'h5');
+  if (!entryValue.match(/(^|\n)###### \b/)) styleClasses = removeSectionClass(styleClasses, 'h6');
+
+  return styleClasses
+    .split(' ')
+    .sort()
+    .join(' ');
+};
+
+export const removeSectionClass = (styleClasses, sectionPrefix) => {
+  if (!styleClasses) return;
+  const re = new RegExp('^' + sectionPrefix + '-', 'g');
+
+  return styleClasses
+    .split(' ')
+    .filter(className => !className.match(re))
+    .join(' ');
+};

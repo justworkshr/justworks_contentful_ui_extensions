@@ -16,3 +16,8 @@ export const FIELD_TYPE_TEXT = 'text'
 export const FIELD_TYPE_MARKDOWN = 'markdown'
 
 export * from './styleClasses'
+
+
+// Style types
+
+export const STYLE_TYPE_BACKGROUND_COLOR = 'backgroundColor'

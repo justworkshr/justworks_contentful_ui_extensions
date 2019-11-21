@@ -1,4 +1,4 @@
-import { constructRole } from '../utils';
+import { constructRole, defaultStyleTypes } from '../utils';
 import * as c from '../constants';
 
 export const textMediaModule = {
@@ -6,6 +6,9 @@ export const textMediaModule = {
     meta: {
       description: 'copy pending',
       imageUrl: "https://images.ctfassets.net/mnc2gcng0j8q/3xn8AvsyundHautmUuOKhJ/b7f3bd11eb55910ca7b3e34920099f39/Screenshot_from_2019-10-30_12-49-03.png"
+    },
+    style: {
+      ...defaultStyleTypes()
     },
     roles: {
       left_content: constructRole({

@@ -15,6 +15,8 @@ import {
 import CreateNewLink from './components/CreateNewLink';
 import LinkExisting from './components/LinkExisting';
 import EntryField from './components/EntryField';
+import TemplateStyleEditor from './components/TemplateStyleEditor';
+
 import { init } from 'contentful-ui-extensions-sdk';
 
 import { customTemplates, templatePlaceholder } from '../../custom_templates/';
@@ -29,7 +31,8 @@ import {
   displayRoleName,
   getContentTypeArray,
   getEntryOrField,
-  constructFieldEntry
+  constructFieldEntry,
+  cleanStyleClasses
 } from './utils';
 
 import {
@@ -73,9 +76,12 @@ export class App extends React.Component {
 
     this.versionAttempts = 0;
     this.MAX_VERSION_ATTEMPTS = 3;
+    this.loadEntries = this.loadEntries.bind(this);
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
     this.updateEntryStyle = this.updateEntryStyle.bind(this);
+    this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
+    this.updateTemplateStyleExclusive = this.updateTemplateStyleExclusive.bind(this);
   }
 
   componentDidMount = async () => {
@@ -147,7 +153,9 @@ export class App extends React.Component {
 
   getRolesToFetch(newInternalMapping, oldEntries) {
     // if newInternalMapping has more keys than oldEntries, return those extra keys
-    return newInternalMapping.keys().filter(key => !Object.keys(oldEntries).some(k => k === key));
+    return newInternalMapping
+      .fieldKeys()
+      .filter(key => !Object.keys(oldEntries).some(k => k === key));
   }
 
   onTemplateChange = async template => {
@@ -198,7 +206,7 @@ export class App extends React.Component {
     const updatedEntries = Object.assign(
       {},
       ...Object.keys(this.state.entries)
-        .filter(key => updatedInternalMapping.keys().includes(key))
+        .filter(key => updatedInternalMapping.fieldKeys().includes(key))
         .map(key => ({ [key]: this.state.entries[key] }))
     );
 
@@ -422,7 +430,7 @@ export class App extends React.Component {
 
   loadEntries = async () => {
     await Promise.all(
-      await this.state.entryInternalMapping.keys().map(async roleKey => {
+      await this.state.entryInternalMapping.fieldKeys().map(async roleKey => {
         await this.fetchEntryByRoleKey(roleKey);
       })
     );
@@ -506,6 +514,13 @@ export class App extends React.Component {
       let updatedInternalMapping = this.state.entryInternalMapping;
       updatedInternalMapping[roleKey] = value;
 
+      const styleClasses = cleanStyleClasses(
+        updatedInternalMapping[roleKey].styleClasses,
+        updatedInternalMapping[roleKey].value
+      );
+
+      updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
+
       const updatedEntries = {
         ...this.state.entries,
         [roleKey]: constructFieldEntry(
@@ -523,9 +538,26 @@ export class App extends React.Component {
     }
   };
 
+  updateTemplateStyle(classString) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.styleClasses = classString;
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.updateEntry(
+        this.props.sdk.entry.fields.entries.getValue(),
+        updatedInternalMapping.asJSON()
+      );
+    });
+  }
+
   updateEntryStyle(roleKey, styleClasses) {
     let updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
+    updatedInternalMapping.setStyleClasses(
+      roleKey,
+      cleanStyleClasses(styleClasses, updatedInternalMapping[roleKey].value)
+    );
+
+    styleClasses = updatedInternalMapping[roleKey].styleClasses;
 
     const updatedEntries = {
       ...this.state.entries,
@@ -550,6 +582,17 @@ export class App extends React.Component {
         ),
       milliseconds
     );
+  }
+
+  updateTemplateStyleExclusive(value, classString, valuesArray) {
+    classString = classString
+      .split(' ')
+      .filter(e => e)
+      .filter(className => !valuesArray.some(classObject => classObject.className === className));
+
+    classString = [...classString, value].join(' ');
+
+    this.updateTemplateStyle(classString);
   }
 
   // onDragStart = (e, roleKey, id) => {
@@ -613,8 +656,16 @@ export class App extends React.Component {
           className="extension__refresh"
           onClick={this.loadEntries}
           size="small">
-          Refresh List
+          Refresh
         </Button>
+        {this.state.templateMapping.style && (
+          <TemplateStyleEditor
+            updateStyleExclusive={this.updateTemplateStyleExclusive}
+            templateStyleClasses={this.state.entryInternalMapping.styleClasses}
+            templateStyleObject={this.state.templateMapping.style}
+            title="Template Style"
+          />
+        )}
         {Object.keys(contentTypeGroups).map((groupKey, index) => {
           return (
             <div className="entry-group" key={`group--${index}`}>

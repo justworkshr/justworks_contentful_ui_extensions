@@ -1,3 +1,5 @@
+import * as c from './constants'
+
 export const constructRole = ({
   contentType = '',
   linkAsset = false,
@@ -15,3 +17,13 @@ export const constructRole = ({
     fieldType
   };
 };
+
+
+export const defaultStyleTypes = () => {
+  return {
+    'backgroundColor': {
+      type: c.STYLE_TYPE_BACKGROUND_COLOR,
+      description: 'The background color for this template.'
+    }
+  }
+}

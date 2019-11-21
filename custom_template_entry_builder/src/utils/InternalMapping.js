@@ -4,9 +4,16 @@ export const ENTRY_MAPPING = 'entry';
 
 export default class InternalMapping {
   constructor(json) {
-    const object = this.loadInternalMapping(json);
-    Object.keys(object).forEach(key => {
-      this[`_${key}`] = object[key];
+    const parsedJSON = this.loadInternalMapping(json);
+
+    Object.keys(InternalMapping.blankMapping).forEach(key => {
+      this[key] = parsedJSON[key] || InternalMapping.blankMapping[key];
+    });
+
+    Object.keys(parsedJSON.fieldRoles || {}).forEach(key => {
+      if (key === 'styleClasses')
+        throw new Error('Cannot name an entryRole "styleClasses". This is a reserved key.');
+      this.fieldRoles[`${key}`] = parsedJSON.fieldRoles[key];
 
       this.defineGetterSetters(key);
     });
@@ -44,8 +51,15 @@ export default class InternalMapping {
     };
   }
 
+  static get blankMapping() {
+    return {
+      fieldRoles: {},
+      styleClasses: ''
+    };
+  }
+
   loadInternalMapping(json) {
-    if (!json || !typeof json === 'string') return {};
+    if (!json || !typeof json === 'string') return InternalMapping.blankMapping;
     return JSON.parse(json);
   }
 
@@ -53,13 +67,13 @@ export default class InternalMapping {
     if (!this.hasOwnProperty(key)) {
       Object.defineProperty(this, key, {
         get: () => {
-          return InternalMapping.entryMapping({ ...this[`_${key}`] });
+          return InternalMapping.entryMapping({ ...this.fieldRoles[`${key}`] });
         },
 
         set: value => {
-          this[`_${key}`] = InternalMapping.entryMapping({
-            type: this[`_${key}`].type,
-            styleClasses: this[`_${key}`].styleClasses,
+          this.fieldRoles[`${key}`] = InternalMapping.entryMapping({
+            type: this.fieldRoles[`${key}`].type,
+            styleClasses: this.fieldRoles[`${key}`].styleClasses,
             value
           });
         },
@@ -70,44 +84,56 @@ export default class InternalMapping {
 
   addAsset(key, value) {
     this.defineGetterSetters(key);
-    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.ASSET, value });
+    this.fieldRoles[`${key}`] = InternalMapping.entryMapping({
+      type: InternalMapping.ASSET,
+      value
+    });
   }
 
   addEntry(key, value) {
     this.defineGetterSetters(key);
-    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.ENTRY, value });
+    this.fieldRoles[`${key}`] = InternalMapping.entryMapping({
+      type: InternalMapping.ENTRY,
+      value
+    });
   }
 
   addTextField(key, value = '') {
     this.defineGetterSetters(key);
-    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.TEXT, value });
+    this.fieldRoles[`${key}`] = InternalMapping.entryMapping({
+      type: InternalMapping.TEXT,
+      value
+    });
   }
 
   addMarkdownField(key, value = '') {
     this.defineGetterSetters(key);
-    this[`_${key}`] = InternalMapping.entryMapping({ type: InternalMapping.MARKDOWN, value });
+    this.fieldRoles[`${key}`] = InternalMapping.entryMapping({
+      type: InternalMapping.MARKDOWN,
+      value
+    });
   }
 
   addField(key, type, value) {
     this.defineGetterSetters(key);
-    this[`_${key}`] = InternalMapping.entryMapping({ type: type, value });
+    this.fieldRoles[`${key}`] = InternalMapping.entryMapping({ type: type, value });
   }
 
   setStyleClasses(key, styleClasses) {
-    this[`_${key}`].styleClasses = styleClasses;
+    this.fieldRoles[`${key}`].styleClasses = styleClasses;
   }
 
   addStyleClass(key, styleClass) {
-    const classes = this[`_${key}`].styleClasses.split(' ').filter(e => e);
-    this[`_${key}`].styleClasses = [...classes, styleClass].join(' ');
+    const classes = this.fieldRoles[`${key}`].styleClasses.split(' ').filter(e => e);
+    this.fieldRoles[`${key}`].styleClasses = [...classes, styleClass].join(' ');
   }
 
   removeStyleClass(key, styleClass) {
-    const classes = this[`_${key}`].styleClasses
+    const classes = this.fieldRoles[`${key}`].styleClasses
       .split(' ')
       .filter(e => e)
       .filter(c => c !== styleClass);
-    this[`_${key}`].styleClasses = [...classes].join(' ');
+    this.fieldRoles[`${key}`].styleClasses = [...classes].join(' ');
   }
 
   asJSON() {
@@ -123,20 +149,20 @@ export default class InternalMapping {
     );
   }
 
-  keys() {
-    return Object.getOwnPropertyNames(this).filter(key => key.charAt(0) !== '_');
+  fieldKeys() {
+    return Object.keys(this.fieldRoles);
   }
 
   getType(key) {
-    return this[`_${key}`].type;
+    return this.fieldRoles[`${key}`].type;
   }
 
   isEntry(key) {
-    return this[`_${key}`].type === InternalMapping.ENTRY;
+    return this.fieldRoles[`${key}`].type === InternalMapping.ENTRY;
   }
 
   removeEntry(key) {
-    delete this[`_${key}`];
+    delete this.fieldRoles[`${key}`];
     delete this[key];
   }
 }

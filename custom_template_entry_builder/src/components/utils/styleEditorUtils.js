@@ -24,3 +24,9 @@ export const getMarkdownSections = entryValue => {
 
   return sections;
 };
+
+export const getSectionValue = (e, section) => {
+  const targetValue = e.target.value;
+  const prefix = isGlobalSection(section) ? '' : `${section}-`;
+  return prefix + targetValue;
+};

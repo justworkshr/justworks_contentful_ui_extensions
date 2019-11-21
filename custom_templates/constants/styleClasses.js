@@ -38,3 +38,7 @@ export const TEXT_TRANSFORM_CLASSES = [
 export const TEXT_COLOR_CLASSES = COLORS.map(color => {
   return constructStyleClass({className: `text-${color.label.toLowerCase()}`, label: color.label})
 })
+
+export const BACKGROUND_COLOR_CLASSES = COLORS.map(color => {
+  return constructStyleClass({className: `background-${color.label.toLowerCase()}`, label: color.label})
+})

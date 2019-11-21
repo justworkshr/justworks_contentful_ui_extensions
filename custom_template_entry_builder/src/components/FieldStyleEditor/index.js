@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
 
 import InternalMapping from '../../utils/InternalMapping';
-import TextStyle from './TextStyle';
+import TextStyle from '../TextStyle';
 
-import { getMarkdownSections } from './utils';
+import { getMarkdownSections } from '../utils/styleEditorUtils';
 
 import './style.css';
 
-const StyleEditor = props => {
+const FieldStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
 
   const updateStyleExclusive = (value, entryStyleClasses, valuesArray) => {
@@ -71,7 +71,7 @@ const StyleEditor = props => {
   );
 };
 
-StyleEditor.propTypes = {
+FieldStyleEditor.propTypes = {
   title: PropTypes.string,
   roleKey: PropTypes.string,
   updateStyle: PropTypes.func,
@@ -80,11 +80,11 @@ StyleEditor.propTypes = {
   entryValue: PropTypes.string
 };
 
-StyleEditor.defaultProps = {
+FieldStyleEditor.defaultProps = {
   entryStyleClasses: '',
   entryValue: '',
   roleKey: '',
   type: InternalMapping.TEXT
 };
 
-export default StyleEditor;
+export default FieldStyleEditor;
