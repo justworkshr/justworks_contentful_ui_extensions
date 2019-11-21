@@ -4,13 +4,7 @@ import * as c from '../../../../custom_templates/constants';
 
 import ColorStyle from '../ColorStyle';
 
-import {
-  Tabs,
-  Tab,
-  FieldGroup,
-  FormLabel,
-  RadioButtonField
-} from '@contentful/forma-36-react-components';
+import { Tabs, Tab, FormLabel, RadioButtonField } from '@contentful/forma-36-react-components';
 
 import {
   getSectionLabel,
@@ -49,7 +43,7 @@ const TextStyle = props => {
           selected === section && (
             <div key={`section-${section}`} className="style-editor__section">
               {isGlobalSection(section) && ( // only use text alignment for global section
-                <FieldGroup>
+                <div className="style-editor__field-group">
                   <FormLabel htmlFor="">Text Alignment ({sectionLabel})</FormLabel>
                   <div className="style-editor__input-section">
                     {c.TEXT_ALIGNMENT_CLASSES.map((classObject, index) => {
@@ -83,9 +77,9 @@ const TextStyle = props => {
                       );
                     })}
                   </div>
-                </FieldGroup>
+                </div>
               )}
-              <FieldGroup>
+              <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Text Transform ({sectionLabel})</FormLabel>
                 <div className="style-editor__input-section">
                   {c.TEXT_TRANSFORM_CLASSES.map((classObject, index) => {
@@ -119,8 +113,8 @@ const TextStyle = props => {
                     );
                   })}
                 </div>
-              </FieldGroup>
-              <FieldGroup>
+              </div>
+              <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Text Color ({sectionLabel})</FormLabel>
                 <ColorStyle
                   colorClassType="text"
@@ -128,7 +122,7 @@ const TextStyle = props => {
                   classString={props.entryStyleClasses}
                   section={section}
                 />
-              </FieldGroup>
+              </div>
             </div>
           )
         );

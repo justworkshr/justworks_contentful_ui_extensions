@@ -40,5 +40,5 @@ export const TEXT_COLOR_CLASSES = COLORS.map(color => {
 })
 
 export const BACKGROUND_COLOR_CLASSES = COLORS.map(color => {
-  return constructStyleClass({className: `background-${color.label.toLowerCase()}`, label: color.label})
+  return constructStyleClass({className: `bg-color-${color.label.toLowerCase()}`, label: color.label})
 })

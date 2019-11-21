@@ -7,7 +7,6 @@ import BackgroundColorStyle from '../BackgroundColorStyle';
 const TemplateStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
 
-  console.log(props.templateStyleClasses);
   const renderStyle = props => {
     return Object.keys(props.templateStyleObject).map(styleKey => {
       switch (styleKey) {
@@ -16,6 +15,7 @@ const TemplateStyleEditor = props => {
             <BackgroundColorStyle
               key={`template-style--${styleKey}`}
               classString={props.templateStyleClasses}
+              helpText={props.templateStyleObject[styleKey].description}
               onChange={props.updateStyleExclusive}
             />
           );
@@ -37,7 +37,7 @@ const TemplateStyleEditor = props => {
         />
       </div>
       <div className="style-editor__heading" onClick={() => toggleOpen(!open)} />
-      {open && <div>{renderStyle(props)}</div>}
+      {open && <div className="style-editor__section">{renderStyle(props)}</div>}
     </div>
   );
 };

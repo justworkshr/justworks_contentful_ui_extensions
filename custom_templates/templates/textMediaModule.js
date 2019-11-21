@@ -24,11 +24,6 @@ export const textMediaModule = {
         fieldType: c.FIELD_TYPE_MARKDOWN,
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
-      }),
-      module_style: constructRole({
-        contentType: c.CONTENT_TYPE_STYLE,
-        description: 'Global style for this module.',
-        required: false
       })
     }
   }

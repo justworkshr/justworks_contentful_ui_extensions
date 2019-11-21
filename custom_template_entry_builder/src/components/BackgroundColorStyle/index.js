@@ -1,24 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FormLabel } from '@contentful/forma-36-react-components';
+import { FormLabel, HelpText } from '@contentful/forma-36-react-components';
 import ColorStyle from '../ColorStyle';
 
 const BackgroundColorStyle = props => {
   return (
-    <div className="background-color-style">
-      <FormLabel htmlFor="">Background Color</FormLabel>
-      <ColorStyle
-        colorClassType="background"
-        onChange={props.onChange}
-        classString={props.classString}
-      />
+    <div className="style-editor__field-group background-color-style">
+      <div className="style-editor__field-group">
+        <FormLabel htmlFor="">Background Color</FormLabel>
+        {props.helpText && <HelpText>{props.helpText}</HelpText>}
+        <ColorStyle
+          colorClassType="background"
+          onChange={props.onChange}
+          classString={props.classString}
+        />
+      </div>
     </div>
   );
 };
 
 BackgroundColorStyle.propTypes = {
   classString: PropTypes.string,
+  helpText: PropTypes.string,
   onChange: PropTypes.func
 };
 

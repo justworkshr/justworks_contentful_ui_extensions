@@ -4,8 +4,14 @@
   margin: 40px 0;
 }
 
+.style-editor__field-group {
+  margin-bottom: 20px;
+}
+
 .style-editor__section {
+  background-color: #f5f7f8;
   margin-top: 20px;
+  padding: 20px;
 }
 
 .style-editor__heading {
@@ -26,6 +32,7 @@
 .style-editor__input-section {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .style-editor__radio-section {
