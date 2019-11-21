@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+
+import * as c from '../../custom_templates/constants';
+
 import {
   Button,
-  SectionHeading,
-  FieldGroup,
   FormLabel,
   HelpText,
   ValidationMessage,
@@ -246,9 +247,15 @@ export class App extends React.Component {
 
   linkAssetToTemplate = (entry, roleKey) => {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
-
+    const roleMapping = this.state.templateMapping.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.addAsset(roleKey, entry.sys.id, entry.fields.file['en-US'].url);
+    updatedInternalMapping.addAsset(
+      roleKey,
+      entry.sys.id,
+      entry.fields.file['en-US'].url,
+      roleMapping.asset.type,
+      roleMapping.asset.type === c.ASSET_TYPE_IMAGE ? { f: 'png' } : {}
+    );
 
     this.updateEntry(entriesFieldValue, updatedInternalMapping.asJSON());
   };
