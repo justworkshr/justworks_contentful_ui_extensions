@@ -51,12 +51,12 @@ export default class InternalMapping {
     };
   }
 
-  static assetMapping({ type, styleClasses = '', value = '', asset_url = '' } = {}) {
+  static assetMapping({ type, styleClasses = '', value = '', assetUrl = '' } = {}) {
     return {
       type,
       styleClasses,
       value,
-      asset_url
+      assetUrl
     };
   }
 
@@ -91,12 +91,12 @@ export default class InternalMapping {
     }
   }
 
-  addAsset(key, value, asset_url) {
+  addAsset(key, value, assetUrl) {
     this.defineGetterSetters(key);
     this.fieldRoles[`${key}`] = InternalMapping.assetMapping({
       type: InternalMapping.ASSET,
       value,
-      asset_url
+      assetUrl
     });
   }
 
