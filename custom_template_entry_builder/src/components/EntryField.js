@@ -95,29 +95,8 @@ export const EntryField = props => {
       {props.entry.sys.type === 'Field' &&
         props.entry.fields.type === InternalMapping.MARKDOWN &&
         renderMarkdownField(props.entry.fields.value)}
-      {props.entry.sys.type === 'Field' && (
-        <FieldStyleEditor
-          roleKey={props.roleKey}
-          updateStyle={props.updateStyle}
-          entryStyleClasses={props.entry.fields.styleClasses}
-          entryValue={props.entry.fields.value}
-          title={displayRoleName(props.roleKey) + ' Style'}
-          type={props.entry.fields.type}
-        />
-      )}
     </div>
   );
-};
-EntryField.defaultProps = {
-  entry: {
-    sys: {}
-  },
-  roleKey: '',
-  roleMapping: {},
-  isLoading: false,
-  isDragActive: false,
-  onEditClick: () => {},
-  onRemoveClick: () => {}
 };
 
 EntryField.propTypes = {
@@ -129,8 +108,19 @@ EntryField.propTypes = {
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onRemoveFieldClick: PropTypes.func,
-  onFieldChange: PropTypes.func,
-  updateStyle: PropTypes.func
+  onFieldChange: PropTypes.func
+};
+
+EntryField.defaultProps = {
+  entry: {
+    sys: {}
+  },
+  roleKey: '',
+  roleMapping: {},
+  isLoading: false,
+  isDragActive: false,
+  onEditClick: () => {},
+  onRemoveClick: () => {}
 };
 
 export default EntryField;

@@ -17,6 +17,7 @@ import CreateNewLink from './components/CreateNewLink';
 import LinkExisting from './components/LinkExisting';
 import EntryField from './components/EntryField';
 import TemplateStyleEditor from './components/TemplateStyleEditor';
+import FieldStyleEditor from './components/FieldStyleEditor';
 
 import { init } from 'contentful-ui-extensions-sdk';
 
@@ -254,7 +255,9 @@ export class App extends React.Component {
       entry.sys.id,
       entry.fields.file['en-US'].url,
       roleMapping.asset.type,
-      roleMapping.asset.type === c.ASSET_TYPE_IMAGE ? { f: 'png' } : {}
+      roleMapping.asset.type === c.ASSET_TYPE_IMAGE
+        ? { fm: 'png', w: roleMapping.asset.formatting.maxWidth }
+        : {}
     );
 
     this.updateEntry(entriesFieldValue, updatedInternalMapping.asJSON());
@@ -687,8 +690,10 @@ export class App extends React.Component {
                   .sort((a, b) => (!this.state.templateMapping.fieldRoles[b] || {}).required)
                   .map((roleKey, index) => {
                     const entry = contentTypeGroups[groupKey][roleKey];
-                    const internalMappingObject =
-                      this.state.templateMapping.fieldRoles[roleKey] || {};
+                    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey] || {};
+                    const internalMappingObject = this.state.entryInternalMapping.fieldRoles[
+                      roleKey
+                    ];
                     return (
                       <div
                         key={index}
@@ -704,7 +709,7 @@ export class App extends React.Component {
                           <FormLabel
                             className="role-section__heading"
                             htmlFor=""
-                            required={internalMappingObject.required}>
+                            required={roleMappingObject.required}>
                             {displayRoleName(roleKey)}
                           </FormLabel>
                           {!!entry && entry.sys.type === 'Field' && (
@@ -717,22 +722,41 @@ export class App extends React.Component {
                             />
                           )}
                         </div>
-                        <HelpText>{internalMappingObject.description}</HelpText>
+                        <HelpText>{roleMappingObject.description}</HelpText>
                         {!!this.state.entries[roleKey] || this.state.loadingEntries[roleKey] ? (
-                          <EntryField
-                            entry={entry}
-                            isLoading={!!this.state.loadingEntries[roleKey]}
-                            isDragActive={
-                              entry ? this.state.draggingObject === entry.sys.id : false
-                            }
-                            roleKey={roleKey}
-                            roleMapping={internalMappingObject}
-                            onEditClick={this.onEditClick}
-                            onRemoveClick={this.onRemoveClick}
-                            onRemoveFieldClick={this.onRemoveFieldClick}
-                            onFieldChange={this.onFieldChange}
-                            updateStyle={this.updateEntryStyle}
-                          />
+                          <div>
+                            <EntryField
+                              entry={entry}
+                              isLoading={!!this.state.loadingEntries[roleKey]}
+                              isDragActive={
+                                entry ? this.state.draggingObject === entry.sys.id : false
+                              }
+                              roleKey={roleKey}
+                              roleMapping={roleMappingObject}
+                              onEditClick={this.onEditClick}
+                              onRemoveClick={this.onRemoveClick}
+                              onRemoveFieldClick={this.onRemoveFieldClick}
+                              onFieldChange={this.onFieldChange}
+                            />
+                            {((entry && entry.sys.type === 'Field') ||
+                              (entry &&
+                                entry.sys.type === 'Asset' &&
+                                roleMappingObject.asset.formatting.allow)) && (
+                              <FieldStyleEditor
+                                roleKey={roleKey}
+                                roleMapping={roleMappingObject}
+                                internalMappingObject={internalMappingObject}
+                                updateStyle={this.updateEntryStyle}
+                                entry={entry}
+                                title={displayRoleName(roleKey) + ' Style'}
+                                type={
+                                  entry.sys.type === InternalMapping.ASSETSYS
+                                    ? InternalMapping.ASSETSYS
+                                    : entry.fields.type
+                                }
+                              />
+                            )}
+                          </div>
                         ) : (
                           <div className="link-entries-row">
                             {!!this.state.templateMapping.fieldRoles[roleKey].fieldType && (

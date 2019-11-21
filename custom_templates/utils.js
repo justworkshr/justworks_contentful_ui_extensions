@@ -27,3 +27,15 @@ export const defaultStyleTypes = () => {
     }
   }
 }
+
+export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, allowFormatting= false, maxWidth=2000}={}) => {
+  return ({
+    asset: {
+      type,
+      formatting: {
+        allow: allowFormatting,
+        maxWidth
+      }
+    },
+  })
+}

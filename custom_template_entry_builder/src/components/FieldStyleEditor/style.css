@@ -29,7 +29,7 @@
   margin-right: 10px;
 }
 
-.style-editor__input-section {
+.style-editor__inline-input-section {
   display: flex;
   flex-wrap: wrap;
   margin-top: 10px;

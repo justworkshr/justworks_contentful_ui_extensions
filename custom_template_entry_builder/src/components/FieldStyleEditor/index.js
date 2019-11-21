@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
+import * as c from '../../../../custom_templates/constants';
+
 import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
 
 import InternalMapping from '../../utils/InternalMapping';
 import TextStyle from '../TextStyle';
-
+import ImageStyle from '../ImageStyle';
 import { getMarkdownSections } from '../utils/styleEditorUtils';
 
 import './style.css';
@@ -26,9 +29,13 @@ const FieldStyleEditor = props => {
   const renderStyle = props => {
     switch (props.type) {
       case InternalMapping.MARKDOWN:
-        return renderMarkdownStyle(props.entryStyleClasses, props.entryValue);
+        return renderMarkdownStyle(props.entry.fields.styleClasses, props.entry.fields.value);
       case InternalMapping.TEXT:
-        return renderTextStyle(props.entryStyleClasses);
+        return renderTextStyle(props.entry.fields.styleClasses);
+      case InternalMapping.ASSETSYS:
+        if (props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE) {
+          return renderImageStyle(props.internalMappingObject.formatting);
+        }
     }
   };
 
@@ -39,6 +46,10 @@ const FieldStyleEditor = props => {
         updateStyleExclusive={updateStyleExclusive}
       />
     );
+  };
+
+  const renderImageStyle = formattingObject => {
+    return <ImageStyle formattingObject={formattingObject} />;
   };
 
   const renderMarkdownStyle = (entryStyleClasses, entryValue) => {
@@ -74,16 +85,18 @@ const FieldStyleEditor = props => {
 FieldStyleEditor.propTypes = {
   title: PropTypes.string,
   roleKey: PropTypes.string,
+  roleMapping: PropTypes.object,
+  internalMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
   type: PropTypes.string,
-  entryStyleClasses: PropTypes.string,
-  entryValue: PropTypes.string
+  entry: PropTypes.object
 };
 
 FieldStyleEditor.defaultProps = {
-  entryStyleClasses: '',
-  entryValue: '',
+  entry: {},
   roleKey: '',
+  roleMapping: {},
+  internalMappingObject: {},
   type: InternalMapping.TEXT
 };
 

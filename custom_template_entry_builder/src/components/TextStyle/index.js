@@ -45,7 +45,7 @@ const TextStyle = props => {
               {isGlobalSection(section) && ( // only use text alignment for global section
                 <div className="style-editor__field-group">
                   <FormLabel htmlFor="">Text Alignment ({sectionLabel})</FormLabel>
-                  <div className="style-editor__input-section">
+                  <div className="style-editor__inline-input-section">
                     {c.TEXT_ALIGNMENT_CLASSES.map((classObject, index) => {
                       const fieldId = `radio-${classObject.className}`;
                       return (
@@ -81,7 +81,7 @@ const TextStyle = props => {
               )}
               <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Text Transform ({sectionLabel})</FormLabel>
-                <div className="style-editor__input-section">
+                <div className="style-editor__inline-input-section">
                   {c.TEXT_TRANSFORM_CLASSES.map((classObject, index) => {
                     const fieldId = `radio-${classObject.className}`;
                     return (

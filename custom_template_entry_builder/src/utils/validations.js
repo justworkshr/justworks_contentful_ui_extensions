@@ -57,7 +57,6 @@ export const templateIsValid = errorObject => {
 };
 
 const validateAssetType = (entry, type) => {
-  console.log(entry.fields.file, type);
   return entry.fields.file['en-US'].contentType.includes(type);
 };
 

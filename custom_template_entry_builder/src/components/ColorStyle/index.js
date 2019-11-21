@@ -11,9 +11,8 @@ const ColorStyle = props => {
   const colorClasses =
     props.colorClassType === 'text' ? c.TEXT_COLOR_CLASSES : c.BACKGROUND_COLOR_CLASSES;
 
-  console.log(props.classString, colorClasses);
   return (
-    <div className="style-editor__input-section">
+    <div className="style-editor__inline-input-section">
       {colorClasses.map((classObject, index) => {
         const color = c.COLORS.find(color => color.label === classObject.label);
         const fieldId = `radio-${classObject.className}`;

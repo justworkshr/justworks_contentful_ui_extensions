@@ -211,4 +211,30 @@ describe('InternalMapping', () => {
       expect(internalMapping.hi.styleClasses).toEqual('helloClass');
     });
   });
+
+  describe('setImageFormatting', () => {
+    it('rejects when roleObject isnt an asset', () => {
+      const json = JSON.stringify({
+        fieldRoles: { hi: { type: 'field', value: 'hello' } }
+      });
+      const internalMapping = new InternalMapping(json);
+      const imageObject = { w: 100 };
+
+      expect(() => internalMapping.setImageFormatting('hi', imageObject)).toThrow(
+        'Can only format an image asset'
+      );
+    });
+
+    it('adds formatting object to empty value', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: { type: 'asset', assetType: 'image', value: 'hello', formatting: { w: 50 } }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      const imageObject = { w: 100 };
+      internalMapping.setImageFormatting('hi', imageObject);
+      expect(internalMapping.hi.formatting).toEqual(imageObject);
+    });
+  });
 });

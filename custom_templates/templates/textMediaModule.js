@@ -1,4 +1,4 @@
-import { constructRole, defaultStyleTypes } from '../utils';
+import { constructRole, allowAsset, defaultStyleTypes } from '../utils';
 import * as c from '../constants';
 
 export const textMediaModule = {
@@ -12,20 +12,14 @@ export const textMediaModule = {
     },
     fieldRoles: {
       left_content: constructRole({
-        asset: {
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: true
-        },
+        ...allowAsset({type: c.ASSET_TYPE_IMAGE, allowFormatting: true, maxWidth: 800}),
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
         fieldType: c.FIELD_TYPE_MARKDOWN,
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
       }),
       right_content: constructRole({
-        asset: {
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: true
-        },
+        ...allowAsset({type: c.ASSET_TYPE_IMAGE, allowFormatting: true, maxWidth: 800}),
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA],
         fieldType: c.FIELD_TYPE_MARKDOWN,
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
