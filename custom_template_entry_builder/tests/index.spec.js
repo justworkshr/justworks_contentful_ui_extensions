@@ -10,6 +10,7 @@ configure({ adapter: new Adapter() });
 const mockCustomTemplates = {
   'mock 1': {
     meta: {},
+    style: {},
     roles: {
       left_section: {
         contentType: 'text',
@@ -103,7 +104,8 @@ describe('App', () => {
       },
       internalMapping: JSON.stringify({
         left_section: '1',
-        right_section: '2'
+        right_section: '2',
+        style: {}
       })
     };
 

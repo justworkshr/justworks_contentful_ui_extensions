@@ -71,7 +71,7 @@ export class App extends React.Component {
       entries: {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
-      entryInternalMapping: new InternalMapping(internalMappingJson),
+      entryInternalMapping: new InternalMapping(internalMappingJson, templateMapping),
       templateMapping: templateMapping,
       rolesNavigatedTo: []
     };
@@ -97,6 +97,9 @@ export class App extends React.Component {
     this.detachExternalChangeHandler = sdk.field.onValueChanged(this.onExternalChange);
     sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
     sdk.entry.onSysChanged(this.onSysChanged);
+    this.updateEntry({
+      updatedInternalMappingJson: this.state.entryInternalMapping.asJSON()
+    });
     await this.loadEntries();
   };
 
@@ -121,7 +124,7 @@ export class App extends React.Component {
     this.setState(
       {
         template,
-        entryInternalMapping: new InternalMapping(internalMappingJson),
+        entryInternalMapping: new InternalMapping(internalMappingJson, this.state.templateMapping),
         templateMapping:
           this.props.customTemplates[template && template.toLowerCase()] ||
           this.props.templatePlaceholder
@@ -175,14 +178,17 @@ export class App extends React.Component {
     }
   };
 
-  onAddFieldClick = (roleKey, fieldType) => {
+  onAddFieldClick = (roleKey, field) => {
     const updatedInternalMapping = this.state.entryInternalMapping;
-    switch (fieldType) {
+    switch (field.type) {
       case InternalMapping.TEXT:
-        updatedInternalMapping.addTextField(roleKey);
+        updatedInternalMapping.addTextField({ key: roleKey, styleClasses: field.defaultClasses });
         break;
       case InternalMapping.MARKDOWN:
-        updatedInternalMapping.addMarkdownField(roleKey);
+        updatedInternalMapping.addMarkdownField({
+          key: roleKey,
+          styleClasses: field.defaultClasses
+        });
         break;
       default:
         break;
@@ -764,7 +770,7 @@ export class App extends React.Component {
                           </div>
                         ) : (
                           <div className="link-entries-row">
-                            {!!this.state.templateMapping.fieldRoles[roleKey].fieldType && (
+                            {!!this.state.templateMapping.fieldRoles[roleKey].field && (
                               <TextLink
                                 icon="Quote"
                                 linkType="primary"
@@ -772,7 +778,7 @@ export class App extends React.Component {
                                 onClick={() =>
                                   this.onAddFieldClick(
                                     roleKey,
-                                    this.state.templateMapping.fieldRoles[roleKey].fieldType
+                                    this.state.templateMapping.fieldRoles[roleKey].field
                                   )
                                 }>
                                 Add field

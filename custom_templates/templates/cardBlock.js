@@ -1,4 +1,4 @@
-import { constructRole, allowAsset, defaultStyleTypes, styleProperty } from '../utils';
+import { constructRole, allowAsset, defaultStyleTypes, styleProperty, fieldObject } from '../utils';
 import * as c from '../constants';
 
 export const cardBlock = {
@@ -10,13 +10,13 @@ export const cardBlock = {
     style: {
       ...defaultStyleTypes(),
       'tag_style': {
-        ...styleProperty({label: 'background_color', type: c.STYLE_TYPE_BACKGROUND_COLOR, description: 'The background color the top right tag.'})
+        ...styleProperty({label: 'background_color', type: c.STYLE_TYPE_BACKGROUND_COLOR, defaultClasses: 'bg-color-cerulean', description: 'The background color the top right tag.'})
       }
     },
     fieldRoles: {
       left_text: constructRole({
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        fieldType: c.FIELD_TYPE_MARKDOWN,
+        field: fieldObject({type: c.FIELD_TYPE_MARKDOWN}),
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true,
         description: `Text or Custom Template [${[c.TEXT_COLLECTION]}]. Primary markdown text to display on the left half section.`
@@ -29,17 +29,17 @@ export const cardBlock = {
       }),
       card_link: constructRole({
         contentType: c.CONTENT_TYPE_LINK,
-        fieldType: c.FIELD_TYPE_TEXT,
+        field: fieldObject({type: c.FIELD_TYPE_TEXT }),
         required: false,
         description: 'Link url for the card.'
       }),
       cta_text: constructRole({
-        fieldType: c.FIELD_TYPE_TEXT,
+        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-cerulean'}),
         required: false,
         description: 'Text for the optional CTA'
       }),
       tag_text: constructRole({
-        fieldType: c.FIELD_TYPE_TEXT,
+        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-white text-uppercase'}),
         required: false,
         description: 'Text for the optional tag on the upper right corner of the card.'
       }),

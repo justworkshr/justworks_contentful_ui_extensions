@@ -18,6 +18,29 @@ describe('InternalMapping', () => {
       expect(new InternalMapping(json).constructor.name).toEqual('InternalMapping');
     });
 
+    it('sets default styles', () => {
+      const templateMapping = {
+        style: {
+          hiSection: {
+            hiProperty: { defaultClasses: 'hiclass' },
+            hiProperty2: { defaultClasses: 'hiclass2 hiclass3' }
+          }
+        }
+      };
+      const json = JSON.stringify({ fieldRoles: {} });
+      expect(new InternalMapping(json, templateMapping).style).toEqual({
+        hiSection: { styleClasses: 'hiclass hiclass2 hiclass3' }
+      });
+    });
+
+    it('does not set default styles if already defined', () => {
+      const templateMapping = { style: { hi: { defaultClasses: 'hiclass' } } };
+      const json = JSON.stringify({ fieldRoles: {}, style: { hi: { styleClasses: 'byeClass' } } });
+      expect(new InternalMapping(json, templateMapping).style).toEqual({
+        hi: { styleClasses: 'byeClass' }
+      });
+    });
+
     it('rejects an entryRole named "style"', () => {
       const object = { fieldRoles: { style: 'hello' } };
       const json = JSON.stringify(object);
@@ -80,12 +103,12 @@ describe('InternalMapping', () => {
       const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
 
-      internalMapping.addTextField('hi', 'bye');
+      internalMapping.addTextField({ key: 'hi', value: 'bye', styleClasses: 'text-left' });
 
       it('sets the type and sets the value', () => {
         expect(internalMapping.hi.type).toEqual('text');
         expect(internalMapping.hi.value).toEqual('bye');
-        expect(internalMapping.hi.styleClasses).toEqual('');
+        expect(internalMapping.hi.styleClasses).toEqual('text-left');
       });
     });
 
@@ -93,12 +116,12 @@ describe('InternalMapping', () => {
       const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
 
-      internalMapping.addMarkdownField('hi', 'bye');
+      internalMapping.addMarkdownField({ key: 'hi', value: 'bye', styleClasses: 'text-left' });
 
       it('sets the type and sets the value', () => {
         expect(internalMapping.hi.type).toEqual('markdown');
         expect(internalMapping.hi.value).toEqual('bye');
-        expect(internalMapping.hi.styleClasses).toEqual('');
+        expect(internalMapping.hi.styleClasses).toEqual('text-left');
       });
     });
   });

@@ -3,7 +3,7 @@ export const MARKDOWN_MAPPING = 'markdown';
 export const ENTRY_MAPPING = 'entry';
 
 export default class InternalMapping {
-  constructor(json) {
+  constructor(json, templateMapping = { style: {} }) {
     const parsedJSON = this.loadInternalMapping(json);
 
     Object.keys(InternalMapping.blankMapping).forEach(key => {
@@ -16,6 +16,20 @@ export default class InternalMapping {
       this.fieldRoles[key] = parsedJSON.fieldRoles[key];
 
       this.defineGetterSetters(key);
+    });
+
+    Object.keys(templateMapping.style).forEach(styleSectionKey => {
+      if (!templateMapping.style[styleSectionKey]) return;
+      if (!this.style[styleSectionKey]) {
+        this.style[styleSectionKey] = {};
+        let classArray = [];
+
+        Object.keys(templateMapping.style[styleSectionKey]).forEach(stylePropertyKey => {
+          classArray.push(templateMapping.style[styleSectionKey][stylePropertyKey].defaultClasses);
+        });
+
+        this.style[styleSectionKey].styleClasses = classArray.join(' ');
+      }
     });
   }
 
@@ -121,25 +135,27 @@ export default class InternalMapping {
     });
   }
 
-  addTextField(key, value = '') {
+  addTextField({ key, value = '', styleClasses = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: InternalMapping.TEXT,
-      value
+      value,
+      styleClasses
     });
   }
 
-  addMarkdownField(key, value = '') {
+  addMarkdownField({ key, value = '', styleClasses = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: InternalMapping.MARKDOWN,
-      value
+      value,
+      styleClasses
     });
   }
 
-  addField(key, type, value) {
+  addField(key, type, value = '', styleClasses = '') {
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.entryMapping({ type: type, value });
+    this.fieldRoles[key] = InternalMapping.entryMapping({ type: type, value, styleClasses });
   }
 
   setStyleClasses(key, styleClasses) {

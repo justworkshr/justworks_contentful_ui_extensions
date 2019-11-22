@@ -2,11 +2,11 @@ import * as c from './constants'
 
 export const constructRole = ({
   contentType = '',
-  asset = undefined,
+  asset = null,
   description = '',
   allowedCustomTemplates = [],
   required = true,
-  fieldType = ''
+  field = null
 } = {}) => {
   return {
     contentType,
@@ -14,10 +14,16 @@ export const constructRole = ({
     description,
     allowedCustomTemplates,
     required,
-    fieldType
+    field
   };
 };
 
+export const fieldObject = ({type, defaultClasses=''}={}) => {
+  return ({
+    type,
+    defaultClasses
+  })
+}
 
 export const defaultStyleTypes = () => {
   return {
@@ -27,11 +33,12 @@ export const defaultStyleTypes = () => {
   }
 }
 
-export const styleProperty = ({label='', type=c.STYLE_TYPE_BACKGROUND_COLOR, description=''}={}) => {
+export const styleProperty = ({label='', type=c.STYLE_TYPE_BACKGROUND_COLOR, description='', defaultClasses=''}={}) => {
   return {
     [label]: {
       type,
-      description
+      description,
+      defaultClasses
     }
   }
 }
