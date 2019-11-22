@@ -212,6 +212,66 @@ describe('InternalMapping', () => {
     });
   });
 
+  describe('removeStyleClasses', () => {
+    it('removes from empty value', () => {
+      const json = JSON.stringify({
+        fieldRoles: { hi: { type: 'entry', value: 'hello', styleClasses: '' } }
+      });
+      const internalMapping = new InternalMapping(json);
+      const styleClasses = [{ className: 'hiClass' }];
+      internalMapping.removeStyleClasses('hi', styleClasses.map(el => el.className));
+      expect(internalMapping.hi.styleClasses).toEqual('');
+    });
+
+    it('removes style class from existing value', () => {
+      const styleClasses = [{ className: 'hiClass' }, { className: 'class2' }];
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            type: 'entry',
+            value: 'hello',
+            styleClasses: styleClasses.map(el => el.className).join(' ')
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeStyleClasses('hi', styleClasses);
+      expect(internalMapping.hi.styleClasses).toEqual('');
+    });
+
+    it('removes style class from existing value with string array', () => {
+      const styleClasses = ['hiClass', 'class2'];
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            type: 'entry',
+            value: 'hello',
+            styleClasses: styleClasses.join(' ')
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeStyleClasses('hi', styleClasses);
+      expect(internalMapping.hi.styleClasses).toEqual('');
+    });
+
+    it('removess style class from existing value 3', () => {
+      const styleClasses = [{ className: 'hiClass' }, { className: 'class2' }];
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            type: 'entry',
+            value: 'hello',
+            styleClasses: [...styleClasses.map(el => el.className), 'class3'].join(' ')
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeStyleClasses('hi', styleClasses);
+      expect(internalMapping.hi.styleClasses).toEqual('class3');
+    });
+  });
+
   describe('setImageFormatting', () => {
     it('rejects when roleObject isnt an asset', () => {
       const json = JSON.stringify({

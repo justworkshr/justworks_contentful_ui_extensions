@@ -42,6 +42,7 @@ const FieldStyleEditor = props => {
   const renderTextStyle = entryStyleClasses => {
     return (
       <TextStyle
+        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
         entryStyleClasses={entryStyleClasses}
         updateStyleExclusive={updateStyleExclusive}
       />
@@ -63,6 +64,7 @@ const FieldStyleEditor = props => {
 
     return (
       <TextStyle
+        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
         entryStyleClasses={entryStyleClasses}
         sections={sections}
         updateStyleExclusive={updateStyleExclusive}
@@ -89,6 +91,7 @@ const FieldStyleEditor = props => {
 };
 
 FieldStyleEditor.propTypes = {
+  clearStyleField: PropTypes.func,
   title: PropTypes.string,
   roleKey: PropTypes.string,
   roleMapping: PropTypes.object,

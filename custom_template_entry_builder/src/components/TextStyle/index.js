@@ -4,7 +4,13 @@ import * as c from '../../../../custom_templates/constants';
 
 import ColorStyle from '../ColorStyle';
 
-import { Tabs, Tab, FormLabel, RadioButtonField } from '@contentful/forma-36-react-components';
+import {
+  Tabs,
+  Tab,
+  FormLabel,
+  RadioButtonField,
+  TextLink
+} from '@contentful/forma-36-react-components';
 
 import {
   getSectionLabel,
@@ -45,6 +51,18 @@ const TextStyle = props => {
               {isGlobalSection(section) && ( // only use text alignment for global section
                 <div className="style-editor__field-group">
                   <FormLabel htmlFor="">Text Alignment ({sectionLabel})</FormLabel>
+                  <TextLink
+                    className="style-editor__clear-link"
+                    icon="Close"
+                    onClick={() =>
+                      props.onClear(
+                        c.TEXT_ALIGNMENT_CLASSES.map(classObject =>
+                          getSectionedClassName(section, classObject.className)
+                        )
+                      )
+                    }>
+                    Clear
+                  </TextLink>
                   <div className="style-editor__inline-input-section">
                     {c.TEXT_ALIGNMENT_CLASSES.map((classObject, index) => {
                       const fieldId = `radio-${classObject.className}`;
@@ -81,6 +99,18 @@ const TextStyle = props => {
               )}
               <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Text Transform ({sectionLabel})</FormLabel>
+                <TextLink
+                  className="style-editor__clear-link"
+                  icon="Close"
+                  onClick={() =>
+                    props.onClear(
+                      c.TEXT_TRANSFORM_CLASSES.map(classObject =>
+                        getSectionedClassName(section, classObject.className)
+                      )
+                    )
+                  }>
+                  Clear
+                </TextLink>
                 <div className="style-editor__inline-input-section">
                   {c.TEXT_TRANSFORM_CLASSES.map((classObject, index) => {
                     const fieldId = `radio-${classObject.className}`;
@@ -116,6 +146,18 @@ const TextStyle = props => {
               </div>
               <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Text Color ({sectionLabel})</FormLabel>
+                <TextLink
+                  className="style-editor__clear-link"
+                  icon="Close"
+                  onClick={() =>
+                    props.onClear(
+                      c.TEXT_COLOR_CLASSES.map(classObject =>
+                        getSectionedClassName(section, classObject.className)
+                      )
+                    )
+                  }>
+                  Clear
+                </TextLink>
                 <ColorStyle
                   colorClassType="text"
                   onChange={props.updateStyleExclusive}
@@ -132,8 +174,10 @@ const TextStyle = props => {
 };
 
 TextStyle.propTypes = {
+  onChange: PropTypes.func,
   entryStyleClasses: PropTypes.string,
   sections: PropTypes.array,
+  roleKey: PropTypes.string,
   updateStyleExclusive: PropTypes.func
 };
 

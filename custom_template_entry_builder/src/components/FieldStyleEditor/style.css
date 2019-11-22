@@ -1,7 +1,7 @@
 /* style editor */
 
 .style-editor {
-  margin: 40px 0;
+  margin: 20px 0 40px;
 }
 
 .style-editor__field-group {
@@ -19,6 +19,10 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+}
+
+.style-editor__clear-link {
+  margin-left: 10px;
 }
 
 .style-editor__heading:hover {

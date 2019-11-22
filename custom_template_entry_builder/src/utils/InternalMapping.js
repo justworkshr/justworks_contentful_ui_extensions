@@ -160,6 +160,18 @@ export default class InternalMapping {
     this.fieldRoles[key].styleClasses = [...classes].join(' ');
   }
 
+  removeStyleClasses(key, classArray) {
+    if (classArray[0].className) {
+      // if passed an array of classObjects instead of strings
+      classArray = classArray.map(el => el.className);
+    }
+    const classes = this.fieldRoles[key].styleClasses
+      .split(' ')
+      .filter(e => e)
+      .filter(cl => !classArray.includes(cl));
+    this.fieldRoles[key].styleClasses = [...classes].join(' ');
+  }
+
   setImageFormatting(key, formattingObject) {
     const roleObject = this.fieldRoles[key];
 

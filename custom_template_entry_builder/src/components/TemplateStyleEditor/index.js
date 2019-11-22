@@ -17,6 +17,7 @@ const TemplateStyleEditor = props => {
               classString={props.templateStyleClasses}
               helpText={props.templateStyleObject[styleKey].description}
               onChange={props.updateStyleExclusive}
+              onClear={props.clearStyleField}
             />
           );
       }
@@ -43,6 +44,7 @@ const TemplateStyleEditor = props => {
 };
 
 TemplateStyleEditor.propTypes = {
+  clearStyleField: PropTypes.func,
   title: PropTypes.string,
   updateStyleExclusive: PropTypes.func,
   templateStyleObject: PropTypes.object,

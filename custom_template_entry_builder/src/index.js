@@ -87,6 +87,8 @@ export class App extends React.Component {
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
     this.updateTemplateStyleExclusive = this.updateTemplateStyleExclusive.bind(this);
     this.linkAssetToTemplate = this.linkAssetToTemplate.bind(this);
+    this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
+    this.clearTemplateStyleClasses = this.clearTemplateStyleClasses.bind(this);
   }
 
   componentDidMount = async () => {
@@ -588,7 +590,7 @@ export class App extends React.Component {
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
       this.updateEntry({
-        updatedEntryList: his.props.sdk.entry.fields.entries.getValue(),
+        updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
         updatedInternalMappingJson: updatedInternalMapping.asJSON()
       });
     });
@@ -648,6 +650,41 @@ export class App extends React.Component {
     this.updateTemplateStyle(classString);
   }
 
+  clearEntryStyleClasses(roleKey, classArray) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.removeStyleClasses(roleKey, classArray);
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.updateEntry({
+        updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
+        updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      });
+    });
+  }
+
+  clearTemplateStyleClasses(classArray) {
+    if (classArray[0].className) {
+      // if passed an array of classObjects instead of strings
+      classArray = classArray.map(el => el.className);
+    }
+
+    const updatedInternalMapping = this.state.entryInternalMapping;
+
+    updatedInternalMapping.styleClasses = updatedInternalMapping.styleClasses
+      .split(' ')
+      .filter(e => e)
+      .filter(cl => !classArray.includes(cl))
+      .join(' ');
+
+    console.log(classArray, this.state.entryInternalMapping, updatedInternalMapping);
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.updateEntry({
+        updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      });
+    });
+  }
+
   // TODO - work with assets field on model
   // - add / remove assets from field programmatically
 
@@ -668,6 +705,7 @@ export class App extends React.Component {
         </Button>
         {this.state.templateMapping.style && (
           <TemplateStyleEditor
+            clearStyleField={this.clearTemplateStyleClasses}
             updateStyleExclusive={this.updateTemplateStyleExclusive}
             templateStyleClasses={this.state.entryInternalMapping.styleClasses}
             templateStyleObject={this.state.templateMapping.style}
@@ -744,6 +782,7 @@ export class App extends React.Component {
                                 internalMappingObject={internalMappingObject}
                                 updateStyle={this.updateEntryStyle}
                                 updateAssetFormatting={this.updateAssetFormatting}
+                                clearStyleField={this.clearEntryStyleClasses}
                                 entry={entry}
                                 title={displayRoleName(roleKey) + ' Style'}
                                 type={
