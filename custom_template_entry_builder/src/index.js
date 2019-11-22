@@ -71,9 +71,12 @@ export class App extends React.Component {
       entries: {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
-      entryInternalMapping: new InternalMapping(internalMappingJson, templateMapping),
+      entryInternalMapping: template
+        ? new InternalMapping(internalMappingJson, templateMapping)
+        : {},
       templateMapping: templateMapping,
-      rolesNavigatedTo: []
+      rolesNavigatedTo: [],
+      template
     };
 
     this.sendUpdateRequestTimeout = undefined;
@@ -97,10 +100,14 @@ export class App extends React.Component {
     this.detachExternalChangeHandler = sdk.field.onValueChanged(this.onExternalChange);
     sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
     sdk.entry.onSysChanged(this.onSysChanged);
-    this.updateEntry({
-      updatedInternalMappingJson: this.state.entryInternalMapping.asJSON()
-    });
-    await this.loadEntries();
+
+    if (this.state.template) {
+      this.updateEntry({
+        updatedInternalMappingJson: this.state.entryInternalMapping.asJSON()
+      });
+
+      await this.loadEntries();
+    }
   };
 
   componentWillUnmount() {
@@ -168,12 +175,17 @@ export class App extends React.Component {
   }
 
   onTemplateChange = async template => {
+    const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
+    const templateMapping =
+      this.props.customTemplates[template && template.toLowerCase()] ||
+      this.props.templatePlaceholder;
     if (template !== this.state.template) {
       this.setState({
         template,
-        templateMapping:
-          this.props.customTemplates[template && template.toLowerCase()] ||
-          this.props.templatePlaceholder
+        templateMapping,
+        entryInternalMapping: template
+          ? new InternalMapping(internalMappingJson, templateMapping)
+          : {}
       });
     }
   };
