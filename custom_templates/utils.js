@@ -21,20 +21,28 @@ export const constructRole = ({
 
 export const defaultStyleTypes = () => {
   return {
-    'backgroundColor': {
-      type: c.STYLE_TYPE_BACKGROUND_COLOR,
-      description: 'The background color for this template.'
+    'template_style': {
+      ...styleProperty({label: 'background_color', type: c.STYLE_TYPE_BACKGROUND_COLOR, description: 'The background color for this template.'})
     }
   }
 }
 
-export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, allowFormatting= false, maxWidth='2000'}={}) => {
+export const styleProperty = ({label='', type=c.STYLE_TYPE_BACKGROUND_COLOR, description=''}={}) => {
+  return {
+    [label]: {
+      type,
+      description
+    }
+  }
+}
+
+export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, allowFormatting = false, maxWidth='2000'}={}) => {
   return ({
     asset: {
       type,
       formatting: {
         allow: allowFormatting,
-        maxWidth
+        maxWidth: String(maxWidth)
       }
     },
   })

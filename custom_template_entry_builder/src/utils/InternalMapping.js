@@ -1,7 +1,6 @@
 export const TEXT_MAPPING = 'text';
 export const MARKDOWN_MAPPING = 'markdown';
 export const ENTRY_MAPPING = 'entry';
-import * as c from '../../../custom_templates/constants';
 
 export default class InternalMapping {
   constructor(json) {
@@ -12,8 +11,8 @@ export default class InternalMapping {
     });
 
     Object.keys(parsedJSON.fieldRoles || {}).forEach(key => {
-      if (key === 'styleClasses')
-        throw new Error('Cannot name an entryRole "styleClasses". This is a reserved key.');
+      if (key === 'style')
+        throw new Error('Cannot name an entryRole "style". This is a reserved key.');
       this.fieldRoles[key] = parsedJSON.fieldRoles[key];
 
       this.defineGetterSetters(key);
@@ -65,7 +64,7 @@ export default class InternalMapping {
   static get blankMapping() {
     return {
       fieldRoles: {},
-      styleClasses: ''
+      style: {}
     };
   }
 

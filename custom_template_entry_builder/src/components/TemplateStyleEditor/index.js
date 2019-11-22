@@ -4,20 +4,47 @@ import * as c from '../../../../custom_templates/constants';
 
 import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
 import BackgroundColorStyle from '../BackgroundColorStyle';
+
+import { displaySnakeCaseName, addExclusiveClassName } from '../../utils';
+
 const TemplateStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
 
+  const onChangeExclusive = (value, classString, valuesArray) => {
+    classString = addExclusiveClassName(value, classString, valuesArray);
+    const templateStyleObject = { ...props.mappingStyleObject, styleClasses: classString };
+    props.updateStyle(props.styleSectionKey, templateStyleObject);
+  };
+
+  const onClearStyleSection = classArray => {
+    if (classArray[0].className) {
+      // if passed an array of classObjects instead of strings
+      classArray = classArray.map(el => el.className);
+    }
+
+    const classString = props.mappingStyleObject.styleClasses
+      .split(' ')
+      .filter(e => e)
+      .filter(cl => !classArray.includes(cl))
+      .join(' ');
+    const templateStyleObject = { ...props.mappingStyleObject, styleClasses: classString };
+    props.updateStyle(props.styleSectionKey, templateStyleObject);
+  };
+
   const renderStyle = props => {
     return Object.keys(props.templateStyleObject).map(styleKey => {
-      switch (styleKey) {
+      switch (props.templateStyleObject[styleKey].type) {
         case c.STYLE_TYPE_BACKGROUND_COLOR:
           return (
             <BackgroundColorStyle
               key={`template-style--${styleKey}`}
-              classString={props.templateStyleClasses}
+              title={displaySnakeCaseName(styleKey)}
+              classString={(props.mappingStyleObject || {}).styleClasses}
               helpText={props.templateStyleObject[styleKey].description}
-              onChange={props.updateStyleExclusive}
-              onClear={props.clearStyleField}
+              onChange={(value, classString, valuesArray) =>
+                onChangeExclusive(value, classString, valuesArray)
+              }
+              onClear={onClearStyleSection}
             />
           );
       }
@@ -46,14 +73,17 @@ const TemplateStyleEditor = props => {
 TemplateStyleEditor.propTypes = {
   clearStyleField: PropTypes.func,
   title: PropTypes.string,
-  updateStyleExclusive: PropTypes.func,
+  updateStyle: PropTypes.func,
   templateStyleObject: PropTypes.object,
-  templateStyleClasses: PropTypes.string
+  mappingStyleObject: PropTypes.object,
+  styleSectionKey: PropTypes.string
 };
 
 TemplateStyleEditor.defaultProps = {
-  templateStyleObject: {},
-  templateStyleClasses: ''
+  mappingStyleObject: {
+    styleClasses: ''
+  },
+  templateStyleObject: {}
 };
 
 export default TemplateStyleEditor;

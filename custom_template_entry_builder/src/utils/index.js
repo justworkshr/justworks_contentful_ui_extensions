@@ -79,8 +79,11 @@ export const displayContentType = contentType => {
     .join(' or ');
 };
 
-export const displayRoleName = contentType => {
-  return contentType.split('_').join(' ');
+export const displaySnakeCaseName = contentType => {
+  return contentType
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 };
 
 export const getContentTypeArray = stringOrArray => {
@@ -144,15 +147,30 @@ export const removeSectionClass = (styleClasses, sectionPrefix) => {
 };
 
 export const selectAssetEntries = stateEntries => {
-  return Object.keys(stateEntries).map(entryKey => {
-    if (stateEntries[entryKey].sys.type === InternalMapping.ASSETSYS) {
-      return stateEntries[entryKey];
-    }
-  });
+  return Object.keys(stateEntries)
+    .map(entryKey => {
+      if (stateEntries[entryKey].sys.type === InternalMapping.ASSETSYS) {
+        return stateEntries[entryKey];
+      }
+    })
+    .filter(el => el);
 };
 
 export const getUpdatedAssetList = (stateEntries, newAsset) => {
   let assetList = selectAssetEntries(stateEntries);
 
   return [...assetList, newAsset].filter(a => a).map(asset => constructLink(asset));
+};
+
+export const addExclusiveClassName = (value, classString, classObjectArray) => {
+  classString = classString
+    .split(' ')
+    .filter(e => e)
+    .filter(
+      className => !classObjectArray.some(classObject => classObject.className === className)
+    );
+
+  classString = [...classString, value].join(' ');
+
+  return classString;
 };

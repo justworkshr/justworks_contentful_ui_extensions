@@ -10,7 +10,8 @@ import {
   HelpText,
   ValidationMessage,
   TextLink,
-  IconButton
+  IconButton,
+  SectionHeading
 } from '@contentful/forma-36-react-components';
 
 import CreateNewLink from './components/CreateNewLink';
@@ -30,7 +31,7 @@ import {
   createEntry,
   constructEntryName,
   getUpdatedAssetList,
-  displayRoleName,
+  displaySnakeCaseName,
   getContentTypeArray,
   getEntryOrField,
   constructFieldEntry,
@@ -85,10 +86,8 @@ export class App extends React.Component {
     this.updateEntryStyle = this.updateEntryStyle.bind(this);
     this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
-    this.updateTemplateStyleExclusive = this.updateTemplateStyleExclusive.bind(this);
     this.linkAssetToTemplate = this.linkAssetToTemplate.bind(this);
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
-    this.clearTemplateStyleClasses = this.clearTemplateStyleClasses.bind(this);
   }
 
   componentDidMount = async () => {
@@ -584,9 +583,12 @@ export class App extends React.Component {
     }
   };
 
-  updateTemplateStyle(classString) {
+  updateTemplateStyle(templateStyleKey, templateStyleObject) {
     let updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.styleClasses = classString;
+    updatedInternalMapping.style = {
+      ...updatedInternalMapping.style,
+      [templateStyleKey]: templateStyleObject
+    };
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
       this.updateEntry({
@@ -639,17 +641,6 @@ export class App extends React.Component {
     );
   }
 
-  updateTemplateStyleExclusive(value, classString, valuesArray) {
-    classString = classString
-      .split(' ')
-      .filter(e => e)
-      .filter(className => !valuesArray.some(classObject => classObject.className === className));
-
-    classString = [...classString, value].join(' ');
-
-    this.updateTemplateStyle(classString);
-  }
-
   clearEntryStyleClasses(roleKey, classArray) {
     let updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeStyleClasses(roleKey, classArray);
@@ -661,32 +652,6 @@ export class App extends React.Component {
       });
     });
   }
-
-  clearTemplateStyleClasses(classArray) {
-    if (classArray[0].className) {
-      // if passed an array of classObjects instead of strings
-      classArray = classArray.map(el => el.className);
-    }
-
-    const updatedInternalMapping = this.state.entryInternalMapping;
-
-    updatedInternalMapping.styleClasses = updatedInternalMapping.styleClasses
-      .split(' ')
-      .filter(e => e)
-      .filter(cl => !classArray.includes(cl))
-      .join(' ');
-
-    console.log(classArray, this.state.entryInternalMapping, updatedInternalMapping);
-
-    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      this.updateEntry({
-        updatedInternalMappingJson: updatedInternalMapping.asJSON()
-      });
-    });
-  }
-
-  // TODO - work with assets field on model
-  // - add / remove assets from field programmatically
 
   render() {
     const contentTypeGroups = groupByContentType(
@@ -703,15 +668,19 @@ export class App extends React.Component {
           size="small">
           Refresh
         </Button>
-        {this.state.templateMapping.style && (
-          <TemplateStyleEditor
-            clearStyleField={this.clearTemplateStyleClasses}
-            updateStyleExclusive={this.updateTemplateStyleExclusive}
-            templateStyleClasses={this.state.entryInternalMapping.styleClasses}
-            templateStyleObject={this.state.templateMapping.style}
-            title="Template Style"
-          />
-        )}
+        {this.state.templateMapping.style &&
+          Object.keys(this.state.templateMapping.style).map(styleSectionKey => {
+            return (
+              <TemplateStyleEditor
+                key={`style-section-${styleSectionKey}`}
+                updateStyle={this.updateTemplateStyle}
+                templateStyleObject={this.state.templateMapping.style[styleSectionKey]}
+                mappingStyleObject={this.state.entryInternalMapping.style[styleSectionKey]}
+                styleSectionKey={styleSectionKey}
+                title={displaySnakeCaseName(styleSectionKey)}
+              />
+            );
+          })}
         {Object.keys(contentTypeGroups).map((groupKey, index) => {
           return (
             <div className="entry-group" key={`group--${index}`}>
@@ -744,7 +713,7 @@ export class App extends React.Component {
                             className="role-section__heading"
                             htmlFor=""
                             required={roleMappingObject.required}>
-                            {displayRoleName(roleKey)}
+                            <SectionHeading>{displaySnakeCaseName(roleKey)}</SectionHeading>
                           </FormLabel>
                           {!!entry && entry.sys.type === 'Field' && (
                             <IconButton
@@ -784,7 +753,7 @@ export class App extends React.Component {
                                 updateAssetFormatting={this.updateAssetFormatting}
                                 clearStyleField={this.clearEntryStyleClasses}
                                 entry={entry}
-                                title={displayRoleName(roleKey) + ' Style'}
+                                title={displaySnakeCaseName(roleKey) + ' Style'}
                                 type={
                                   entry.sys.type === InternalMapping.ASSETSYS
                                     ? InternalMapping.ASSETSYS

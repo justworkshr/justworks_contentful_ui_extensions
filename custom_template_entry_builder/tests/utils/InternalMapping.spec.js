@@ -4,12 +4,12 @@ describe('InternalMapping', () => {
   describe('constructor', () => {
     it('returns empty object if blank string', () => {
       const json = '';
-      expect(new InternalMapping(json)).toEqual({ fieldRoles: {}, styleClasses: '' });
+      expect(new InternalMapping(json)).toEqual({ fieldRoles: {}, style: {} });
     });
 
     it('returns empty object if invalid', () => {
       const json = undefined;
-      expect(new InternalMapping(json)).toEqual({ fieldRoles: {}, styleClasses: '' });
+      expect(new InternalMapping(json)).toEqual({ fieldRoles: {}, style: {} });
     });
 
     it('returns class', () => {
@@ -18,11 +18,11 @@ describe('InternalMapping', () => {
       expect(new InternalMapping(json).constructor.name).toEqual('InternalMapping');
     });
 
-    it('rejects an entryRole named "styleClasses"', () => {
-      const object = { fieldRoles: { styleClasses: 'hello' } };
+    it('rejects an entryRole named "style"', () => {
+      const object = { fieldRoles: { style: 'hello' } };
       const json = JSON.stringify(object);
       expect(() => new InternalMapping(json)).toThrow(
-        'Cannot name an entryRole "styleClasses". This is a reserved key.'
+        'Cannot name an entryRole "style". This is a reserved key.'
       );
     });
   });
@@ -109,7 +109,7 @@ describe('InternalMapping', () => {
 
     it('returns the class and properties as json', () => {
       expect(internalMapping.asJSON()).toEqual(
-        '{"fieldRoles":{"hi":{"type":"entry","value":"hello"}},"styleClasses":""}'
+        '{"fieldRoles":{"hi":{"type":"entry","value":"hello"}},"style":{}}'
       );
     });
   });

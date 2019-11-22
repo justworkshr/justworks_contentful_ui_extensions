@@ -9,7 +9,7 @@ const BackgroundColorStyle = props => {
   return (
     <div className="style-editor__field-group background-color-style">
       <div className="style-editor__field-group">
-        <FormLabel htmlFor="">Background Color</FormLabel>
+        <FormLabel htmlFor="">{props.title}</FormLabel>
         <TextLink
           className="style-editor__clear-link"
           icon="Close"
@@ -31,7 +31,12 @@ BackgroundColorStyle.propTypes = {
   classString: PropTypes.string,
   onClear: PropTypes.func,
   helpText: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  title: PropTypes.string
+};
+
+BackgroundColorStyle.defaultProps = {
+  title: 'Background Color'
 };
 
 export default BackgroundColorStyle;
