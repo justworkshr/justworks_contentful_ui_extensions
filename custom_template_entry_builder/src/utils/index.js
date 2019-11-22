@@ -142,3 +142,17 @@ export const removeSectionClass = (styleClasses, sectionPrefix) => {
     .filter(className => !className.match(re))
     .join(' ');
 };
+
+export const selectAssetEntries = stateEntries => {
+  return Object.keys(stateEntries).map(entryKey => {
+    if (stateEntries[entryKey].sys.type === InternalMapping.ASSETSYS) {
+      return stateEntries[entryKey];
+    }
+  });
+};
+
+export const getUpdatedAssetList = (stateEntries, newAsset) => {
+  let assetList = selectAssetEntries(stateEntries);
+
+  return [...assetList, newAsset].filter(a => a).map(asset => constructLink(asset));
+};
