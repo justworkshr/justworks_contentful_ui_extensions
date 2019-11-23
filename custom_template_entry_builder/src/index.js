@@ -104,9 +104,9 @@ export class App extends React.Component {
     if (this.state.template) {
       updateEntry({
         sdk: this.props.sdk,
+        updatedInternalMappingJson: this.state.entryInternalMapping.asJSON(),
         stateEntries: this.state.entries,
         stateTemplateMapping: this.state.templateMapping,
-        updatedInternalMappingJson: this.state.entryInternalMapping.asJSON(),
         loadEntriesFunc: this.loadEntries,
         setStateFunc: this.setState.bind(this)
       });
@@ -222,9 +222,9 @@ export class App extends React.Component {
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
       updateEntry({
         sdk: this.props.sdk,
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
         stateEntries: this.state.entries,
         stateTemplateMapping: this.state.templateMapping,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
         loadEntriesFunc: this.loadEntries,
         setStateFunc: this.setState.bind(this)
       })
@@ -249,10 +249,10 @@ export class App extends React.Component {
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
       updateEntry({
         sdk: this.props.sdk,
-        stateEntries: this.state.entries,
-        stateTemplateMapping: this.state.templateMapping,
         updatedAssetList,
         updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+        stateEntries: this.state.entries,
+        stateTemplateMapping: this.state.templateMapping,
         loadEntriesFunc: this.loadEntries,
         setStateFunc: this.setState.bind(this)
       })
@@ -303,11 +303,11 @@ export class App extends React.Component {
 
     updateEntry({
       sdk: this.props.sdk,
-      stateEntries: this.state.entries,
-      stateTemplateMapping: this.state.templateMapping,
       updatedEntryList: entriesFieldValue,
       updatedAssetList,
       updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+      stateEntries: this.state.entries,
+      stateTemplateMapping: this.state.templateMapping,
       loadEntriesFunc: this.loadEntries,
       setStateFunc: this.setState.bind(this)
     });
@@ -342,10 +342,10 @@ export class App extends React.Component {
 
     updateEntry({
       sdk: this.props.sdk,
-      stateEntries: this.state.entries,
-      stateTemplateMapping: this.state.templateMapping,
       updatedEntryList,
       updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+      stateEntries: this.state.entries,
+      stateTemplateMapping: this.state.templateMapping,
       loadEntriesFunc: this.loadEntries,
       setStateFunc: this.setState.bind(this)
     });
@@ -406,7 +406,7 @@ export class App extends React.Component {
     ];
 
     this.setState(prevState => ({
-      rolesNavigatedTo: [...prevState.fieldRolesNavigatedTo, ...fieldRolesNavigatedTo]
+      rolesNavigatedTo: [...prevState.rolesNavigatedTo, ...rolesNavigatedTo]
     }));
   };
 
@@ -436,10 +436,10 @@ export class App extends React.Component {
       () => {
         updateEntry({
           sdk: this.props.sdk,
-          stateEntries: this.state.entries,
-          stateTemplateMapping: this.state.templateMapping,
           updatedEntryList,
           updatedInternalMappingJson: updatedInternalMapping,
+          stateEntries: this.state.entries,
+          stateTemplateMapping: this.state.templateMapping,
           loadEntriesFunc: this.loadEntries,
           setStateFunc: this.setState.bind(this)
         });
@@ -453,9 +453,9 @@ export class App extends React.Component {
       () =>
         updateEntry({
           sdk: this.props.sdk,
+          updatedInternalMappingJson: updatedInternalMapping.asJSON(),
           stateEntries: this.state.entries,
           stateTemplateMapping: this.state.templateMapping,
-          updatedInternalMappingJson: updatedInternalMapping.asJSON(),
           loadEntriesFunc: this.loadEntries,
           setStateFunc: this.setState.bind(this)
         }),
@@ -521,7 +521,7 @@ export class App extends React.Component {
   };
 
   fetchNavigatedTo = () => {
-    if (this.state.fieldRolesNavigatedTo && !this.state.fieldRolesNavigatedTo.length) return;
+    if (this.state.rolesNavigatedTo && !this.state.rolesNavigatedTo.length) return;
     this.setState(
       {
         rolesNavigatedTo: []
@@ -530,17 +530,6 @@ export class App extends React.Component {
         this.loadEntries();
       }
     );
-  };
-
-  onChange = e => {
-    const sdk = this.props.sdk;
-    const value = e.currentTarget.value;
-    this.setState({ value });
-    if (value) {
-      sdk.field.setValue(value);
-    } else {
-      sdk.field.removeValue();
-    }
   };
 
   onFieldChange = (e, roleKey) => {
@@ -583,9 +572,9 @@ export class App extends React.Component {
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
       updateEntry({
         sdk: this.props.sdk,
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
         stateEntries: this.state.entries,
         stateTemplateMapping: this.state.templateMapping,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
         loadEntriesFunc: this.loadEntries,
         setStateFunc: this.setState.bind(this)
       });
@@ -630,9 +619,9 @@ export class App extends React.Component {
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
       updateEntry({
         sdk: this.props.sdk,
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
         stateEntries: this.state.entries,
         stateTemplateMapping: this.state.templateMapping,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
         loadEntriesFunc: this.loadEntries,
         setStateFunc: this.setState.bind(this)
       });
