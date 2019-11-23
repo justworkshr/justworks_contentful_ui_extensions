@@ -5,10 +5,14 @@ import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
 
+import { textMediaModule } from '../../custom_templates/templates/textMediaModule';
+import * as c from '../../custom_templates/constants';
+
 configure({ adapter: new Adapter() });
 
+const MOCK_TEMPLATE_NAME = 'mock 1';
 const mockCustomTemplates = {
-  'mock 1': {
+  [MOCK_TEMPLATE_NAME]: {
     meta: {},
     style: {},
     roles: {
@@ -24,11 +28,11 @@ const mockCustomTemplates = {
   }
 };
 
-const mockLink = ({ id = 0 } = {}) => {
+const mockLink = ({ id = 0, type = 'Entry' } = {}) => {
   return {
     sys: {
       id: id,
-      linkType: 'Entry',
+      linkType: type,
       type: 'Link'
     }
   };
@@ -86,7 +90,7 @@ describe('App', () => {
       const wrapper = mount(
         <App
           customTemplates={mockCustomTemplates}
-          templatePlaceholder={mockCustomTemplates['mock 1']}
+          templatePlaceholder={mockCustomTemplates}
           sdk={mockSdk(mockEntry)}
         />
       );
@@ -94,13 +98,15 @@ describe('App', () => {
     });
   });
 
-  describe('with an mock entry', () => {
+  describe('with a mock entry', () => {
     const mockEntry = {
       name: 'Mock Custom Template Entry',
-      template: 'mock 1',
+      template: MOCK_TEMPLATE_NAME,
       entries: {
-        ...mockLink({ id: '1' }),
-        ...mockLink({ id: '2' })
+        ...mockLink({ id: '1' })
+      },
+      assets: {
+        ...mockLink({ id: '2', type: 'Asset' })
       },
       internalMapping: JSON.stringify({
         left_section: '1',
@@ -115,6 +121,30 @@ describe('App', () => {
           customTemplates={mockCustomTemplates}
           templatePlaceholder={mockCustomTemplates['mock 1']}
           sdk={mockSdk(mockEntry)}
+        />
+      );
+
+      expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
+    });
+  });
+
+  describe('with text media template', () => {
+    const mockEntry = {
+      name: 'Mock Custom Template Entry',
+      template: c.TEXT_MEDIA_MODULE,
+      entries: {},
+      assets: {},
+      internalMapping: undefined
+    };
+
+    const sdk = mockSdk(mockEntry);
+
+    it('should render without crashing', () => {
+      const wrapper = mount(
+        <App
+          customTemplates={textMediaModule}
+          templatePlaceholder={mockCustomTemplates}
+          sdk={sdk}
         />
       );
 

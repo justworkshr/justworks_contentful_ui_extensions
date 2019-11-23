@@ -1,0 +1,32 @@
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        useBuiltIns: false
+      }
+    ],
+    [
+      '@babel/preset-react',
+      {
+        useBuiltIns: true
+      }
+    ]
+  ],
+  plugins: [
+    [
+      '@babel/plugin-proposal-class-properties',
+      {
+        loose: true
+      }
+    ],
+    [
+      '@babel/plugin-transform-runtime',
+      {
+        corejs: false,
+        helpers: false,
+        regenerator: true
+      }
+    ]
+  ]
+};

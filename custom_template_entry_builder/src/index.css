@@ -57,3 +57,7 @@ div {
 .extension__refresh {
   margin: 40px 0;
 }
+
+.role-section__heading h3 {
+  display: inline-block;
+}

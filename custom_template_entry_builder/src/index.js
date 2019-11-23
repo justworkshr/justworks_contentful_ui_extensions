@@ -39,6 +39,8 @@ import {
   selectAssetEntries
 } from './utils';
 
+import { updateEntry } from './utils/sdkUtils';
+
 import {
   validateLinkedEntry,
   validateLinkedAsset,
@@ -81,8 +83,6 @@ export class App extends React.Component {
 
     this.sendUpdateRequestTimeout = undefined;
 
-    this.versionAttempts = 0;
-    this.MAX_VERSION_ATTEMPTS = 3;
     this.loadEntries = this.loadEntries.bind(this);
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
@@ -102,8 +102,13 @@ export class App extends React.Component {
     sdk.entry.onSysChanged(this.onSysChanged);
 
     if (this.state.template) {
-      this.updateEntry({
-        updatedInternalMappingJson: this.state.entryInternalMapping.asJSON()
+      updateEntry({
+        sdk: this.props.sdk,
+        stateEntries: this.state.entries,
+        stateTemplateMapping: this.state.templateMapping,
+        updatedInternalMappingJson: this.state.entryInternalMapping.asJSON(),
+        loadEntriesFunc: this.loadEntries,
+        setStateFunc: this.setState.bind(this)
       });
 
       await this.loadEntries();
@@ -215,9 +220,13 @@ export class App extends React.Component {
     };
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
-      this.updateEntry({
-        updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
-        updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      updateEntry({
+        sdk: this.props.sdk,
+        stateEntries: this.state.entries,
+        stateTemplateMapping: this.state.templateMapping,
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+        loadEntriesFunc: this.loadEntries,
+        setStateFunc: this.setState.bind(this)
       })
     );
   };
@@ -238,10 +247,14 @@ export class App extends React.Component {
     const updatedAssetList = selectAssetEntries(updatedEntries).map(asset => constructLink(asset));
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
-      this.updateEntry({
-        updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
+      updateEntry({
+        sdk: this.props.sdk,
+        stateEntries: this.state.entries,
+        stateTemplateMapping: this.state.templateMapping,
         updatedAssetList,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON()
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+        loadEntriesFunc: this.loadEntries,
+        setStateFunc: this.setState.bind(this)
       })
     );
   };
@@ -288,10 +301,15 @@ export class App extends React.Component {
 
     const updatedAssetList = getUpdatedAssetList(this.state.entries, entry);
 
-    this.updateEntry({
+    updateEntry({
+      sdk: this.props.sdk,
+      stateEntries: this.state.entries,
+      stateTemplateMapping: this.state.templateMapping,
       updatedEntryList: entriesFieldValue,
       updatedAssetList,
-      updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+      loadEntriesFunc: this.loadEntries,
+      setStateFunc: this.setState.bind(this)
     });
   };
 
@@ -322,9 +340,14 @@ export class App extends React.Component {
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.addEntry(roleKey, entry.sys.id);
 
-    this.updateEntry({
+    updateEntry({
+      sdk: this.props.sdk,
+      stateEntries: this.state.entries,
+      stateTemplateMapping: this.state.templateMapping,
       updatedEntryList,
-      updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+      loadEntriesFunc: this.loadEntries,
+      setStateFunc: this.setState.bind(this)
     });
   };
 
@@ -411,85 +434,34 @@ export class App extends React.Component {
         return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
       },
       () => {
-        this.updateEntry({ updatedEntryList, updatedInternalMappingJson: updatedInternalMapping });
+        updateEntry({
+          sdk: this.props.sdk,
+          stateEntries: this.state.entries,
+          stateTemplateMapping: this.state.templateMapping,
+          updatedEntryList,
+          updatedInternalMappingJson: updatedInternalMapping,
+          loadEntriesFunc: this.loadEntries,
+          setStateFunc: this.setState.bind(this)
+        });
       }
     );
   };
 
-  updateEntry = async ({
-    updatedEntryList,
-    updatedAssetList,
-    updatedInternalMappingJson,
-    version = 0
-  } = {}) => {
-    if (!updatedInternalMappingJson)
-      throw new Error('Cannot update entry without internal mapping JSON.');
-    const sdk = this.props.sdk;
-    // Clones sys and fields object
-    // adds new Entry list
-    // adds new internalMapping JSON
-    const errors = getTemplateErrors(
-      this.state.templateMapping.fieldRoles,
-      JSON.parse(updatedInternalMappingJson),
-      this.state.entries
+  timeoutUpdateEntry(updatedInternalMapping, milliseconds) {
+    clearTimeout(this.sendUpdateRequestTimeout);
+    this.sendUpdateRequestTimeout = setTimeout(
+      () =>
+        updateEntry({
+          sdk: this.props.sdk,
+          stateEntries: this.state.entries,
+          stateTemplateMapping: this.state.templateMapping,
+          updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+          loadEntriesFunc: this.loadEntries,
+          setStateFunc: this.setState.bind(this)
+        }),
+      milliseconds
     );
-    const isValid = templateIsValid(errors);
-
-    const entries = updatedEntryList => {
-      if (updatedEntryList) return { entries: { 'en-US': updatedEntryList } };
-    };
-
-    const assets = updatedAssetList => {
-      if (updatedAssetList) return { assets: { 'en-US': updatedAssetList } };
-    };
-
-    const newEntry = {
-      sys: {
-        ...sdk.entry.getSys(),
-        version: version ? version : sdk.entry.getSys().version
-      },
-      fields: Object.assign(
-        {},
-        ...Object.keys(sdk.entry.fields).map(key => ({
-          [key]: { 'en-US': sdk.entry.fields[key].getValue() },
-          ...entries(updatedEntryList),
-          ...assets(updatedAssetList),
-          internalMapping: { 'en-US': updatedInternalMappingJson },
-          isValid: {
-            'en-US': isValid ? 'Yes' : 'No'
-          }
-        }))
-      )
-    };
-
-    try {
-      await sdk.space.updateEntry(newEntry);
-      this.versionAttempts = 0;
-      this.setState({
-        errors
-      });
-    } catch (err) {
-      console.log(err);
-      if (err.code === 'VersionMismatch') {
-        if (this.versionAttempts < this.MAX_VERSION_ATTEMPTS) {
-          this.versionAttempts += 1;
-          await this.updateEntry({
-            updatedEntryList,
-            updatedInternalMappingJson,
-            version: version ? version + 1 : sdk.entry.getSys().version + 1
-          });
-        } else {
-          sdk.dialogs.openAlert({
-            title: 'Please refresh the page.',
-            message: 'This entry needs to be refreshed. Please refresh the page.'
-          });
-        }
-      } else {
-        sdk.notifier.error('An error occured. Please try again.');
-        await this.loadEntries();
-      }
-    }
-  };
+  }
 
   loadEntries = async () => {
     await Promise.all(
@@ -609,9 +581,13 @@ export class App extends React.Component {
     };
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      this.updateEntry({
-        updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
-        updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      updateEntry({
+        sdk: this.props.sdk,
+        stateEntries: this.state.entries,
+        stateTemplateMapping: this.state.templateMapping,
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+        loadEntriesFunc: this.loadEntries,
+        setStateFunc: this.setState.bind(this)
       });
     });
   }
@@ -647,26 +623,18 @@ export class App extends React.Component {
     });
   }
 
-  timeoutUpdateEntry(updatedInternalMapping, milliseconds) {
-    clearTimeout(this.sendUpdateRequestTimeout);
-    this.sendUpdateRequestTimeout = setTimeout(
-      () =>
-        this.updateEntry({
-          updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
-          updatedInternalMappingJson: updatedInternalMapping.asJSON()
-        }),
-      milliseconds
-    );
-  }
-
   clearEntryStyleClasses(roleKey, classArray) {
     let updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeStyleClasses(roleKey, classArray);
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      this.updateEntry({
-        updatedEntryList: this.props.sdk.entry.fields.entries.getValue(),
-        updatedInternalMappingJson: updatedInternalMapping.asJSON()
+      updateEntry({
+        sdk: this.props.sdk,
+        stateEntries: this.state.entries,
+        stateTemplateMapping: this.state.templateMapping,
+        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+        loadEntriesFunc: this.loadEntries,
+        setStateFunc: this.setState.bind(this)
       });
     });
   }
