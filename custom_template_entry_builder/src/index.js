@@ -11,7 +11,8 @@ import {
   ValidationMessage,
   TextLink,
   IconButton,
-  SectionHeading
+  SectionHeading,
+  DisplayText
 } from '@contentful/forma-36-react-components';
 
 import CreateNewLink from './components/CreateNewLink';
@@ -30,14 +31,15 @@ import {
   groupByContentType,
   createEntry,
   constructEntryName,
-  getUpdatedAssetList,
   displaySnakeCaseName,
   getContentTypeArray,
   getEntryOrField,
-  constructFieldEntry,
   cleanStyleClasses,
-  selectAssetEntries
+  selectAssetEntries,
+  getRolesToFetch
 } from './utils';
+
+import { addStateAsset, addStateEntry, removeStateEntry } from './utils/stateUtils';
 
 import { updateEntry } from './utils/sdkUtils';
 
@@ -102,14 +104,7 @@ export class App extends React.Component {
     sdk.entry.onSysChanged(this.onSysChanged);
 
     if (this.state.template) {
-      updateEntry({
-        sdk: this.props.sdk,
-        updatedInternalMappingJson: this.state.entryInternalMapping.asJSON(),
-        stateEntries: this.state.entries,
-        stateTemplateMapping: this.state.templateMapping,
-        loadEntriesFunc: this.loadEntries,
-        setStateFunc: this.setState.bind(this)
-      });
+      this.timeoutUpdateEntry({ updatedInternalMapping: this.state.entryInternalMapping, ms: 0 });
 
       await this.loadEntries();
     }
@@ -142,10 +137,7 @@ export class App extends React.Component {
           this.props.templatePlaceholder
       },
       async () => {
-        const rolesToFetch = this.getRolesToFetch(
-          this.state.entryInternalMapping,
-          this.state.entries
-        );
+        const rolesToFetch = getRolesToFetch(this.state.entryInternalMapping, this.state.entries);
         //
         await Promise.all(
           await rolesToFetch.map(async roleKey => {
@@ -171,13 +163,6 @@ export class App extends React.Component {
       }
     );
   };
-
-  getRolesToFetch(newInternalMapping, oldEntries) {
-    // if newInternalMapping has more keys than oldEntries, return those extra keys
-    return newInternalMapping
-      .fieldKeys()
-      .filter(key => !Object.keys(oldEntries).some(k => k === key));
-  }
 
   onTemplateChange = async template => {
     const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
@@ -211,23 +196,14 @@ export class App extends React.Component {
         break;
     }
 
-    const updatedEntries = {
-      ...this.state.entries,
-      [roleKey]: constructFieldEntry(
-        InternalMapping.FIELDSYS,
-        InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey] })
-      )
-    };
+    const updatedEntries = addStateEntry(
+      this.state.entries,
+      roleKey,
+      InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey] })
+    );
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
-      updateEntry({
-        sdk: this.props.sdk,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-        stateEntries: this.state.entries,
-        stateTemplateMapping: this.state.templateMapping,
-        loadEntriesFunc: this.loadEntries,
-        setStateFunc: this.setState.bind(this)
-      })
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 0 })
     );
   };
 
@@ -235,27 +211,14 @@ export class App extends React.Component {
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeEntry(roleKey);
 
-    const removedAsset = this.state.entries[roleKey];
-    // Removes key from this.state.entries
-    const updatedEntries = Object.assign(
-      {},
-      ...Object.keys(this.state.entries)
-        .filter(key => updatedInternalMapping.fieldKeys().includes(key))
-        .map(key => ({ [key]: this.state.entries[key] }))
+    const updatedEntryList = removeStateEntry(this.state.entries, updatedInternalMapping);
+
+    const updatedAssetList = selectAssetEntries(updatedEntryList).map(asset =>
+      constructLink(asset)
     );
 
-    const updatedAssetList = selectAssetEntries(updatedEntries).map(asset => constructLink(asset));
-
-    this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
-      updateEntry({
-        sdk: this.props.sdk,
-        updatedAssetList,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-        stateEntries: this.state.entries,
-        stateTemplateMapping: this.state.templateMapping,
-        loadEntriesFunc: this.loadEntries,
-        setStateFunc: this.setState.bind(this)
-      })
+    this.setState({ entries: updatedEntryList, entryInternalMapping: updatedInternalMapping }, () =>
+      this.timeoutUpdateEntry({ updatedEntryList, updatedAssetList, updatedInternalMapping, ms: 0 })
     );
   };
 
@@ -286,7 +249,7 @@ export class App extends React.Component {
   };
 
   linkAssetToTemplate = (entry, roleKey) => {
-    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
+    const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
     const roleMapping = this.state.templateMapping.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.addAsset(
@@ -299,17 +262,13 @@ export class App extends React.Component {
         : {}
     );
 
-    const updatedAssetList = getUpdatedAssetList(this.state.entries, entry);
+    const updatedAssetList = addStateAsset(this.state.entries, entry);
 
-    updateEntry({
-      sdk: this.props.sdk,
-      updatedEntryList: entriesFieldValue,
+    this.timeoutUpdateEntry({
+      updatedEntryList,
       updatedAssetList,
-      updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-      stateEntries: this.state.entries,
-      stateTemplateMapping: this.state.templateMapping,
-      loadEntriesFunc: this.loadEntries,
-      setStateFunc: this.setState.bind(this)
+      updatedInternalMapping,
+      ms: 0
     });
   };
 
@@ -340,15 +299,7 @@ export class App extends React.Component {
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.addEntry(roleKey, entry.sys.id);
 
-    updateEntry({
-      sdk: this.props.sdk,
-      updatedEntryList,
-      updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-      stateEntries: this.state.entries,
-      stateTemplateMapping: this.state.templateMapping,
-      loadEntriesFunc: this.loadEntries,
-      setStateFunc: this.setState.bind(this)
-    });
+    this.timeoutUpdateEntry({ updatedEntryList, updatedInternalMapping, ms: 150 });
   };
 
   setEntryLoading(roleKey, value) {
@@ -415,8 +366,8 @@ export class App extends React.Component {
     const thisEntry = this.props.sdk.entry;
     const entriesValue = thisEntry.fields.entries.getValue();
     const entry = this.state.entries[roleKey] || {};
-    const internalMapping = this.state.entryInternalMapping;
-    internalMapping.removeEntry(roleKey);
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.removeEntry(roleKey);
 
     const firstEntryInstance = entriesValue.find(e => e.sys.id === entry.sys.id);
     const firstEntryIndex = entriesValue.indexOf(firstEntryInstance);
@@ -424,7 +375,6 @@ export class App extends React.Component {
       ...entriesValue.slice(0, firstEntryIndex),
       ...entriesValue.slice(firstEntryIndex + 1, entriesValue.length)
     ];
-    const updatedInternalMapping = internalMapping.asJSON();
     this.setState(
       prevState => {
         const prevStateLoadingEntries = { ...prevState.loadingEntries };
@@ -434,32 +384,26 @@ export class App extends React.Component {
         return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
       },
       () => {
-        updateEntry({
-          sdk: this.props.sdk,
-          updatedEntryList,
-          updatedInternalMappingJson: updatedInternalMapping,
-          stateEntries: this.state.entries,
-          stateTemplateMapping: this.state.templateMapping,
-          loadEntriesFunc: this.loadEntries,
-          setStateFunc: this.setState.bind(this)
-        });
+        this.timeoutUpdateEntry({ updatedEntryList, updatedInternalMapping, ms: 0 });
       }
     );
   };
 
-  timeoutUpdateEntry(updatedInternalMapping, milliseconds) {
+  timeoutUpdateEntry({ updatedEntries, updatedAssets, updatedInternalMapping, ms = 150 } = {}) {
     clearTimeout(this.sendUpdateRequestTimeout);
     this.sendUpdateRequestTimeout = setTimeout(
       () =>
         updateEntry({
           sdk: this.props.sdk,
+          updatedEntries,
+          updatedAssets,
           updatedInternalMappingJson: updatedInternalMapping.asJSON(),
           stateEntries: this.state.entries,
           stateTemplateMapping: this.state.templateMapping,
           loadEntriesFunc: this.loadEntries,
           setStateFunc: this.setState.bind(this)
         }),
-      milliseconds
+      ms
     );
   }
 
@@ -545,18 +489,16 @@ export class App extends React.Component {
 
       updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
 
-      const updatedEntries = {
-        ...this.state.entries,
-        [roleKey]: constructFieldEntry(
-          InternalMapping.FIELDSYS,
-          InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], value })
-        )
-      };
+      const updatedEntries = addStateEntry(
+        this.state.entries,
+        roleKey,
+        InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], value })
+      );
 
       this.setState(
         { entries: updatedEntries, entryInternalMapping: updatedInternalMapping },
         () => {
-          this.timeoutUpdateEntry(updatedInternalMapping, 1000);
+          this.timeoutUpdateEntry({ updatedInternalMapping, ms: 1000 });
         }
       );
     }
@@ -570,14 +512,7 @@ export class App extends React.Component {
     };
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      updateEntry({
-        sdk: this.props.sdk,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-        stateEntries: this.state.entries,
-        stateTemplateMapping: this.state.templateMapping,
-        loadEntriesFunc: this.loadEntries,
-        setStateFunc: this.setState.bind(this)
-      });
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
     });
   }
 
@@ -590,25 +525,14 @@ export class App extends React.Component {
 
     styleClasses = updatedInternalMapping[roleKey].styleClasses;
 
-    const updatedEntries = {
-      ...this.state.entries,
-      [roleKey]: constructFieldEntry(
-        InternalMapping.FIELDSYS,
-        InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], styleClasses })
-      )
-    };
+    const updatedEntries = addStateEntry(
+      this.state.entries,
+      roleKey,
+      InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], styleClasses })
+    );
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () => {
-      this.timeoutUpdateEntry(updatedInternalMapping, 50);
-    });
-  }
-
-  updateAssetFormatting(roleKey, formattingObject) {
-    let updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.setImageFormatting(roleKey, formattingObject);
-
-    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      this.timeoutUpdateEntry(updatedInternalMapping, 1000);
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
     });
   }
 
@@ -617,14 +541,16 @@ export class App extends React.Component {
     updatedInternalMapping.removeStyleClasses(roleKey, classArray);
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      updateEntry({
-        sdk: this.props.sdk,
-        updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-        stateEntries: this.state.entries,
-        stateTemplateMapping: this.state.templateMapping,
-        loadEntriesFunc: this.loadEntries,
-        setStateFunc: this.setState.bind(this)
-      });
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+    });
+  }
+
+  updateAssetFormatting(roleKey, formattingObject) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.setImageFormatting(roleKey, formattingObject);
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 1000 });
     });
   }
 
@@ -643,154 +569,166 @@ export class App extends React.Component {
           size="small">
           Refresh
         </Button>
-        {this.state.templateMapping.style &&
-          Object.keys(this.state.templateMapping.style).map(styleSectionKey => {
+        {this.state.templateMapping.style && (
+          <div className="custom-template-entry-builder__section">
+            <DisplayText className="style-editor__heading--header" element="h1">
+              Styles
+            </DisplayText>
+            {Object.keys(this.state.templateMapping.style).map(styleSectionKey => {
+              return (
+                <TemplateStyleEditor
+                  key={`style-section-${styleSectionKey}`}
+                  updateStyle={this.updateTemplateStyle}
+                  templateStyleObject={this.state.templateMapping.style[styleSectionKey]}
+                  mappingStyleObject={this.state.entryInternalMapping.style[styleSectionKey]}
+                  styleSectionKey={styleSectionKey}
+                  title={displaySnakeCaseName(styleSectionKey)}
+                />
+              );
+            })}
+          </div>
+        )}
+        <div className="custom-template-entry-builder__section">
+          <DisplayText className="style-editor__heading--header" element="h1">
+            Fields
+          </DisplayText>
+          {Object.keys(contentTypeGroups).map((groupKey, index) => {
             return (
-              <TemplateStyleEditor
-                key={`style-section-${styleSectionKey}`}
-                updateStyle={this.updateTemplateStyle}
-                templateStyleObject={this.state.templateMapping.style[styleSectionKey]}
-                mappingStyleObject={this.state.entryInternalMapping.style[styleSectionKey]}
-                styleSectionKey={styleSectionKey}
-                title={displaySnakeCaseName(styleSectionKey)}
-              />
-            );
-          })}
-        {Object.keys(contentTypeGroups).map((groupKey, index) => {
-          return (
-            <div className="entry-group" key={`group--${index}`}>
-              {/* <div className="entry-group__header-section">
-                <Heading>{displayContentType(groupKey)}</Heading>
-                <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
-              </div> */}
-              <div className="entry-container">
-                {Object.keys(contentTypeGroups[groupKey])
-                  .sort((a, b) => (!this.state.templateMapping.fieldRoles[b] || {}).required)
-                  .map((roleKey, index) => {
-                    const entry = contentTypeGroups[groupKey][roleKey];
-                    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey] || {};
-                    const internalMappingObject = this.state.entryInternalMapping.fieldRoles[
-                      roleKey
-                    ];
-                    return (
-                      <div
-                        key={index}
-                        className={`role-section ${
-                          !!this.state.draggingObject &&
-                          this.state.templateMapping.fieldRoles[this.state.draggingObject.roleKey]
-                            .contentType !==
-                            this.state.templateMapping.fieldRoles[roleKey].contentType
-                            ? 'unhighlighted'
-                            : ''
-                        }`}>
-                        <div className="role-section__header-section ">
-                          <FormLabel
-                            className="role-section__heading"
-                            htmlFor=""
-                            required={roleMappingObject.required}>
-                            <SectionHeading>{displaySnakeCaseName(roleKey)}</SectionHeading>
-                          </FormLabel>
-                          {!!entry && entry.sys.type === 'Field' && (
-                            <IconButton
-                              className="role-section__remove-field"
-                              iconProps={{ icon: 'Close', size: 'large' }}
-                              buttonType="negative"
-                              label="Remove Field"
-                              onClick={() => this.onRemoveFieldClick(roleKey)}
-                            />
-                          )}
-                        </div>
-                        <HelpText>{roleMappingObject.description}</HelpText>
-                        {!!this.state.entries[roleKey] || this.state.loadingEntries[roleKey] ? (
-                          <div>
-                            <EntryField
-                              entry={entry}
-                              isLoading={!!this.state.loadingEntries[roleKey]}
-                              isDragActive={
-                                entry ? this.state.draggingObject === entry.sys.id : false
-                              }
-                              roleKey={roleKey}
-                              roleMapping={roleMappingObject}
-                              onEditClick={this.onEditClick}
-                              onRemoveClick={this.onRemoveClick}
-                              onRemoveFieldClick={this.onRemoveFieldClick}
-                              onFieldChange={this.onFieldChange}
-                            />
-                            {((entry && entry.sys.type === 'Field') ||
-                              (entry &&
-                                entry.sys.type === 'Asset' &&
-                                roleMappingObject.asset.formatting.allow)) && (
-                              <FieldStyleEditor
-                                roleKey={roleKey}
-                                roleMapping={roleMappingObject}
-                                internalMappingObject={internalMappingObject}
-                                updateStyle={this.updateEntryStyle}
-                                updateAssetFormatting={this.updateAssetFormatting}
-                                clearStyleField={this.clearEntryStyleClasses}
-                                entry={entry}
-                                title={displaySnakeCaseName(roleKey) + ' Style'}
-                                type={
-                                  entry.sys.type === InternalMapping.ASSETSYS
-                                    ? InternalMapping.ASSETSYS
-                                    : entry.fields.type
-                                }
+              <div className="entry-group" key={`group--${index}`}>
+                {/* <div className="entry-group__header-section">
+                  <Heading>{displayContentType(groupKey)}</Heading>
+                  <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
+                </div> */}
+                <div className="entry-container">
+                  {Object.keys(contentTypeGroups[groupKey])
+                    .sort((a, b) => (!this.state.templateMapping.fieldRoles[b] || {}).required)
+                    .map((roleKey, index) => {
+                      const entry = contentTypeGroups[groupKey][roleKey];
+                      const roleMappingObject =
+                        this.state.templateMapping.fieldRoles[roleKey] || {};
+                      const internalMappingObject = this.state.entryInternalMapping.fieldRoles[
+                        roleKey
+                      ];
+                      return (
+                        <div
+                          key={index}
+                          className={`role-section ${
+                            !!this.state.draggingObject &&
+                            this.state.templateMapping.fieldRoles[this.state.draggingObject.roleKey]
+                              .contentType !==
+                              this.state.templateMapping.fieldRoles[roleKey].contentType
+                              ? 'unhighlighted'
+                              : ''
+                          }`}>
+                          <div className="role-section__header-section ">
+                            <FormLabel
+                              className="role-section__heading"
+                              htmlFor=""
+                              required={roleMappingObject.required}>
+                              <SectionHeading>{displaySnakeCaseName(roleKey)}</SectionHeading>
+                            </FormLabel>
+                            {!!entry && entry.sys.type === 'Field' && (
+                              <IconButton
+                                className="role-section__remove-field"
+                                iconProps={{ icon: 'Close', size: 'large' }}
+                                buttonType="negative"
+                                label="Remove Field"
+                                onClick={() => this.onRemoveFieldClick(roleKey)}
                               />
                             )}
                           </div>
-                        ) : (
-                          <div className="link-entries-row">
-                            {!!this.state.templateMapping.fieldRoles[roleKey].field && (
-                              <TextLink
-                                icon="Quote"
-                                linkType="primary"
-                                className="link-entries-row__button"
-                                onClick={() =>
-                                  this.onAddFieldClick(
-                                    roleKey,
-                                    this.state.templateMapping.fieldRoles[roleKey].field
-                                  )
-                                }>
-                                Add field
-                              </TextLink>
-                            )}
-                            <CreateNewLink
-                              allowedCustomTemplates={
-                                this.state.templateMapping.fieldRoles[roleKey]
-                                  .allowedCustomTemplates
-                              }
-                              onAddEntryClick={this.onAddEntryClick}
-                              contentTypes={
-                                this.state.templateMapping.fieldRoles[roleKey].contentType
-                              }
-                              roleKey={roleKey}
-                            />
-                            <LinkExisting
-                              linkAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
-                              onLinkAssetClick={this.onLinkAssetClick}
-                              onLinkEntryClick={this.onLinkEntryClick}
-                              onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                              contentTypes={
-                                this.state.templateMapping.fieldRoles[roleKey].contentType
-                              }
-                              roleKey={roleKey}
-                            />
-                          </div>
-                        )}
-                        {!!(this.state.errors[roleKey] || {}).length &&
-                          this.state.errors[roleKey].map((error, index) => {
-                            return (
-                              <ValidationMessage key={`error-${roleKey}-${index}`}>
-                                {error.message}
-                              </ValidationMessage>
-                            );
-                          })}
-                      </div>
-                    );
-                  })}
+                          <HelpText>{roleMappingObject.description}</HelpText>
+                          {!!this.state.entries[roleKey] || this.state.loadingEntries[roleKey] ? (
+                            <div>
+                              <EntryField
+                                entry={entry}
+                                isLoading={!!this.state.loadingEntries[roleKey]}
+                                isDragActive={
+                                  entry ? this.state.draggingObject === entry.sys.id : false
+                                }
+                                roleKey={roleKey}
+                                roleMapping={roleMappingObject}
+                                onEditClick={this.onEditClick}
+                                onRemoveClick={this.onRemoveClick}
+                                onRemoveFieldClick={this.onRemoveFieldClick}
+                                onFieldChange={this.onFieldChange}
+                              />
+                              {((entry && entry.sys.type === 'Field') ||
+                                (entry &&
+                                  entry.sys.type === 'Asset' &&
+                                  roleMappingObject.asset.formatting.allow)) && (
+                                <FieldStyleEditor
+                                  roleKey={roleKey}
+                                  roleMapping={roleMappingObject}
+                                  internalMappingObject={internalMappingObject}
+                                  updateStyle={this.updateEntryStyle}
+                                  updateAssetFormatting={this.updateAssetFormatting}
+                                  clearStyleField={this.clearEntryStyleClasses}
+                                  entry={entry}
+                                  title={displaySnakeCaseName(roleKey) + ' Style'}
+                                  type={
+                                    entry.sys.type === InternalMapping.ASSETSYS
+                                      ? InternalMapping.ASSETSYS
+                                      : entry.fields.type
+                                  }
+                                />
+                              )}
+                            </div>
+                          ) : (
+                            <div className="link-entries-row">
+                              {!!this.state.templateMapping.fieldRoles[roleKey].field && (
+                                <TextLink
+                                  icon="Quote"
+                                  linkType="primary"
+                                  className="link-entries-row__button"
+                                  onClick={() =>
+                                    this.onAddFieldClick(
+                                      roleKey,
+                                      this.state.templateMapping.fieldRoles[roleKey].field
+                                    )
+                                  }>
+                                  Add field
+                                </TextLink>
+                              )}
+                              <CreateNewLink
+                                allowedCustomTemplates={
+                                  this.state.templateMapping.fieldRoles[roleKey]
+                                    .allowedCustomTemplates
+                                }
+                                onAddEntryClick={this.onAddEntryClick}
+                                contentTypes={
+                                  this.state.templateMapping.fieldRoles[roleKey].contentType
+                                }
+                                roleKey={roleKey}
+                              />
+                              <LinkExisting
+                                linkAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+                                onLinkAssetClick={this.onLinkAssetClick}
+                                onLinkEntryClick={this.onLinkEntryClick}
+                                onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+                                contentTypes={
+                                  this.state.templateMapping.fieldRoles[roleKey].contentType
+                                }
+                                roleKey={roleKey}
+                              />
+                            </div>
+                          )}
+                          {!!(this.state.errors[roleKey] || {}).length &&
+                            this.state.errors[roleKey].map((error, index) => {
+                              return (
+                                <ValidationMessage key={`error-${roleKey}-${index}`}>
+                                  {error.message}
+                                </ValidationMessage>
+                              );
+                            })}
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     );
   }

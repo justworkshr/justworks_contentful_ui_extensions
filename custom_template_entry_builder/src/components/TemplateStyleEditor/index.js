@@ -44,6 +44,7 @@ const TemplateStyleEditor = props => {
               onChange={(value, classString, valuesArray) =>
                 onChangeExclusive(value, classString, valuesArray)
               }
+              roleKey={props.styleSectionKey + styleKey}
               onClear={onClearStyleSection}
             />
           );

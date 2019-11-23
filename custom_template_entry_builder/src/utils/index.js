@@ -156,12 +156,6 @@ export const selectAssetEntries = stateEntries => {
     .filter(el => el);
 };
 
-export const getUpdatedAssetList = (stateEntries, newAsset) => {
-  let assetList = selectAssetEntries(stateEntries);
-
-  return [...assetList, newAsset].filter(a => a).map(asset => constructLink(asset));
-};
-
 export const addExclusiveClassName = (value, classString, classObjectArray) => {
   classString = classString
     .split(' ')
@@ -173,4 +167,11 @@ export const addExclusiveClassName = (value, classString, classObjectArray) => {
   classString = [...classString, value].join(' ');
 
   return classString;
+};
+
+export const getRolesToFetch = (newInternalMapping, oldEntries) => {
+  // if newInternalMapping has more keys than oldEntries, return those extra keys
+  return newInternalMapping
+    .fieldKeys()
+    .filter(key => !Object.keys(oldEntries).some(k => k === key));
 };

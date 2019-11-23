@@ -163,6 +163,7 @@ const TextStyle = props => {
                   onChange={props.updateStyleExclusive}
                   classString={props.entryStyleClasses}
                   section={section}
+                  roleKey={props.roleKey}
                 />
               </div>
             </div>

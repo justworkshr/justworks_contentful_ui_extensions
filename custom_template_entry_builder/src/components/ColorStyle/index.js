@@ -15,7 +15,7 @@ const ColorStyle = props => {
     <div className="style-editor__inline-input-section">
       {colorClasses.map((classObject, index) => {
         const color = c.COLORS.find(color => color.label === classObject.label);
-        const fieldId = `radio-${classObject.className}`;
+        const fieldId = `radio-${props.roleKey}-${props.section}-${classObject.className}`;
         return (
           <div className="style-editor__radio-section" key={`text-color-section-${index}`}>
             <RadioButtonField
@@ -59,7 +59,8 @@ ColorStyle.propTypes = {
   section: PropTypes.string,
   onChange: PropTypes.func,
   classString: PropTypes.string,
-  colorClassType: PropTypes.string
+  colorClassType: PropTypes.string,
+  roleKey: PropTypes.string
 };
 
 ColorStyle.defaultProps = {

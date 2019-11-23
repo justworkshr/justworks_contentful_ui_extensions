@@ -21,6 +21,7 @@ const BackgroundColorStyle = props => {
           colorClassType="background"
           onChange={props.onChange}
           classString={props.classString}
+          roleKey={props.roleKey}
         />
       </div>
     </div>
@@ -32,7 +33,8 @@ BackgroundColorStyle.propTypes = {
   onClear: PropTypes.func,
   helpText: PropTypes.string,
   onChange: PropTypes.func,
-  title: PropTypes.string
+  title: PropTypes.string,
+  roleKey: PropTypes.string
 };
 
 BackgroundColorStyle.defaultProps = {
