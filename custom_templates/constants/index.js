@@ -3,7 +3,7 @@ export const CARD_BLOCK = 'card block'
 export const TEXT_COLLECTION = 'text collection'
 export const TEXT_MEDIA_MODULE = 'text media module'
 export const LOGO_ITEM = 'logo item'
-export const COLLECTION_ROW = 'collection row'
+export const COLLECTION_GRID = 'collection grid'
 
 // Content types
 export const CONTENT_TYPE_TEXT = 'text'
@@ -16,6 +16,7 @@ export const CONTENT_TYPE_LINK = 'link'
 
 export const FIELD_TYPE_TEXT = 'text'
 export const FIELD_TYPE_MARKDOWN = 'markdown'
+export const FIELD_TYPE_MULTI_REFERENCE = 'multi-reference'
 
 export * from './styleClasses'
 

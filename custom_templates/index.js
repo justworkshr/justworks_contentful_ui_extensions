@@ -2,7 +2,7 @@ import { cardBlock } from './templates/cardBlock';
 import { textCollection } from './templates/textCollection';
 import { textMediaModule } from './templates/textMediaModule';
 import { logoItem } from './templates/logoItem';
-import { collectionRow } from './templates/collectionRow';
+import { collectionGrid } from './templates/collectionGrid';
 
 /////////////////
 // Instructions
@@ -19,7 +19,7 @@ export const customTemplates = {
   ...textMediaModule,
   ...textCollection,
   ...logoItem,
-  ...collectionRow
+  ...collectionGrid
 };
 
 export const templatePlaceholder = {
