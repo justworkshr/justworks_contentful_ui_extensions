@@ -1,7 +1,7 @@
 import { constructRole, allowAsset, fieldObject } from '../utils';
 import * as c from '../constants';
 
-export const collectionGrid = {
+export const logoGrid = {
   [c.LOGO_GRID]: {
     meta: {
       hidden: true,
