@@ -217,9 +217,12 @@ export class App extends React.Component {
     const updatedAssetList = selectAssetEntries(updatedEntryList).map(asset =>
       constructLink(asset)
     );
-
     this.setState({ entries: updatedEntryList, entryInternalMapping: updatedInternalMapping }, () =>
-      this.timeoutUpdateEntry({ updatedEntryList, updatedAssetList, updatedInternalMapping, ms: 0 })
+      this.timeoutUpdateEntry({
+        updatedAssets: updatedAssetList,
+        updatedInternalMapping,
+        ms: 0
+      })
     );
   };
 
@@ -274,8 +277,8 @@ export class App extends React.Component {
     const updatedAssetList = addStateAsset(this.state.entries, entry);
 
     this.timeoutUpdateEntry({
-      updatedEntryList,
-      updatedAssetList,
+      updatedEntries: updatedEntryList,
+      updatedAssets: updatedAssetList,
       updatedInternalMapping,
       ms: 0
     });
@@ -393,7 +396,11 @@ export class App extends React.Component {
         return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
       },
       () => {
-        this.timeoutUpdateEntry({ updatedEntryList, updatedInternalMapping, ms: 0 });
+        this.timeoutUpdateEntry({
+          updatedEntries: updatedEntryList,
+          updatedInternalMapping,
+          ms: 0
+        });
       }
     );
   };

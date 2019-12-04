@@ -5,8 +5,8 @@ let MAX_VERSION_ATTEMPTS = 3;
 
 export const updateEntry = async ({
   sdk,
-  updatedEntryList,
-  updatedAssetList,
+  updatedEntries,
+  updatedAssets,
   updatedInternalMappingJson,
   stateEntries,
   stateTemplateMapping,
@@ -40,8 +40,8 @@ export const updateEntry = async ({
       {},
       ...Object.keys(sdk.entry.fields).map(key => ({
         [key]: { 'en-US': sdk.entry.fields[key].getValue() },
-        ...entries(updatedEntryList),
-        ...assets(updatedAssetList),
+        ...entries(updatedEntries),
+        ...assets(updatedAssets),
         internalMapping: { 'en-US': updatedInternalMappingJson },
         isValid: {
           'en-US': isValid ? 'Yes' : 'No'
@@ -63,8 +63,8 @@ export const updateEntry = async ({
         versionAttempts += 1;
         await updateEntry({
           sdk,
-          updatedEntryList,
-          updatedAssetList,
+          updatedEntries,
+          updatedAssets,
           updatedInternalMappingJson,
           stateEntries,
           stateTemplateMapping,
