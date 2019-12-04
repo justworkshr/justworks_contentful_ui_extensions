@@ -2,7 +2,7 @@ import { constructRole, allowAsset, fieldObject } from '../utils';
 import * as c from '../constants';
 
 export const collectionGrid = {
-  [c.COLLECTION_GRID]: {
+  [c.LOGO_GRID]: {
     meta: {
       hidden: true,
       description: 'copy pending',
@@ -15,9 +15,11 @@ export const collectionGrid = {
         description: 'Template title.'
       }),
       items: constructRole({
-        field: fieldObject({type: c.FIELD_TYPE_MULTI_REFERENCE}),
+        contentType: ['customTemplate'],
+        allowedCustomTemplates: ['logoItem'],
+        allowMultiple: true,
         required: false,
-        description: 'Text beneath the logo.'
+        description: 'Grid items.'
       })
     }
   }
