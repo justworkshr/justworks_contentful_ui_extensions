@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, AssetCard, SectionHeading } from '@contentful/forma-36-react-components';
+import { AssetCard, SectionHeading } from '@contentful/forma-36-react-components';
 
 class TemplateDisplay extends React.Component {
   constructor(props) {
@@ -32,7 +32,11 @@ class TemplateDisplay extends React.Component {
               <AssetCard
                 size="small"
                 title={templateName}
-                src={this.props.templates[templateKey].meta.imageUrl + '?w=300'}
+                src={
+                  (this.props.templates[templateKey].meta.imageUrl ||
+                    'https://images.ctfassets.net/mnc2gcng0j8q/75kidbqfOrrZXuzpnxz3dz/2ac73c04f775bae19378a0fd0d32d4c0/JW_MetaImages__LOGO.png') +
+                  '?w=300'
+                }
               />
             </div>
           );
