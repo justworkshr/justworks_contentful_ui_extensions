@@ -1,7 +1,7 @@
 import { constructRole, allowAsset, fieldObject } from '../utils';
 import * as c from '../constants';
 
-export const logoItem = {
+export const collectionRow = {
   [c.LOGO_ITEM]: {
     meta: {
       hidden: true,
