@@ -35,6 +35,11 @@ export const TEXT_TRANSFORM_CLASSES = [
   constructStyleClass({className: 'text-capitalize', label: 'Capitalize'})
 ]
 
+export const TEXT_WEIGHT_CLASSES = [
+  constructStyleClass({className: 'text-normal', label: 'Normal'}),
+  constructStyleClass({className: 'text-bold', label: 'Bold'}),
+]
+
 export const TEXT_COLOR_CLASSES = COLORS.map(color => {
   return constructStyleClass({className: `text-${color.label.toLowerCase()}`, label: color.label})
 })
