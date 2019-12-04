@@ -2,7 +2,7 @@ import { constructRole, allowAsset, fieldObject } from '../utils';
 import * as c from '../constants';
 
 export const collectionRow = {
-  [c.LOGO_ITEM]: {
+  [c.COLLECTION_ROW]: {
     meta: {
       hidden: true,
       description: 'copy pending',
