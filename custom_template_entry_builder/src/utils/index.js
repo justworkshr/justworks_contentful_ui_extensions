@@ -26,6 +26,16 @@ export const constructEntryName = (parentName, entryDescriptor) => {
   return `${parentName} ${entryDescriptor}`;
 };
 
+export const createAsset = async space => {
+  let data = {
+    fields: {}
+  };
+
+  const newAsset = await space.createAsset(data);
+
+  return newAsset;
+};
+
 export const createEntry = async (space, contentType, name, template = undefined) => {
   let data = {
     fields: {
@@ -36,7 +46,7 @@ export const createEntry = async (space, contentType, name, template = undefined
   if (template) {
     template = template
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
     data = { ...data, fields: { ...data.fields, template: { 'en-US': template } } };
   }

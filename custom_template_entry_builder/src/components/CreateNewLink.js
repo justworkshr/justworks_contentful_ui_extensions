@@ -24,19 +24,34 @@ class CreateNewLink extends React.Component {
     }));
   }
 
-  render() {
-    return Array.isArray(this.props.contentTypes) ? (
+  renderAssetDropdownItem() {
+    return (
+      <DropdownListItem
+        onClick={() =>
+          this.props.onAddEntryClick({
+            roleKey: this.props.roleKey,
+            type: 'asset'
+          })
+        }>
+        asset
+      </DropdownListItem>
+    );
+  }
+
+  renderMultipleContentTypes() {
+    return (
       <Dropdown
         className="link-entries-row__button"
         toggleElement={
           <TextLink icon="Plus" linkType="primary">
-            Create new entry
+            Create new
           </TextLink>
         }
         onClick={this.toggleDropdown}
         isOpen={this.state.isOpen}>
         <DropdownList>
-          <DropdownListItem isTitle>All Content Types</DropdownListItem>
+          <DropdownListItem isTitle>Types</DropdownListItem>
+          {this.props.allowAsset && this.renderAssetDropdownItem()}
           {this.props.contentTypes.map((contentType, index) => {
             return contentType === 'customTemplate' &&
               !!this.props.allowedCustomTemplates.length ? (
@@ -47,11 +62,11 @@ class CreateNewLink extends React.Component {
                       <DropdownListItem
                         key={`allowed-${index}`}
                         onClick={() =>
-                          this.props.onAddEntryClick(
-                            this.props.roleKey,
+                          this.props.onAddEntryClick({
+                            roleKey: this.props.roleKey,
                             contentType,
-                            allowedTemplate
-                          )
+                            template: allowedTemplate
+                          })
                         }>
                         {allowedTemplate}
                       </DropdownListItem>
@@ -62,31 +77,94 @@ class CreateNewLink extends React.Component {
             ) : (
               <DropdownListItem
                 key={`dropdown-${index}`}
-                onClick={() => this.props.onAddEntryClick(this.props.roleKey, contentType)}>
+                onClick={() =>
+                  this.props.onAddEntryClick({ roleKey: this.props.roleKey, contentType })
+                }>
                 {contentType}
               </DropdownListItem>
             );
           })}
         </DropdownList>
       </Dropdown>
-    ) : (
-      <TextLink
-        icon="Plus"
-        linkType="primary"
-        className="link-entries-row__button"
-        onClick={() => this.props.onAddEntryClick(this.props.roleKey, this.props.contentTypes)}>
-        Create new entry
-      </TextLink>
     );
+  }
+
+  renderSingleContentTypeAndAsset() {
+    return (
+      <Dropdown
+        className="link-entries-row__button"
+        toggleElement={
+          <TextLink icon="Plus" linkType="primary">
+            Create new
+          </TextLink>
+        }
+        onClick={this.toggleDropdown}
+        isOpen={this.state.isOpen}>
+        <DropdownList>
+          <DropdownListItem isTitle>Types</DropdownListItem>
+          {this.renderAssetDropdownItem()}
+          <DropdownListItem
+            onClick={() =>
+              this.props.onAddEntryClick({
+                roleKey: this.props.roleKey,
+                contentType: this.props.contentTypes
+              })
+            }>
+            {this.props.contentTypes}
+          </DropdownListItem>
+        </DropdownList>
+      </Dropdown>
+    );
+  }
+
+  render() {
+    if (Array.isArray(this.props.contentTypes)) {
+      return this.renderMultipleContentTypes();
+    } else if (!!this.props.contentTypes && !!this.props.allowAsset) {
+      return this.renderSingleContentTypeAndAsset();
+    } else if (this.props.contentTypes) {
+      return (
+        <TextLink
+          icon="Plus"
+          linkType="primary"
+          className="link-entries-row__button"
+          onClick={() =>
+            this.props.onAddEntryClick({
+              roleKey: this.props.roleKey,
+              contentType: this.props.contentTypes
+            })
+          }>
+          Create new entry
+        </TextLink>
+      );
+    } else if (this.props.allowAsset) {
+      return (
+        <TextLink
+          icon="Plus"
+          linkType="primary"
+          className="link-entries-row__button"
+          onClick={() =>
+            this.props.onAddEntryClick({
+              roleKey: this.props.roleKey,
+              contentType: this.props.contentTypes,
+              type: 'asset'
+            })
+          }>
+          Create new asset
+        </TextLink>
+      );
+    }
   }
 }
 
 CreateNewLink.defaultProps = {
-  allowedCustomTemplates: []
+  allowedCustomTemplates: [],
+  allowAsset: false
 };
 
 CreateNewLink.propTypes = {
   onAddEntryClick: PropTypes.func,
+  allowAsset: PropTypes.bool,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   roleKey: PropTypes.string,
   allowedCustomTemplates: PropTypes.array

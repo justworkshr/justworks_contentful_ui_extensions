@@ -30,6 +30,7 @@ import {
   constructLink,
   groupByContentType,
   createEntry,
+  createAsset,
   constructEntryName,
   displaySnakeCaseName,
   getContentTypeArray,
@@ -222,13 +223,20 @@ export class App extends React.Component {
     );
   };
 
-  onAddEntryClick = async (roleKey, contentType, template = undefined) => {
+  onAddEntryClick = async ({ roleKey, contentType, template = undefined, type = 'entry' } = {}) => {
     const sdk = this.props.sdk;
-    const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
-    const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
-    await this.linkEntryToTemplate(newEntry, roleKey);
-    sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+    if (type === 'asset') {
+      const newAsset = await createAsset(sdk.space);
+
+      sdk.navigator.openAsset(newAsset.sys.id, { slideIn: true });
+    } else if (type === 'entry') {
+      const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
+      const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
+
+      await this.linkEntryToTemplate(newEntry, roleKey);
+      sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+    }
   };
 
   onLinkAssetClick = async roleKey => {
@@ -690,27 +698,36 @@ export class App extends React.Component {
                                   Add field
                                 </TextLink>
                               )}
-                              <CreateNewLink
-                                allowedCustomTemplates={
-                                  this.state.templateMapping.fieldRoles[roleKey]
-                                    .allowedCustomTemplates
-                                }
-                                onAddEntryClick={this.onAddEntryClick}
-                                contentTypes={
-                                  this.state.templateMapping.fieldRoles[roleKey].contentType
-                                }
-                                roleKey={roleKey}
-                              />
-                              <LinkExisting
-                                linkAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
-                                onLinkAssetClick={this.onLinkAssetClick}
-                                onLinkEntryClick={this.onLinkEntryClick}
-                                onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                                contentTypes={
-                                  this.state.templateMapping.fieldRoles[roleKey].contentType
-                                }
-                                roleKey={roleKey}
-                              />
+                              {(!!this.state.templateMapping.fieldRoles[roleKey].contentType ||
+                                !!this.state.templateMapping.fieldRoles[roleKey].asset) && (
+                                <CreateNewLink
+                                  allowedCustomTemplates={
+                                    this.state.templateMapping.fieldRoles[roleKey]
+                                      .allowedCustomTemplates
+                                  }
+                                  allowAsset={
+                                    !!this.state.templateMapping.fieldRoles[roleKey].asset
+                                  }
+                                  onAddEntryClick={this.onAddEntryClick}
+                                  contentTypes={
+                                    this.state.templateMapping.fieldRoles[roleKey].contentType
+                                  }
+                                  roleKey={roleKey}
+                                />
+                              )}
+                              {(!!this.state.templateMapping.fieldRoles[roleKey].contentType ||
+                                !!this.state.templateMapping.fieldRoles[roleKey].asset) && (
+                                <LinkExisting
+                                  linkAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+                                  onLinkAssetClick={this.onLinkAssetClick}
+                                  onLinkEntryClick={this.onLinkEntryClick}
+                                  onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+                                  contentTypes={
+                                    this.state.templateMapping.fieldRoles[roleKey].contentType
+                                  }
+                                  roleKey={roleKey}
+                                />
+                              )}
                             </div>
                           )}
                           {!!(this.state.errors[roleKey] || {}).length &&

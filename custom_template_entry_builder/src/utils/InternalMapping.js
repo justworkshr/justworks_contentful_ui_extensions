@@ -18,19 +18,23 @@ export default class InternalMapping {
       this.defineGetterSetters(key);
     });
 
-    Object.keys(templateMapping.style).forEach(styleSectionKey => {
-      if (!templateMapping.style[styleSectionKey]) return;
-      if (!this.style[styleSectionKey]) {
-        this.style[styleSectionKey] = {};
-        let classArray = [];
+    if (templateMapping.style) {
+      Object.keys(templateMapping.style).forEach(styleSectionKey => {
+        if (!templateMapping.style[styleSectionKey]) return;
+        if (!this.style[styleSectionKey]) {
+          this.style[styleSectionKey] = {};
+          let classArray = [];
 
-        Object.keys(templateMapping.style[styleSectionKey]).forEach(stylePropertyKey => {
-          classArray.push(templateMapping.style[styleSectionKey][stylePropertyKey].defaultClasses);
-        });
+          Object.keys(templateMapping.style[styleSectionKey]).forEach(stylePropertyKey => {
+            classArray.push(
+              templateMapping.style[styleSectionKey][stylePropertyKey].defaultClasses
+            );
+          });
 
-        this.style[styleSectionKey].styleClasses = classArray.join(' ');
-      }
-    });
+          this.style[styleSectionKey].styleClasses = classArray.join(' ');
+        }
+      });
+    }
   }
 
   static get TEXT() {

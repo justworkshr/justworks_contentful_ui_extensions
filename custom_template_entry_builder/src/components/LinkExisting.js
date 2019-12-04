@@ -37,23 +37,27 @@ class LinkExisting extends React.Component {
         isOpen={this.state.isOpen}>
         <DropdownList>
           <DropdownListItem isTitle>Actions</DropdownListItem>
-          <DropdownListItem
-            onClick={() =>
-              this.props.onLinkEntryClick(this.props.roleKey, this.props.contentTypes)
-            }>
-            Link Entry
-          </DropdownListItem>
+          {!!this.props.contentTypes.length && (
+            <DropdownListItem
+              onClick={() =>
+                this.props.onLinkEntryClick(this.props.roleKey, this.props.contentTypes)
+              }>
+              Link Entry
+            </DropdownListItem>
+          )}
           {this.props.linkAsset && (
             <DropdownListItem onClick={() => this.props.onLinkAssetClick(this.props.roleKey)}>
               Link Asset
             </DropdownListItem>
           )}
-          <DropdownListItem
-            onClick={() =>
-              this.props.onDeepCloneLinkClick(this.props.roleKey, this.props.contentTypes)
-            }>
-            Deep copy
-          </DropdownListItem>
+          {!!this.props.contentTypes.length && (
+            <DropdownListItem
+              onClick={() =>
+                this.props.onDeepCloneLinkClick(this.props.roleKey, this.props.contentTypes)
+              }>
+              Deep copy
+            </DropdownListItem>
+          )}
         </DropdownList>
       </Dropdown>
     );
