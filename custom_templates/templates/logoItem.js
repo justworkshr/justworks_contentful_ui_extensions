@@ -6,6 +6,7 @@ export const logoItem = {
     meta: {
       hidden: true,
       description: 'copy pending',
+      imageUrl: ""
     },
     fieldRoles: {
       logo_asset: constructRole({
