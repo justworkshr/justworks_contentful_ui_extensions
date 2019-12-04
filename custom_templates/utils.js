@@ -43,10 +43,12 @@ export const styleProperty = ({label='', type=c.STYLE_TYPE_BACKGROUND_COLOR, des
   }
 }
 
-export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, allowFormatting = false, maxWidth='2000'}={}) => {
+export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, subType=undefined, allowFormatting = false, maxWidth='2000', defaultClasses=''}={}) => {
   return ({
     asset: {
       type,
+      subType,
+      defaultClasses,
       formatting: {
         allow: allowFormatting,
         maxWidth: String(maxWidth)

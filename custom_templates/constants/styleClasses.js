@@ -42,3 +42,8 @@ export const TEXT_COLOR_CLASSES = COLORS.map(color => {
 export const BACKGROUND_COLOR_CLASSES = COLORS.map(color => {
   return constructStyleClass({className: `bg-color-${color.label.toLowerCase()}`, label: color.label})
 })
+
+export const LOGO_SIZE_CLASSES = [
+  constructStyleClass({className: 'logo-small', label: 'Small'}),
+  constructStyleClass({className: 'logo-large', label: 'Large'}),
+]

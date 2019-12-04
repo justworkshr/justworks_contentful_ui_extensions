@@ -8,6 +8,7 @@ import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
 import InternalMapping from '../../utils/InternalMapping';
 import TextStyle from '../TextStyle';
 import ImageStyle from '../ImageStyle';
+import LogoStyle from '../LogoStyle';
 import { getMarkdownSections } from '../utils/styleEditorUtils';
 
 import './style.css';
@@ -29,12 +30,18 @@ const FieldStyleEditor = props => {
   const renderStyle = props => {
     switch (props.type) {
       case InternalMapping.MARKDOWN:
-        return renderMarkdownStyle(props.entry.fields.styleClasses, props.entry.fields.value);
+        return renderMarkdownStyle(
+          props.internalMappingObject.styleClasses,
+          props.entry.fields.value
+        );
       case InternalMapping.TEXT:
-        return renderTextStyle(props.entry.fields.styleClasses);
+        return renderTextStyle(props.internalMappingObject.styleClasses);
       case InternalMapping.ASSETSYS:
-        if (props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE) {
-          return renderImageStyle(props.internalMappingObject.formatting);
+        if (
+          props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&
+          props.roleMapping.asset.subType === c.ASSET_SUBTYPE_LOGO
+        ) {
+          return renderLogoStyle(props.internalMappingObject.styleClasses);
         }
     }
   };
@@ -49,7 +56,17 @@ const FieldStyleEditor = props => {
     );
   };
 
-  const renderImageStyle = formattingObject => {
+  const renderLogoStyle = entryStyleClasses => {
+    return (
+      <LogoStyle
+        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
+        entryStyleClasses={entryStyleClasses}
+        updateStyleExclusive={updateStyleExclusive}
+      />
+    );
+  };
+
+  const renderFormattingStyle = formattingObject => {
     return (
       <ImageStyle
         roleKey={props.roleKey}
@@ -86,6 +103,11 @@ const FieldStyleEditor = props => {
         />
       </div>
       {!!open && renderStyle(props)}
+      {!!open &&
+        !!props.type === InternalMapping.ASSETSYS &&
+        !!props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&
+        !!props.roleMapping.asset.allowFormatting &&
+        renderFormattingStyle(props.internalMappingObject.formatting)}
     </div>
   );
 };

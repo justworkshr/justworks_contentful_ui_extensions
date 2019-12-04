@@ -267,7 +267,8 @@ export class App extends React.Component {
       roleMapping.asset.type,
       roleMapping.asset.type === c.ASSET_TYPE_IMAGE
         ? { fm: 'png', w: roleMapping.asset.formatting.maxWidth }
-        : {}
+        : {},
+      roleMapping.asset.defaultClasses
     );
 
     const updatedAssetList = addStateAsset(this.state.entries, entry);
@@ -533,10 +534,15 @@ export class App extends React.Component {
 
     styleClasses = updatedInternalMapping[roleKey].styleClasses;
 
+    const type =
+      updatedInternalMapping[roleKey].type === 'asset'
+        ? InternalMapping.ASSETSYS
+        : updatedInternalMapping[roleKey].type;
+
     const updatedEntries = addStateEntry(
       this.state.entries,
       roleKey,
-      InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], styleClasses })
+      InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], type, styleClasses })
     );
 
     this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () => {
@@ -664,7 +670,8 @@ export class App extends React.Component {
                               {((entry && entry.sys.type === 'Field') ||
                                 (entry &&
                                   entry.sys.type === 'Asset' &&
-                                  roleMappingObject.asset.formatting.allow)) && (
+                                  (roleMappingObject.asset.formatting.allow ||
+                                    roleMappingObject.asset.subType === c.ASSET_SUBTYPE_LOGO))) && (
                                 <FieldStyleEditor
                                   roleKey={roleKey}
                                   roleMapping={roleMappingObject}

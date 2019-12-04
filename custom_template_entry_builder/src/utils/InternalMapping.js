@@ -69,13 +69,21 @@ export default class InternalMapping {
     };
   }
 
-  static assetMapping({ type, assetType = '', value = '', assetUrl = '', formatting = {} } = {}) {
+  static assetMapping({
+    type,
+    assetType = '',
+    value = '',
+    assetUrl = '',
+    formatting = {},
+    styleClasses = ''
+  } = {}) {
     return {
       type,
       assetType,
       value,
       assetUrl,
-      formatting
+      formatting,
+      styleClasses
     };
   }
 
@@ -120,14 +128,15 @@ export default class InternalMapping {
     }
   }
 
-  addAsset(key, value, assetUrl, assetType, formatting) {
+  addAsset(key, value, assetUrl, assetType, formatting, styleClasses) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.assetMapping({
       type: InternalMapping.ASSET,
       value,
       assetUrl,
       assetType,
-      formatting
+      formatting,
+      styleClasses
     });
   }
 

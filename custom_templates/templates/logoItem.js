@@ -9,7 +9,7 @@ export const logoItem = {
     },
     fieldRoles: {
       logo_asset: constructRole({
-        ...allowAsset({type: c.ASSET_TYPE_IMAGE, allowFormatting: false, maxWidth: '200'}),
+        ...allowAsset({type: c.ASSET_TYPE_IMAGE, subType: c.ASSET_SUBTYPE_LOGO, allowFormatting: false, maxWidth: '200', defaultClasses: 'logo-small'}),
         description: `Logo image asset`,
         required: true
       }),
