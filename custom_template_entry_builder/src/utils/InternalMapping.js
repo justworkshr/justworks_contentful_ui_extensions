@@ -103,10 +103,21 @@ export default class InternalMapping {
     if (!this.hasOwnProperty(key)) {
       Object.defineProperty(this, key, {
         get: () => {
-          if (this.fieldRoles[key].type === InternalMapping.ASSET) {
-            return InternalMapping.assetMapping({ ...this.fieldRoles[key] });
+          // if its an array, return array of mappings. Else, return direct object mapping.
+          if (Array.isArray(this.fieldRoles[key])) {
+            return this.fieldRoles[key].map(entry => {
+              if (entry.type === InternalMapping.ASSET) {
+                return InternalMapping.assetMapping({ ...entry });
+              } else {
+                return InternalMapping.entryMapping({ ...entry });
+              }
+            });
           } else {
-            return InternalMapping.entryMapping({ ...this.fieldRoles[key] });
+            if (this.fieldRoles[key].type === InternalMapping.ASSET) {
+              return InternalMapping.assetMapping({ ...this.fieldRoles[key] });
+            } else {
+              return InternalMapping.entryMapping({ ...this.fieldRoles[key] });
+            }
           }
         },
 
@@ -141,11 +152,30 @@ export default class InternalMapping {
   }
 
   addEntry(key, value) {
+    /*
+     * key - string - the getter key of the internal mapping being assigned to
+     * value - string - the ID of the contentful entry
+     */
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: InternalMapping.ENTRY,
       value
     });
+  }
+
+  addEntries(key, value) {
+    /*
+     * key - string - the getter key of the internal mapping being assigned to
+     * value - array<string> - an array of the ID strings of all the contentful entries
+     */
+    if (!Array.isArray(value)) throw new Error('Value for "addEntries" must be an array.');
+    this.defineGetterSetters(key);
+    this.fieldRoles[key] = value.map(entry =>
+      InternalMapping.entryMapping({
+        type: InternalMapping.ENTRY,
+        value: entry
+      })
+    );
   }
 
   addTextField({ key, value = '', styleClasses = '' } = {}) {

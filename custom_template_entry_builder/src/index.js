@@ -9,7 +9,6 @@ import {
   FormLabel,
   HelpText,
   ValidationMessage,
-  TextLink,
   IconButton,
   SectionHeading,
   DisplayText
@@ -71,6 +70,20 @@ export class App extends React.Component {
       props.customTemplates[template && template.toLowerCase()] || props.templatePlaceholder;
     const internalMappingJson = props.sdk.entry.fields.internalMapping.getValue();
 
+    /*
+      entries: object {}
+      // A mapping of all entry's linked entries & assets assigned to their roles.
+
+      loadingEntries: object { [roleKey]: <boolean>}
+      // a mapping of which roles have entries which are loading
+
+      entryInternalMapping: object {}
+      // the parsed JSON for this entry's internal mapping field
+
+      templateMapping: object {}
+      // the customTemplate object of the current template as defined in ./customTemplates
+
+    */
     this.state = {
       entries: {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
@@ -241,6 +254,10 @@ export class App extends React.Component {
 
   onLinkAssetClick = async roleKey => {
     const sdk = this.props.sdk;
+
+    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+    } else {
+    }
     const entry = await sdk.dialogs.selectSingleAsset({
       locale: 'en-US'
     });
@@ -281,7 +298,7 @@ export class App extends React.Component {
     });
   };
 
-  onLinkEntryClick = async (roleKey, contentType) => {
+  handleSingleEntryLink = async (roleKey, contentType) => {
     const sdk = this.props.sdk;
     const entry = await sdk.dialogs.selectSingleEntry({
       locale: 'en-US',
@@ -300,6 +317,46 @@ export class App extends React.Component {
     }
 
     this.linkEntryToTemplate(entry, roleKey);
+  };
+
+  handleMultipleEntriesLink = async (roleKey, contentType) => {
+    const sdk = this.props.sdk;
+    const entries = await sdk.dialogs.selectMultipleEntries({
+      locale: 'en-US',
+      contentTypes: getContentTypeArray(contentType)
+    });
+
+    entries.forEach(entry => {
+      const linkedEntryValidation = validateLinkedEntry(
+        entry,
+        roleKey,
+        sdk.entry.getSys().id,
+        this.state.templateMapping.fieldRoles
+      );
+
+      if (linkedEntryValidation) {
+        return sdk.notifier.error(linkedEntryValidation);
+      }
+    });
+
+    this.linkEntriesToTemplate(entries, roleKey);
+  };
+
+  onLinkEntryClick = (roleKey, contentType) => {
+    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+      this.handleMultipleEntriesLink(roleKey, contentType);
+    } else {
+      this.handleSingleEntryLink(roleKey, contentType);
+    }
+  };
+
+  linkEntriesToTemplate = (entries, roleKey) => {
+    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
+    const updatedEntryList = [...entriesFieldValue, ...entries.map(entry => constructLink(entry))];
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.addEntries(roleKey, entries.map(entry => entry.sys.id));
+
+    this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
   };
 
   linkEntryToTemplate = (entry, roleKey) => {
@@ -681,7 +738,7 @@ export class App extends React.Component {
                               )}
                             </div>
                           )}
-                          {/* No linked entry present, or multiple allowed */}
+                          {/* if no linked entry present, or multiple allowed */}
                           {(!(this.state.entries[roleKey] || this.state.loadingEntries[roleKey]) ||
                             this.state.templateMapping.fieldRoles[roleKey]
                               .allowMultipleReferences) && (

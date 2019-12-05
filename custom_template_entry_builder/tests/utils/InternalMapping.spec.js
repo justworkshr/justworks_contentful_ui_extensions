@@ -99,6 +99,32 @@ describe('InternalMapping', () => {
       });
     });
 
+    describe('addEntries', () => {
+      it('sets the type and sets the value and style', () => {
+        const json = JSON.stringify({ fieldRoles: { hi: { type: 'text', value: 'hello' } } });
+        const internalMapping = new InternalMapping(json);
+
+        internalMapping.addEntries('hi', ['bye', 'greetings']);
+        expect(internalMapping.hi[0].type).toEqual('entry');
+        expect(internalMapping.hi[0].value).toEqual('bye');
+        expect(internalMapping.hi[0].styleClasses).toEqual('');
+        expect(internalMapping.hi[1].type).toEqual('entry');
+        expect(internalMapping.hi[1].value).toEqual('greetings');
+        expect(internalMapping.hi[1].styleClasses).toEqual('');
+      });
+
+      it('with blank start - sets the type and sets the value', () => {
+        const json = JSON.stringify({});
+        const internalMapping = new InternalMapping(json);
+        internalMapping.addField('entry', 'hi');
+        internalMapping.addEntries('hi', ['bye', 'greetings']);
+        expect(internalMapping.hi[0].type).toEqual('entry');
+        expect(internalMapping.hi[0].value).toEqual('bye');
+        expect(internalMapping.hi[1].type).toEqual('entry');
+        expect(internalMapping.hi[1].value).toEqual('greetings');
+      });
+    });
+
     describe('addTextField', () => {
       const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
