@@ -16,7 +16,8 @@ export const cardBlock = {
     fieldRoles: {
       left_text: constructRole({
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        field: fieldObject({type: c.FIELD_TYPE_MARKDOWN, defaultClasses: 'text-black'}),
+        field: fieldObject({type: c.FIELD_TYPE_MARKDOWN}),
+        defaultClasses: 'text-black',
         allowedCustomTemplates: [c.TEXT_COLLECTION],
         required: true,
         description: `Text or Custom Template [${[c.TEXT_COLLECTION]}]. Primary markdown text to display on the left half section.`
@@ -34,12 +35,14 @@ export const cardBlock = {
         description: 'Link url for the card.'
       }),
       cta_text: constructRole({
-        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-cerulean'}),
+        field: fieldObject({type: c.FIELD_TYPE_TEXT}),
+        defaultClasses: 'text-cerulean',
         required: false,
         description: 'Text for the optional CTA'
       }),
       tag_text: constructRole({
-        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-white text-uppercase'}),
+        field: fieldObject({type: c.FIELD_TYPE_TEXT}),
+        defaultClasses: 'text-white text-uppercase',
         required: false,
         description: 'Text for the optional tag on the upper right corner of the card.'
       }),

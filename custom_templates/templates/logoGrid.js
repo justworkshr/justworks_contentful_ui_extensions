@@ -12,7 +12,8 @@ export const logoGrid = {
       title: constructRole({
         description: 'Template title.',
         required: false,
-        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-center text-black text-bold'}),
+        field: fieldObject({type: c.FIELD_TYPE_TEXT}),
+        defaultClasses: 'text-center text-black text-bold'
       }),
       items: constructRole({
         description: 'Grid items.',

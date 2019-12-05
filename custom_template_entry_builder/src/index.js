@@ -194,15 +194,19 @@ export class App extends React.Component {
   };
 
   onAddFieldClick = (roleKey, field) => {
+    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
     switch (field.type) {
       case InternalMapping.TEXT:
-        updatedInternalMapping.addTextField({ key: roleKey, styleClasses: field.defaultClasses });
+        updatedInternalMapping.addTextField({
+          key: roleKey,
+          styleClasses: roleMappingObject.defaultClasses
+        });
         break;
       case InternalMapping.MARKDOWN:
         updatedInternalMapping.addMarkdownField({
           key: roleKey,
-          styleClasses: field.defaultClasses
+          styleClasses: roleMappingObject.defaultClasses
         });
         break;
       default:
