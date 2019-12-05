@@ -534,25 +534,14 @@ export class App extends React.Component {
 
   updateEntryStyle(roleKey, styleClasses) {
     let updatedInternalMapping = this.state.entryInternalMapping;
+
     updatedInternalMapping.setStyleClasses(
       roleKey,
       cleanStyleClasses(styleClasses, updatedInternalMapping[roleKey].value)
     );
-
     styleClasses = updatedInternalMapping[roleKey].styleClasses;
 
-    const type =
-      updatedInternalMapping[roleKey].type === 'asset'
-        ? InternalMapping.ASSETSYS
-        : updatedInternalMapping[roleKey].type;
-
-    const updatedEntries = addStateEntry(
-      this.state.entries,
-      roleKey,
-      InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], type, styleClasses })
-    );
-
-    this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () => {
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
       this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
     });
   }
@@ -616,10 +605,6 @@ export class App extends React.Component {
           {Object.keys(contentTypeGroups).map((groupKey, index) => {
             return (
               <div className="entry-group" key={`group--${index}`}>
-                {/* <div className="entry-group__header-section">
-                  <Heading>{displayContentType(groupKey)}</Heading>
-                  <Paragraph>({Object.keys(contentTypeGroups[groupKey]).length})</Paragraph>
-                </div> */}
                 <div className="entry-container">
                   {Object.keys(contentTypeGroups[groupKey])
                     .sort((a, b) => (!this.state.templateMapping.fieldRoles[b] || {}).required)

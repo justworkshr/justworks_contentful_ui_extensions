@@ -16,7 +16,7 @@ export const logoGrid = {
       }),
       items: constructRole({
         contentType: ['customTemplate'],
-        allowedCustomTemplates: ['logoItem'],
+        allowedCustomTemplates: [c.LOGO_ITEM],
         allowMultiple: true,
         required: false,
         description: 'Grid items.'

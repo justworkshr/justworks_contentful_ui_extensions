@@ -9,9 +9,13 @@ export const addStateAsset = (stateEntries, newAsset) => {
 };
 
 export const addStateEntry = (stateEntries, roleKey, fieldObject) => {
+  const type =
+    fieldObject.type === InternalMapping.ASSETSYS
+      ? InternalMapping.ASSETSYS
+      : InternalMapping.FIELDSYS;
   return {
     ...stateEntries,
-    [roleKey]: constructFieldEntry(InternalMapping.FIELDSYS, fieldObject)
+    [roleKey]: constructFieldEntry(type, fieldObject)
   };
 };
 
