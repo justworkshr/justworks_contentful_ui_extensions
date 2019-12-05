@@ -29,7 +29,6 @@ const FieldStyleEditor = props => {
   };
 
   const renderFieldStyle = props => {
-    console.log(props.type);
     switch (props.type) {
       case InternalMapping.MARKDOWN:
         return renderMarkdownStyle(

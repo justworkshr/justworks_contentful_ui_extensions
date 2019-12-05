@@ -615,7 +615,6 @@ export class App extends React.Component {
 
   updateEntryStyle(roleKey, styleClasses) {
     let updatedInternalMapping = this.state.entryInternalMapping;
-
     updatedInternalMapping.setStyleClasses(
       roleKey,
       cleanStyleClasses(styleClasses, updatedInternalMapping[roleKey].value)
