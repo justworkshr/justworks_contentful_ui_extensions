@@ -101,27 +101,39 @@ describe('InternalMapping', () => {
 
     describe('addEntries', () => {
       it('sets the type and sets the value and style', () => {
-        const json = JSON.stringify({ fieldRoles: { hi: { type: 'text', value: 'hello' } } });
+        const json = JSON.stringify({
+          fieldRoles: {
+            hi: { type: 'text', value: [{ type: 'entry', styleClasses: '', value: 'hello' }] }
+          }
+        });
         const internalMapping = new InternalMapping(json);
 
         internalMapping.addEntries('hi', ['bye', 'greetings']);
-        expect(internalMapping.hi[0].type).toEqual('entry');
-        expect(internalMapping.hi[0].value).toEqual('bye');
-        expect(internalMapping.hi[0].styleClasses).toEqual('');
-        expect(internalMapping.hi[1].type).toEqual('entry');
-        expect(internalMapping.hi[1].value).toEqual('greetings');
-        expect(internalMapping.hi[1].styleClasses).toEqual('');
+        expect(internalMapping.hi.type).toEqual('multi-reference');
+        expect(internalMapping.hi.value).toHaveLength(3);
+        expect(internalMapping.hi.styleClasses).toEqual('');
+        expect(internalMapping.hi.value[0].type).toEqual('entry');
+        expect(internalMapping.hi.value[0].value).toEqual('hello');
+        expect(internalMapping.hi.value[0].styleClasses).toEqual('');
+        expect(internalMapping.hi.value[1].type).toEqual('entry');
+        expect(internalMapping.hi.value[1].value).toEqual('bye');
+        expect(internalMapping.hi.value[1].styleClasses).toEqual('');
+        expect(internalMapping.hi.value[2].type).toEqual('entry');
+        expect(internalMapping.hi.value[2].value).toEqual('greetings');
+        expect(internalMapping.hi.value[2].styleClasses).toEqual('');
       });
 
       it('with blank start - sets the type and sets the value', () => {
         const json = JSON.stringify({});
         const internalMapping = new InternalMapping(json);
-        internalMapping.addField('entry', 'hi');
         internalMapping.addEntries('hi', ['bye', 'greetings']);
-        expect(internalMapping.hi[0].type).toEqual('entry');
-        expect(internalMapping.hi[0].value).toEqual('bye');
-        expect(internalMapping.hi[1].type).toEqual('entry');
-        expect(internalMapping.hi[1].value).toEqual('greetings');
+        expect(internalMapping.hi.type).toEqual('multi-reference');
+        expect(internalMapping.hi.value).toHaveLength(2);
+        expect(internalMapping.hi.styleClasses).toEqual('');
+        expect(internalMapping.hi.value[0].type).toEqual('entry');
+        expect(internalMapping.hi.value[0].value).toEqual('bye');
+        expect(internalMapping.hi.value[1].type).toEqual('entry');
+        expect(internalMapping.hi.value[1].value).toEqual('greetings');
       });
     });
 
@@ -173,11 +185,42 @@ describe('InternalMapping', () => {
   });
 
   describe('removeEntry', () => {
-    const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
-    const internalMapping = new InternalMapping(json);
-
     it('removes the role and key', () => {
+      const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+      const internalMapping = new InternalMapping(json);
       internalMapping.removeEntry('hi');
+      expect(internalMapping.hi).toBeUndefined();
+      expect(internalMapping.fieldKeys()).not.toContain('hi');
+    });
+
+    it('only removes the entry with passed in ID if the entry value is an array', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            type: 'text',
+            value: [
+              { type: 'entry', styleClasses: '', value: '1' },
+              { type: 'entry', styleClasses: '', value: '2' }
+            ]
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeEntry('hi', '2');
+      expect(internalMapping.hi.value).toHaveLength(1);
+    });
+
+    it('removes the entire key if the array becomes empty from removal', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            type: 'text',
+            value: [{ type: 'entry', styleClasses: '', value: '2' }]
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeEntry('hi', '2');
       expect(internalMapping.hi).toBeUndefined();
       expect(internalMapping.fieldKeys()).not.toContain('hi');
     });

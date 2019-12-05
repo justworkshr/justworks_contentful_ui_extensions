@@ -53,6 +53,10 @@ export default class InternalMapping {
     return 'asset';
   }
 
+  static get MULTI_REFERENCE() {
+    return 'multi-reference';
+  }
+
   static get FIELDSYS() {
     return 'Field';
   }
@@ -165,17 +169,27 @@ export default class InternalMapping {
 
   addEntries(key, value) {
     /*
+     * Adds an entry mapping to the key, unless the value of the key is an array. Then it adds the entries to the array.
      * key - string - the getter key of the internal mapping being assigned to
      * value - array<string> - an array of the ID strings of all the contentful entries
      */
     if (!Array.isArray(value)) throw new Error('Value for "addEntries" must be an array.');
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = value.map(entry =>
+
+    let valueArray = value.map(entry =>
       InternalMapping.entryMapping({
         type: InternalMapping.ENTRY,
         value: entry
       })
     );
+
+    if (Array.isArray((this.fieldRoles[key] || {}).value)) {
+      valueArray = [...this.fieldRoles[key].value, ...valueArray];
+    }
+    this.fieldRoles[key] = InternalMapping.entryMapping({
+      type: InternalMapping.MULTI_REFERENCE,
+      value: valueArray
+    });
   }
 
   addTextField({ key, value = '', styleClasses = '' } = {}) {
@@ -258,15 +272,33 @@ export default class InternalMapping {
   }
 
   getType(key) {
-    return this.fieldRoles[key].type;
+    if (Array.isArray(this.fieldRoles[key])) {
+      return InternalMapping.MULTI_REFERENCE;
+    } else {
+      return this.fieldRoles[key].type;
+    }
   }
 
   isEntry(key) {
     return this.fieldRoles[key].type === InternalMapping.ENTRY;
   }
 
-  removeEntry(key) {
-    delete this.fieldRoles[key];
-    delete this[key];
+  removeEntry(key, sysId = null) {
+    // Only remove the entry with the passed in sysId if it's a multi-reference array
+    // Otherwise remove the entire key.
+    if (Array.isArray(this.fieldRoles[key].value)) {
+      this.fieldRoles[key].value = this.fieldRoles[key].value.filter(
+        entry => entry.value !== sysId
+      );
+
+      // delete key entirely if array is now empty
+      if (!this.fieldRoles[key].value.length) {
+        delete this.fieldRoles[key];
+        delete this[key];
+      }
+    } else {
+      delete this.fieldRoles[key];
+      delete this[key];
+    }
   }
 }

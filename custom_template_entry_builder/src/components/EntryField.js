@@ -33,7 +33,8 @@ export const EntryField = props => {
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
             <DropdownListItem onClick={() => props.onEditClick(props.entry)}>Edit</DropdownListItem>
-            <DropdownListItem onClick={() => props.onRemoveClick(props.roleKey)}>
+            <DropdownListItem
+              onClick={() => props.onRemoveClick(props.roleKey, props.entry.sys.id)}>
               Remove
             </DropdownListItem>
           </DropdownList>

@@ -111,6 +111,17 @@ export const getEntryOrField = async (space, internalMapping, roleKey) => {
     return await space.getEntry(internalMapping[roleKey].value);
   } else if (fieldType === InternalMapping.ASSET) {
     return await space.getAsset(internalMapping[roleKey].value);
+  } else if (fieldType === InternalMapping.MULTI_REFERENCE) {
+    return await Promise.all(
+      internalMapping[roleKey].value.map(async entry => {
+        const entryType = entry.type;
+        if (entryType === InternalMapping.ENTRY) {
+          return await space.getEntry(entry.value);
+        } else if (entryType === InternalMapping.ASSET) {
+          return await space.getAsset(entry.value);
+        }
+      })
+    );
   } else {
     const sysType =
       fieldType === InternalMapping.ASSET ? InternalMapping.ASSETSYS : InternalMapping.FIELDSYS;

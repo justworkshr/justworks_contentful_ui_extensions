@@ -357,6 +357,8 @@ export class App extends React.Component {
     updatedInternalMapping.addEntries(roleKey, entries.map(entry => entry.sys.id));
 
     this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
+
+    this.fetchEntryByRoleKey(roleKey);
   };
 
   linkEntryToTemplate = (entry, roleKey) => {
@@ -428,14 +430,14 @@ export class App extends React.Component {
     }));
   };
 
-  onRemoveClick = roleKey => {
+  onRemoveClick = (roleKey, sysId = null) => {
     if (!roleKey) return null;
     const thisEntry = this.props.sdk.entry;
     const entriesValue = thisEntry.fields.entries.getValue();
-    const entry = this.state.entries[roleKey] || {};
+    const entrySysId = sysId ? sysId : this.state.entries[roleKey] || {};
     const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.removeEntry(roleKey);
-    const firstEntryInstance = entriesValue.find(e => e.sys.id === entry.sys.id);
+    updatedInternalMapping.removeEntry(roleKey, entrySysId);
+    const firstEntryInstance = entriesValue.find(e => e.sys.id === entrySysId);
     const firstEntryIndex = entriesValue.indexOf(firstEntryInstance);
     const updatedEntryList = [
       ...entriesValue.slice(0, firstEntryIndex),
@@ -445,8 +447,21 @@ export class App extends React.Component {
       prevState => {
         const prevStateLoadingEntries = { ...prevState.loadingEntries };
         const prevStateEntries = { ...prevState.entries };
-        delete prevStateLoadingEntries[roleKey];
-        delete prevStateEntries[roleKey];
+
+        if (Array.isArray(prevStateEntries[roleKey])) {
+          prevStateEntries[roleKey] = prevStateEntries[roleKey].filter(
+            entry => entry.sys.id !== entrySysId
+          );
+
+          if (!prevStateEntries[roleKey].length) {
+            delete prevStateEntries[roleKey];
+            delete prevStateLoadingEntries[roleKey];
+          }
+        } else {
+          delete prevStateEntries[roleKey];
+          delete prevStateLoadingEntries[roleKey];
+        }
+
         return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
       },
       () => {
@@ -618,6 +633,65 @@ export class App extends React.Component {
     });
   }
 
+  renderEntryFields(roleKey, roleMappingObject, internalMappingObject, entry) {
+    if (!entry) return null;
+    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+      return entry.map((e, index) => {
+        return (
+          <EntryField
+            key={`entryfield-${roleKey}-${index}`}
+            entry={e}
+            isLoading={!!this.state.loadingEntries[roleKey]}
+            isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
+            roleKey={roleKey}
+            roleMapping={roleMappingObject}
+            onEditClick={this.onEditClick}
+            onRemoveClick={this.onRemoveClick}
+            onRemoveFieldClick={this.onRemoveFieldClick}
+            onFieldChange={this.onFieldChange}
+          />
+        );
+      });
+    } else {
+      return (
+        <div>
+          <EntryField
+            entry={entry}
+            isLoading={!!this.state.loadingEntries[roleKey]}
+            isDragActive={entry ? this.state.draggingObject === entry.sys.id : false}
+            roleKey={roleKey}
+            roleMapping={roleMappingObject}
+            onEditClick={this.onEditClick}
+            onRemoveClick={this.onRemoveClick}
+            onRemoveFieldClick={this.onRemoveFieldClick}
+            onFieldChange={this.onFieldChange}
+          />
+          {((entry && entry.sys.type === 'Field') ||
+            (entry &&
+              entry.sys.type === 'Asset' &&
+              (roleMappingObject.asset.formatting.allow ||
+                roleMappingObject.asset.subType === c.ASSET_SUBTYPE_LOGO))) && (
+            <FieldStyleEditor
+              roleKey={roleKey}
+              roleMapping={roleMappingObject}
+              internalMappingObject={internalMappingObject}
+              updateStyle={this.updateEntryStyle}
+              updateAssetFormatting={this.updateAssetFormatting}
+              clearStyleField={this.clearEntryStyleClasses}
+              entry={entry}
+              title={displaySnakeCaseName(roleKey) + ' Style'}
+              type={
+                entry.sys.type === InternalMapping.ASSETSYS
+                  ? InternalMapping.ASSETSYS
+                  : entry.fields.type
+              }
+            />
+          )}
+        </div>
+      );
+    }
+  }
+
   render() {
     const contentTypeGroups = groupByContentType(
       (this.state.templateMapping || {}).fieldRoles,
@@ -687,7 +761,7 @@ export class App extends React.Component {
                               required={roleMappingObject.required}>
                               <SectionHeading>{displaySnakeCaseName(roleKey)}</SectionHeading>
                             </FormLabel>
-                            {!!entry && entry.sys.type === 'Field' && (
+                            {!!entry && (entry.sys || {}).type === 'Field' && (
                               <IconButton
                                 className="role-section__remove-field"
                                 iconProps={{ icon: 'Close', size: 'large' }}
@@ -698,46 +772,13 @@ export class App extends React.Component {
                             )}
                           </div>
                           <HelpText>{roleMappingObject.description}</HelpText>
-                          {!!(
-                            this.state.entries[roleKey] || this.state.loadingEntries[roleKey]
-                          ) && (
-                            <div>
-                              <EntryField
-                                entry={entry}
-                                isLoading={!!this.state.loadingEntries[roleKey]}
-                                isDragActive={
-                                  entry ? this.state.draggingObject === entry.sys.id : false
-                                }
-                                roleKey={roleKey}
-                                roleMapping={roleMappingObject}
-                                onEditClick={this.onEditClick}
-                                onRemoveClick={this.onRemoveClick}
-                                onRemoveFieldClick={this.onRemoveFieldClick}
-                                onFieldChange={this.onFieldChange}
-                              />
-                              {((entry && entry.sys.type === 'Field') ||
-                                (entry &&
-                                  entry.sys.type === 'Asset' &&
-                                  (roleMappingObject.asset.formatting.allow ||
-                                    roleMappingObject.asset.subType === c.ASSET_SUBTYPE_LOGO))) && (
-                                <FieldStyleEditor
-                                  roleKey={roleKey}
-                                  roleMapping={roleMappingObject}
-                                  internalMappingObject={internalMappingObject}
-                                  updateStyle={this.updateEntryStyle}
-                                  updateAssetFormatting={this.updateAssetFormatting}
-                                  clearStyleField={this.clearEntryStyleClasses}
-                                  entry={entry}
-                                  title={displaySnakeCaseName(roleKey) + ' Style'}
-                                  type={
-                                    entry.sys.type === InternalMapping.ASSETSYS
-                                      ? InternalMapping.ASSETSYS
-                                      : entry.fields.type
-                                  }
-                                />
-                              )}
-                            </div>
-                          )}
+                          {!!(this.state.entries[roleKey] || this.state.loadingEntries[roleKey]) &&
+                            this.renderEntryFields(
+                              roleKey,
+                              roleMappingObject,
+                              internalMappingObject,
+                              entry
+                            )}
                           {/* if no linked entry present, or multiple allowed */}
                           {(!(this.state.entries[roleKey] || this.state.loadingEntries[roleKey]) ||
                             this.state.templateMapping.fieldRoles[roleKey]

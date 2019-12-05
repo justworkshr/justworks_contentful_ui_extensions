@@ -44,7 +44,7 @@ EntryActionRow.propTypes = {
   allowAsset: PropTypes.bool,
   allowedCustomTemplates: PropTypes.array,
   contentTypes: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fieldObject: PropTypes.oneOfType([PropTypes.object, undefined]),
+  fieldObject: PropTypes.object,
   onAddFieldClick: PropTypes.func,
   roleKey: PropTypes.string,
   onAddEntryClick: PropTypes.func,
