@@ -54,13 +54,13 @@ div {
   color: #8797a9;
 }
 
-.link-entries-row {
+.entry-action-row {
   display: flex;
   justify-content: flex-start;
   padding: 40px 0;
 }
 
-.link-entries-row .link-entries-row__button {
+.entry-action-row .link-entries-row__button {
   margin-right: 10px;
 }
 

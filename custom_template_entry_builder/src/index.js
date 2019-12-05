@@ -15,11 +15,10 @@ import {
   DisplayText
 } from '@contentful/forma-36-react-components';
 
-import CreateNewLink from './components/CreateNewLink';
-import LinkExisting from './components/LinkExisting';
 import EntryField from './components/EntryField';
 import TemplateStyleEditor from './components/TemplateStyleEditor';
 import FieldStyleEditor from './components/FieldStyleEditor';
+import EntryActionRow from './components/EntryActionRow';
 
 import { init } from 'contentful-ui-extensions-sdk';
 
@@ -228,7 +227,6 @@ export class App extends React.Component {
 
   onAddEntryClick = async ({ roleKey, contentType, template = undefined, type = 'entry' } = {}) => {
     const sdk = this.props.sdk;
-
     if (type === 'asset') {
       const newAsset = await createAsset(sdk.space);
 
@@ -236,7 +234,6 @@ export class App extends React.Component {
     } else if (type === 'entry') {
       const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
-
       await this.linkEntryToTemplate(newEntry, roleKey);
       sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
     }
@@ -301,6 +298,7 @@ export class App extends React.Component {
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
     }
+
     this.linkEntryToTemplate(entry, roleKey);
   };
 
@@ -311,7 +309,7 @@ export class App extends React.Component {
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.addEntry(roleKey, entry.sys.id);
 
-    this.timeoutUpdateEntry({ updatedEntryList, updatedInternalMapping, ms: 150 });
+    this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
   };
 
   setEntryLoading(roleKey, value) {
@@ -380,7 +378,6 @@ export class App extends React.Component {
     const entry = this.state.entries[roleKey] || {};
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeEntry(roleKey);
-
     const firstEntryInstance = entriesValue.find(e => e.sys.id === entry.sys.id);
     const firstEntryIndex = entriesValue.indexOf(firstEntryInstance);
     const updatedEntryList = [
@@ -644,7 +641,9 @@ export class App extends React.Component {
                             )}
                           </div>
                           <HelpText>{roleMappingObject.description}</HelpText>
-                          {!!this.state.entries[roleKey] || this.state.loadingEntries[roleKey] ? (
+                          {!!(
+                            this.state.entries[roleKey] || this.state.loadingEntries[roleKey]
+                          ) && (
                             <div>
                               <EntryField
                                 entry={entry}
@@ -681,53 +680,28 @@ export class App extends React.Component {
                                 />
                               )}
                             </div>
-                          ) : (
-                            <div className="link-entries-row">
-                              {!!this.state.templateMapping.fieldRoles[roleKey].field && (
-                                <TextLink
-                                  icon="Quote"
-                                  linkType="primary"
-                                  className="link-entries-row__button"
-                                  onClick={() =>
-                                    this.onAddFieldClick(
-                                      roleKey,
-                                      this.state.templateMapping.fieldRoles[roleKey].field
-                                    )
-                                  }>
-                                  Add field
-                                </TextLink>
-                              )}
-                              {(!!this.state.templateMapping.fieldRoles[roleKey].contentType ||
-                                !!this.state.templateMapping.fieldRoles[roleKey].asset) && (
-                                <CreateNewLink
-                                  allowedCustomTemplates={
-                                    this.state.templateMapping.fieldRoles[roleKey]
-                                      .allowedCustomTemplates
-                                  }
-                                  allowAsset={
-                                    !!this.state.templateMapping.fieldRoles[roleKey].asset
-                                  }
-                                  onAddEntryClick={this.onAddEntryClick}
-                                  contentTypes={
-                                    this.state.templateMapping.fieldRoles[roleKey].contentType
-                                  }
-                                  roleKey={roleKey}
-                                />
-                              )}
-                              {(!!this.state.templateMapping.fieldRoles[roleKey].contentType ||
-                                !!this.state.templateMapping.fieldRoles[roleKey].asset) && (
-                                <LinkExisting
-                                  linkAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
-                                  onLinkAssetClick={this.onLinkAssetClick}
-                                  onLinkEntryClick={this.onLinkEntryClick}
-                                  onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                                  contentTypes={
-                                    this.state.templateMapping.fieldRoles[roleKey].contentType
-                                  }
-                                  roleKey={roleKey}
-                                />
-                              )}
-                            </div>
+                          )}
+                          {/* No linked entry present, or multiple allowed */}
+                          {(!(this.state.entries[roleKey] || this.state.loadingEntries[roleKey]) ||
+                            this.state.templateMapping.fieldRoles[roleKey]
+                              .allowMultipleReferences) && (
+                            <EntryActionRow
+                              allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+                              allowedCustomTemplates={
+                                this.state.templateMapping.fieldRoles[roleKey]
+                                  .allowedCustomTemplates
+                              }
+                              contentTypes={
+                                this.state.templateMapping.fieldRoles[roleKey].contentType
+                              }
+                              fieldObject={this.state.templateMapping.fieldRoles[roleKey].field}
+                              onAddFieldClick={this.onAddFieldClick}
+                              roleKey={roleKey}
+                              onAddEntryClick={this.onAddEntryClick}
+                              onLinkAssetClick={this.onLinkAssetClick}
+                              onLinkEntryClick={this.onLinkEntryClick}
+                              onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+                            />
                           )}
                           {!!(this.state.errors[roleKey] || {}).length &&
                             this.state.errors[roleKey].map((error, index) => {

@@ -4,6 +4,7 @@ export const constructRole = ({
   contentType = '',
   asset = null,
   description = '',
+  allowMultipleReferences = false,
   allowedCustomTemplates = [],
   required = true,
   field = null
@@ -12,6 +13,7 @@ export const constructRole = ({
     contentType,
     asset,
     description,
+    allowMultipleReferences,
     allowedCustomTemplates,
     required,
     field
