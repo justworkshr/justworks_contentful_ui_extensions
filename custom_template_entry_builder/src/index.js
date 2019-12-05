@@ -229,7 +229,6 @@ export class App extends React.Component {
     updatedInternalMapping.removeEntry(roleKey);
 
     const updatedEntryList = removeStateEntry(this.state.entries, updatedInternalMapping);
-
     const updatedAssetList = selectAssetEntries(updatedEntryList).map(asset =>
       constructLink(asset)
     );
@@ -645,8 +644,8 @@ export class App extends React.Component {
   }
 
   renderEntryFields(roleKey, roleMappingObject, internalMappingObject, entry) {
-    if (!entry) return null;
     if (roleMappingObject.allowMultipleReferences) {
+      if (!entry) return null;
       return (
         <div>
           {entry.map((e, index) => {
@@ -665,6 +664,20 @@ export class App extends React.Component {
               />
             );
           })}
+          <EntryActionRow
+            allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+            allowedCustomTemplates={
+              this.state.templateMapping.fieldRoles[roleKey].allowedCustomTemplates
+            }
+            contentTypes={this.state.templateMapping.fieldRoles[roleKey].contentType}
+            fieldObject={this.state.templateMapping.fieldRoles[roleKey].field}
+            onAddFieldClick={this.onAddFieldClick}
+            roleKey={roleKey}
+            onAddEntryClick={this.onAddEntryClick}
+            onLinkAssetClick={this.onLinkAssetClick}
+            onLinkEntryClick={this.onLinkEntryClick}
+            onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+          />
           {roleMappingObject.allowMultipleReferenceStyle && (
             <FieldStyleEditor
               roleKey={roleKey}
@@ -680,7 +693,7 @@ export class App extends React.Component {
           )}
         </div>
       );
-    } else {
+    } else if (!!this.state.entries[roleKey] || !!this.state.loadingEntries[roleKey]) {
       return (
         <div>
           <EntryField
@@ -716,6 +729,24 @@ export class App extends React.Component {
             />
           )}
         </div>
+      );
+    } else {
+      console.log('heee');
+      return (
+        <EntryActionRow
+          allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+          allowedCustomTemplates={
+            this.state.templateMapping.fieldRoles[roleKey].allowedCustomTemplates
+          }
+          contentTypes={this.state.templateMapping.fieldRoles[roleKey].contentType}
+          fieldObject={this.state.templateMapping.fieldRoles[roleKey].field}
+          onAddFieldClick={this.onAddFieldClick}
+          roleKey={roleKey}
+          onAddEntryClick={this.onAddEntryClick}
+          onLinkAssetClick={this.onLinkAssetClick}
+          onLinkEntryClick={this.onLinkEntryClick}
+          onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+        />
       );
     }
   }
@@ -771,6 +802,7 @@ export class App extends React.Component {
                       const internalMappingObject = this.state.entryInternalMapping.fieldRoles[
                         roleKey
                       ];
+
                       return (
                         <div
                           key={index}
@@ -800,35 +832,13 @@ export class App extends React.Component {
                             )}
                           </div>
                           <HelpText>{roleMappingObject.description}</HelpText>
-                          {!!(this.state.entries[roleKey] || this.state.loadingEntries[roleKey]) &&
-                            this.renderEntryFields(
-                              roleKey,
-                              roleMappingObject,
-                              internalMappingObject,
-                              entry
-                            )}
-                          {/* if no linked entry present, or multiple allowed */}
-                          {(!(this.state.entries[roleKey] || this.state.loadingEntries[roleKey]) ||
-                            this.state.templateMapping.fieldRoles[roleKey]
-                              .allowMultipleReferences) && (
-                            <EntryActionRow
-                              allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
-                              allowedCustomTemplates={
-                                this.state.templateMapping.fieldRoles[roleKey]
-                                  .allowedCustomTemplates
-                              }
-                              contentTypes={
-                                this.state.templateMapping.fieldRoles[roleKey].contentType
-                              }
-                              fieldObject={this.state.templateMapping.fieldRoles[roleKey].field}
-                              onAddFieldClick={this.onAddFieldClick}
-                              roleKey={roleKey}
-                              onAddEntryClick={this.onAddEntryClick}
-                              onLinkAssetClick={this.onLinkAssetClick}
-                              onLinkEntryClick={this.onLinkEntryClick}
-                              onDeepCloneLinkClick={this.onDeepCloneLinkClick}
-                            />
+                          {this.renderEntryFields(
+                            roleKey,
+                            roleMappingObject,
+                            internalMappingObject,
+                            entry
                           )}
+
                           {!!(this.state.errors[roleKey] || {}).length &&
                             this.state.errors[roleKey].map((error, index) => {
                               return (

@@ -170,11 +170,21 @@ export const removeSectionClass = (styleClasses, sectionPrefix) => {
 
 export const selectAssetEntries = stateEntries => {
   return Object.keys(stateEntries)
-    .map(entryKey => {
-      if (stateEntries[entryKey].sys.type === InternalMapping.ASSETSYS) {
-        return stateEntries[entryKey];
+    .reduce((reducer, entryKey) => {
+      if (Array.isArray(stateEntries[entryKey])) {
+        stateEntries[entryKey].forEach(entry => {
+          if (entry.sys.type === InternalMapping.ASSETSYS) {
+            reducer.push(entry);
+          }
+        });
+      } else {
+        if (stateEntries[entryKey].sys.type === InternalMapping.ASSETSYS) {
+          reducer.push(stateEntries[entryKey]);
+        }
       }
-    })
+
+      return reducer;
+    }, [])
     .filter(el => el);
 };
 

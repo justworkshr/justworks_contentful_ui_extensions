@@ -288,7 +288,7 @@ export default class InternalMapping {
   removeEntry(key, sysId = null) {
     // Only remove the entry with the passed in sysId if it's a multi-reference array
     // Otherwise remove the entire key.
-    if (Array.isArray(this.fieldRoles[key].value)) {
+    if (Array.isArray((this.fieldRoles[key] || {}).value)) {
       this.fieldRoles[key].value = this.fieldRoles[key].value.filter(
         entry => entry.value !== sysId
       );
