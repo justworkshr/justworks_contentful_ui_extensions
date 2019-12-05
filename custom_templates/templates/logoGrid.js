@@ -20,7 +20,7 @@ export const logoGrid = {
         required: false,
         allowedCustomTemplates: [c.LOGO_ITEM],
         ...allowMultipleReferences({allow: true, allowStyle: true, contentTypes: ['customTemplate']}),
-        defaultClasses: 'flex-row',
+        defaultClasses: 'flex-row flex-centered flex-items-per-1 small-flex-items-per-2 large-flex-items-per-4',
       })
     }
   }

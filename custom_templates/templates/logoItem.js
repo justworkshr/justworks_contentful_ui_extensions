@@ -15,7 +15,8 @@ export const logoItem = {
         required: true
       }),
       label: constructRole({
-        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-center text-black text-bold'}),
+        field: fieldObject({type: c.FIELD_TYPE_TEXT}),
+        defaultClasses: 'text-center text-black text-bold',
         required: false,
         description: 'Text beneath the logo.'
       })

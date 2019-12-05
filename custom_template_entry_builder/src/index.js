@@ -431,9 +431,11 @@ export class App extends React.Component {
       ...sdk.entry.fields.entries
         .getValue()
         .filter(e => e.sys.id === entry.sys.id)
-        .map(e =>
-          Object.keys(this.state.entries).find(key => this.state.entries[key].sys.id === e.sys.id)
-        )
+        .map(e => {
+          return Object.keys(this.state.entries).find(
+            key => (this.state.entries[key].sys || {}).id === e.sys.id // may not work for array multi-references
+          );
+        })
     ];
 
     this.setState(prevState => ({
@@ -644,8 +646,7 @@ export class App extends React.Component {
   }
 
   renderEntryFields(roleKey, roleMappingObject, internalMappingObject, entry) {
-    if (roleMappingObject.allowMultipleReferences) {
-      if (!entry) return null;
+    if (roleMappingObject.allowMultipleReferences && !!entry) {
       return (
         <div>
           {entry.map((e, index) => {
@@ -731,7 +732,6 @@ export class App extends React.Component {
         </div>
       );
     } else {
-      console.log('heee');
       return (
         <EntryActionRow
           allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}

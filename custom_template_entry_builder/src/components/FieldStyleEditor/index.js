@@ -96,7 +96,7 @@ const FieldStyleEditor = props => {
   };
 
   const renderMultiReferenceStyle = entryStyleClasses => {
-    const sections = [];
+    const sections = ['small', 'medium', 'large'];
     return (
       <MultiReferenceStyle
         onClear={classArray => props.clearStyleField(props.roleKey, classArray)}

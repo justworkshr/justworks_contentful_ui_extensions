@@ -56,6 +56,27 @@ export const LOGO_SIZE_CLASSES = [
 export const FLEX_DIRECTION_CLASSES = [
   constructStyleClass({className: 'flex-row', label: 'Row'}),
   constructStyleClass({className: 'flex-column', label: 'Column'}),
-  constructStyleClass({className: 'flex-reverse-row', label: 'Reverse Row'}),
-  constructStyleClass({className: 'flex-reverse-column', label: 'Reverse Column'}),
+  constructStyleClass({className: 'flex-row-reverse', label: 'Reverse Row'}),
+  constructStyleClass({className: 'flex-column-reverse', label: 'Reverse Column'}),
+]
+
+export const FLEX_POSITION_CLASSES = [
+  constructStyleClass({className: 'flex-centered', label: 'Center'}),
+  constructStyleClass({className: 'flex-start', label: 'Start'}),
+  constructStyleClass({className: 'flex-end', label: 'End'}),
+]
+
+export const FLEX_ITEM_COUNT_CLASSES = [
+  constructStyleClass({className: 'flex-items-per-1', label: '1'}),
+  constructStyleClass({className: 'flex-items-per-2', label: '2'}),
+  constructStyleClass({className: 'flex-items-per-3', label: '3'}),
+  constructStyleClass({className: 'flex-items-per-4', label: '4'}),
+  constructStyleClass({className: 'flex-items-per-5', label: '5'}),
+  constructStyleClass({className: 'flex-items-per-6', label: '6'}),
+]
+
+export const FLEX_ITEM_SPACING_CLASSES = [
+  constructStyleClass({className: 'flex-item-spacing-zero', label: 'None'}),
+  constructStyleClass({className: 'flex-item-spacing-tiny', label: 'Tiny'}),
+  constructStyleClass({className: 'flex-item-spacing-small', label: 'Small'}),
 ]
