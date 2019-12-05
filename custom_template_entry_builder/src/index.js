@@ -326,8 +326,9 @@ export class App extends React.Component {
       contentTypes: getContentTypeArray(contentType)
     });
 
+    let linkedEntryValidation;
     entries.forEach(entry => {
-      const linkedEntryValidation = validateLinkedEntry(
+      linkedEntryValidation = validateLinkedEntry(
         entry,
         roleKey,
         sdk.entry.getSys().id,
@@ -339,7 +340,9 @@ export class App extends React.Component {
       }
     });
 
-    this.linkEntriesToTemplate(entries, roleKey);
+    if (!linkedEntryValidation) {
+      this.linkEntriesToTemplate(entries, roleKey);
+    }
   };
 
   onLinkEntryClick = (roleKey, contentType) => {
@@ -354,7 +357,12 @@ export class App extends React.Component {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
     const updatedEntryList = [...entriesFieldValue, ...entries.map(entry => constructLink(entry))];
     const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.addEntries(roleKey, entries.map(entry => entry.sys.id));
+    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
+    updatedInternalMapping.addEntries(
+      roleKey,
+      entries.map(entry => entry.sys.id),
+      (roleMappingObject || {}).defaultClasses
+    );
 
     this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
 
@@ -635,23 +643,40 @@ export class App extends React.Component {
 
   renderEntryFields(roleKey, roleMappingObject, internalMappingObject, entry) {
     if (!entry) return null;
-    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
-      return entry.map((e, index) => {
-        return (
-          <EntryField
-            key={`entryfield-${roleKey}-${index}`}
-            entry={e}
-            isLoading={!!this.state.loadingEntries[roleKey]}
-            isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
-            roleKey={roleKey}
-            roleMapping={roleMappingObject}
-            onEditClick={this.onEditClick}
-            onRemoveClick={this.onRemoveClick}
-            onRemoveFieldClick={this.onRemoveFieldClick}
-            onFieldChange={this.onFieldChange}
-          />
-        );
-      });
+    if (roleMappingObject.allowMultipleReferences) {
+      return (
+        <div>
+          {entry.map((e, index) => {
+            return (
+              <EntryField
+                key={`entryfield-${roleKey}-${index}`}
+                entry={e}
+                isLoading={!!this.state.loadingEntries[roleKey]}
+                isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
+                roleKey={roleKey}
+                roleMapping={roleMappingObject}
+                onEditClick={this.onEditClick}
+                onRemoveClick={this.onRemoveClick}
+                onRemoveFieldClick={this.onRemoveFieldClick}
+                onFieldChange={this.onFieldChange}
+              />
+            );
+          })}
+          {roleMappingObject.allowMultipleReferenceStyle && (
+            <FieldStyleEditor
+              roleKey={roleKey}
+              roleMapping={roleMappingObject}
+              internalMappingObject={internalMappingObject}
+              updateStyle={this.updateEntryStyle}
+              updateAssetFormatting={this.updateAssetFormatting}
+              clearStyleField={this.clearEntryStyleClasses}
+              entry={entry}
+              title={displaySnakeCaseName(roleKey) + ' Style'}
+              type={InternalMapping.MULTI_REFERENCE}
+            />
+          )}
+        </div>
+      );
     } else {
       return (
         <div>

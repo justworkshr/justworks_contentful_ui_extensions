@@ -167,7 +167,7 @@ export default class InternalMapping {
     });
   }
 
-  addEntries(key, value) {
+  addEntries(key, value, styleClasses) {
     /*
      * Adds an entry mapping to the key, unless the value of the key is an array. Then it adds the entries to the array.
      * key - string - the getter key of the internal mapping being assigned to
@@ -186,9 +186,11 @@ export default class InternalMapping {
     if (Array.isArray((this.fieldRoles[key] || {}).value)) {
       valueArray = [...this.fieldRoles[key].value, ...valueArray];
     }
+
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: InternalMapping.MULTI_REFERENCE,
-      value: valueArray
+      value: valueArray,
+      styleClasses: (this.fieldRoles[key] || {}).styleClasses || styleClasses
     });
   }
 

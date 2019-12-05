@@ -9,6 +9,7 @@ import InternalMapping from '../../utils/InternalMapping';
 import TextStyle from '../TextStyle';
 import ImageStyle from '../ImageStyle';
 import LogoStyle from '../LogoStyle';
+import MultiReferenceStyle from '../MultiReferenceStyle';
 import { getMarkdownSections } from '../utils/styleEditorUtils';
 
 import './style.css';
@@ -27,7 +28,8 @@ const FieldStyleEditor = props => {
     props.updateStyle(props.roleKey, entryStyleClasses);
   };
 
-  const renderStyle = props => {
+  const renderFieldStyle = props => {
+    console.log(props.type);
     switch (props.type) {
       case InternalMapping.MARKDOWN:
         return renderMarkdownStyle(
@@ -43,6 +45,11 @@ const FieldStyleEditor = props => {
         ) {
           return renderLogoStyle(props.internalMappingObject.styleClasses);
         }
+        break;
+      case InternalMapping.MULTI_REFERENCE:
+        return props.roleMapping.allowMultipleReferenceStyle
+          ? renderMultiReferenceStyle(props.internalMappingObject.styleClasses)
+          : null;
     }
   };
 
@@ -89,6 +96,18 @@ const FieldStyleEditor = props => {
     );
   };
 
+  const renderMultiReferenceStyle = entryStyleClasses => {
+    const sections = [];
+    return (
+      <MultiReferenceStyle
+        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
+        entryStyleClasses={entryStyleClasses}
+        sections={sections}
+        updateStyleExclusive={updateStyleExclusive}
+      />
+    );
+  };
+
   return (
     <div className="style-editor">
       <div className="style-editor__heading" onClick={() => toggleOpen(!open)}>
@@ -102,7 +121,7 @@ const FieldStyleEditor = props => {
           size="small"
         />
       </div>
-      {!!open && renderStyle(props)}
+      {!!open && renderFieldStyle(props)}
       {!!open &&
         !!props.type === InternalMapping.ASSETSYS &&
         !!props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&

@@ -52,3 +52,10 @@ export const LOGO_SIZE_CLASSES = [
   constructStyleClass({className: 'logo-small', label: 'Small'}),
   constructStyleClass({className: 'logo-large', label: 'Large'}),
 ]
+
+export const FLEX_DIRECTION_CLASSES = [
+  constructStyleClass({className: 'flex-row', label: 'Row'}),
+  constructStyleClass({className: 'flex-column', label: 'Column'}),
+  constructStyleClass({className: 'flex-reverse-row', label: 'Reverse Row'}),
+  constructStyleClass({className: 'flex-reverse-column', label: 'Reverse Column'}),
+]

@@ -223,6 +223,7 @@ const TextStyle = props => {
 
 TextStyle.propTypes = {
   onChange: PropTypes.func,
+  onClear: PropTypes.func,
   entryStyleClasses: PropTypes.string,
   sections: PropTypes.array,
   roleKey: PropTypes.string,

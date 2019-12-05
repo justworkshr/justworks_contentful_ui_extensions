@@ -219,6 +219,7 @@ describe('InternalMapping', () => {
           }
         }
       });
+
       const internalMapping = new InternalMapping(json);
       internalMapping.removeEntry('hi', '2');
       expect(internalMapping.hi).toBeUndefined();

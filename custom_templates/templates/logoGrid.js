@@ -1,4 +1,4 @@
-import { constructRole, allowAsset, fieldObject } from '../utils';
+import { constructRole, allowAsset, fieldObject, allowMultipleReferences } from '../utils';
 import * as c from '../constants';
 
 export const logoGrid = {
@@ -10,16 +10,16 @@ export const logoGrid = {
     },
     fieldRoles: {
       title: constructRole({
-        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-center text-black text-bold'}),
+        description: 'Template title.',
         required: false,
-        description: 'Template title.'
+        field: fieldObject({type: c.FIELD_TYPE_TEXT, defaultClasses: 'text-center text-black text-bold'}),
       }),
       items: constructRole({
-        contentType: ['customTemplate'],
-        allowedCustomTemplates: [c.LOGO_ITEM],
-        allowMultipleReferences: true,
+        description: 'Grid items.',
         required: false,
-        description: 'Grid items.'
+        allowedCustomTemplates: [c.LOGO_ITEM],
+        ...allowMultipleReferences({allow: true, allowStyle: true, contentTypes: ['customTemplate']}),
+        defaultClasses: 'flex-row',
       })
     }
   }
