@@ -250,7 +250,12 @@ export class App extends React.Component {
     } else if (type === 'entry') {
       const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
-      await this.linkEntryToTemplate(newEntry, roleKey);
+
+      if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+        this.linkEntriesToTemplate([newEntry], roleKey);
+      } else {
+        this.linkEntryToTemplate(newEntry, roleKey);
+      }
       sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
     }
   };

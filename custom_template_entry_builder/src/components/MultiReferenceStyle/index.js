@@ -46,55 +46,54 @@ const MultiReferenceStyle = props => {
         return (
           selected === section && (
             <div key={`section-${section}`} className="style-editor__section">
-              {isGlobalSection(section) && ( // only use for global section
-                <div className="style-editor__field-group">
-                  <FormLabel htmlFor="">Item Spacing ({sectionLabel})</FormLabel>
-                  <TextLink
-                    className="style-editor__clear-link"
-                    icon="Close"
-                    onClick={() =>
-                      props.onClear(
-                        c.FLEX_ITEM_SPACING_CLASSES.map(classObject =>
-                          getSectionedClassName(section, classObject.className)
-                        )
+              <div className="style-editor__field-group">
+                <FormLabel htmlFor="">Item Spacing ({sectionLabel})</FormLabel>
+                <TextLink
+                  className="style-editor__clear-link"
+                  icon="Close"
+                  onClick={() =>
+                    props.onClear(
+                      c.FLEX_ITEM_SPACING_CLASSES.map(classObject =>
+                        getSectionedClassName(section, classObject.className)
                       )
-                    }>
-                    Clear
-                  </TextLink>
-                  <div className="style-editor__inline-input-section">
-                    {c.FLEX_ITEM_SPACING_CLASSES.map((classObject, index) => {
-                      const fieldId = `radio-${classObject.className}`;
-                      return (
-                        <div
-                          className="style-editor__radio-section"
-                          key={`text-alignment-section-${index}`}>
-                          <RadioButtonField
-                            id={fieldId}
-                            className="style-editor__radio-field"
-                            checked={props.entryStyleClasses
-                              .split(' ')
-                              .filter(e => e)
-                              .includes(getSectionedClassName(section, classObject.className))}
-                            labelText={classObject.label}
-                            value={classObject.className}
-                            labelIsLight={true}
-                            onChange={e =>
-                              props.updateStyleExclusive(
-                                getSectionValue(e, section),
-                                props.entryStyleClasses,
-                                c.FLEX_ITEM_SPACING_CLASSES.map(classObject => ({
-                                  ...classObject,
-                                  className: getSectionedClassName(section, classObject.className)
-                                }))
-                              )
-                            }
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+                    )
+                  }>
+                  Clear
+                </TextLink>
+                <div className="style-editor__inline-input-section">
+                  {c.FLEX_ITEM_SPACING_CLASSES.map((classObject, index) => {
+                    const fieldId = `radio-${classObject.className}`;
+                    return (
+                      <div
+                        className="style-editor__radio-section"
+                        key={`text-alignment-section-${index}`}>
+                        <RadioButtonField
+                          id={fieldId}
+                          className="style-editor__radio-field"
+                          checked={props.entryStyleClasses
+                            .split(' ')
+                            .filter(e => e)
+                            .includes(getSectionedClassName(section, classObject.className))}
+                          labelText={classObject.label}
+                          value={classObject.className}
+                          labelIsLight={true}
+                          onChange={e =>
+                            props.updateStyleExclusive(
+                              getSectionValue(e, section),
+                              props.entryStyleClasses,
+                              c.FLEX_ITEM_SPACING_CLASSES.map(classObject => ({
+                                ...classObject,
+                                className: getSectionedClassName(section, classObject.className)
+                              }))
+                            )
+                          }
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
+              </div>
+
               <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Flex Direction ({sectionLabel})</FormLabel>
                 <TextLink
@@ -143,7 +142,7 @@ const MultiReferenceStyle = props => {
                 </div>
               </div>
               <div className="style-editor__field-group">
-                <FormLabel htmlFor="">Items per row/column ({sectionLabel})</FormLabel>
+                <FormLabel htmlFor="">Items per row ({sectionLabel})</FormLabel>
                 <TextLink
                   className="style-editor__clear-link"
                   icon="Close"
