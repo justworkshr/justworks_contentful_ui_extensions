@@ -81,15 +81,6 @@ const TextStyle = props => {
                 sectionLabel={sectionLabel}
                 styleClasses={c.TEXT_TRANSFORM_CLASSES}
               />
-              <StyleEditorFieldGroup
-                label="Text Color"
-                entryStyleClasses={props.entryStyleClasses}
-                onClear={props.onClear}
-                updateStyleExclusive={props.updateStyleExclusive}
-                section={section}
-                sectionLabel={sectionLabel}
-                styleClasses={c.TEXT_TRANSFORM_CLASSES}
-              />
               <ColorStyle
                 classString={props.entryStyleClasses}
                 onChange={props.updateStyleExclusive}
