@@ -48,10 +48,17 @@ export const BACKGROUND_COLOR_CLASSES = COLORS.map(color => {
   return constructStyleClass({className: `bg-color-${color.label.toLowerCase()}`, label: color.label})
 })
 
-export const LOGO_SIZE_CLASSES = [
-  constructStyleClass({className: 'logo-small', label: 'Small'}),
-  constructStyleClass({className: 'logo-large', label: 'Large'}),
+export const ICON_SIZE_CLASSES = [
+  constructStyleClass({className: 'icon-small', label: 'Small'}),
+  constructStyleClass({className: 'icon-large', label: 'Large'}),
 ]
+
+export const ICON_POSITION_CLASSES = [
+  constructStyleClass({className: 'icon-left', label: 'Left'}),
+  constructStyleClass({className: 'icon-center', label: 'Center'}),
+  constructStyleClass({className: 'icon-right', label: 'Right'}),
+]
+
 
 export const FLEX_DIRECTION_CLASSES = [
   constructStyleClass({className: 'flex-row', label: 'Row'}),
@@ -60,10 +67,16 @@ export const FLEX_DIRECTION_CLASSES = [
   constructStyleClass({className: 'flex-column-reverse', label: 'Reverse Column'}),
 ]
 
-export const FLEX_POSITION_CLASSES = [
-  constructStyleClass({className: 'flex-centered', label: 'Center'}),
-  constructStyleClass({className: 'flex-start', label: 'Start'}),
-  constructStyleClass({className: 'flex-end', label: 'End'}),
+export const FLEX_ALIGNMENT_CLASSES = [
+  constructStyleClass({className: 'flex-align-center', label: 'Center'}),
+  constructStyleClass({className: 'flex-align-start', label: 'Start'}),
+  constructStyleClass({className: 'flex-align-end', label: 'End'}),
+]
+
+export const FLEX_JUSTIFY_CLASSES = [
+  constructStyleClass({className: 'flex-justify-center', label: 'Center'}),
+  constructStyleClass({className: 'flex-justify-start', label: 'Start'}),
+  constructStyleClass({className: 'flex-justify-end', label: 'End'}),
 ]
 
 export const FLEX_ITEM_COUNT_CLASSES = [
@@ -75,8 +88,15 @@ export const FLEX_ITEM_COUNT_CLASSES = [
   constructStyleClass({className: 'flex-items-per-6', label: '6'}),
 ]
 
-export const FLEX_ITEM_SPACING_CLASSES = [
-  constructStyleClass({className: 'flex-item-spacing-zero', label: 'None'}),
-  constructStyleClass({className: 'flex-item-spacing-tiny', label: 'Tiny'}),
-  constructStyleClass({className: 'flex-item-spacing-small', label: 'Small'}),
+export const FLEX_HORIZONAL_ITEM_SPACING_CLASSES = [
+  constructStyleClass({className: 'flex-item-h-spacing-zero', label: 'None'}),
+  constructStyleClass({className: 'flex-item-h-spacing-tiny', label: 'Tiny'}),
+  constructStyleClass({className: 'flex-item-h-spacing-small', label: 'Small'}),
+  constructStyleClass({className: 'flex-item-h-spacing-column', label: 'Column Spacing'}),
+]
+
+export const FLEX_VERTICAL_ITEM_SPACING_CLASSES = [
+  constructStyleClass({className: 'flex-item-v-spacing-zero', label: 'None'}),
+  constructStyleClass({className: 'flex-item-v-spacing-tiny', label: 'Tiny'}),
+  constructStyleClass({className: 'flex-item-v-spacing-small', label: 'Small'}),
 ]

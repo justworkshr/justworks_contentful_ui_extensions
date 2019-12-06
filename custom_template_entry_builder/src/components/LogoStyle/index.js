@@ -42,13 +42,13 @@ const LogoStyle = props => {
           selected === section && (
             <div key={`section-${section}`} className="style-editor__section">
               <div className="style-editor__field-group">
-                <FormLabel htmlFor="">Logo Size ({sectionLabel})</FormLabel>
+                <FormLabel htmlFor="">Icon Size ({sectionLabel})</FormLabel>
                 <TextLink
                   className="style-editor__clear-link"
                   icon="Close"
                   onClick={() =>
                     props.onClear(
-                      c.LOGO_SIZE_CLASSES.map(classObject =>
+                      c.ICON_SIZE_CLASSES.map(classObject =>
                         getSectionedClassName(section, classObject.className)
                       )
                     )
@@ -56,7 +56,7 @@ const LogoStyle = props => {
                   Clear
                 </TextLink>
                 <div className="style-editor__inline-input-section">
-                  {c.LOGO_SIZE_CLASSES.map((classObject, index) => {
+                  {c.ICON_SIZE_CLASSES.map((classObject, index) => {
                     const fieldId = `radio-${classObject.className}`;
                     return (
                       <div
@@ -76,7 +76,54 @@ const LogoStyle = props => {
                             props.updateStyleExclusive(
                               getSectionValue(e, section),
                               props.entryStyleClasses,
-                              c.LOGO_SIZE_CLASSES.map(classObject => ({
+                              c.ICON_SIZE_CLASSES.map(classObject => ({
+                                ...classObject,
+                                className: getSectionedClassName(section, classObject.className)
+                              }))
+                            )
+                          }
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="style-editor__field-group">
+                <FormLabel htmlFor="">Icon Position ({sectionLabel})</FormLabel>
+                <TextLink
+                  className="style-editor__clear-link"
+                  icon="Close"
+                  onClick={() =>
+                    props.onClear(
+                      c.ICON_POSITION_CLASSES.map(classObject =>
+                        getSectionedClassName(section, classObject.className)
+                      )
+                    )
+                  }>
+                  Clear
+                </TextLink>
+                <div className="style-editor__inline-input-section">
+                  {c.ICON_POSITION_CLASSES.map((classObject, index) => {
+                    const fieldId = `radio-${classObject.className}`;
+                    return (
+                      <div
+                        className="style-editor__radio-section"
+                        key={`text-transform-section-${index}`}>
+                        <RadioButtonField
+                          id={fieldId}
+                          className="style-editor__radio-field"
+                          checked={props.entryStyleClasses
+                            .split(' ')
+                            .filter(e => e)
+                            .includes(getSectionedClassName(section, classObject.className))}
+                          labelText={classObject.label}
+                          value={classObject.className}
+                          labelIsLight={true}
+                          onChange={e =>
+                            props.updateStyleExclusive(
+                              getSectionValue(e, section),
+                              props.entryStyleClasses,
+                              c.ICON_POSITION_CLASSES.map(classObject => ({
                                 ...classObject,
                                 className: getSectionedClassName(section, classObject.className)
                               }))

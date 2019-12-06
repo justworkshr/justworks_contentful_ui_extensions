@@ -97,6 +97,55 @@ const TextStyle = props => {
                   </div>
                 </div>
               )}
+              {isGlobalSection(section) && ( // only use for global section
+                <div className="style-editor__field-group">
+                  <FormLabel htmlFor="">Text Weight ({sectionLabel})</FormLabel>
+                  <TextLink
+                    className="style-editor__clear-link"
+                    icon="Close"
+                    onClick={() =>
+                      props.onClear(
+                        c.TEXT_WEIGHT_CLASSES.map(classObject =>
+                          getSectionedClassName(section, classObject.className)
+                        )
+                      )
+                    }>
+                    Clear
+                  </TextLink>
+                  <div className="style-editor__inline-input-section">
+                    {c.TEXT_WEIGHT_CLASSES.map((classObject, index) => {
+                      const fieldId = `radio-${classObject.className}`;
+                      return (
+                        <div
+                          className="style-editor__radio-section"
+                          key={`text-transform-section-${index}`}>
+                          <RadioButtonField
+                            id={fieldId}
+                            className="style-editor__radio-field"
+                            checked={props.entryStyleClasses
+                              .split(' ')
+                              .filter(e => e)
+                              .includes(getSectionedClassName(section, classObject.className))}
+                            labelText={classObject.label}
+                            value={classObject.className}
+                            labelIsLight={true}
+                            onChange={e =>
+                              props.updateStyleExclusive(
+                                getSectionValue(e, section),
+                                props.entryStyleClasses,
+                                c.TEXT_WEIGHT_CLASSES.map(classObject => ({
+                                  ...classObject,
+                                  className: getSectionedClassName(section, classObject.className)
+                                }))
+                              )
+                            }
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="style-editor__field-group">
                 <FormLabel htmlFor="">Text Transform ({sectionLabel})</FormLabel>
                 <TextLink
@@ -133,53 +182,6 @@ const TextStyle = props => {
                               getSectionValue(e, section),
                               props.entryStyleClasses,
                               c.TEXT_TRANSFORM_CLASSES.map(classObject => ({
-                                ...classObject,
-                                className: getSectionedClassName(section, classObject.className)
-                              }))
-                            )
-                          }
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="style-editor__field-group">
-                <FormLabel htmlFor="">Text Weight ({sectionLabel})</FormLabel>
-                <TextLink
-                  className="style-editor__clear-link"
-                  icon="Close"
-                  onClick={() =>
-                    props.onClear(
-                      c.TEXT_WEIGHT_CLASSES.map(classObject =>
-                        getSectionedClassName(section, classObject.className)
-                      )
-                    )
-                  }>
-                  Clear
-                </TextLink>
-                <div className="style-editor__inline-input-section">
-                  {c.TEXT_WEIGHT_CLASSES.map((classObject, index) => {
-                    const fieldId = `radio-${classObject.className}`;
-                    return (
-                      <div
-                        className="style-editor__radio-section"
-                        key={`text-transform-section-${index}`}>
-                        <RadioButtonField
-                          id={fieldId}
-                          className="style-editor__radio-field"
-                          checked={props.entryStyleClasses
-                            .split(' ')
-                            .filter(e => e)
-                            .includes(getSectionedClassName(section, classObject.className))}
-                          labelText={classObject.label}
-                          value={classObject.className}
-                          labelIsLight={true}
-                          onChange={e =>
-                            props.updateStyleExclusive(
-                              getSectionValue(e, section),
-                              props.entryStyleClasses,
-                              c.TEXT_WEIGHT_CLASSES.map(classObject => ({
                                 ...classObject,
                                 className: getSectionedClassName(section, classObject.className)
                               }))
