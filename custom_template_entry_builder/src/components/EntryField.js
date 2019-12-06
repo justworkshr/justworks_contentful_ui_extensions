@@ -59,7 +59,8 @@ export const EntryField = props => {
         dropdownListElements={
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
-            <DropdownListItem onClick={() => props.onRemoveFieldClick(props.roleKey)}>
+            <DropdownListItem
+              onClick={() => props.onRemoveFieldClick(props.roleKey, props.entry.sys.id)}>
               Remove
             </DropdownListItem>
           </DropdownList>

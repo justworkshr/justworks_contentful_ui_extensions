@@ -19,6 +19,7 @@ export const logoGrid = {
         description: 'Grid items.',
         required: false,
         allowedCustomTemplates: [c.LOGO_ITEM],
+        ...allowAsset({type: c.ASSET_TYPE_IMAGE, subType: c.ASSET_SUBTYPE_LOGO, allowFormatting: false, maxWidth: '200', defaultClasses: 'icon-small icon-center'}),
         ...allowMultipleReferences({allow: true, allowStyle: true, contentTypes: ['customTemplate']}),
         defaultClasses: 'flex-row flex-align-start flex-justify-center flex-items-per-1 small-flex-items-per-2 large-flex-items-per-4',
       })

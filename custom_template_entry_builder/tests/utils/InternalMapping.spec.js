@@ -99,7 +99,7 @@ describe('InternalMapping', () => {
       });
     });
 
-    describe('addEntries', () => {
+    describe('addEntriesOrAssets', () => {
       it('sets the type and sets the value and style', () => {
         const json = JSON.stringify({
           fieldRoles: {
@@ -108,7 +108,7 @@ describe('InternalMapping', () => {
         });
         const internalMapping = new InternalMapping(json);
 
-        internalMapping.addEntries('hi', ['bye', 'greetings']);
+        internalMapping.addEntriesOrAssets({ key: 'hi', value: ['bye', 'greetings'] });
         expect(internalMapping.hi.type).toEqual('multi-reference');
         expect(internalMapping.hi.value).toHaveLength(3);
         expect(internalMapping.hi.styleClasses).toEqual('');
@@ -126,7 +126,7 @@ describe('InternalMapping', () => {
       it('with blank start - sets the type and sets the value', () => {
         const json = JSON.stringify({});
         const internalMapping = new InternalMapping(json);
-        internalMapping.addEntries('hi', ['bye', 'greetings']);
+        internalMapping.addEntriesOrAssets({ key: 'hi', value: ['bye', 'greetings'] });
         expect(internalMapping.hi.type).toEqual('multi-reference');
         expect(internalMapping.hi.value).toHaveLength(2);
         expect(internalMapping.hi.styleClasses).toEqual('');
@@ -134,6 +134,30 @@ describe('InternalMapping', () => {
         expect(internalMapping.hi.value[0].value).toEqual('bye');
         expect(internalMapping.hi.value[1].type).toEqual('entry');
         expect(internalMapping.hi.value[1].value).toEqual('greetings');
+      });
+
+      it('sets allows entries and assets to mix', () => {
+        const json = JSON.stringify({
+          fieldRoles: {
+            hi: { type: 'text', value: [{ type: 'entry', styleClasses: '', value: 'hello' }] }
+          }
+        });
+        const internalMapping = new InternalMapping(json);
+
+        internalMapping.addEntriesOrAssets({
+          key: 'hi',
+          value: [{ type: 'asset', value: 'bye', assetUrl: 'url', assetType: 'image' }]
+        });
+        expect(internalMapping.hi.type).toEqual('multi-reference');
+        expect(internalMapping.hi.value).toHaveLength(2);
+        expect(internalMapping.hi.styleClasses).toEqual('');
+        expect(internalMapping.hi.value[0].type).toEqual('entry');
+        expect(internalMapping.hi.value[0].value).toEqual('hello');
+        expect(internalMapping.hi.value[0].styleClasses).toEqual('');
+        expect(internalMapping.hi.value[1].type).toEqual('asset');
+        expect(internalMapping.hi.value[1].value).toEqual('bye');
+        expect(internalMapping.hi.value[1].assetUrl).toEqual('url');
+        expect(internalMapping.hi.value[1].assetType).toEqual('image');
       });
     });
 

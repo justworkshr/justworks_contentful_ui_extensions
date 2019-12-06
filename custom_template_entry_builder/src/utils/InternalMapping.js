@@ -167,21 +167,33 @@ export default class InternalMapping {
     });
   }
 
-  addEntries(key, value, styleClasses) {
+  addEntriesOrAssets({ key = '', value = [], styleClasses = '' } = {}) {
     /*
      * Adds an entry mapping to the key, unless the value of the key is an array. Then it adds the entries to the array.
      * key - string - the getter key of the internal mapping being assigned to
      * value - array<string> - an array of the ID strings of all the contentful entries
+     * styleClasses - string - the style classes to apply to the multi-reference field
      */
-    if (!Array.isArray(value)) throw new Error('Value for "addEntries" must be an array.');
+    if (!Array.isArray(value)) throw new Error('Value for "addEntriesOrAssets" must be an array.');
     this.defineGetterSetters(key);
 
-    let valueArray = value.map(entry =>
-      InternalMapping.entryMapping({
-        type: InternalMapping.ENTRY,
-        value: entry
-      })
-    );
+    let valueArray = value.map(entry => {
+      if (entry.assetUrl) {
+        return InternalMapping.assetMapping({
+          type: InternalMapping.ASSET,
+          value: entry.value,
+          assetUrl: entry.assetUrl,
+          assetType: entry.assetType,
+          formatting: entry.formatting,
+          styleClasses: entry.styleClasses
+        });
+      } else {
+        return InternalMapping.entryMapping({
+          type: InternalMapping.ENTRY,
+          value: entry
+        });
+      }
+    });
 
     if (Array.isArray((this.fieldRoles[key] || {}).value)) {
       valueArray = [...this.fieldRoles[key].value, ...valueArray];

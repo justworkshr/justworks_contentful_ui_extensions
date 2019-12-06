@@ -136,11 +136,13 @@ export class App extends React.Component {
   };
 
   onSysChanged = async sysValue => {
+    /*
+      Updates state with new values and validates template
+    */
     const sdk = this.props.sdk;
     const template = sdk.entry.fields.template.getValue();
     const internalMappingJson = sdk.entry.fields.internalMapping.getValue();
     if (!internalMappingJson) return;
-
     this.setState(
       {
         template,
@@ -157,7 +159,6 @@ export class App extends React.Component {
             await this.fetchEntryByRoleKey(roleKey);
           })
         );
-
         if (
           Object.keys(this.state.entries).length &&
           internalMappingJson &&
@@ -224,21 +225,64 @@ export class App extends React.Component {
     );
   };
 
-  onRemoveFieldClick = roleKey => {
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.removeEntry(roleKey);
+  onRemoveFieldClick = (roleKey, entrySysId = null) => {
+    /*
+      Removes fields or assets from internal mapping
+    */
 
-    const updatedEntryList = removeStateEntry(this.state.entries, updatedInternalMapping);
+    const updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.removeEntry(roleKey, entrySysId);
+    const updatedEntryList = removeStateEntry(
+      this.state.entries,
+      updatedInternalMapping,
+      entrySysId
+    );
     const updatedAssetList = selectAssetEntries(updatedEntryList).map(asset =>
       constructLink(asset)
     );
-    this.setState({ entries: updatedEntryList, entryInternalMapping: updatedInternalMapping }, () =>
-      this.timeoutUpdateEntry({
-        updatedAssets: updatedAssetList,
-        updatedInternalMapping,
-        ms: 0
-      })
+
+    this.setState(
+      prevState => {
+        const prevStateLoadingEntries = { ...prevState.loadingEntries };
+        const prevStateEntries = { ...prevState.entries };
+
+        if (Array.isArray(prevStateEntries[roleKey])) {
+          prevStateEntries[roleKey] = prevStateEntries[roleKey].filter(
+            entry => entry.sys.id !== entrySysId
+          );
+
+          if (!prevStateEntries[roleKey].length) {
+            delete prevStateEntries[roleKey];
+            delete prevStateLoadingEntries[roleKey];
+          }
+        } else {
+          delete prevStateEntries[roleKey];
+          delete prevStateLoadingEntries[roleKey];
+        }
+
+        return {
+          loadingEntries: prevStateLoadingEntries,
+          entries: updatedEntryList,
+          entryInternalMapping: updatedInternalMapping
+        };
+      },
+      () => {
+        this.timeoutUpdateEntry({
+          updatedAssets: updatedAssetList,
+          updatedInternalMapping,
+          ms: 0
+        });
+      }
     );
+
+    // this.setState({ entries: updatedEntryList, entryInternalMapping: updatedInternalMapping }, () =>
+    //   this.timeoutUpdateEntry({
+    //     updatedEntries: updatedEntryList,
+    //     updatedAssets: updatedAssetList,
+    //     updatedInternalMapping,
+    //     ms: 0
+    //   })
+    // );
   };
 
   onAddEntryClick = async ({ roleKey, contentType, template = undefined, type = 'entry' } = {}) => {
@@ -260,12 +304,30 @@ export class App extends React.Component {
     }
   };
 
-  onLinkAssetClick = async roleKey => {
+  handleMultipleAssetsLink = async roleKey => {
+    const sdk = this.props.sdk;
+    const assets = await sdk.dialogs.selectMultipleAssets({
+      locale: 'en-US'
+    });
+
+    let linkedEntryValidation;
+    assets.forEach(asset => {
+      linkedEntryValidation = validateLinkedAsset(
+        asset,
+        this.state.templateMapping.fieldRoles[roleKey]
+      );
+    });
+
+    if (linkedEntryValidation) {
+      return sdk.notifier.error(linkedEntryValidation);
+    } else {
+      this.linkAssetsToTemplate(assets, roleKey);
+    }
+  };
+
+  handleSingleAssetLink = async roleKey => {
     const sdk = this.props.sdk;
 
-    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
-    } else {
-    }
     const entry = await sdk.dialogs.selectSingleAsset({
       locale: 'en-US'
     });
@@ -281,22 +343,60 @@ export class App extends React.Component {
     this.linkAssetToTemplate(entry, roleKey);
   };
 
-  linkAssetToTemplate = (entry, roleKey) => {
+  onLinkAssetClick = async roleKey => {
+    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+      this.handleMultipleAssetsLink(roleKey);
+    } else {
+      this.handleSingleAssetLink(roleKey);
+    }
+  };
+
+  linkAssetsToTemplate = (assets, roleKey) => {
     const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
-    const roleMapping = this.state.templateMapping.fieldRoles[roleKey];
+    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
+
+    // TODO - work
+    updatedInternalMapping.addEntriesOrAssets({
+      key: roleKey,
+      value: assets.map(asset => {
+        return InternalMapping.assetMapping({
+          type: InternalMapping.ASSET,
+          value: asset.sys.id,
+          assetUrl: asset.fields.file['en-US'].url,
+          assetType: roleMappingObject.asset.type,
+          formatting:
+            roleMappingObject.asset.type === c.ASSET_TYPE_IMAGE
+              ? { fm: 'png', w: roleMappingObject.asset.formatting.maxWidth }
+              : {},
+          styleClasses: roleMappingObject.asset.defaultClasses
+        });
+      }),
+      styleClasses: (roleMappingObject || {}).defaultClasses
+    });
+
+    this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
+
+    this.fetchEntryByRoleKey(roleKey);
+  };
+
+  linkAssetToTemplate = (asset, roleKey) => {
+    const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
+    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
+    const updatedInternalMapping = this.state.entryInternalMapping;
+
     updatedInternalMapping.addAsset(
       roleKey,
-      entry.sys.id,
-      entry.fields.file['en-US'].url,
-      roleMapping.asset.type,
-      roleMapping.asset.type === c.ASSET_TYPE_IMAGE
-        ? { fm: 'png', w: roleMapping.asset.formatting.maxWidth }
+      asset.sys.id,
+      asset.fields.file['en-US'].url,
+      roleMappingObject.asset.type,
+      roleMappingObject.asset.type === c.ASSET_TYPE_IMAGE
+        ? { fm: 'png', w: roleMappingObject.asset.formatting.maxWidth }
         : {},
-      roleMapping.asset.defaultClasses
+      roleMappingObject.asset.defaultClasses
     );
 
-    const updatedAssetList = addStateAsset(this.state.entries, entry);
+    const updatedAssetList = addStateAsset(this.state.entries, asset);
 
     this.timeoutUpdateEntry({
       updatedEntries: updatedEntryList,
@@ -366,11 +466,11 @@ export class App extends React.Component {
     const updatedEntryList = [...entriesFieldValue, ...entries.map(entry => constructLink(entry))];
     const updatedInternalMapping = this.state.entryInternalMapping;
     const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
-    updatedInternalMapping.addEntries(
-      roleKey,
-      entries.map(entry => entry.sys.id),
-      (roleMappingObject || {}).defaultClasses
-    );
+    updatedInternalMapping.addEntriesOrAssets({
+      key: roleKey,
+      value: entries.map(entry => entry.sys.id),
+      styleClasses: (roleMappingObject || {}).defaultClasses
+    });
 
     this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
 
@@ -461,6 +561,13 @@ export class App extends React.Component {
       ...entriesValue.slice(0, firstEntryIndex),
       ...entriesValue.slice(firstEntryIndex + 1, entriesValue.length)
     ];
+
+    const updatedStateEntryList = removeStateEntry(
+      this.state.entries,
+      updatedInternalMapping,
+      entrySysId
+    );
+
     this.setState(
       prevState => {
         const prevStateLoadingEntries = { ...prevState.loadingEntries };
@@ -480,7 +587,7 @@ export class App extends React.Component {
           delete prevStateLoadingEntries[roleKey];
         }
 
-        return { loadingEntries: prevStateLoadingEntries, entries: prevStateEntries };
+        return { loadingEntries: prevStateLoadingEntries, entries: updatedStateEntryList };
       },
       () => {
         this.timeoutUpdateEntry({

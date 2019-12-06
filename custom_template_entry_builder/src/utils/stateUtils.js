@@ -19,11 +19,15 @@ export const addStateEntry = (stateEntries, roleKey, fieldObject) => {
   };
 };
 
-export const removeStateEntry = (stateEntries, updatedInternalMapping) => {
+export const removeStateEntry = (stateEntries, updatedInternalMapping, entrySysId = null) => {
   return Object.assign(
     {},
     ...Object.keys(stateEntries)
       .filter(key => updatedInternalMapping.fieldKeys().includes(key))
-      .map(key => ({ [key]: stateEntries[key] }))
+      .map(key => ({
+        [key]: Array.isArray(stateEntries[key])
+          ? stateEntries[key].filter(entry => entry.sys.id !== entrySysId)
+          : stateEntries[key]
+      }))
   );
 };
