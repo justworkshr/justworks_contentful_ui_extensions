@@ -356,9 +356,13 @@ export class App extends React.Component {
   linkAssetsToTemplate = (assets, roleKey) => {
     const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
-    const firstAsset = this.state.entryInternalMapping[roleKey].value
-      ? this.state.entryInternalMapping[roleKey].value.find(el => el.type === InternalMapping.ASSET)
-      : undefined;
+    const firstAsset =
+      this.state.entryInternalMapping[roleKey] &&
+      !!this.state.entryInternalMapping[roleKey].value.length
+        ? this.state.entryInternalMapping[roleKey].value.find(
+            el => el.type === InternalMapping.ASSET
+          )
+        : undefined;
 
     const assetStyleClasses = firstAsset
       ? firstAsset.styleClasses
