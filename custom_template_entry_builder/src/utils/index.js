@@ -93,8 +93,8 @@ export const displayContentType = contentType => {
     .join(' or ');
 };
 
-export const displaySnakeCaseName = contentType => {
-  return contentType
+export const displaySnakeCaseName = snakeCaseString => {
+  return snakeCaseString
     .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');

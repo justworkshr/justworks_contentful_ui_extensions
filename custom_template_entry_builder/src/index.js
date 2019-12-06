@@ -4,20 +4,13 @@ import ReactDOM from 'react-dom';
 
 import * as c from '../../custom_templates/constants';
 
-import {
-  Button,
-  FormLabel,
-  HelpText,
-  ValidationMessage,
-  IconButton,
-  SectionHeading,
-  DisplayText
-} from '@contentful/forma-36-react-components';
+import { Button, DisplayText } from '@contentful/forma-36-react-components';
 
 import EntryField from './components/EntryField';
 import TemplateStyleEditor from './components/TemplateStyleEditor';
 import FieldStyleEditor from './components/FieldStyleEditor';
 import EntryActionRow from './components/EntryActionRow';
+import RoleSection from './components/RoleSection';
 
 import { init } from 'contentful-ui-extensions-sdk';
 
@@ -110,6 +103,7 @@ export class App extends React.Component {
     this.linkAssetsToTemplate = this.linkAssetsToTemplate.bind(this);
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
+    this.renderEntryFields = this.renderEntryFields.bind(this);
   }
 
   componentDidMount = async () => {
@@ -964,50 +958,16 @@ export class App extends React.Component {
                       ];
 
                       return (
-                        <div
+                        <RoleSection
                           key={index}
-                          className={`role-section ${
-                            !!this.state.draggingObject &&
-                            this.state.templateMapping.fieldRoles[this.state.draggingObject.roleKey]
-                              .contentType !==
-                              this.state.templateMapping.fieldRoles[roleKey].contentType
-                              ? 'unhighlighted'
-                              : ''
-                          }`}>
-                          <div className="role-section__header-section ">
-                            <FormLabel
-                              className="role-section__heading"
-                              htmlFor=""
-                              required={roleMappingObject.required}>
-                              <SectionHeading>{displaySnakeCaseName(roleKey)}</SectionHeading>
-                            </FormLabel>
-                            {!!entry && (entry.sys || {}).type === 'Field' && (
-                              <IconButton
-                                className="role-section__remove-field"
-                                iconProps={{ icon: 'Close', size: 'large' }}
-                                buttonType="negative"
-                                label="Remove Field"
-                                onClick={() => this.onRemoveFieldClick(roleKey)}
-                              />
-                            )}
-                          </div>
-                          <HelpText>{roleMappingObject.description}</HelpText>
-                          {this.renderEntryFields(
-                            roleKey,
-                            roleMappingObject,
-                            internalMappingObject,
-                            entry
-                          )}
-
-                          {!!(this.state.errors[roleKey] || {}).length &&
-                            this.state.errors[roleKey].map((error, index) => {
-                              return (
-                                <ValidationMessage key={`error-${roleKey}-${index}`}>
-                                  {error.message}
-                                </ValidationMessage>
-                              );
-                            })}
-                        </div>
+                          entry={entry}
+                          roleKey={roleKey}
+                          roleMappingObject={roleMappingObject}
+                          internalMappingObject={internalMappingObject}
+                          renderEntryFields={this.renderEntryFields}
+                          stateErrors={this.state.errors}
+                          onRemoveFieldClick={this.onRemoveFieldClick}
+                        />
                       );
                     })}
                 </div>

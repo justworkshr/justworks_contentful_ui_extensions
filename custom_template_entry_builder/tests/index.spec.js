@@ -8,25 +8,9 @@ import { mount } from 'enzyme';
 import { textMediaModule } from '../../custom_templates/templates/textMediaModule';
 import * as c from '../../custom_templates/constants';
 
-configure({ adapter: new Adapter() });
+import * as tm from './mocks/templateMocks';
 
-const MOCK_TEMPLATE_NAME = 'mock 1';
-const mockCustomTemplates = {
-  [MOCK_TEMPLATE_NAME]: {
-    meta: {},
-    style: {},
-    roles: {
-      left_section: {
-        contentType: 'text',
-        description: 'A left section'
-      },
-      right_section: {
-        contentType: 'text',
-        description: 'A left section'
-      }
-    }
-  }
-};
+configure({ adapter: new Adapter() });
 
 const mockLink = ({ id = 0, type = 'Entry' } = {}) => {
   return {
@@ -56,6 +40,9 @@ const mockSdk = mockCustomTemplateEntry => {
           getValue: () => getValue(mockCustomTemplateEntry, 'internalMapping')
         },
         entries: {
+          getValue: () => getValue(mockCustomTemplateEntry, 'entries')
+        },
+        assets: {
           getValue: () => getValue(mockCustomTemplateEntry, 'entries')
         }
       }
@@ -89,8 +76,8 @@ describe('App', () => {
     it('should render without crashing', () => {
       const wrapper = mount(
         <App
-          customTemplates={mockCustomTemplates}
-          templatePlaceholder={mockCustomTemplates}
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
           sdk={mockSdk(mockEntry)}
         />
       );
@@ -101,7 +88,7 @@ describe('App', () => {
   describe('with a mock entry', () => {
     const mockEntry = {
       name: 'Mock Custom Template Entry',
-      template: MOCK_TEMPLATE_NAME,
+      template: tm.MOCK_TEMPLATE_NAME,
       entries: {
         ...mockLink({ id: '1' })
       },
@@ -118,8 +105,8 @@ describe('App', () => {
     it('should render without crashing', () => {
       const wrapper = mount(
         <App
-          customTemplates={mockCustomTemplates}
-          templatePlaceholder={mockCustomTemplates['mock 1']}
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates['mock 1']}
           sdk={mockSdk(mockEntry)}
         />
       );
@@ -128,27 +115,44 @@ describe('App', () => {
     });
   });
 
-  describe('with text media template', () => {
+  describe('a template w/ all fields', () => {
     const mockEntry = {
       name: 'Mock Custom Template Entry',
-      template: c.TEXT_MEDIA_MODULE,
+      template: tm.MOCK_FIELDS_TEMPLATE,
       entries: {},
       assets: {},
-      internalMapping: undefined
+      internalMapping: ''
     };
 
-    const sdk = mockSdk(mockEntry);
+    const templateMapping = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
-    it('should render without crashing', () => {
+    const sdk = mockSdk(mockEntry);
+    it('should render the default editor state', () => {
       const wrapper = mount(
         <App
-          customTemplates={textMediaModule}
-          templatePlaceholder={mockCustomTemplates}
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
           sdk={sdk}
         />
       );
 
       expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
+
+      // 1 Role Section per FieldRole
+      expect(wrapper.find('RoleSection')).toHaveLength(2);
+
+      // Tests Role Section render
+      wrapper.find('RoleSection').forEach(node => {
+        // Tests required label render
+        if (templateMapping.fieldRoles[node.props().roleKey].required) {
+          expect(node.find('FormLabel.role-section__heading').props().required).toEqual(true);
+        } else {
+          expect(node.find('FormLabel.role-section__heading').props().required).toEqual(false);
+        }
+
+        // Should render add-field button for empty role section w/ field
+        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
+      });
     });
   });
 });

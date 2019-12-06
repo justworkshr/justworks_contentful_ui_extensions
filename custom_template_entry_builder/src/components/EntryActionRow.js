@@ -12,7 +12,7 @@ const EntryActionRow = props => {
         <TextLink
           icon="Quote"
           linkType="primary"
-          className="link-entries-row__button"
+          className="entry-action-button__add-field link-entries-row__button"
           onClick={() => props.onAddFieldClick(props.roleKey, props.fieldObject)}>
           Add field
         </TextLink>
