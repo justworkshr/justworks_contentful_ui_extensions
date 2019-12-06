@@ -235,6 +235,14 @@ export default class InternalMapping {
     this.fieldRoles[key].styleClasses = styleClasses;
   }
 
+  setReferencesStyleClasses(key, styleClasses) {
+    if (!this.fieldRoles[key].value) return;
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
+      entry.styleClasses = styleClasses;
+      return entry;
+    });
+  }
+
   addStyleClass(key, styleClass) {
     const classes = this.fieldRoles[key].styleClasses.split(' ').filter(e => e);
     this.fieldRoles[key].styleClasses = [...classes, styleClass].join(' ');
@@ -246,6 +254,23 @@ export default class InternalMapping {
       .filter(e => e)
       .filter(cl => cl !== styleClass);
     this.fieldRoles[key].styleClasses = [...classes].join(' ');
+  }
+
+  removeReferencesStyleClasses(key, classArray) {
+    if (classArray[0].className) {
+      // if passed an array of classObjects instead of strings
+      classArray = classArray.map(el => el.className);
+    }
+
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
+      const classes = entry.styleClasses
+        .split(' ')
+        .filter(e => e)
+        .filter(cl => !classArray.includes(cl));
+
+      entry.styleClasses = [...classes].join(' ');
+      return entry;
+    });
   }
 
   removeStyleClasses(key, classArray) {

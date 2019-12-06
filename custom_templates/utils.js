@@ -5,7 +5,8 @@ export const constructRole = ({
   asset = null,
   description = '',
   allowMultipleReferences = false,
-  allowMultipleReferenceStyle = false,
+  allowMultiReferenceStyle = false,
+  multipleReferenceStyle = undefined,
   allowedCustomTemplates = [],
   defaultClasses,
   required = true,
@@ -16,7 +17,8 @@ export const constructRole = ({
     asset,
     description,
     allowMultipleReferences,
-    allowMultipleReferenceStyle,
+    allowMultiReferenceStyle,
+    multipleReferenceStyle,
     allowedCustomTemplates,
     defaultClasses,
     required,
@@ -63,10 +65,11 @@ export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, subType=undefined, allowFor
   })
 }
 
-export const allowMultipleReferences = ({allow=true, allowStyle=false, contentTypes=[]}={}) => {
+export const allowMultipleReferences = ({allow=true, allowStyle=true, styleType=undefined, contentTypes=[]}={}) => {
   return ({
     allowMultipleReferences: allow,
-    allowMultipleReferenceStyle: allowStyle,
+    allowMultiReferenceStyle: allowStyle,
+    multipleReferenceStyle: styleType,
     contentType: contentTypes
   })
 }

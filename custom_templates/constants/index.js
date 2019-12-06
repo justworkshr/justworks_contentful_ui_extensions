@@ -25,6 +25,8 @@ export * from './styleClasses'
 
 export const STYLE_TYPE_BACKGROUND_COLOR = 'backgroundColor'
 
+export const MULTI_REFERENCE_STYLE_FLEX = 'multi-reference-style-flex'
+
 // Asset types
 
 export const ASSET_TYPE_IMAGE = 'image'

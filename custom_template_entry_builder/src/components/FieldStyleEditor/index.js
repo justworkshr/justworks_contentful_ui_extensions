@@ -42,13 +42,14 @@ const FieldStyleEditor = props => {
           props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&
           props.roleMapping.asset.subType === c.ASSET_SUBTYPE_LOGO
         ) {
-          return renderLogoStyle(props.internalMappingObject.styleClasses);
+          const styleClasses = props.useReferenceStyleClasses
+            ? props.internalMappingObject.value[0].styleClasses
+            : props.internalMappingObject.styleClasses;
+          return renderLogoStyle(styleClasses);
         }
         break;
-      case InternalMapping.MULTI_REFERENCE:
-        return props.roleMapping.allowMultipleReferenceStyle
-          ? renderMultiReferenceStyle(props.internalMappingObject.styleClasses)
-          : null;
+      case c.MULTI_REFERENCE_STYLE_FLEX:
+        return renderMultiReferenceStyle(props.internalMappingObject.styleClasses);
     }
   };
 
@@ -121,7 +122,7 @@ const FieldStyleEditor = props => {
         />
       </div>
       {!!open && renderFieldStyle(props)}
-      {!!open &&
+      {!!open && // When mapping allows for asset formatting
         !!props.type === InternalMapping.ASSETSYS &&
         !!props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&
         !!props.roleMapping.asset.allowFormatting &&
@@ -138,6 +139,7 @@ FieldStyleEditor.propTypes = {
   internalMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
+  useReferenceStyleClasses: PropTypes.bool,
   type: PropTypes.string,
   entry: PropTypes.object
 };

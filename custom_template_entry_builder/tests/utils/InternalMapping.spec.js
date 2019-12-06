@@ -230,7 +230,7 @@ describe('InternalMapping', () => {
         }
       });
       const internalMapping = new InternalMapping(json);
-      internalMapping.removeEntry('hi', '2');
+      internalMapping.removeEntry('hi', 1);
       expect(internalMapping.hi.value).toHaveLength(1);
     });
 
@@ -245,7 +245,7 @@ describe('InternalMapping', () => {
       });
 
       const internalMapping = new InternalMapping(json);
-      internalMapping.removeEntry('hi', '2');
+      internalMapping.removeEntry('hi', 0);
       expect(internalMapping.hi).toBeUndefined();
       expect(internalMapping.fieldKeys()).not.toContain('hi');
     });
@@ -292,6 +292,44 @@ describe('InternalMapping', () => {
       const styleClass = 'hiClass';
       internalMapping.setStyleClasses('hi', styleClass);
       expect(internalMapping.hi.styleClasses).toEqual(styleClass);
+    });
+  });
+
+  describe('setReferencesStyleClasses', () => {
+    it('adds style classes to empty value', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            value: [
+              { type: 'entry', value: 'hello', styleClasses: '' },
+              { type: 'entry', value: 'bye', styleClasses: '' }
+            ]
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      const styleClass = 'hiClass';
+      internalMapping.setReferencesStyleClasses('hi', styleClass);
+      expect(internalMapping.hi.value[0].styleClasses).toEqual(styleClass);
+      expect(internalMapping.hi.value[1].styleClasses).toEqual(styleClass);
+    });
+
+    it('overwrites an existing value', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            value: [
+              { type: 'entry', value: 'hello', styleClasses: 'helloClass' },
+              { type: 'entry', value: 'bye', styleClasses: 'helloClass' }
+            ]
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      const styleClass = 'hiClass';
+      internalMapping.setReferencesStyleClasses('hi', styleClass);
+      expect(internalMapping.hi.value[0].styleClasses).toEqual(styleClass);
+      expect(internalMapping.hi.value[1].styleClasses).toEqual(styleClass);
     });
   });
 
@@ -386,6 +424,32 @@ describe('InternalMapping', () => {
       const internalMapping = new InternalMapping(json);
       internalMapping.removeStyleClasses('hi', styleClasses);
       expect(internalMapping.hi.styleClasses).toEqual('class3');
+    });
+  });
+
+  describe('removeReferencesStyleClasses', () => {
+    it('removes from empty value', () => {
+      const json = JSON.stringify({
+        fieldRoles: { hi: { value: [{ type: 'asset', styleClasses: '' }] } }
+      });
+      const internalMapping = new InternalMapping(json);
+      const styleClasses = [{ className: 'hiClass' }];
+      internalMapping.removeReferencesStyleClasses('hi', styleClasses.map(el => el.className));
+      expect(internalMapping.hi.value[0].styleClasses).toEqual('');
+    });
+
+    it('removes style class from existing value', () => {
+      const styleClasses = [{ className: 'hiClass' }, { className: 'class2' }];
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            value: [{ type: 'asset', styleClasses: styleClasses.map(el => el.className).join(' ') }]
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeReferencesStyleClasses('hi', styleClasses);
+      expect(internalMapping.hi.styleClasses).toEqual('');
     });
   });
 

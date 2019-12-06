@@ -103,10 +103,12 @@ export class App extends React.Component {
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
     this.updateEntryStyle = this.updateEntryStyle.bind(this);
+    this.updateReferencesStyle = this.updateReferencesStyle.bind(this);
     this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
     this.linkAssetToTemplate = this.linkAssetToTemplate.bind(this);
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
+    this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
   }
 
   componentDidMount = async () => {
@@ -730,9 +732,31 @@ export class App extends React.Component {
     });
   }
 
+  updateReferencesStyle(roleKey, styleClasses) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.setReferencesStyleClasses(
+      roleKey,
+      cleanStyleClasses(styleClasses, updatedInternalMapping[roleKey].value)
+    );
+    styleClasses = updatedInternalMapping[roleKey].styleClasses;
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+    });
+  }
+
   clearEntryStyleClasses(roleKey, classArray) {
     let updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeStyleClasses(roleKey, classArray);
+
+    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
+      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+    });
+  }
+
+  clearReferencesStyle(roleKey, classArray) {
+    let updatedInternalMapping = this.state.entryInternalMapping;
+    updatedInternalMapping.removeReferencesStyleClasses(roleKey, classArray);
 
     this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
       this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
@@ -783,19 +807,36 @@ export class App extends React.Component {
             onLinkEntryClick={this.onLinkEntryClick}
             onDeepCloneLinkClick={this.onDeepCloneLinkClick}
           />
-          {roleMappingObject.allowMultipleReferenceStyle && (
-            <FieldStyleEditor
-              roleKey={roleKey}
-              roleMapping={roleMappingObject}
-              internalMappingObject={internalMappingObject}
-              updateStyle={this.updateEntryStyle}
-              updateAssetFormatting={this.updateAssetFormatting}
-              clearStyleField={this.clearEntryStyleClasses}
-              entry={entry}
-              title={displaySnakeCaseName(roleKey) + ' Style'}
-              type={InternalMapping.MULTI_REFERENCE}
-            />
-          )}
+          {!!roleMappingObject.allowMultiReferenceStyle &&
+            !!roleMappingObject.multipleReferenceStyle && (
+              <FieldStyleEditor
+                roleKey={roleKey}
+                roleMapping={roleMappingObject}
+                internalMappingObject={internalMappingObject}
+                updateStyle={this.updateEntryStyle}
+                updateAssetFormatting={this.updateAssetFormatting}
+                clearStyleField={this.clearEntryStyleClasses}
+                entry={entry}
+                title={displaySnakeCaseName(roleKey) + ' Collection Style'}
+                type={roleMappingObject.multipleReferenceStyle}
+              />
+            )}
+          {!!roleMappingObject.allowMultiReferenceStyle &&
+          !!roleMappingObject.multipleReferenceStyle && // When multi-reference field has assets
+            !!internalMappingObject.value.find(entry => entry.type === InternalMapping.ASSET) && (
+              <FieldStyleEditor
+                roleKey={roleKey}
+                roleMapping={roleMappingObject}
+                internalMappingObject={internalMappingObject}
+                updateStyle={this.updateReferencesStyle}
+                updateAssetFormatting={this.updateAssetFormatting}
+                clearStyleField={this.clearReferencesStyle}
+                entry={entry}
+                title={displaySnakeCaseName(roleKey) + ' Style'}
+                type={InternalMapping.ASSETSYS}
+                useReferenceStyleClasses={true}
+              />
+            )}
         </div>
       );
     } else if (!!this.state.entries[roleKey] || !!this.state.loadingEntries[roleKey]) {
