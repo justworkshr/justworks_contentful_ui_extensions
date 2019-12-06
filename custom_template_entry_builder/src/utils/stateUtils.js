@@ -8,6 +8,12 @@ export const addStateAsset = (stateEntries, newAsset) => {
   return [...assetList, newAsset].filter(a => a).map(asset => constructLink(asset));
 };
 
+export const addStateAssets = (stateEntries, newAssets) => {
+  let assetList = selectAssetEntries(stateEntries);
+
+  return [...assetList, ...newAssets].filter(a => a).map(asset => constructLink(asset));
+};
+
 export const addStateEntry = (stateEntries, roleKey, fieldObject) => {
   const type =
     fieldObject.type === InternalMapping.ASSETSYS

@@ -39,7 +39,7 @@ import {
   getRolesToFetch
 } from './utils';
 
-import { addStateAsset, addStateEntry, removeStateEntry } from './utils/stateUtils';
+import { addStateAsset, addStateAssets, addStateEntry, removeStateEntry } from './utils/stateUtils';
 
 import { updateEntry } from './utils/sdkUtils';
 
@@ -107,6 +107,7 @@ export class App extends React.Component {
     this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
     this.linkAssetToTemplate = this.linkAssetToTemplate.bind(this);
+    this.linkAssetsToTemplate = this.linkAssetsToTemplate.bind(this);
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
   }
@@ -353,11 +354,15 @@ export class App extends React.Component {
   };
 
   linkAssetsToTemplate = (assets, roleKey) => {
-    const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
     const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
+    const firstAsset = this.state.entryInternalMapping[roleKey].value
+      ? this.state.entryInternalMapping[roleKey].value.find(el => el.type === InternalMapping.ASSET)
+      : undefined;
 
-    // TODO - work
+    const assetStyleClasses = firstAsset
+      ? firstAsset.styleClasses
+      : roleMappingObject.asset.defaultClasses; // duplicate existing asset style classes to maintain consistancy
     updatedInternalMapping.addEntriesOrAssets({
       key: roleKey,
       value: assets.map(asset => {
@@ -370,13 +375,19 @@ export class App extends React.Component {
             roleMappingObject.asset.type === c.ASSET_TYPE_IMAGE
               ? { fm: 'png', w: roleMappingObject.asset.formatting.maxWidth }
               : {},
-          styleClasses: roleMappingObject.asset.defaultClasses
+          styleClasses: assetStyleClasses
         });
       }),
       styleClasses: (roleMappingObject || {}).defaultClasses
     });
 
-    this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
+    const updatedAssetList = addStateAssets(this.state.entries, assets);
+
+    this.timeoutUpdateEntry({
+      updatedAssets: updatedAssetList,
+      updatedInternalMapping,
+      ms: 150
+    });
 
     this.fetchEntryByRoleKey(roleKey);
   };
