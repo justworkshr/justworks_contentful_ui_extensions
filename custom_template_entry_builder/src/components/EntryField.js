@@ -33,8 +33,7 @@ export const EntryField = props => {
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
             <DropdownListItem onClick={() => props.onEditClick(props.entry)}>Edit</DropdownListItem>
-            <DropdownListItem
-              onClick={() => props.onRemoveClick(props.roleKey, props.entry.sys.id)}>
+            <DropdownListItem onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
               Remove
             </DropdownListItem>
           </DropdownList>
@@ -60,7 +59,7 @@ export const EntryField = props => {
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
             <DropdownListItem
-              onClick={() => props.onRemoveFieldClick(props.roleKey, props.entry.sys.id)}>
+              onClick={() => props.onRemoveFieldClick(props.roleKey, props.entryIndex)}>
               Remove
             </DropdownListItem>
           </DropdownList>
@@ -99,6 +98,7 @@ export const EntryField = props => {
 
 EntryField.propTypes = {
   entry: PropTypes.object,
+  entryIndex: PropTypes.number,
   roleKey: PropTypes.string,
   roleMapping: PropTypes.object,
   isDragActive: PropTypes.bool,

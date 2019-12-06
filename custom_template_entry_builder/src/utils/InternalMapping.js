@@ -2,6 +2,8 @@ export const TEXT_MAPPING = 'text';
 export const MARKDOWN_MAPPING = 'markdown';
 export const ENTRY_MAPPING = 'entry';
 
+import { removeByIndex } from './index';
+
 export default class InternalMapping {
   constructor(json, templateMapping = { style: {} }) {
     const parsedJSON = this.loadInternalMapping(json);
@@ -297,13 +299,11 @@ export default class InternalMapping {
     return this.fieldRoles[key].type === InternalMapping.ENTRY;
   }
 
-  removeEntry(key, sysId = null) {
+  removeEntry(key, entryIndex = null) {
     // Only remove the entry with the passed in sysId if it's a multi-reference array
     // Otherwise remove the entire key.
     if (Array.isArray((this.fieldRoles[key] || {}).value)) {
-      this.fieldRoles[key].value = this.fieldRoles[key].value.filter(
-        entry => entry.value !== sysId
-      );
+      this.fieldRoles[key].value = removeByIndex(this.fieldRoles[key].value, entryIndex);
 
       // delete key entirely if array is now empty
       if (!this.fieldRoles[key].value.length) {

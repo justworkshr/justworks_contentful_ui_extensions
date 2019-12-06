@@ -25,6 +25,7 @@ import { customTemplates, templatePlaceholder } from '../../custom_templates/';
 import InternalMapping from './utils/InternalMapping';
 
 import {
+  removeByIndex,
   constructLink,
   groupByContentType,
   createEntry,
@@ -225,17 +226,17 @@ export class App extends React.Component {
     );
   };
 
-  onRemoveFieldClick = (roleKey, entrySysId = null) => {
+  onRemoveFieldClick = (roleKey, entryIndex = null) => {
     /*
       Removes fields or assets from internal mapping
     */
 
     const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.removeEntry(roleKey, entrySysId);
+    updatedInternalMapping.removeEntry(roleKey, entryIndex);
     const updatedEntryList = removeStateEntry(
       this.state.entries,
       updatedInternalMapping,
-      entrySysId
+      entryIndex
     );
     const updatedAssetList = selectAssetEntries(updatedEntryList).map(asset =>
       constructLink(asset)
@@ -247,9 +248,7 @@ export class App extends React.Component {
         const prevStateEntries = { ...prevState.entries };
 
         if (Array.isArray(prevStateEntries[roleKey])) {
-          prevStateEntries[roleKey] = prevStateEntries[roleKey].filter(
-            entry => entry.sys.id !== entrySysId
-          );
+          prevStateEntries[roleKey] = removeByIndex(prevStateEntries[roleKey], entryIndex);
 
           if (!prevStateEntries[roleKey].length) {
             delete prevStateEntries[roleKey];
@@ -548,24 +547,18 @@ export class App extends React.Component {
     }));
   };
 
-  onRemoveClick = (roleKey, sysId = null) => {
+  onRemoveClick = (roleKey, entryIndex = null) => {
     if (!roleKey) return null;
     const thisEntry = this.props.sdk.entry;
     const entriesValue = thisEntry.fields.entries.getValue();
-    const entrySysId = sysId ? sysId : this.state.entries[roleKey] || {};
     const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.removeEntry(roleKey, entrySysId);
-    const firstEntryInstance = entriesValue.find(e => e.sys.id === entrySysId);
-    const firstEntryIndex = entriesValue.indexOf(firstEntryInstance);
-    const updatedEntryList = [
-      ...entriesValue.slice(0, firstEntryIndex),
-      ...entriesValue.slice(firstEntryIndex + 1, entriesValue.length)
-    ];
+    updatedInternalMapping.removeEntry(roleKey, entryIndex);
+    const updatedEntryList = removeByIndex(entriesValue, entryIndex);
 
     const updatedStateEntryList = removeStateEntry(
       this.state.entries,
       updatedInternalMapping,
-      entrySysId
+      entryIndex
     );
 
     this.setState(
@@ -574,9 +567,7 @@ export class App extends React.Component {
         const prevStateEntries = { ...prevState.entries };
 
         if (Array.isArray(prevStateEntries[roleKey])) {
-          prevStateEntries[roleKey] = prevStateEntries[roleKey].filter(
-            entry => entry.sys.id !== entrySysId
-          );
+          prevStateEntries[roleKey] = removeByIndex(prevStateEntries[roleKey], entryIndex);
 
           if (!prevStateEntries[roleKey].length) {
             delete prevStateEntries[roleKey];
@@ -766,6 +757,7 @@ export class App extends React.Component {
               <EntryField
                 key={`entryfield-${roleKey}-${index}`}
                 entry={e}
+                entryIndex={index}
                 isLoading={!!this.state.loadingEntries[roleKey]}
                 isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
                 roleKey={roleKey}

@@ -1,5 +1,9 @@
 import InternalMapping from './InternalMapping';
 
+export const removeByIndex = (array, index) => {
+  return [...array.slice(0, index), ...array.slice(index + 1)];
+};
+
 export const getStatus = entry => {
   if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
     return 'published';

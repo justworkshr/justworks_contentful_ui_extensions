@@ -1,6 +1,6 @@
 import InternalMapping from './InternalMapping';
 
-import { selectAssetEntries, constructFieldEntry, constructLink } from './index';
+import { removeByIndex, selectAssetEntries, constructFieldEntry, constructLink } from './index';
 
 export const addStateAsset = (stateEntries, newAsset) => {
   let assetList = selectAssetEntries(stateEntries);
@@ -19,14 +19,14 @@ export const addStateEntry = (stateEntries, roleKey, fieldObject) => {
   };
 };
 
-export const removeStateEntry = (stateEntries, updatedInternalMapping, entrySysId = null) => {
+export const removeStateEntry = (stateEntries, updatedInternalMapping, entryIndex = null) => {
   return Object.assign(
     {},
     ...Object.keys(stateEntries)
       .filter(key => updatedInternalMapping.fieldKeys().includes(key))
       .map(key => ({
         [key]: Array.isArray(stateEntries[key])
-          ? stateEntries[key].filter(entry => entry.sys.id !== entrySysId)
+          ? removeByIndex(stateEntries[key], entryIndex)
           : stateEntries[key]
       }))
   );
