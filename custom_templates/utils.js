@@ -34,7 +34,7 @@ export const fieldObject = ({type, defaultClasses=''}={}) => {
 export const defaultStyleTypes = () => {
   return {
     'template_style': {
-      ...styleProperty({label: 'background_color', type: c.STYLE_TYPE_BACKGROUND_COLOR, description: 'The background color for this template.'})
+      ...styleProperty({label: 'background_color', type: c.STYLE_TYPE_BACKGROUND_COLOR, description: 'The background color for this template.', defaultClasses: 'bg-color-white'})
     }
   }
 }

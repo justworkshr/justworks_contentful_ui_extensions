@@ -1,23 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import * as c from '../../../../custom_templates/constants';
-
-import {
-  FormLabel,
-  TextLink,
-  RadioButtonField,
-  HelpText
-} from '@contentful/forma-36-react-components';
 
 import { getSectionedClassName, getSectionValue } from '../utils/styleEditorUtils';
 
-const ColorStyle = props => {
+import { FormLabel, RadioButtonField, TextLink } from '@contentful/forma-36-react-components';
+
+const StyleEditorFieldGroup = props => {
   return (
     <div className="style-editor__field-group">
-      <FormLabel htmlFor="">{`${props.label}${
-        props.sectionLabel ? '(' + props.sectionLabel + ')' : ''
-      }`}</FormLabel>
+      <FormLabel htmlFor="">
+        {props.label} ({props.sectionLabel})
+      </FormLabel>
       <TextLink
         className="style-editor__clear-link"
         icon="Close"
@@ -30,28 +24,25 @@ const ColorStyle = props => {
         }>
         Clear
       </TextLink>
-      {props.helpText && <HelpText>{props.helpText}</HelpText>}
       <div className="style-editor__inline-input-section">
         {props.styleClasses.map((classObject, index) => {
-          const color = c.COLORS.find(color => color.label === classObject.label);
-          const fieldId = `radio-${props.roleKey}-${props.section}-${classObject.className}`;
+          const fieldId = `radio-${classObject.className}`;
           return (
-            <div className="style-editor__radio-section" key={`text-color-section-${index}`}>
+            <div className="style-editor__radio-section" key={`text-alignment-section-${index}`}>
               <RadioButtonField
                 id={fieldId}
-                className="style-editor__radio-field style-editor__color-radio"
-                checked={props.classString
+                className="style-editor__radio-field"
+                checked={props.entryStyleClasses
                   .split(' ')
                   .filter(e => e)
                   .includes(getSectionedClassName(props.section, classObject.className))}
-                helpText={color.hexValue}
                 labelText={classObject.label}
                 value={classObject.className}
                 labelIsLight={true}
                 onChange={e =>
-                  props.onChange(
+                  props.updateStyleExclusive(
                     getSectionValue(e, props.section),
-                    props.classString,
+                    props.entryStyleClasses,
                     props.styleClasses.map(classObject => ({
                       ...classObject,
                       className: getSectionedClassName(props.section, classObject.className)
@@ -59,14 +50,6 @@ const ColorStyle = props => {
                   )
                 }
               />
-              <div className="style-editor__color-section">
-                <div
-                  className="style-editor__color-box"
-                  style={{
-                    backgroundColor: color.hexValue
-                  }}
-                />
-              </div>
             </div>
           );
         })}
@@ -75,21 +58,14 @@ const ColorStyle = props => {
   );
 };
 
-ColorStyle.propTypes = {
-  classString: PropTypes.string,
-  helpText: PropTypes.string,
+StyleEditorFieldGroup.propTypes = {
+  entryStyleClasses: PropTypes.string,
   label: PropTypes.string,
-  onChange: PropTypes.func,
   onClear: PropTypes.func,
-  roleKey: PropTypes.string,
+  updateStyleExclusive: PropTypes.func,
   section: PropTypes.string,
   sectionLabel: PropTypes.string,
   styleClasses: PropTypes.array
 };
 
-ColorStyle.defaultProps = {
-  classString: '',
-  section: ''
-};
-
-export default ColorStyle;
+export default StyleEditorFieldGroup;
