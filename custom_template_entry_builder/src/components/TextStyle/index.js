@@ -74,7 +74,7 @@ const TextStyle = props => {
                 classString={props.entryStyleClasses}
                 onChange={props.updateStyleExclusive}
                 onClear={props.onClear}
-                label="Text Color "
+                label="Text Color"
                 section={section}
                 sectionLabel={sectionLabel}
                 roleKey={props.roleKey}
