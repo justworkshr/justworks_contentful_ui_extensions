@@ -97,6 +97,20 @@ export const mockCustomTemplates = {
           contentTypes: ['customTemplate']
         }),
         description: `Multi field`
+      }),
+      no_style_multi_field: constructRole({
+        ...allowAsset({
+          type: c.ASSET_TYPE_IMAGE,
+          allowFormatting: false,
+          maxWidth: '200',
+          defaultClasses: 'icon-small icon-center'
+        }),
+        ...allowMultipleReferences({
+          allow: true,
+          allowStyle: false,
+          contentTypes: ['customTemplate']
+        }),
+        description: `Multi field`
       })
     }
   }

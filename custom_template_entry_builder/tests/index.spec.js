@@ -425,8 +425,13 @@ describe('App', () => {
       const mockEntry = {
         name: 'Mock Custom Template Entry',
         template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
-        entries: [mockLink({ id: '1' }), mockLink({ id: '2' })],
-        assets: [mockLink({ id: '3' })],
+        entries: [
+          mockLink({ id: 1 }),
+          mockLink({ id: 2 }),
+          mockLink({ id: 4 }),
+          mockLink({ id: 5 })
+        ],
+        assets: [mockLink({ id: 3 }), mockLink({ id: 6 })],
         internalMapping: JSON.stringify({
           fieldRoles: {
             grid_logo_multi_field: {
@@ -435,6 +440,14 @@ describe('App', () => {
                 mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 }),
                 mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 2 }),
                 mockAssetMapping({ value: 3 })
+              ]
+            },
+            no_style_multi_field: {
+              type: c.FIELD_TYPE_MULTI_REFERENCE,
+              value: [
+                mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 4 }),
+                mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 5 }),
+                mockAssetMapping({ value: 6 })
               ]
             }
           }
@@ -451,6 +464,11 @@ describe('App', () => {
               mockEntryResponse({ id: 1 }),
               mockEntryResponse({ id: 2 }),
               mockAssetResponse({ id: 3 })
+            ],
+            no_style_multi_field: [
+              mockEntryResponse({ id: 4 }),
+              mockEntryResponse({ id: 5 }),
+              mockAssetResponse({ id: 6 })
             ]
           }}
           templatePlaceholder={tm.mockCustomTemplates}
@@ -461,7 +479,23 @@ describe('App', () => {
       wrapper.find('RoleSection').forEach(node => {
         expect(node.find('EntryCard')).toHaveLength(2);
         expect(node.find('AssetCard')).toHaveLength(1);
-        expect(node.find('FieldStyleEditor')).toHaveLength(2);
+
+        const multiReferenceStyle =
+          templateConfig.fieldRoles[node.props().roleKey].multipleReferenceStyle;
+        // Only renders this style if multipleReferenceStyle property is set
+        if (multiReferenceStyle) {
+          expect(node.find({ type: multiReferenceStyle })).toHaveLength(1);
+        }
+
+        const asset = templateConfig.fieldRoles[node.props().roleKey].asset;
+        // Only renders this style if multipleReferenceStyle property is set
+        if (asset && asset.subType === c.ASSET_SUBTYPE_LOGO) {
+          expect(node.find({ type: c.FIELD_TYPE_ASSET })).toHaveLength(1);
+        }
+
+        if (!multiReferenceStyle && (!asset || (asset && asset.subType !== c.ASSET_SUBTYPE_LOGO))) {
+          expect(node.find('FieldStyleEditor')).toHaveLength(0);
+        }
       });
     });
   });
