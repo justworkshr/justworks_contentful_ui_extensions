@@ -112,24 +112,23 @@ export const getEntryContentTypeId = entry => {
 
 export const getEntryOrField = async (space, internalMapping, roleKey) => {
   const fieldType = internalMapping.getType(roleKey);
-  if (fieldType === InternalMapping.ENTRY) {
+  if (fieldType === c.FIELD_TYPE_ENTRY) {
     return await space.getEntry(internalMapping[roleKey].value);
-  } else if (fieldType === InternalMapping.ASSET) {
+  } else if (fieldType === c.FIELD_TYPE_ASSET) {
     return await space.getAsset(internalMapping[roleKey].value);
-  } else if (fieldType === InternalMapping.MULTI_REFERENCE) {
+  } else if (fieldType === c.FIELD_TYPE_MULTI_REFERENCE) {
     return await Promise.all(
       internalMapping[roleKey].value.map(async entry => {
         const entryType = entry.type;
-        if (entryType === InternalMapping.ENTRY) {
+        if (entryType === c.FIELD_TYPE_ENTRY) {
           return await space.getEntry(entry.value);
-        } else if (entryType === InternalMapping.ASSET) {
+        } else if (entryType === c.FIELD_TYPE_ASSET) {
           return await space.getAsset(entry.value);
         }
       })
     );
   } else {
-    const sysType =
-      fieldType === InternalMapping.ASSET ? InternalMapping.ASSETSYS : InternalMapping.FIELDSYS;
+    const sysType = fieldType === c.FIELD_TYPE_ASSET ? c.SYSTEM_TYPE_ASSET : c.SYSTEM_TYPE_FIELD;
 
     return constructFieldEntry(sysType, internalMapping[roleKey]);
   }
@@ -178,12 +177,12 @@ export const selectAssetEntries = stateEntries => {
     .reduce((reducer, entryKey) => {
       if (Array.isArray(stateEntries[entryKey])) {
         stateEntries[entryKey].forEach(entry => {
-          if (entry.sys.type === InternalMapping.ASSETSYS) {
+          if (entry.sys.type === c.SYSTEM_TYPE_ASSET) {
             reducer.push(entry);
           }
         });
       } else {
-        if (stateEntries[entryKey].sys.type === InternalMapping.ASSETSYS) {
+        if (stateEntries[entryKey].sys.type === c.SYSTEM_TYPE_ASSET) {
           reducer.push(stateEntries[entryKey]);
         }
       }

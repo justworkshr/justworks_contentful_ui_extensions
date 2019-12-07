@@ -30,11 +30,11 @@ const FieldStyleEditor = props => {
 
   const renderFieldStyle = props => {
     switch (props.type) {
-      case InternalMapping.MARKDOWN:
+      case c.FIELD_TYPE_MARKDOWN:
         return renderMarkdownStyle(props.roleMappingObject.styleClasses, props.entry.fields.value);
-      case InternalMapping.TEXT:
+      case c.FIELD_TYPE_TEXT:
         return renderTextStyle(props.roleMappingObject.styleClasses);
-      case InternalMapping.ASSET:
+      case c.FIELD_TYPE_ASSET:
         if (
           props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
           props.roleConfig.asset.subType === c.ASSET_SUBTYPE_LOGO
@@ -120,7 +120,7 @@ const FieldStyleEditor = props => {
       </div>
       {!!open && renderFieldStyle(props)}
       {!!open && // When mapping allows for asset formatting
-        !!props.type === InternalMapping.ASSETSYS &&
+        !!props.type === c.FIELD_TYPE_ASSET &&
         !!props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
         !!props.roleConfig.asset.allowFormatting &&
         renderFormattingStyle(props.roleMappingObject.formatting)}
@@ -146,7 +146,7 @@ FieldStyleEditor.defaultProps = {
   roleKey: '',
   roleConfig: {},
   roleMappingObject: {},
-  type: InternalMapping.TEXT
+  type: c.FIELD_TYPE_TEXT
 };
 
 export default FieldStyleEditor;

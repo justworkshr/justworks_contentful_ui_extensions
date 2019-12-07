@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMde from 'react-mde';
+
+import * as c from '../../../custom_templates/constants';
+
 import InternalMapping from '../utils/InternalMapping';
 
 import {
@@ -89,10 +92,10 @@ export const EntryField = props => {
       {(props.entry.sys || {}).type === 'Asset' && renderAssetCard()}
       {(props.entry.sys || {}).type === 'Entry' && renderEntryCard()}
       {(props.entry.sys || {}).type === 'Field' &&
-        props.entry.fields.type === InternalMapping.TEXT &&
+        props.entry.fields.type === c.FIELD_TYPE_TEXT &&
         renderTextField(props.entry.fields.value)}
       {(props.entry.sys || {}).type === 'Field' &&
-        props.entry.fields.type === InternalMapping.MARKDOWN &&
+        props.entry.fields.type === c.FIELD_TYPE_MARKDOWN &&
         renderMarkdownField(props.entry.fields.value)}
     </div>
   );

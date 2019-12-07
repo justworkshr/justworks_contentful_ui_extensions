@@ -1,6 +1,4 @@
-export const TEXT_MAPPING = 'text';
-export const MARKDOWN_MAPPING = 'markdown';
-export const ENTRY_MAPPING = 'entry';
+import * as c from '../../../custom_templates/constants';
 
 import { removeByIndex } from './index';
 
@@ -49,34 +47,6 @@ export default class InternalMapping {
         }
       });
     }
-  }
-
-  static get TEXT() {
-    return 'text';
-  }
-
-  static get MARKDOWN() {
-    return 'markdown';
-  }
-
-  static get ENTRY() {
-    return 'entry';
-  }
-
-  static get ASSET() {
-    return 'asset';
-  }
-
-  static get MULTI_REFERENCE() {
-    return 'multi-reference';
-  }
-
-  static get FIELDSYS() {
-    return 'Field';
-  }
-
-  static get ASSETSYS() {
-    return 'Asset';
   }
 
   static entryMapping({ type, styleClasses = '', value = '' } = {}) {
@@ -139,14 +109,14 @@ export default class InternalMapping {
           // if its an array, return array of mappings. Else, return direct object mapping.
           if (Array.isArray(this.fieldRoles[key])) {
             return this.fieldRoles[key].map(entry => {
-              if (entry.type === InternalMapping.ASSET) {
+              if (entry.type === c.FIELD_TYPE_ASSET) {
                 return InternalMapping.assetMapping({ ...entry });
               } else {
                 return InternalMapping.entryMapping({ ...entry });
               }
             });
           } else {
-            if (this.fieldRoles[key].type === InternalMapping.ASSET) {
+            if (this.fieldRoles[key].type === c.FIELD_TYPE_ASSET) {
               return InternalMapping.assetMapping({ ...this.fieldRoles[key] });
             } else {
               return InternalMapping.entryMapping({ ...this.fieldRoles[key] });
@@ -155,7 +125,7 @@ export default class InternalMapping {
         },
 
         set: value => {
-          if (this.fieldRoles[key].type === InternalMapping.ASSET) {
+          if (this.fieldRoles[key].type === c.FIELD_TYPE_ASSET) {
             this.fieldRoles[key] = InternalMapping.assetMapping({
               ...this.fieldRoles[key],
               value
@@ -175,7 +145,7 @@ export default class InternalMapping {
   addAsset(key, value, assetUrl, assetType, formatting, styleClasses) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.assetMapping({
-      type: InternalMapping.ASSET,
+      type: c.FIELD_TYPE_ASSET,
       value,
       assetUrl,
       assetType,
@@ -191,7 +161,7 @@ export default class InternalMapping {
      */
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
-      type: InternalMapping.ENTRY,
+      type: c.FIELD_TYPE_ENTRY,
       value
     });
   }
@@ -209,7 +179,7 @@ export default class InternalMapping {
     let valueArray = value.map(entry => {
       if (entry.assetUrl) {
         return InternalMapping.assetMapping({
-          type: InternalMapping.ASSET,
+          type: c.FIELD_TYPE_ASSET,
           value: entry.value,
           assetUrl: entry.assetUrl,
           assetType: entry.assetType,
@@ -218,7 +188,7 @@ export default class InternalMapping {
         });
       } else {
         return InternalMapping.entryMapping({
-          type: InternalMapping.ENTRY,
+          type: c.FIELD_TYPE_ENTRY,
           value: entry
         });
       }
@@ -229,7 +199,7 @@ export default class InternalMapping {
     }
 
     this.fieldRoles[key] = InternalMapping.entryMapping({
-      type: InternalMapping.MULTI_REFERENCE,
+      type: c.FIELD_TYPE_MULTI_REFERENCE,
       value: valueArray,
       styleClasses: (this.fieldRoles[key] || {}).styleClasses || styleClasses
     });
@@ -238,7 +208,7 @@ export default class InternalMapping {
   addTextField({ key, value = '', styleClasses = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
-      type: InternalMapping.TEXT,
+      type: c.FIELD_TYPE_TEXT,
       value,
       styleClasses
     });
@@ -247,7 +217,7 @@ export default class InternalMapping {
   addMarkdownField({ key, value = '', styleClasses = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
-      type: InternalMapping.MARKDOWN,
+      type: c.FIELD_TYPE_MARKDOWN,
       value,
       styleClasses
     });
@@ -261,13 +231,13 @@ export default class InternalMapping {
   addFieldToRole(roleKey, fieldType) {
     const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
     switch (fieldType) {
-      case InternalMapping.TEXT:
+      case c.FIELD_TYPE_TEXT:
         this.addTextField({
           key: roleKey,
           styleClasses: roleConfigObject.defaultClasses
         });
         break;
-      case InternalMapping.MARKDOWN:
+      case c.FIELD_TYPE_MARKDOWN:
         this.addMarkdownField({
           key: roleKey,
           styleClasses: roleConfigObject.defaultClasses
@@ -335,7 +305,7 @@ export default class InternalMapping {
   setImageFormatting(key, formattingObject) {
     const roleObject = this.fieldRoles[key];
 
-    if (roleObject.type !== InternalMapping.ASSET) {
+    if (roleObject.type !== c.FIELD_TYPE_ASSET) {
       throw new Error('Can only format an image asset');
     }
 
@@ -362,14 +332,14 @@ export default class InternalMapping {
 
   getType(key) {
     if (Array.isArray(this.fieldRoles[key])) {
-      return InternalMapping.MULTI_REFERENCE;
+      return c.FIELD_TYPE_MULTI_REFERENCE;
     } else {
       return this.fieldRoles[key].type;
     }
   }
 
   isEntry(key) {
-    return this.fieldRoles[key].type === InternalMapping.ENTRY;
+    return this.fieldRoles[key].type === c.FIELD_TYPE_ENTRY;
   }
 
   removeEntry(key, entryIndex = null) {

@@ -341,9 +341,7 @@ export class App extends React.Component {
     const firstAsset =
       this.state.entryInternalMapping[roleKey] &&
       !!this.state.entryInternalMapping[roleKey].value.length
-        ? this.state.entryInternalMapping[roleKey].value.find(
-            el => el.type === InternalMapping.ASSET
-          )
+        ? this.state.entryInternalMapping[roleKey].value.find(el => el.type === c.FIELD_TYPE_ASSET)
         : undefined;
 
     const assetStyleClasses = firstAsset
@@ -353,7 +351,7 @@ export class App extends React.Component {
       key: roleKey,
       value: assets.map(asset => {
         return InternalMapping.assetMapping({
-          type: InternalMapping.ASSET,
+          type: c.FIELD_TYPE_ASSET,
           value: asset.sys.id,
           assetUrl: asset.fields.file['en-US'].url,
           assetType: roleConfigObject.asset.type,
@@ -827,7 +825,7 @@ export class App extends React.Component {
               clearStyleField={this.clearReferencesStyle}
               entry={entry}
               title={displaySnakeCaseName(roleKey) + ' Style'}
-              type={InternalMapping.ASSET}
+              type={c.FIELD_TYPE_ASSET}
               useReferenceStyleClasses={true}
             />
           )}

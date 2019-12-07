@@ -2,7 +2,7 @@ import InternalMapping from './InternalMapping';
 import * as c from '../../../custom_templates/constants';
 
 export const renderSingleEntryStyle = (roleType, roleConfigObject) => {
-  if (c.FIELD_TYPES.includes(roleType)) return true; // if internalMapping type is a field
+  if (c.DIRECT_FIELD_TYPES.includes(roleType)) return true; // if internalMapping type is a field
   if (
     roleType === InternalMapping.asset &&
     roleConfigObject.asset &&
@@ -21,6 +21,6 @@ export const renderMultiReferenceItemStyle = (roleConfigObject, roleMappingObjec
   return (
     !!roleConfigObject.allowMultiReferenceStyle &&
     !!roleConfigObject.multipleReferenceStyle && // When multi-reference field has assets
-    !!roleMappingObject.value.find(entry => entry.type === InternalMapping.ASSET)
+    !!roleMappingObject.value.find(entry => entry.type === c.FIELD_TYPE_ASSET)
   );
 };

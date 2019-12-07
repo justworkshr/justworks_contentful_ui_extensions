@@ -1,4 +1,5 @@
 import InternalMapping from './InternalMapping';
+import * as c from '../../../custom_templates/constants';
 
 import { removeByIndex, selectAssetEntries, constructFieldEntry, constructLink } from './index';
 
@@ -15,10 +16,7 @@ export const addStateAssets = (stateEntries, newAssets) => {
 };
 
 export const addStateEntry = (stateEntries, roleKey, fieldObject) => {
-  const type =
-    fieldObject.type === InternalMapping.ASSETSYS
-      ? InternalMapping.ASSETSYS
-      : InternalMapping.FIELDSYS;
+  const type = fieldObject.type === c.FIELD_TYPE_ASSET ? c.SYSTEM_TYPE_ASSET : c.SYSTEM_TYPE_FIELD;
   return {
     ...stateEntries,
     [roleKey]: constructFieldEntry(type, fieldObject)
