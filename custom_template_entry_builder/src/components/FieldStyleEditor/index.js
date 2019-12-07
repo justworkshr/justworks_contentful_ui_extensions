@@ -39,8 +39,8 @@ const FieldStyleEditor = props => {
         return renderTextStyle(props.internalMappingObject.styleClasses);
       case InternalMapping.ASSETSYS:
         if (
-          props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&
-          props.roleMapping.asset.subType === c.ASSET_SUBTYPE_LOGO
+          props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
+          props.roleConfig.asset.subType === c.ASSET_SUBTYPE_LOGO
         ) {
           const styleClasses = props.useReferenceStyleClasses
             ? props.internalMappingObject.value[0].styleClasses
@@ -124,8 +124,8 @@ const FieldStyleEditor = props => {
       {!!open && renderFieldStyle(props)}
       {!!open && // When mapping allows for asset formatting
         !!props.type === InternalMapping.ASSETSYS &&
-        !!props.roleMapping.asset.type === c.ASSET_TYPE_IMAGE &&
-        !!props.roleMapping.asset.allowFormatting &&
+        !!props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
+        !!props.roleConfig.asset.allowFormatting &&
         renderFormattingStyle(props.internalMappingObject.formatting)}
     </div>
   );
@@ -135,7 +135,7 @@ FieldStyleEditor.propTypes = {
   clearStyleField: PropTypes.func,
   title: PropTypes.string,
   roleKey: PropTypes.string,
-  roleMapping: PropTypes.object,
+  roleConfig: PropTypes.object,
   internalMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
@@ -147,7 +147,7 @@ FieldStyleEditor.propTypes = {
 FieldStyleEditor.defaultProps = {
   entry: {},
   roleKey: '',
-  roleMapping: {},
+  roleConfig: {},
   internalMappingObject: {},
   type: InternalMapping.TEXT
 };

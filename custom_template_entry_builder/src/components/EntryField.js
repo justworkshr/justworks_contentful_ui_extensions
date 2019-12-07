@@ -50,7 +50,7 @@ export const EntryField = props => {
         size="default"
         title={props.entry.fields.title['en-US']}
         src={props.entry.fields.file['en-US'].url}
-        type={props.roleMapping.asset.type}
+        type={props.roleConfig.asset.type}
         status={getStatus(props.entry)}
         withDragHandle={true}
         onClick={() => props.onEditClick(props.entry, 'asset')}
@@ -100,7 +100,7 @@ EntryField.propTypes = {
   entry: PropTypes.object,
   entryIndex: PropTypes.number,
   roleKey: PropTypes.string,
-  roleMapping: PropTypes.object,
+  roleConfig: PropTypes.object,
   isDragActive: PropTypes.bool,
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,
@@ -114,7 +114,7 @@ EntryField.defaultProps = {
     sys: {}
   },
   roleKey: '',
-  roleMapping: {},
+  roleConfig: {},
   isLoading: false,
   isDragActive: false,
   onEditClick: () => {},

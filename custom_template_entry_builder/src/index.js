@@ -193,19 +193,19 @@ export class App extends React.Component {
   };
 
   onAddFieldClick = (roleKey, field) => {
-    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
+    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
     switch (field.type) {
       case InternalMapping.TEXT:
         updatedInternalMapping.addTextField({
           key: roleKey,
-          styleClasses: roleMappingObject.defaultClasses
+          styleClasses: roleConfigObject.defaultClasses
         });
         break;
       case InternalMapping.MARKDOWN:
         updatedInternalMapping.addMarkdownField({
           key: roleKey,
-          styleClasses: roleMappingObject.defaultClasses
+          styleClasses: roleConfigObject.defaultClasses
         });
         break;
       default:
@@ -348,7 +348,7 @@ export class App extends React.Component {
   };
 
   linkAssetsToTemplate = (assets, roleKey) => {
-    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
+    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
     const firstAsset =
       this.state.entryInternalMapping[roleKey] &&
@@ -360,7 +360,7 @@ export class App extends React.Component {
 
     const assetStyleClasses = firstAsset
       ? firstAsset.styleClasses
-      : roleMappingObject.asset.defaultClasses; // duplicate existing asset style classes to maintain consistancy
+      : roleConfigObject.asset.defaultClasses; // duplicate existing asset style classes to maintain consistancy
     updatedInternalMapping.addEntriesOrAssets({
       key: roleKey,
       value: assets.map(asset => {
@@ -368,15 +368,15 @@ export class App extends React.Component {
           type: InternalMapping.ASSET,
           value: asset.sys.id,
           assetUrl: asset.fields.file['en-US'].url,
-          assetType: roleMappingObject.asset.type,
+          assetType: roleConfigObject.asset.type,
           formatting:
-            roleMappingObject.asset.type === c.ASSET_TYPE_IMAGE
-              ? { fm: 'png', w: roleMappingObject.asset.formatting.maxWidth }
+            roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
+              ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
               : {},
           styleClasses: assetStyleClasses
         });
       }),
-      styleClasses: (roleMappingObject || {}).defaultClasses
+      styleClasses: (roleConfigObject || {}).defaultClasses
     });
 
     const updatedAssetList = addStateAssets(this.state.entries, assets);
@@ -392,18 +392,18 @@ export class App extends React.Component {
 
   linkAssetToTemplate = (asset, roleKey) => {
     const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
-    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
+    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
 
     updatedInternalMapping.addAsset(
       roleKey,
       asset.sys.id,
       asset.fields.file['en-US'].url,
-      roleMappingObject.asset.type,
-      roleMappingObject.asset.type === c.ASSET_TYPE_IMAGE
-        ? { fm: 'png', w: roleMappingObject.asset.formatting.maxWidth }
+      roleConfigObject.asset.type,
+      roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
+        ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
         : {},
-      roleMappingObject.asset.defaultClasses
+      roleConfigObject.asset.defaultClasses
     );
 
     const updatedAssetList = addStateAsset(this.state.entries, asset);
@@ -475,11 +475,11 @@ export class App extends React.Component {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
     const updatedEntryList = [...entriesFieldValue, ...entries.map(entry => constructLink(entry))];
     const updatedInternalMapping = this.state.entryInternalMapping;
-    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
+    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
     updatedInternalMapping.addEntriesOrAssets({
       key: roleKey,
       value: entries.map(entry => entry.sys.id),
-      styleClasses: (roleMappingObject || {}).defaultClasses
+      styleClasses: (roleConfigObject || {}).defaultClasses
     });
 
     this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
@@ -781,8 +781,8 @@ export class App extends React.Component {
     });
   }
 
-  renderEntryFields(roleKey, roleMappingObject, internalMappingObject, entry) {
-    if (roleMappingObject.allowMultipleReferences && !!entry) {
+  renderEntryFields(roleKey, roleConfigObject, internalMappingObject, entry) {
+    if (roleConfigObject.allowMultipleReferences && !!entry) {
       return (
         <div>
           {entry.map((e, index) => {
@@ -794,7 +794,7 @@ export class App extends React.Component {
                 isLoading={!!this.state.loadingEntries[roleKey]}
                 isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
                 roleKey={roleKey}
-                roleMapping={roleMappingObject}
+                roleConfig={roleConfigObject}
                 onEditClick={this.onEditClick}
                 onRemoveClick={this.onRemoveClick}
                 onRemoveFieldClick={this.onRemoveFieldClick}
@@ -816,26 +816,26 @@ export class App extends React.Component {
             onLinkEntryClick={this.onLinkEntryClick}
             onDeepCloneLinkClick={this.onDeepCloneLinkClick}
           />
-          {!!roleMappingObject.allowMultiReferenceStyle &&
-            !!roleMappingObject.multipleReferenceStyle && (
+          {!!roleConfigObject.allowMultiReferenceStyle &&
+            !!roleConfigObject.multipleReferenceStyle && (
               <FieldStyleEditor
                 roleKey={roleKey}
-                roleMapping={roleMappingObject}
+                roleConfig={roleConfigObject}
                 internalMappingObject={internalMappingObject}
                 updateStyle={this.updateEntryStyle}
                 updateAssetFormatting={this.updateAssetFormatting}
                 clearStyleField={this.clearEntryStyleClasses}
                 entry={entry}
                 title={displaySnakeCaseName(roleKey) + ' Collection Style'}
-                type={roleMappingObject.multipleReferenceStyle}
+                type={roleConfigObject.multipleReferenceStyle}
               />
             )}
-          {!!roleMappingObject.allowMultiReferenceStyle &&
-          !!roleMappingObject.multipleReferenceStyle && // When multi-reference field has assets
+          {!!roleConfigObject.allowMultiReferenceStyle &&
+          !!roleConfigObject.multipleReferenceStyle && // When multi-reference field has assets
             !!internalMappingObject.value.find(entry => entry.type === InternalMapping.ASSET) && (
               <FieldStyleEditor
                 roleKey={roleKey}
-                roleMapping={roleMappingObject}
+                roleConfig={roleConfigObject}
                 internalMappingObject={internalMappingObject}
                 updateStyle={this.updateReferencesStyle}
                 updateAssetFormatting={this.updateAssetFormatting}
@@ -856,7 +856,7 @@ export class App extends React.Component {
             isLoading={!!this.state.loadingEntries[roleKey]}
             isDragActive={entry ? this.state.draggingObject === entry.sys.id : false}
             roleKey={roleKey}
-            roleMapping={roleMappingObject}
+            roleConfig={roleConfigObject}
             onEditClick={this.onEditClick}
             onRemoveClick={this.onRemoveClick}
             onRemoveFieldClick={this.onRemoveFieldClick}
@@ -865,11 +865,11 @@ export class App extends React.Component {
           {((entry && entry.sys.type === 'Field') ||
             (entry &&
               entry.sys.type === 'Asset' &&
-              (roleMappingObject.asset.formatting.allow ||
-                roleMappingObject.asset.subType === c.ASSET_SUBTYPE_LOGO))) && (
+              (roleConfigObject.asset.formatting.allow ||
+                roleConfigObject.asset.subType === c.ASSET_SUBTYPE_LOGO))) && (
             <FieldStyleEditor
               roleKey={roleKey}
-              roleMapping={roleMappingObject}
+              roleConfig={roleConfigObject}
               internalMappingObject={internalMappingObject}
               updateStyle={this.updateEntryStyle}
               updateAssetFormatting={this.updateAssetFormatting}
@@ -951,7 +951,7 @@ export class App extends React.Component {
                     .sort((a, b) => (!this.state.templateConfig.fieldRoles[b] || {}).required)
                     .map((roleKey, index) => {
                       const entry = contentTypeGroups[groupKey][roleKey];
-                      const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey] || {};
+                      const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey] || {};
                       const internalMappingObject = this.state.entryInternalMapping.fieldRoles[
                         roleKey
                       ];
@@ -961,7 +961,7 @@ export class App extends React.Component {
                           key={index}
                           entry={entry}
                           roleKey={roleKey}
-                          roleMappingObject={roleMappingObject}
+                          roleConfigObject={roleConfigObject}
                           internalMappingObject={internalMappingObject}
                           renderEntryFields={this.renderEntryFields}
                           stateErrors={this.state.errors}

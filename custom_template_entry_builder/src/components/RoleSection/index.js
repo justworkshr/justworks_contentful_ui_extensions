@@ -18,7 +18,7 @@ const RoleSection = props => {
         <FormLabel
           className="role-section__heading"
           htmlFor=""
-          required={props.roleMappingObject.required}>
+          required={props.roleConfigObject.required}>
           <SectionHeading>{displaySnakeCaseName(props.roleKey)}</SectionHeading>
         </FormLabel>
         {!!props.entry && (props.entry.sys || {}).type === 'Field' && (
@@ -31,10 +31,10 @@ const RoleSection = props => {
           />
         )}
       </div>
-      <HelpText>{props.roleMappingObject.description}</HelpText>
+      <HelpText>{props.roleConfigObject.description}</HelpText>
       {props.renderEntryFields(
         props.roleKey,
-        props.roleMappingObject,
+        props.roleConfigObject,
         props.internalMappingObject,
         props.entry
       )}
@@ -55,7 +55,7 @@ RoleSection.propTypes = {
   entry: PropTypes.object,
   internalMappingObject: PropTypes.object,
   roleKey: PropTypes.string,
-  roleMappingObject: PropTypes.object,
+  roleConfigObject: PropTypes.object,
   renderEntryFields: PropTypes.func,
   stateErrors: PropTypes.object,
   onRemoveFieldClick: PropTypes.func
@@ -63,7 +63,7 @@ RoleSection.propTypes = {
 
 RoleSection.defaultProps = {
   entry: {},
-  roleMappingObject: {},
+  roleConfigObject: {},
   internalMappingObject: {},
   stateErrors: {}
 };
