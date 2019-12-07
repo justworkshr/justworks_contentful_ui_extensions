@@ -4,7 +4,7 @@ import { App } from '../../src/index';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
-
+import sinon from 'sinon';
 import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../mocks/templateMocks';
@@ -17,6 +17,10 @@ import {
   mockMapping,
   mockAssetMapping
 } from '../utils/mockUtils';
+
+const getRoleStyle = (internalMapping, roleKey) => {
+  return internalMapping.fieldRoles[roleKey].styleClasses;
+};
 
 const openStyleEditor = (wrapper, roleKey, type) => {
   return wrapper
@@ -40,6 +44,8 @@ const setStyleValue = (wrapper, roleKey, type, label, value) => {
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
+const sdkUpdateSpy = sinon.spy(App.prototype, 'timeoutUpdateEntry');
+
 describe('App', () => {
   describe('single entry style editing', () => {
     it('should update styleClasses', () => {
@@ -54,7 +60,7 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-
+      sdkUpdateSpy.resetHistory();
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
@@ -83,8 +89,13 @@ describe('App', () => {
       setStyleValue(wrapper, 'text_field', 'text', 'Text Color', value);
 
       // Adds value
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+      expect(getRoleStyle(wrapper.state().entryInternalMapping, 'text_field')).toEqual(
         `text-left ${value}`
+      );
+
+      // updates sdk
+      expect(getRoleStyle(sdkUpdateSpy.args[1][0]['updatedInternalMapping'], 'text_field')).toEqual(
+        'text-left text-navy'
       );
     });
 
@@ -118,6 +129,7 @@ describe('App', () => {
       );
 
       const value = 'text-black';
+
       // Starts with existing value
       expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
         value
@@ -125,6 +137,7 @@ describe('App', () => {
 
       openStyleEditor(wrapper, 'text_field', 'text');
 
+      // radio field is checked
       expect(
         wrapper
           .find({ roleKey: 'text_field' })
@@ -146,7 +159,7 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-
+      sdkUpdateSpy.resetHistory();
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
@@ -173,6 +186,11 @@ describe('App', () => {
 
       // removes corresponding class
       expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+        'text-black'
+      );
+
+      // updates sdk
+      expect(getRoleStyle(sdkUpdateSpy.args[1][0]['updatedInternalMapping'], 'text_field')).toEqual(
         'text-black'
       );
     });

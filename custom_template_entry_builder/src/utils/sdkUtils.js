@@ -51,11 +51,13 @@ export const updateEntry = async ({
   };
 
   try {
-    await sdk.space.updateEntry(newEntry);
+    const response = await sdk.space.updateEntry(newEntry);
     versionAttempts = 0;
     setStateFunc({
       errors
     });
+
+    return newEntry;
   } catch (err) {
     console.log(err);
     if (err.code === 'VersionMismatch') {
