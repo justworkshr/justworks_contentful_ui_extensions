@@ -82,7 +82,7 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      multi_field: constructRole({
+      grid_logo_multi_field: constructRole({
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           subType: c.ASSET_SUBTYPE_LOGO,

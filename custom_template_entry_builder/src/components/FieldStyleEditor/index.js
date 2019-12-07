@@ -5,7 +5,6 @@ import * as c from '../../../../custom_templates/constants';
 
 import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
 
-import InternalMapping from '../../utils/InternalMapping';
 import TextStyle from '../TextStyle';
 import ImageStyle from '../ImageStyle';
 import LogoStyle from '../LogoStyle';
@@ -24,7 +23,6 @@ const FieldStyleEditor = props => {
       .filter(className => !valuesArray.some(classObject => classObject.className === className));
 
     entryStyleClasses = [...entryStyleClasses, value].join(' ');
-
     props.updateStyle(props.roleKey, entryStyleClasses);
   };
 

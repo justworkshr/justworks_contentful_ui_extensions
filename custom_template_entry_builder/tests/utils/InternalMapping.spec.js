@@ -36,9 +36,9 @@ describe('InternalMapping', () => {
         style: {},
         fieldRoles: {
           text_field: {
+            defaultClasses: 'helloClass',
             field: {
               type: 'text',
-              defaultClasses: 'helloClass',
               defaultValue: 'TEXT!!!'
             }
           }

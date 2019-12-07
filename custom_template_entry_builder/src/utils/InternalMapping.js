@@ -42,7 +42,7 @@ export default class InternalMapping {
             key: roleKey,
             type: field.type,
             value: field.defaultValue,
-            styleClasses: field.defaultClasses
+            styleClasses: roleConfigObject.defaultClasses
           });
         }
       });

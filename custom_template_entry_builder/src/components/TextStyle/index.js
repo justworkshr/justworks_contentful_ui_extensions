@@ -4,20 +4,9 @@ import * as c from '../../../../custom_templates/constants';
 
 import ColorStyle from '../ColorStyle';
 
-import {
-  Tabs,
-  Tab,
-  FormLabel,
-  RadioButtonField,
-  TextLink
-} from '@contentful/forma-36-react-components';
+import { Tabs, Tab } from '@contentful/forma-36-react-components';
 
-import {
-  getSectionLabel,
-  getSectionedClassName,
-  isGlobalSection,
-  getSectionValue
-} from '../utils/styleEditorUtils';
+import { getSectionLabel, isGlobalSection } from '../utils/styleEditorUtils';
 
 import StyleEditorFieldGroup from '../StyleEditorFieldGroup';
 

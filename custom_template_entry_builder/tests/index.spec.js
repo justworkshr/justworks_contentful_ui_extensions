@@ -429,7 +429,7 @@ describe('App', () => {
         assets: [mockLink({ id: '3' })],
         internalMapping: JSON.stringify({
           fieldRoles: {
-            multi_field: {
+            grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
                 mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 }),
@@ -447,7 +447,7 @@ describe('App', () => {
         <App
           customTemplates={tm.mockCustomTemplates}
           entries={{
-            multi_field: [
+            grid_logo_multi_field: [
               mockEntryResponse({ id: 1 }),
               mockEntryResponse({ id: 2 }),
               mockAssetResponse({ id: 3 })
@@ -461,7 +461,144 @@ describe('App', () => {
       wrapper.find('RoleSection').forEach(node => {
         expect(node.find('EntryCard')).toHaveLength(2);
         expect(node.find('AssetCard')).toHaveLength(1);
+        expect(node.find('FieldStyleEditor')).toHaveLength(2);
       });
+    });
+  });
+
+  describe('single entry style editing', () => {
+    it('should update styleClasses', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_FIELDS_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // Starts with default classes
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+        'text-left text-black'
+      );
+
+      // Editor starts closed
+      expect(wrapper.find({ roleKey: 'text_field' }).find('ColorStyle')).toHaveLength(0);
+      expect(wrapper.find({ roleKey: 'text_field' }).find('StyleEditorFieldGroup')).toHaveLength(0);
+
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('FieldStyleEditor .style-editor__heading')
+        .at(0)
+        .simulate('click');
+
+      // Editor open
+      expect(wrapper.find({ roleKey: 'text_field' }).find('ColorStyle')).toHaveLength(1);
+      expect(wrapper.find({ roleKey: 'text_field' }).find('StyleEditorFieldGroup')).toHaveLength(3);
+
+      const value = 'text-navy';
+
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find(`FieldStyleEditor input[value="${value}"]`)
+        .at(0)
+        .simulate('change', { target: { value } });
+
+      // Adds value
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+        `text-left ${value}`
+      );
+    });
+
+    it('should load styleClasses', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_FIELDS_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            text_field: {
+              styleClasses: 'text-black'
+            }
+          }
+        })
+      };
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // Starts with existing value
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+        'text-black'
+      );
+    });
+
+    it('should clear styleClasses', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_FIELDS_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // Starts with default classes
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+        'text-left text-black'
+      );
+
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('FieldStyleEditor .style-editor__heading')
+        .at(0)
+        .simulate('click');
+
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('FieldStyleEditor')
+        .at(0)
+        .find('StyleEditorFieldGroup')
+        .at(0)
+        .find('TextLink.style-editor__clear-link')
+        .simulate('click');
+
+      // removes corresponding class
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+        'text-black'
+      );
     });
   });
 });
