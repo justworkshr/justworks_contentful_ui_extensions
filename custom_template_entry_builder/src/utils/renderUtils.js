@@ -1,8 +1,9 @@
 import InternalMapping from './InternalMapping';
 import * as c from '../../../custom_templates/constants';
+import { isDirectField } from './index';
 
 export const renderSingleEntryStyle = (roleType, roleConfigObject) => {
-  if (c.DIRECT_FIELD_TYPES.includes(roleType)) return true; // if internalMapping type is a field
+  if (isDirectField(roleType)) return true; // if internalMapping type is a field
   if (
     roleType === InternalMapping.asset &&
     roleConfigObject.asset &&

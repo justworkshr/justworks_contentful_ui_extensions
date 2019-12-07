@@ -1,6 +1,10 @@
 import InternalMapping from './InternalMapping';
 import * as c from '../../../custom_templates/constants';
 
+export const isDirectField = roleType => {
+  return c.DIRECT_FIELD_TYPES.includes(roleType);
+};
+
 export const removeByIndex = (array, index) => {
   return [...array.slice(0, index), ...array.slice(index + 1)];
 };

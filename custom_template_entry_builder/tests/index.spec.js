@@ -10,7 +10,7 @@ import * as c from '../../custom_templates/constants';
 import * as tm from './mocks/templateMocks';
 
 configure({ adapter: new Adapter() });
-
+jest.useFakeTimers();
 const mockLink = ({ id = 0, type = 'Entry' } = {}) => {
   return {
     sys: {
@@ -128,6 +128,7 @@ describe('App', () => {
     const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
     const sdk = mockSdk(mockEntry);
+
     it('should render the default editor state', () => {
       const wrapper = mount(
         <App
@@ -156,6 +157,36 @@ describe('App', () => {
         expect(node.find('EntryField')).toHaveLength(1);
         expect(node.find('FieldStyleEditor')).toHaveLength(1);
       });
+    });
+
+    it('should clear a field', () => {
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // Expects internal mapping in App state to have same keys as the template config
+      expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(
+        Object.keys(templateConfig.fieldRoles).length
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        // Assumes default field creation
+        expect(node.find('EntryField')).toHaveLength(1);
+        node.find('IconButton.role-section__remove-field').simulate('click');
+      });
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
+        expect(node.find('EntryField')).toHaveLength(0);
+        expect(node.find('FieldStyleEditor')).toHaveLength(0);
+      });
+
+      // Clears roles from App state
+      expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(0);
     });
   });
 });

@@ -4,8 +4,6 @@ import ReactMde from 'react-mde';
 
 import * as c from '../../../custom_templates/constants';
 
-import InternalMapping from '../utils/InternalMapping';
-
 import {
   TextInput,
   DropdownList,

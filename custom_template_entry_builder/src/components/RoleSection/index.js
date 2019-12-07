@@ -9,7 +9,7 @@ import {
   SectionHeading
 } from '@contentful/forma-36-react-components';
 
-import { displaySnakeCaseName } from '../../utils';
+import { isDirectField, displaySnakeCaseName } from '../../utils';
 
 const RoleSection = props => {
   return (
@@ -21,7 +21,7 @@ const RoleSection = props => {
           required={props.roleConfigObject.required}>
           <SectionHeading>{displaySnakeCaseName(props.roleKey)}</SectionHeading>
         </FormLabel>
-        {!!props.entry && (props.entry.sys || {}).type === 'Field' && (
+        {!!props.roleConfigObject.field && isDirectField(props.roleConfigObject.field.type) && (
           <IconButton
             className="role-section__remove-field"
             iconProps={{ icon: 'Close', size: 'large' }}

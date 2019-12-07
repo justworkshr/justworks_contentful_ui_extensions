@@ -240,7 +240,6 @@ export class App extends React.Component {
       prevState => {
         const prevStateLoadingEntries = { ...prevState.loadingEntries };
         const prevStateEntries = { ...prevState.entries };
-
         if (Array.isArray(prevStateEntries[roleKey])) {
           prevStateEntries[roleKey] = removeByIndex(prevStateEntries[roleKey], entryIndex);
 
