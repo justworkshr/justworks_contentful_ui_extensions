@@ -58,6 +58,7 @@ export class App extends React.Component {
   static propTypes = {
     sdk: PropTypes.object.isRequired,
     customTemplates: PropTypes.object.isRequired,
+    entries: PropTypes.object,
     templatePlaceholder: PropTypes.object
   };
 
@@ -87,7 +88,7 @@ export class App extends React.Component {
 
     */
     this.state = {
-      entries: {},
+      entries: this.props.entries || {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
       entryInternalMapping: template
@@ -771,11 +772,14 @@ export class App extends React.Component {
       return (
         <div>
           {entry.map((e, index) => {
+            const entryType = (roleMappingObject.value.find(el => el.value === e.sys.id) || {})
+              .type;
             return (
               <EntryField
                 key={`entryfield-${roleKey}-${index}`}
                 entry={e}
                 entryIndex={index}
+                fieldType={entryType}
                 isLoading={!!this.state.loadingEntries[roleKey]}
                 isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
                 roleKey={roleKey}
@@ -835,6 +839,7 @@ export class App extends React.Component {
         <div>
           <EntryField
             entry={entry}
+            fieldType={roleMappingObject.type}
             isLoading={!!this.state.loadingEntries[roleKey]}
             isDragActive={entry ? this.state.draggingObject === (entry.sys || {}).id : false}
             roleKey={roleKey}

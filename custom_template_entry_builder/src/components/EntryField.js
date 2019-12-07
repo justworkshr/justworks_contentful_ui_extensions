@@ -24,7 +24,7 @@ export const EntryField = props => {
         loading={props.isLoading}
         className="role-section__entity"
         size="small"
-        title={props.entry ? props.entry.fields.name['en-US'] : 'Loading...'}
+        title={props.entry.fields ? props.entry.fields.name['en-US'] : 'Loading...'}
         contentType={
           (props.entry.sys || {}).contentType ? getEntryContentTypeId(props.entry) : null
         }
@@ -51,8 +51,8 @@ export const EntryField = props => {
         draggable
         className="role-section__entity"
         size="default"
-        title={props.entry.fields.title['en-US']}
-        src={props.entry.fields.file['en-US'].url}
+        title={props.entry.fields ? props.entry.fields.title['en-US'] : ''}
+        src={props.entry.fields ? props.entry.fields.file['en-US'].url : ''}
         type={props.roleConfig.asset.type}
         status={getStatus(props.entry)}
         withDragHandle={true}
@@ -85,10 +85,11 @@ export const EntryField = props => {
       />
     );
   };
+
   return (
     <div className="custom-template-entry-field">
-      {(props.entry.sys || {}).type === 'Asset' && renderAssetCard()}
-      {(props.entry.sys || {}).type === 'Entry' && renderEntryCard()}
+      {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}
+      {props.fieldType === c.FIELD_TYPE_ENTRY && renderEntryCard()}
       {(props.entry.sys || {}).type === 'Field' &&
         props.entry.fields.type === c.FIELD_TYPE_TEXT &&
         renderTextField(props.entry.fields.value)}
@@ -104,6 +105,8 @@ EntryField.propTypes = {
   entryIndex: PropTypes.number,
   roleKey: PropTypes.string,
   roleConfig: PropTypes.object,
+  roleMapping: PropTypes.object,
+  fieldType: PropTypes.string,
   isDragActive: PropTypes.bool,
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,

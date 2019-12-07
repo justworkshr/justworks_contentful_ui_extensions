@@ -21,7 +21,7 @@ const RoleSection = props => {
           required={props.roleConfigObject.required}>
           <SectionHeading>{displaySnakeCaseName(props.roleKey)}</SectionHeading>
         </FormLabel>
-        {!!props.roleConfigObject.field && isDirectField(props.roleConfigObject.field.type) && (
+        {isDirectField(props.roleMappingObject.type) && (
           <IconButton
             className="role-section__remove-field"
             iconProps={{ icon: 'Close', size: 'large' }}

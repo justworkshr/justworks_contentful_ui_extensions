@@ -24,7 +24,7 @@ export const cardBlock = {
       }),
       right_media: constructRole({
         contentType: c.CONTENT_TYPE_MEDIA,
-        ...allowAsset({ maxWidth: '800' }),
+        ...allowAsset({type: c.ASSET_TYPE_IMAGE, allowFormatting: false, maxWidth: '800' }),
         required: true,
         description: 'Media to display on the right half section.'
       }),
@@ -47,7 +47,7 @@ export const cardBlock = {
         description: 'Text for the optional tag on the upper right corner of the card.'
       }),
       background_media: constructRole({
-        ...allowAsset({ maxWidth: '800' }),
+        ...allowAsset({type: c.ASSET_TYPE_IMAGE, allowFormatting: false, maxWidth: '800' }),
         required: false,
         description: 'Specific triangular SVG background for the right half of the card.'
       }),

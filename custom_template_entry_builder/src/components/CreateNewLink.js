@@ -7,6 +7,7 @@ import {
   TextLink
 } from '@contentful/forma-36-react-components';
 
+// TODO - refactor to use react hooks
 class CreateNewLink extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +42,7 @@ class CreateNewLink extends React.Component {
   renderMultipleContentTypes() {
     return (
       <Dropdown
-        className="link-entries-row__button"
+        className={this.props.className}
         toggleElement={
           <TextLink icon="Plus" linkType="primary">
             Create new
@@ -92,7 +93,7 @@ class CreateNewLink extends React.Component {
   renderSingleContentTypeAndAsset() {
     return (
       <Dropdown
-        className="link-entries-row__button"
+        className={this.props.className}
         toggleElement={
           <TextLink icon="Plus" linkType="primary">
             Create new
@@ -127,7 +128,7 @@ class CreateNewLink extends React.Component {
         <TextLink
           icon="Plus"
           linkType="primary"
-          className="link-entries-row__button"
+          className={this.props.className}
           onClick={() =>
             this.props.onAddEntryClick({
               roleKey: this.props.roleKey,
@@ -142,7 +143,7 @@ class CreateNewLink extends React.Component {
         <TextLink
           icon="Plus"
           linkType="primary"
-          className="link-entries-row__button"
+          className={this.props.className}
           onClick={() =>
             this.props.onAddEntryClick({
               roleKey: this.props.roleKey,
@@ -164,6 +165,7 @@ CreateNewLink.defaultProps = {
 
 CreateNewLink.propTypes = {
   onAddEntryClick: PropTypes.func,
+  className: PropTypes.string,
   allowAsset: PropTypes.bool,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   roleKey: PropTypes.string,

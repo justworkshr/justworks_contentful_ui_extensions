@@ -21,6 +21,67 @@ const mockLink = ({ id = 0, type = 'Entry' } = {}) => {
   };
 };
 
+const mockAssetResponse = ({ id = 0, url = 'localhost', assetType = 'image/png' } = {}) => {
+  return {
+    sys: {
+      id: id,
+      type: 'Asset'
+    },
+    fields: {
+      title: {
+        'en-US': 'Asset Title.'
+      },
+      file: {
+        'en-US': {
+          url,
+          contentType: assetType
+        }
+      }
+    }
+  };
+};
+
+const mockEntryResponse = ({ id = 0 } = {}) => {
+  return {
+    sys: {
+      id: id,
+      type: 'Entry'
+    },
+    fields: {
+      name: {
+        'en-US': 'Entry Title.'
+      },
+      f1: {
+        'en-US': 'text!!!'
+      }
+    }
+  };
+};
+
+const mockMapping = ({ type, value = '', styleClasses = '' } = {}) => {
+  return {
+    type,
+    value,
+    styleClasses
+  };
+};
+
+const mockAssetMapping = ({
+  type = c.FIELD_TYPE_ASSET,
+  value = '',
+  styleClasses = '',
+  assetUrl = 'localhost',
+  formatting = {}
+} = {}) => {
+  return {
+    type,
+    value,
+    styleClasses,
+    assetUrl,
+    formatting
+  };
+};
+
 const mockSdk = mockCustomTemplateEntry => {
   const getValue = (entry, field) => {
     return entry[field];
@@ -69,6 +130,7 @@ describe('App', () => {
       name: '',
       template: '',
       entries: undefined,
+      assets: undefined,
       internalMapping: ''
     };
 
@@ -88,12 +150,8 @@ describe('App', () => {
     const mockEntry = {
       name: 'Mock Custom Template Entry',
       template: tm.MOCK_TEMPLATE_NAME,
-      entries: {
-        ...mockLink({ id: '1' })
-      },
-      assets: {
-        ...mockLink({ id: '2', type: 'Asset' })
-      },
+      entries: [mockLink({ id: '1' })],
+      assets: [mockLink({ id: '2' })],
       internalMapping: JSON.stringify({
         fieldRoles: {
           left_section: '1',
@@ -120,8 +178,8 @@ describe('App', () => {
     const mockEntry = {
       name: 'Mock Custom Template Entry',
       template: tm.MOCK_FIELDS_TEMPLATE,
-      entries: {},
-      assets: {},
+      entries: undefined,
+      assets: undefined,
       internalMapping: ''
     };
 
@@ -141,7 +199,9 @@ describe('App', () => {
       expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
 
       // 1 Role Section per FieldRole
-      expect(wrapper.find('RoleSection')).toHaveLength(2);
+      expect(wrapper.find('RoleSection')).toHaveLength(
+        Object.keys(templateConfig.fieldRoles).length
+      );
 
       // Tests Role Section render
       wrapper.find('RoleSection').forEach(node => {
@@ -187,6 +247,221 @@ describe('App', () => {
 
       // Clears roles from App state
       expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(0);
+    });
+  });
+
+  describe('a template w/ asset fields', () => {
+    const templateConfig = tm.mockCustomTemplates[tm.MOCK_ASSETS_TEMPLATE];
+
+    it('should render the default editor state', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_ASSETS_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
+      expect(wrapper.find('RoleSection')).toHaveLength(
+        Object.keys(templateConfig.fieldRoles).length
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('CreateNewLink')).toHaveLength(1);
+        expect(node.find('LinkExisting')).toHaveLength(1);
+        expect(node.find('AssetCard')).toHaveLength(0);
+      });
+    });
+
+    it('renders asset cards', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_ASSETS_TEMPLATE,
+        entries: undefined,
+        assets: [mockLink({ id: '1' }), mockLink({ id: '2' }), mockLink({ id: '3' })],
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            image_asset: mockAssetMapping({ value: 1 }),
+            formattable_image_asset: mockAssetMapping({ value: 2 }),
+            logo_asset: mockAssetMapping({ value: 3 })
+          }
+        })
+      };
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          entries={{
+            image_asset: mockAssetResponse({ id: 1 }),
+            formattable_image_asset: mockAssetResponse({ id: 2 }),
+            logo_asset: mockAssetResponse({ id: 3 })
+          }}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('AssetCard')).toHaveLength(1);
+      });
+    });
+  });
+
+  describe('a template w/ entry fields', () => {
+    const templateConfig = tm.mockCustomTemplates[tm.MOCK_ENTRY_TEMPLATE];
+
+    it('should render the default editor state', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_ENTRY_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
+      expect(wrapper.find('RoleSection')).toHaveLength(
+        Object.keys(templateConfig.fieldRoles).length
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('CreateNewLink')).toHaveLength(1);
+        expect(node.find('LinkExisting')).toHaveLength(1);
+        expect(node.find('EntryCard')).toHaveLength(0);
+      });
+    });
+
+    it('renders entry cards', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_ENTRY_TEMPLATE,
+        entries: [mockLink({ id: '1' })],
+        assets: undefined,
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            entry_field: mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 })
+          }
+        })
+      };
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          entries={{
+            entry_field: mockEntryResponse({ id: 1 })
+          }}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('EntryCard')).toHaveLength(1);
+        expect(node.find('FieldStyleEditor')).toHaveLength(0);
+      });
+    });
+  });
+
+  describe('a template w/ multi-reference fields', () => {
+    const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_TEMPLATE];
+
+    it('should render the default editor state', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
+      expect(wrapper.find('RoleSection')).toHaveLength(
+        Object.keys(templateConfig.fieldRoles).length
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('CreateNewLink')).toHaveLength(1);
+        expect(node.find('LinkExisting')).toHaveLength(1);
+        expect(node.find('EntryCard')).toHaveLength(0);
+      });
+    });
+
+    it('renders multiple entry/asset cards', () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        entries: [mockLink({ id: '1' }), mockLink({ id: '2' })],
+        assets: [mockLink({ id: '3' })],
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            multi_field: {
+              type: c.FIELD_TYPE_MULTI_REFERENCE,
+              value: [
+                mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 }),
+                mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 2 }),
+                mockAssetMapping({ value: 3 })
+              ]
+            }
+          }
+        })
+      };
+
+      const sdk = mockSdk(mockEntry);
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          entries={{
+            multi_field: [
+              mockEntryResponse({ id: 1 }),
+              mockEntryResponse({ id: 2 }),
+              mockAssetResponse({ id: 3 })
+            ]
+          }}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('EntryCard')).toHaveLength(2);
+        expect(node.find('AssetCard')).toHaveLength(1);
+      });
     });
   });
 });

@@ -21,6 +21,7 @@ const EntryActionRow = props => {
         <CreateNewLink
           allowedCustomTemplates={props.allowedCustomTemplates}
           allowAsset={!!props.allowAsset}
+          className="entry-action-button__create-new link-entries-row__button"
           onAddEntryClick={props.onAddEntryClick}
           contentTypes={props.contentTypes}
           roleKey={props.roleKey}
