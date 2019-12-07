@@ -16,6 +16,10 @@ export const CONTENT_TYPE_LINK = 'link'
 
 export const FIELD_TYPE_TEXT = 'text'
 export const FIELD_TYPE_MARKDOWN = 'markdown'
+export const FIELD_TYPES = [
+  FIELD_TYPE_TEXT,
+  FIELD_TYPE_MARKDOWN
+] // used in "displaySingleEntryStyle"
 
 export * from './styleClasses'
 

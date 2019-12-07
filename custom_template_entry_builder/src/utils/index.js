@@ -1,4 +1,5 @@
 import InternalMapping from './InternalMapping';
+import * as c from '../../../custom_templates/constants';
 
 export const removeByIndex = (array, index) => {
   return [...array.slice(0, index), ...array.slice(index + 1)];

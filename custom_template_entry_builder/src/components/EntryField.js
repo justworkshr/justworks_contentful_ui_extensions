@@ -24,7 +24,9 @@ export const EntryField = props => {
         className="role-section__entity"
         size="small"
         title={props.entry ? props.entry.fields.name['en-US'] : 'Loading...'}
-        contentType={props.entry.sys.contentType ? getEntryContentTypeId(props.entry) : null}
+        contentType={
+          (props.entry.sys || {}).contentType ? getEntryContentTypeId(props.entry) : null
+        }
         status={getStatus(props.entry)}
         withDragHandle={true}
         isDragActive={props.isDragActive}
@@ -84,12 +86,12 @@ export const EntryField = props => {
   };
   return (
     <div className="custom-template-entry-field">
-      {props.entry.sys.type === 'Asset' && renderAssetCard()}
-      {props.entry.sys.type === 'Entry' && renderEntryCard()}
-      {props.entry.sys.type === 'Field' &&
+      {(props.entry.sys || {}).type === 'Asset' && renderAssetCard()}
+      {(props.entry.sys || {}).type === 'Entry' && renderEntryCard()}
+      {(props.entry.sys || {}).type === 'Field' &&
         props.entry.fields.type === InternalMapping.TEXT &&
         renderTextField(props.entry.fields.value)}
-      {props.entry.sys.type === 'Field' &&
+      {(props.entry.sys || {}).type === 'Field' &&
         props.entry.fields.type === InternalMapping.MARKDOWN &&
         renderMarkdownField(props.entry.fields.value)}
     </div>

@@ -35,7 +35,7 @@ const RoleSection = props => {
       {props.renderEntryFields(
         props.roleKey,
         props.roleConfigObject,
-        props.internalMappingObject,
+        props.roleMappingObject,
         props.entry
       )}
 
@@ -53,7 +53,7 @@ const RoleSection = props => {
 
 RoleSection.propTypes = {
   entry: PropTypes.object,
-  internalMappingObject: PropTypes.object,
+  roleMappingObject: PropTypes.object,
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,
   renderEntryFields: PropTypes.func,
@@ -62,9 +62,9 @@ RoleSection.propTypes = {
 };
 
 RoleSection.defaultProps = {
-  entry: {},
+  entry: undefined,
   roleConfigObject: {},
-  internalMappingObject: {},
+  roleMappingObject: {},
   stateErrors: {}
 };
 

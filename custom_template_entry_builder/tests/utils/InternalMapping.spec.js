@@ -4,12 +4,79 @@ describe('InternalMapping', () => {
   describe('constructor', () => {
     it('returns empty object if blank string', () => {
       const json = '';
-      expect(new InternalMapping(json)).toEqual({ fieldRoles: {}, style: {} });
+      expect(new InternalMapping(json)).toEqual({
+        _templateConfig: {
+          style: {},
+          fieldRoles: {}
+        },
+        fieldRoles: {},
+        style: {}
+      });
     });
 
     it('returns empty object if invalid', () => {
       const json = undefined;
-      expect(new InternalMapping(json)).toEqual({ fieldRoles: {}, style: {} });
+      expect(new InternalMapping(json)).toEqual({
+        _templateConfig: {
+          style: {},
+          fieldRoles: {}
+        },
+        fieldRoles: {},
+        style: {}
+      });
+    });
+
+    it('loads fields if internalMapping is blank', () => {
+      const json = JSON.stringify({
+        fieldRoles: {},
+        style: {}
+      });
+
+      const templateConfig = {
+        style: {},
+        fieldRoles: {
+          text_field: {
+            field: {
+              type: 'text',
+              defaultClasses: 'helloClass',
+              defaultValue: 'TEXT!!!'
+            }
+          }
+        }
+      };
+
+      const internalMapping = new InternalMapping(json, templateConfig);
+      expect(internalMapping.text_field.type).toEqual('text');
+      expect(internalMapping.text_field.value).toEqual('TEXT!!!');
+      expect(internalMapping.text_field.styleClasses).toEqual('helloClass');
+    });
+
+    it('does not load fields if internalMapping is not blank', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          text_field: {
+            type: 'text',
+            value: 'occupied'
+          }
+        },
+        style: {}
+      });
+
+      const templateConfig = {
+        style: {},
+        fieldRoles: {
+          text_field: {
+            field: {
+              type: 'text',
+              defaultClasses: 'helloClass',
+              defaultValue: 'TEXT!!!'
+            }
+          }
+        }
+      };
+
+      const internalMapping = new InternalMapping(json, templateConfig);
+      expect(internalMapping.text_field.value).toEqual('occupied');
     });
 
     it('returns class', () => {
@@ -25,7 +92,8 @@ describe('InternalMapping', () => {
             hiProperty: { defaultClasses: 'hiclass' },
             hiProperty2: { defaultClasses: 'hiclass2 hiclass3' }
           }
-        }
+        },
+        fieldRoles: {}
       };
       const json = JSON.stringify({ fieldRoles: {} });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
@@ -34,7 +102,7 @@ describe('InternalMapping', () => {
     });
 
     it('does not set default styles if already defined', () => {
-      const templateConfig = { style: { hi: { defaultClasses: 'hiclass' } } };
+      const templateConfig = { style: { hi: { defaultClasses: 'hiclass' } }, fieldRoles: {} };
       const json = JSON.stringify({ fieldRoles: {}, style: { hi: { styleClasses: 'byeClass' } } });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
         hi: { styleClasses: 'byeClass' }
@@ -92,7 +160,6 @@ describe('InternalMapping', () => {
       it('with blank start - sets the type and sets the value', () => {
         const json = JSON.stringify({});
         const internalMapping = new InternalMapping(json);
-        internalMapping.addField('entry', 'hi');
         internalMapping.addEntry('hi', 'bye');
         expect(internalMapping.hi.type).toEqual('entry');
         expect(internalMapping.hi.value).toEqual('bye');
@@ -158,6 +225,24 @@ describe('InternalMapping', () => {
         expect(internalMapping.hi.value[1].value).toEqual('bye');
         expect(internalMapping.hi.value[1].assetUrl).toEqual('url');
         expect(internalMapping.hi.value[1].assetType).toEqual('image');
+      });
+    });
+
+    describe('addfield', () => {
+      const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+      const internalMapping = new InternalMapping(json);
+
+      internalMapping.addField({
+        key: 'hi',
+        type: 'text',
+        value: 'bye',
+        styleClasses: 'text-left'
+      });
+
+      it('sets the type, value, and classes for the key', () => {
+        expect(internalMapping.hi.type).toEqual('text');
+        expect(internalMapping.hi.value).toEqual('bye');
+        expect(internalMapping.hi.styleClasses).toEqual('text-left');
       });
     });
 

@@ -95,8 +95,10 @@ describe('App', () => {
         ...mockLink({ id: '2', type: 'Asset' })
       },
       internalMapping: JSON.stringify({
-        left_section: '1',
-        right_section: '2',
+        fieldRoles: {
+          left_section: '1',
+          right_section: '2'
+        },
         style: {}
       })
     };
@@ -149,8 +151,10 @@ describe('App', () => {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(false);
         }
 
-        // Should render add-field button for empty role section w/ field
-        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
+        // Should render the fields and style editors by default
+        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(0);
+        expect(node.find('EntryField')).toHaveLength(1);
+        expect(node.find('FieldStyleEditor')).toHaveLength(1);
       });
     });
   });

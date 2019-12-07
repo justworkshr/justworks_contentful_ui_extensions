@@ -5,26 +5,19 @@ export const ENTRY_MAPPING = 'entry';
 import { removeByIndex } from './index';
 
 export default class InternalMapping {
-  constructor(json, templateConfig = { style: {} }) {
+  constructor(json, templateConfig = { style: {}, fieldRoles: {} }) {
     /*
       json - string - the raw JSON of the internalMapping field
       templateConfig - object - the corresponding custom template config object from './customTemplates'
 
     */
+    this._templateConfig = templateConfig;
+
     const parsedJSON = this.loadInternalMapping(json);
 
-    Object.keys(InternalMapping.blankMapping).forEach(key => {
-      this[key] = parsedJSON[key] || InternalMapping.blankMapping[key];
-    });
+    this.assignRolesFromMapping(parsedJSON);
 
-    Object.keys(parsedJSON.fieldRoles || {}).forEach(key => {
-      if (key === 'style')
-        throw new Error('Cannot name an entryRole "style". This is a reserved key.');
-      this.fieldRoles[key] = parsedJSON.fieldRoles[key];
-
-      this.defineGetterSetters(key);
-    });
-
+    // Load default style classes if none present
     if (templateConfig.style) {
       Object.keys(templateConfig.style).forEach(styleSectionKey => {
         if (!templateConfig.style[styleSectionKey]) return;
@@ -37,6 +30,22 @@ export default class InternalMapping {
           });
 
           this.style[styleSectionKey].styleClasses = classArray.join(' ');
+        }
+      });
+    }
+
+    // load default fields if internalMapping role is blank and the roleConfig allows a field.
+    if (parsedJSON && this._templateConfig) {
+      Object.keys(this._templateConfig.fieldRoles).forEach(roleKey => {
+        const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
+        if (!parsedJSON.fieldRoles[roleKey] && roleConfigObject.field) {
+          const field = roleConfigObject.field;
+          this.addField({
+            key: roleKey,
+            type: field.type,
+            value: field.defaultValue,
+            styleClasses: field.defaultClasses
+          });
         }
       });
     }
@@ -106,6 +115,21 @@ export default class InternalMapping {
   loadInternalMapping(json) {
     if (!json || !typeof json === 'string') return InternalMapping.blankMapping;
     return JSON.parse(json);
+  }
+
+  assignRolesFromMapping(parsedJSON) {
+    // Prepare the blank object structure: {fieldRoles: {}, style: {}}
+    Object.keys(InternalMapping.blankMapping).forEach(key => {
+      this[key] = parsedJSON[key] || InternalMapping.blankMapping[key];
+    });
+
+    // Load values from the entry's internalMapping Json
+    Object.keys(parsedJSON.fieldRoles || {}).forEach(key => {
+      if (key === 'style')
+        throw new Error('Cannot name an entryRole "style". This is a reserved key.');
+      this.fieldRoles[key] = parsedJSON.fieldRoles[key];
+      this.defineGetterSetters(key);
+    });
   }
 
   defineGetterSetters(key) {
@@ -229,9 +253,29 @@ export default class InternalMapping {
     });
   }
 
-  addField(key, type, value = '', styleClasses = '') {
+  addField({ key, type, value = '', styleClasses = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({ type: type, value, styleClasses });
+  }
+
+  addFieldToRole(roleKey, fieldType) {
+    const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
+    switch (fieldType) {
+      case InternalMapping.TEXT:
+        this.addTextField({
+          key: roleKey,
+          styleClasses: roleConfigObject.defaultClasses
+        });
+        break;
+      case InternalMapping.MARKDOWN:
+        this.addMarkdownField({
+          key: roleKey,
+          styleClasses: roleConfigObject.defaultClasses
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   setStyleClasses(key, styleClasses) {
@@ -303,6 +347,7 @@ export default class InternalMapping {
       Object.assign(
         {},
         ...Object.keys(this).map(key => {
+          if (key === '_templateConfig') return; // Skip templateConfig object
           return {
             [key.charAt(0) === '_' ? key.slice(1) : key]: this[key]
           };

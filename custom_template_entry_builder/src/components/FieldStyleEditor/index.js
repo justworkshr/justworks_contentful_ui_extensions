@@ -31,25 +31,22 @@ const FieldStyleEditor = props => {
   const renderFieldStyle = props => {
     switch (props.type) {
       case InternalMapping.MARKDOWN:
-        return renderMarkdownStyle(
-          props.internalMappingObject.styleClasses,
-          props.entry.fields.value
-        );
+        return renderMarkdownStyle(props.roleMappingObject.styleClasses, props.entry.fields.value);
       case InternalMapping.TEXT:
-        return renderTextStyle(props.internalMappingObject.styleClasses);
-      case InternalMapping.ASSETSYS:
+        return renderTextStyle(props.roleMappingObject.styleClasses);
+      case InternalMapping.ASSET:
         if (
           props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
           props.roleConfig.asset.subType === c.ASSET_SUBTYPE_LOGO
         ) {
           const styleClasses = props.useReferenceStyleClasses
-            ? props.internalMappingObject.value[0].styleClasses
-            : props.internalMappingObject.styleClasses;
+            ? props.roleMappingObject.value[0].styleClasses
+            : props.roleMappingObject.styleClasses;
           return renderLogoStyle(styleClasses);
         }
         break;
       case c.MULTI_REFERENCE_STYLE_FLEX:
-        return renderMultiReferenceStyle(props.internalMappingObject.styleClasses);
+        return renderMultiReferenceStyle(props.roleMappingObject.styleClasses);
     }
   };
 
@@ -126,7 +123,7 @@ const FieldStyleEditor = props => {
         !!props.type === InternalMapping.ASSETSYS &&
         !!props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
         !!props.roleConfig.asset.allowFormatting &&
-        renderFormattingStyle(props.internalMappingObject.formatting)}
+        renderFormattingStyle(props.roleMappingObject.formatting)}
     </div>
   );
 };
@@ -136,7 +133,7 @@ FieldStyleEditor.propTypes = {
   title: PropTypes.string,
   roleKey: PropTypes.string,
   roleConfig: PropTypes.object,
-  internalMappingObject: PropTypes.object,
+  roleMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
   useReferenceStyleClasses: PropTypes.bool,
@@ -148,7 +145,7 @@ FieldStyleEditor.defaultProps = {
   entry: {},
   roleKey: '',
   roleConfig: {},
-  internalMappingObject: {},
+  roleMappingObject: {},
   type: InternalMapping.TEXT
 };
 
