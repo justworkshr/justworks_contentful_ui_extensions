@@ -25,7 +25,7 @@ export class App extends React.Component {
     const value = props.sdk.field.getValue() || '';
     this.state = {
       value: value,
-      templateMapping: props.customTemplates[value.toLowerCase()] || props.templatePlaceholder,
+      templateConfig: props.customTemplates[value.toLowerCase()] || props.templatePlaceholder,
       displayingTemplates: !props.customTemplates[value.toLowerCase()]
     };
 
@@ -49,7 +49,7 @@ export class App extends React.Component {
     if (value) {
       this.setState({
         value,
-        templateMapping:
+        templateConfig:
           this.props.customTemplates[value.toLowerCase()] || this.props.templatePlaceholder
       });
     }
@@ -105,7 +105,7 @@ export class App extends React.Component {
   };
 
   render() {
-    if (!!this.state.value && !this.state.templateMapping)
+    if (!!this.state.value && !this.state.templateConfig)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
 
     return this.state.displayingTemplates ? (
@@ -126,10 +126,10 @@ export class App extends React.Component {
       </div>
     ) : (
       <div className="custom-template__palette">
-        {this.state.templateMapping.meta.imageUrl && (
+        {this.state.templateConfig.meta.imageUrl && (
           <img
             className="palette__example-image"
-            src={this.state.templateMapping.meta.imageUrl + '?w=800'}
+            src={this.state.templateConfig.meta.imageUrl + '?w=800'}
             alt="Template example."
             onLoad={() => this.props.sdk.window.updateHeight()}
           />
@@ -138,7 +138,7 @@ export class App extends React.Component {
         <EmptyState
           className="palette__meta"
           headingProps={{ text: this.props.sdk.field.getValue() }}
-          descriptionProps={{ text: this.state.templateMapping.meta.description }}
+          descriptionProps={{ text: this.state.templateConfig.meta.description }}
         />
         <hr />
         <Button

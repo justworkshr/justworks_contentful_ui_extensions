@@ -5,7 +5,12 @@ export const ENTRY_MAPPING = 'entry';
 import { removeByIndex } from './index';
 
 export default class InternalMapping {
-  constructor(json, templateMapping = { style: {} }) {
+  constructor(json, templateConfig = { style: {} }) {
+    /*
+      json - string - the raw JSON of the internalMapping field
+      templateConfig - object - the corresponding custom template config object from './customTemplates'
+
+    */
     const parsedJSON = this.loadInternalMapping(json);
 
     Object.keys(InternalMapping.blankMapping).forEach(key => {
@@ -20,17 +25,15 @@ export default class InternalMapping {
       this.defineGetterSetters(key);
     });
 
-    if (templateMapping.style) {
-      Object.keys(templateMapping.style).forEach(styleSectionKey => {
-        if (!templateMapping.style[styleSectionKey]) return;
+    if (templateConfig.style) {
+      Object.keys(templateConfig.style).forEach(styleSectionKey => {
+        if (!templateConfig.style[styleSectionKey]) return;
         if (!this.style[styleSectionKey]) {
           this.style[styleSectionKey] = {};
           let classArray = [];
 
-          Object.keys(templateMapping.style[styleSectionKey]).forEach(stylePropertyKey => {
-            classArray.push(
-              templateMapping.style[styleSectionKey][stylePropertyKey].defaultClasses
-            );
+          Object.keys(templateConfig.style[styleSectionKey]).forEach(stylePropertyKey => {
+            classArray.push(templateConfig.style[styleSectionKey][stylePropertyKey].defaultClasses);
           });
 
           this.style[styleSectionKey].styleClasses = classArray.join(' ');

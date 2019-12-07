@@ -4,9 +4,9 @@ const addError = (errorArray, message) => {
   return Array.isArray(errorArray) ? errorArray.push({ message: message }) : [{ message: message }];
 };
 
-const missingRequiredRoles = (errors, templateMapping, internalMapping) => {
-  Object.keys(templateMapping).forEach(roleKey => {
-    const templateRole = templateMapping[roleKey] || {};
+const missingRequiredRoles = (errors, templateConfigFieldRoles, internalMapping) => {
+  Object.keys(templateConfigFieldRoles).forEach(roleKey => {
+    const templateRole = templateConfigFieldRoles[roleKey] || {};
 
     if (!!templateRole.required && !internalMapping[roleKey]) {
       errors[roleKey] = addError(errors[roleKey], 'Entry is required.');
@@ -16,9 +16,9 @@ const missingRequiredRoles = (errors, templateMapping, internalMapping) => {
   return errors;
 };
 
-const hasInvalidCustomTemplateType = (errors, templateMapping, entries) => {
-  Object.keys(templateMapping).map(roleKey => {
-    const templateRole = templateMapping[roleKey] || {};
+const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, entries) => {
+  Object.keys(templateConfigFieldRoles).map(roleKey => {
+    const templateRole = templateConfigFieldRoles[roleKey] || {};
     const entry = entries[roleKey];
     if (
       entry &&
@@ -38,10 +38,14 @@ const hasInvalidCustomTemplateType = (errors, templateMapping, entries) => {
   return errors;
 };
 
-export const getTemplateErrors = (templateMapping, updatedInternalMapping, entries) => {
+export const getTemplateErrors = (templateConfigFieldRoles, updatedInternalMapping, entries) => {
   let errors = {};
-  errors = missingRequiredRoles(errors, templateMapping, updatedInternalMapping.fieldRoles);
-  errors = hasInvalidCustomTemplateType(errors, templateMapping, entries);
+  errors = missingRequiredRoles(
+    errors,
+    templateConfigFieldRoles,
+    updatedInternalMapping.fieldRoles
+  );
+  errors = hasInvalidCustomTemplateType(errors, templateConfigFieldRoles, entries);
 
   return errors;
 };

@@ -19,7 +19,7 @@ describe('InternalMapping', () => {
     });
 
     it('sets default styles', () => {
-      const templateMapping = {
+      const templateConfig = {
         style: {
           hiSection: {
             hiProperty: { defaultClasses: 'hiclass' },
@@ -28,15 +28,15 @@ describe('InternalMapping', () => {
         }
       };
       const json = JSON.stringify({ fieldRoles: {} });
-      expect(new InternalMapping(json, templateMapping).style).toEqual({
+      expect(new InternalMapping(json, templateConfig).style).toEqual({
         hiSection: { styleClasses: 'hiclass hiclass2 hiclass3' }
       });
     });
 
     it('does not set default styles if already defined', () => {
-      const templateMapping = { style: { hi: { defaultClasses: 'hiclass' } } };
+      const templateConfig = { style: { hi: { defaultClasses: 'hiclass' } } };
       const json = JSON.stringify({ fieldRoles: {}, style: { hi: { styleClasses: 'byeClass' } } });
-      expect(new InternalMapping(json, templateMapping).style).toEqual({
+      expect(new InternalMapping(json, templateConfig).style).toEqual({
         hi: { styleClasses: 'byeClass' }
       });
     });

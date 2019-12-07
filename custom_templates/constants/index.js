@@ -16,7 +16,6 @@ export const CONTENT_TYPE_LINK = 'link'
 
 export const FIELD_TYPE_TEXT = 'text'
 export const FIELD_TYPE_MARKDOWN = 'markdown'
-export const FIELD_TYPE_MULTI_REFERENCE = 'multi-reference'
 
 export * from './styleClasses'
 

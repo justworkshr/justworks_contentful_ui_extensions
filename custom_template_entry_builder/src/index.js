@@ -60,7 +60,7 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     const template = props.sdk.entry.fields.template.getValue();
-    const templateMapping =
+    const templateConfig =
       props.customTemplates[template && template.toLowerCase()] || props.templatePlaceholder;
     const internalMappingJson = props.sdk.entry.fields.internalMapping.getValue();
 
@@ -74,7 +74,7 @@ export class App extends React.Component {
       entryInternalMapping: object {}
       // the parsed JSON for this entry's internal mapping field
 
-      templateMapping: object {}
+      templateConfig: object {}
       // the customTemplate object of the current template as defined in ./customTemplates
 
     */
@@ -83,9 +83,9 @@ export class App extends React.Component {
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
       entryInternalMapping: template
-        ? new InternalMapping(internalMappingJson, templateMapping)
+        ? new InternalMapping(internalMappingJson, templateConfig)
         : {},
-      templateMapping: templateMapping,
+      templateConfig: templateConfig,
       rolesNavigatedTo: [],
       template
     };
@@ -144,8 +144,8 @@ export class App extends React.Component {
     this.setState(
       {
         template,
-        entryInternalMapping: new InternalMapping(internalMappingJson, this.state.templateMapping),
-        templateMapping:
+        entryInternalMapping: new InternalMapping(internalMappingJson, this.state.templateConfig),
+        templateConfig:
           this.props.customTemplates[template && template.toLowerCase()] ||
           this.props.templatePlaceholder
       },
@@ -162,7 +162,7 @@ export class App extends React.Component {
           internalMappingJson &&
           templateIsValid(
             getTemplateErrors(
-              this.state.templateMapping.fieldRoles,
+              this.state.templateConfig.fieldRoles,
               JSON.parse(sdk.entry.fields.internalMapping.getValue()),
               this.state.entries
             )
@@ -178,22 +178,22 @@ export class App extends React.Component {
 
   onTemplateChange = async template => {
     const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
-    const templateMapping =
+    const templateConfig =
       this.props.customTemplates[template && template.toLowerCase()] ||
       this.props.templatePlaceholder;
     if (template !== this.state.template) {
       this.setState({
         template,
-        templateMapping,
+        templateConfig,
         entryInternalMapping: template
-          ? new InternalMapping(internalMappingJson, templateMapping)
+          ? new InternalMapping(internalMappingJson, templateConfig)
           : {}
       });
     }
   };
 
   onAddFieldClick = (roleKey, field) => {
-    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
+    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
     switch (field.type) {
       case InternalMapping.TEXT:
@@ -291,7 +291,7 @@ export class App extends React.Component {
       const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
-      if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+      if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
         this.linkEntriesToTemplate([newEntry], roleKey);
       } else {
         this.linkEntryToTemplate(newEntry, roleKey);
@@ -310,7 +310,7 @@ export class App extends React.Component {
     assets.forEach(asset => {
       linkedEntryValidation = validateLinkedAsset(
         asset,
-        this.state.templateMapping.fieldRoles[roleKey]
+        this.state.templateConfig.fieldRoles[roleKey]
       );
     });
 
@@ -331,7 +331,7 @@ export class App extends React.Component {
     if (!entry) return;
     const linkedEntryValidation = validateLinkedAsset(
       entry,
-      this.state.templateMapping.fieldRoles[roleKey]
+      this.state.templateConfig.fieldRoles[roleKey]
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -340,7 +340,7 @@ export class App extends React.Component {
   };
 
   onLinkAssetClick = async roleKey => {
-    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+    if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
       this.handleMultipleAssetsLink(roleKey);
     } else {
       this.handleSingleAssetLink(roleKey);
@@ -348,7 +348,7 @@ export class App extends React.Component {
   };
 
   linkAssetsToTemplate = (assets, roleKey) => {
-    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
+    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
     const firstAsset =
       this.state.entryInternalMapping[roleKey] &&
@@ -392,7 +392,7 @@ export class App extends React.Component {
 
   linkAssetToTemplate = (asset, roleKey) => {
     const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
-    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
+    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
     const updatedInternalMapping = this.state.entryInternalMapping;
 
     updatedInternalMapping.addAsset(
@@ -428,7 +428,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       sdk.entry.getSys().id,
-      this.state.templateMapping.fieldRoles
+      this.state.templateConfig.fieldRoles
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -450,7 +450,7 @@ export class App extends React.Component {
         entry,
         roleKey,
         sdk.entry.getSys().id,
-        this.state.templateMapping.fieldRoles
+        this.state.templateConfig.fieldRoles
       );
 
       if (linkedEntryValidation) {
@@ -464,7 +464,7 @@ export class App extends React.Component {
   };
 
   onLinkEntryClick = (roleKey, contentType) => {
-    if (this.state.templateMapping.fieldRoles[roleKey].allowMultipleReferences) {
+    if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
       this.handleMultipleEntriesLink(roleKey, contentType);
     } else {
       this.handleSingleEntryLink(roleKey, contentType);
@@ -475,7 +475,7 @@ export class App extends React.Component {
     const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
     const updatedEntryList = [...entriesFieldValue, ...entries.map(entry => constructLink(entry))];
     const updatedInternalMapping = this.state.entryInternalMapping;
-    const roleMappingObject = this.state.templateMapping.fieldRoles[roleKey];
+    const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey];
     updatedInternalMapping.addEntriesOrAssets({
       key: roleKey,
       value: entries.map(entry => entry.sys.id),
@@ -515,7 +515,7 @@ export class App extends React.Component {
       entry,
       roleKey,
       sdk.entry.getSys().id,
-      this.state.templateMapping.fieldRoles
+      this.state.templateConfig.fieldRoles
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
@@ -611,7 +611,7 @@ export class App extends React.Component {
           updatedAssets,
           updatedInternalMappingJson: updatedInternalMapping.asJSON(),
           stateEntries: this.state.entries,
-          stateTemplateMapping: this.state.templateMapping,
+          stateTemplateMapping: this.state.templateConfig,
           loadEntriesFunc: this.loadEntries,
           setStateFunc: this.setState.bind(this)
         }),
@@ -632,7 +632,7 @@ export class App extends React.Component {
   validateTemplate = async () => {
     const sdk = this.props.sdk;
     const errors = await getTemplateErrors(
-      this.state.templateMapping.fieldRoles,
+      this.state.templateConfig.fieldRoles,
       this.state.entryInternalMapping,
       this.state.entries
     );
@@ -803,12 +803,12 @@ export class App extends React.Component {
             );
           })}
           <EntryActionRow
-            allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+            allowAsset={!!this.state.templateConfig.fieldRoles[roleKey].asset}
             allowedCustomTemplates={
-              this.state.templateMapping.fieldRoles[roleKey].allowedCustomTemplates
+              this.state.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
             }
-            contentTypes={this.state.templateMapping.fieldRoles[roleKey].contentType}
-            fieldObject={this.state.templateMapping.fieldRoles[roleKey].field}
+            contentTypes={this.state.templateConfig.fieldRoles[roleKey].contentType}
+            fieldObject={this.state.templateConfig.fieldRoles[roleKey].field}
             onAddFieldClick={this.onAddFieldClick}
             roleKey={roleKey}
             onAddEntryClick={this.onAddEntryClick}
@@ -888,12 +888,12 @@ export class App extends React.Component {
     } else {
       return (
         <EntryActionRow
-          allowAsset={!!this.state.templateMapping.fieldRoles[roleKey].asset}
+          allowAsset={!!this.state.templateConfig.fieldRoles[roleKey].asset}
           allowedCustomTemplates={
-            this.state.templateMapping.fieldRoles[roleKey].allowedCustomTemplates
+            this.state.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
           }
-          contentTypes={this.state.templateMapping.fieldRoles[roleKey].contentType}
-          fieldObject={this.state.templateMapping.fieldRoles[roleKey].field}
+          contentTypes={this.state.templateConfig.fieldRoles[roleKey].contentType}
+          fieldObject={this.state.templateConfig.fieldRoles[roleKey].field}
           onAddFieldClick={this.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={this.onAddEntryClick}
@@ -907,7 +907,7 @@ export class App extends React.Component {
 
   render() {
     const contentTypeGroups = groupByContentType(
-      (this.state.templateMapping || {}).fieldRoles,
+      (this.state.templateConfig || {}).fieldRoles,
       this.state.entries
     );
 
@@ -920,17 +920,17 @@ export class App extends React.Component {
           size="small">
           Refresh
         </Button>
-        {this.state.templateMapping.style && (
+        {this.state.templateConfig.style && (
           <div className="custom-template-entry-builder__section">
             <DisplayText className="style-editor__heading--header" element="h1">
               Styles
             </DisplayText>
-            {Object.keys(this.state.templateMapping.style).map(styleSectionKey => {
+            {Object.keys(this.state.templateConfig.style).map(styleSectionKey => {
               return (
                 <TemplateStyleEditor
                   key={`style-section-${styleSectionKey}`}
                   updateStyle={this.updateTemplateStyle}
-                  templateStyleObject={this.state.templateMapping.style[styleSectionKey]}
+                  templateStyleObject={this.state.templateConfig.style[styleSectionKey]}
                   mappingStyleObject={this.state.entryInternalMapping.style[styleSectionKey]}
                   styleSectionKey={styleSectionKey}
                   title={displaySnakeCaseName(styleSectionKey)}
@@ -948,11 +948,10 @@ export class App extends React.Component {
               <div className="entry-group" key={`group--${index}`}>
                 <div className="entry-container">
                   {Object.keys(contentTypeGroups[groupKey])
-                    .sort((a, b) => (!this.state.templateMapping.fieldRoles[b] || {}).required)
+                    .sort((a, b) => (!this.state.templateConfig.fieldRoles[b] || {}).required)
                     .map((roleKey, index) => {
                       const entry = contentTypeGroups[groupKey][roleKey];
-                      const roleMappingObject =
-                        this.state.templateMapping.fieldRoles[roleKey] || {};
+                      const roleMappingObject = this.state.templateConfig.fieldRoles[roleKey] || {};
                       const internalMappingObject = this.state.entryInternalMapping.fieldRoles[
                         roleKey
                       ];

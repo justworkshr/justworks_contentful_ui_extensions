@@ -5,7 +5,6 @@ import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
 
-import { textMediaModule } from '../../custom_templates/templates/textMediaModule';
 import * as c from '../../custom_templates/constants';
 
 import * as tm from './mocks/templateMocks';
@@ -124,7 +123,7 @@ describe('App', () => {
       internalMapping: ''
     };
 
-    const templateMapping = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+    const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
     const sdk = mockSdk(mockEntry);
     it('should render the default editor state', () => {
@@ -144,7 +143,7 @@ describe('App', () => {
       // Tests Role Section render
       wrapper.find('RoleSection').forEach(node => {
         // Tests required label render
-        if (templateMapping.fieldRoles[node.props().roleKey].required) {
+        if (templateConfig.fieldRoles[node.props().roleKey].required) {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(true);
         } else {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(false);
