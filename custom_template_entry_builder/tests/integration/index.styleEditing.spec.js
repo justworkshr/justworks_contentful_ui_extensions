@@ -18,6 +18,8 @@ import {
   mockAssetMapping
 } from '../utils/mockUtils';
 
+import { resolveAll, newEntryRoleStyle } from '../utils/assertUtils';
+
 const getRoleStyle = (internalMapping, roleKey) => {
   return internalMapping.fieldRoles[roleKey].styleClasses;
 };
@@ -44,11 +46,9 @@ const setStyleValue = (wrapper, roleKey, type, label, value) => {
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
-const sdkUpdateSpy = sinon.spy(App.prototype, 'timeoutUpdateEntry');
-
 describe('App', () => {
   describe('single entry style editing', () => {
-    it('should update styleClasses', () => {
+    it('should update styleClasses', async () => {
       const mockEntry = {
         name: 'Mock Custom Template Entry',
         template: tm.MOCK_FIELDS_TEMPLATE,
@@ -60,7 +60,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
@@ -94,7 +93,8 @@ describe('App', () => {
       );
 
       // updates sdk
-      expect(getRoleStyle(sdkUpdateSpy.args[1][0]['updatedInternalMapping'], 'text_field')).toEqual(
+      await resolveAll();
+      expect(newEntryRoleStyle(sdk.space.updateEntry.args[0][0], 'text_field')).toBe(
         'text-left text-navy'
       );
     });
@@ -147,7 +147,7 @@ describe('App', () => {
       ).toBe(true);
     });
 
-    it('should clear styleClasses', () => {
+    it('should clear styleClasses', async () => {
       const mockEntry = {
         name: 'Mock Custom Template Entry',
         template: tm.MOCK_FIELDS_TEMPLATE,
@@ -159,7 +159,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
@@ -190,9 +189,8 @@ describe('App', () => {
       );
 
       // updates sdk
-      expect(getRoleStyle(sdkUpdateSpy.args[1][0]['updatedInternalMapping'], 'text_field')).toEqual(
-        'text-black'
-      );
+      await resolveAll();
+      expect(newEntryRoleStyle(sdk.space.updateEntry.args[0][0], 'text_field')).toBe('text-black');
     });
   });
 

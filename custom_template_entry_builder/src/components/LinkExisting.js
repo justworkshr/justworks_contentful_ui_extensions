@@ -39,6 +39,7 @@ class LinkExisting extends React.Component {
           <DropdownListItem isTitle>Actions</DropdownListItem>
           {!!this.props.contentTypes.length && (
             <DropdownListItem
+              className="link-entries-row__dropdown--link-entry"
               onClick={() =>
                 this.props.onLinkEntryClick(this.props.roleKey, this.props.contentTypes)
               }>
@@ -46,12 +47,15 @@ class LinkExisting extends React.Component {
             </DropdownListItem>
           )}
           {this.props.linkAsset && (
-            <DropdownListItem onClick={() => this.props.onLinkAssetClick(this.props.roleKey)}>
+            <DropdownListItem
+              className="link-entries-row__dropdown--link-asset"
+              onClick={() => this.props.onLinkAssetClick(this.props.roleKey)}>
               Link Asset
             </DropdownListItem>
           )}
           {!!this.props.contentTypes.length && (
             <DropdownListItem
+              className="link-entries-row__dropdown--deep-copy"
               onClick={() =>
                 this.props.onDeepCloneLinkClick(this.props.roleKey, this.props.contentTypes)
               }>

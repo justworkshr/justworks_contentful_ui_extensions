@@ -113,6 +113,7 @@ export class App extends React.Component {
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
     this.renderEntryFields = this.renderEntryFields.bind(this);
+    this.onLinkAssetClick = this.onLinkAssetClick.bind(this);
   }
 
   componentDidMount = async () => {
@@ -288,11 +289,8 @@ export class App extends React.Component {
     }
   };
 
-  handleMultipleAssetsLink = async roleKey => {
+  handleMultipleAssetsLink = async (roleKey, assets) => {
     const sdk = this.props.sdk;
-    const assets = await sdk.dialogs.selectMultipleAssets({
-      locale: 'en-US'
-    });
 
     let linkedEntryValidation;
     assets.forEach(asset => {
@@ -309,29 +307,34 @@ export class App extends React.Component {
     }
   };
 
-  handleSingleAssetLink = async roleKey => {
+  handleSingleAssetLink = async (roleKey, asset) => {
+    if (!asset) return;
     const sdk = this.props.sdk;
-
-    const entry = await sdk.dialogs.selectSingleAsset({
-      locale: 'en-US'
-    });
-
-    if (!entry) return;
     const linkedEntryValidation = validateLinkedAsset(
-      entry,
+      asset,
       this.state.templateConfig.fieldRoles[roleKey]
     );
     if (linkedEntryValidation) {
       return sdk.notifier.error(linkedEntryValidation);
     }
-    this.linkAssetToTemplate(entry, roleKey);
+
+    this.linkAssetToTemplate(asset, roleKey);
   };
 
   onLinkAssetClick = async roleKey => {
+    const sdk = this.props.sdk;
+
     if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
-      this.handleMultipleAssetsLink(roleKey);
+      const assets = await sdk.dialogs.selectMultipleAssets({
+        locale: 'en-US'
+      });
+      this.handleMultipleAssetsLink(roleKey, assets);
     } else {
-      this.handleSingleAssetLink(roleKey);
+      const asset = await sdk.dialogs.selectSingleAsset({
+        locale: 'en-US'
+      });
+
+      this.handleSingleAssetLink(roleKey, asset);
     }
   };
 
@@ -393,7 +396,6 @@ export class App extends React.Component {
     );
 
     const updatedAssetList = addStateAsset(this.state.entries, asset);
-
     this.timeoutUpdateEntry({
       updatedEntries: updatedEntryList,
       updatedAssets: updatedAssetList,

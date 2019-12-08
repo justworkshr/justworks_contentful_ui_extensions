@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import * as c from '../../../custom_templates/constants';
 
 export const mockLink = ({ id = 0, type = 'Entry' } = {}) => {
@@ -77,10 +78,20 @@ export const mockSdk = mockCustomTemplateEntry => {
   };
 
   return {
+    space: {
+      updateEntry: sinon.spy()
+    },
     entry: {
+      getSys: () => {
+        return {
+          version: 1
+        };
+      },
       onSysChanged: jest.fn(),
       fields: {
-        name: '',
+        name: {
+          getValue: () => getValue(mockCustomTemplateEntry, 'internalMapping')
+        },
         template: {
           getValue: () => getValue(mockCustomTemplateEntry, 'template'),
           onValueChanged: jest.fn()
@@ -94,6 +105,20 @@ export const mockSdk = mockCustomTemplateEntry => {
         assets: {
           getValue: () => getValue(mockCustomTemplateEntry, 'entries')
         }
+      }
+    },
+    dialogs: {
+      selectMultipleAssets: () => {
+        return [mockAssetResponse({ id: 'newAsset1a' }), mockAssetResponse({ id: 'newAsset2a' })];
+      },
+      selectSingleAsset: () => {
+        return mockAssetResponse({ id: 'newAsset1b' });
+      },
+      selectMultipleEntries: () => {
+        return [mockEntryResponse({ id: 'newEntry1a' }), mockEntryResponse({ id: 'newEntry2a' })];
+      },
+      selectSingleEntry: () => {
+        return mockEntryResponse({ id: 'newEntry1b' });
       }
     },
     field: {

@@ -38,25 +38,26 @@ export const updateEntry = async ({
     },
     fields: Object.assign(
       {},
-      ...Object.keys(sdk.entry.fields).map(key => ({
-        [key]: { 'en-US': sdk.entry.fields[key].getValue() },
-        ...entries(updatedEntries),
-        ...assets(updatedAssets),
-        internalMapping: { 'en-US': updatedInternalMappingJson },
-        isValid: {
-          'en-US': isValid ? 'Yes' : 'No'
-        }
-      }))
+      ...Object.keys(sdk.entry.fields).map(key => {
+        return {
+          [key]: { 'en-US': sdk.entry.fields[key].getValue() },
+          ...entries(updatedEntries),
+          ...assets(updatedAssets),
+          internalMapping: { 'en-US': updatedInternalMappingJson },
+          isValid: {
+            'en-US': isValid ? 'Yes' : 'No'
+          }
+        };
+      })
     )
   };
 
   try {
-    const response = await sdk.space.updateEntry(newEntry);
+    await sdk.space.updateEntry(newEntry);
     versionAttempts = 0;
     setStateFunc({
       errors
     });
-
     return newEntry;
   } catch (err) {
     console.log(err);
