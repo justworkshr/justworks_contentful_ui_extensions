@@ -27,7 +27,7 @@ const RoleSection = props => {
             iconProps={{ icon: 'Close', size: 'large' }}
             buttonType="negative"
             label="Remove Field"
-            onClick={() => props.onRemoveFieldClick(props.roleKey)}
+            onClick={() => props.onRemoveClick(props.roleKey)}
           />
         )}
       </div>
@@ -58,7 +58,7 @@ RoleSection.propTypes = {
   roleConfigObject: PropTypes.object,
   renderEntryFields: PropTypes.func,
   stateErrors: PropTypes.object,
-  onRemoveFieldClick: PropTypes.func
+  onRemoveClick: PropTypes.func
 };
 
 RoleSection.defaultProps = {

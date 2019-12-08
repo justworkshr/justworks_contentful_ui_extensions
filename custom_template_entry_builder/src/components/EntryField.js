@@ -69,7 +69,7 @@ export const EntryField = props => {
             <DropdownListItem isTitle>Actions</DropdownListItem>
             <DropdownListItem
               className="asset-card__action--remove"
-              onClick={() => props.onRemoveFieldClick(props.roleKey, props.entryIndex)}>
+              onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
               Remove
             </DropdownListItem>
           </DropdownList>
@@ -118,7 +118,6 @@ EntryField.propTypes = {
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
-  onRemoveFieldClick: PropTypes.func,
   onFieldChange: PropTypes.func
 };
 

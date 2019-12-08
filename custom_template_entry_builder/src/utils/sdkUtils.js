@@ -1,7 +1,18 @@
 import { templateIsValid, getTemplateErrors } from './validations';
+import { constructLink } from './index';
 
 let versionAttempts = 0;
 let MAX_VERSION_ATTEMPTS = 3;
+
+export const addFieldAsset = (assetsValue, asset) => {
+  const linkedAsset = constructLink(asset);
+  return assetsValue ? [...assetsValue, linkedAsset] : [linkedAsset];
+};
+
+export const addFieldAssets = (assetsValue, assets) => {
+  const linkedAssets = assets.map(asset => constructLink(asset));
+  return assetsValue ? [...assetsValue, ...linkedAssets] : linkedAssets;
+};
 
 export const updateEntry = async ({
   sdk,

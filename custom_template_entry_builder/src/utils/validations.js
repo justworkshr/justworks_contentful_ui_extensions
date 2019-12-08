@@ -1,5 +1,28 @@
 import { getEntryContentTypeId } from './index';
 
+export const validateTemplate = async ({ sdk, state, setState }) => {
+  const errors = await getTemplateErrors(
+    state.templateConfig.fieldRoles,
+    state.entryInternalMapping,
+    state.entries
+  );
+
+  const isValid = templateIsValid(errors);
+
+  setState(
+    {
+      errors
+    },
+    () => {
+      if (isValid) {
+        sdk.field.setInvalid(false);
+      } else {
+        sdk.field.setInvalid(true);
+      }
+    }
+  );
+};
+
 const addError = (errorArray, message) => {
   return Array.isArray(errorArray) ? errorArray.push({ message: message }) : [{ message: message }];
 };

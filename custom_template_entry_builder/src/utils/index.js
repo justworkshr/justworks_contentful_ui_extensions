@@ -1,11 +1,15 @@
 import InternalMapping from './InternalMapping';
 import * as c from '../../../custom_templates/constants';
 
+import { setEntryLoading } from './stateUtils';
+import { handleRemoveEntry } from './eventUtils';
+
 export const isDirectField = roleType => {
   return c.DIRECT_FIELD_TYPES.includes(roleType);
 };
 
 export const removeByIndex = (array, index) => {
+  if (!array || !array.length) return;
   return [...array.slice(0, index), ...array.slice(index + 1)];
 };
 
@@ -112,6 +116,36 @@ export const getContentTypeArray = stringOrArray => {
 export const getEntryContentTypeId = entry => {
   if (!entry.sys || !entry.sys.contentType) return;
   return entry.sys.contentType.sys.id;
+};
+
+export const fetchEntryByRoleKey = async ({
+  sdk,
+  state,
+  setState,
+  timeoutUpdateEntry,
+  roleKey
+} = {}) => {
+  setEntryLoading({ setState, roleKey, value: true });
+  const entry = await getEntryOrField(sdk.space, state.entryInternalMapping, roleKey).catch(err => {
+    if (err.code === 'NotFound') {
+      handleRemoveEntry({
+        sdk,
+        state,
+        setState,
+        timeoutUpdateEntry,
+        roleKey
+      });
+    }
+  });
+
+  if (entry) {
+    setState(prevState => ({
+      entries: { ...prevState.entries, [roleKey]: entry }
+    }));
+    setEntryLoading({ setState, roleKey, value: false });
+  }
+
+  return entry;
 };
 
 export const getEntryOrField = async (space, internalMapping, roleKey) => {

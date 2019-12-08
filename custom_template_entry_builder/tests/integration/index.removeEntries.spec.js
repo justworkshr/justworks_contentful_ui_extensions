@@ -97,7 +97,10 @@ describe('App', () => {
           mockLink({ id: 4 }),
           mockLink({ id: 5 })
         ],
-        assets: [mockLink({ id: 3 }), mockLink({ id: 6 })],
+        assets: [
+          mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 3 }),
+          mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 6 })
+        ],
         internalMapping: JSON.stringify({
           fieldRoles: {
             grid_logo_multi_field: {
@@ -224,7 +227,7 @@ describe('App', () => {
         name: 'Mock Custom Template Entry',
         template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: [mockLink({ id: 1 }), mockLink({ id: 2 })],
-        assets: [mockLink({ id: 3 })],
+        assets: [mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 3 })],
         internalMapping: JSON.stringify({
           fieldRoles: {
             grid_logo_multi_field: {

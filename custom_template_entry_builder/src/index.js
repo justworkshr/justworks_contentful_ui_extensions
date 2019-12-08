@@ -18,18 +18,12 @@ import { customTemplates, templatePlaceholder } from '../../custom_templates/';
 import InternalMapping from './utils/InternalMapping';
 
 import {
-  removeByIndex,
-  constructLink,
   groupByContentType,
-  createEntry,
-  createAsset,
-  constructEntryName,
   displaySnakeCaseName,
-  getContentTypeArray,
   getEntryOrField,
   cleanStyleClasses,
-  selectAssetEntries,
-  getRolesToFetch
+  getRolesToFetch,
+  fetchEntryByRoleKey
 } from './utils';
 
 import {
@@ -38,18 +32,24 @@ import {
   renderMultiReferenceItemStyle
 } from './utils/renderUtils';
 
-import { addStateAsset, addStateAssets, addStateEntry, removeStateEntry } from './utils/stateUtils';
+import { addStateField, setEntryLoading } from './utils/stateUtils';
 
 import { updateEntry } from './utils/sdkUtils';
 
-import {
-  validateLinkedEntry,
-  validateLinkedAsset,
-  templateIsValid,
-  getTemplateErrors
-} from './utils/validations';
+import { validateTemplate, templateIsValid, getTemplateErrors } from './utils/validations';
 
-import { cloneEntry } from '../../shared/utilities/deepCopy';
+import {
+  handleRemoveEntry,
+  handleAddField,
+  handleAddEntry,
+  handleLinkAssetClick,
+  handleLinkEntryClick,
+  handleDeepCloneClick,
+  handleUpdateEntryStyle,
+  handleUpdateReferencesStyle,
+  handleEntryEditClick,
+  handleFieldChange
+} from './utils/eventUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -108,8 +108,6 @@ export class App extends React.Component {
     this.updateReferencesStyle = this.updateReferencesStyle.bind(this);
     this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
-    this.linkAssetToTemplate = this.linkAssetToTemplate.bind(this);
-    this.linkAssetsToTemplate = this.linkAssetsToTemplate.bind(this);
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
     this.renderEntryFields = this.renderEntryFields.bind(this);
@@ -126,7 +124,6 @@ export class App extends React.Component {
 
     if (this.state.template) {
       this.timeoutUpdateEntry({ updatedInternalMapping: this.state.entryInternalMapping, ms: 0 });
-
       await this.loadEntries();
     }
   };
@@ -137,11 +134,7 @@ export class App extends React.Component {
     }
   }
 
-  onExternalChange = value => {
-    // this.setState({
-    //   value
-    // });
-  };
+  onExternalChange = value => {};
 
   onSysChanged = async sysValue => {
     /*
@@ -164,7 +157,13 @@ export class App extends React.Component {
         //
         await Promise.all(
           await rolesToFetch.map(async roleKey => {
-            await this.fetchEntryByRoleKey(roleKey);
+            await fetchEntryByRoleKey({
+              sdk: this.props.sdk,
+              state: this.state,
+              setState: this.setState.bind(this),
+              timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+              roleKey
+            });
           })
         );
         if (
@@ -203,389 +202,79 @@ export class App extends React.Component {
   };
 
   onAddFieldClick = (roleKey, field) => {
-    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.addField({
-      key: roleKey,
-      type: field.type,
-      styleClasses: roleConfigObject.defaultClasses
-    });
-
-    const updatedEntries = addStateEntry(
-      this.state.entries,
+    handleAddField({
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
       roleKey,
-      InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey] })
-    );
-
-    this.setState({ entries: updatedEntries, entryInternalMapping: updatedInternalMapping }, () =>
-      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 0 })
-    );
-  };
-
-  onRemoveFieldClick = (roleKey, entryIndex = null) => {
-    /*
-      Removes fields or assets from internal mapping
-    */
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.removeEntry(roleKey, entryIndex);
-    const updatedEntryList = removeStateEntry(
-      this.state.entries,
-      updatedInternalMapping,
-      entryIndex
-    );
-    const updatedAssetList = selectAssetEntries(updatedEntryList).map(asset =>
-      constructLink(asset)
-    );
-
-    this.setState(
-      prevState => {
-        const prevStateLoadingEntries = { ...prevState.loadingEntries };
-        const prevStateEntries = { ...prevState.entries };
-        if (Array.isArray(prevStateEntries[roleKey])) {
-          prevStateEntries[roleKey] = removeByIndex(prevStateEntries[roleKey], entryIndex);
-
-          if (!prevStateEntries[roleKey].length) {
-            delete prevStateEntries[roleKey];
-            delete prevStateLoadingEntries[roleKey];
-          }
-        } else {
-          delete prevStateEntries[roleKey];
-          delete prevStateLoadingEntries[roleKey];
-        }
-
-        return {
-          loadingEntries: prevStateLoadingEntries,
-          entries: updatedEntryList,
-          entryInternalMapping: updatedInternalMapping
-        };
-      },
-      () => {
-        this.timeoutUpdateEntry({
-          updatedAssets: updatedAssetList,
-          updatedInternalMapping,
-          ms: 0
-        });
-      }
-    );
+      field
+    });
   };
 
   onAddEntryClick = async ({ roleKey, contentType, template = undefined, type = 'entry' } = {}) => {
-    const sdk = this.props.sdk;
-    if (type === 'asset') {
-      const newAsset = await createAsset(sdk.space);
-
-      sdk.navigator.openAsset(newAsset.sys.id, { slideIn: true });
-    } else if (type === 'entry') {
-      const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
-      const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
-
-      if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
-        this.linkEntriesToTemplate([newEntry], roleKey);
-      } else {
-        this.linkEntryToTemplate(newEntry, roleKey);
-      }
-      sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
-    }
-  };
-
-  handleMultipleAssetsLink = async (roleKey, assets) => {
-    const sdk = this.props.sdk;
-
-    let linkedEntryValidation;
-    assets.forEach(asset => {
-      linkedEntryValidation = validateLinkedAsset(
-        asset,
-        this.state.templateConfig.fieldRoles[roleKey]
-      );
+    await handleAddEntry({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      roleKey,
+      contentType,
+      template,
+      type
     });
-
-    if (linkedEntryValidation) {
-      return sdk.notifier.error(linkedEntryValidation);
-    } else {
-      this.linkAssetsToTemplate(assets, roleKey);
-    }
-  };
-
-  handleSingleAssetLink = async (roleKey, asset) => {
-    if (!asset) return;
-    const sdk = this.props.sdk;
-    const linkedEntryValidation = validateLinkedAsset(
-      asset,
-      this.state.templateConfig.fieldRoles[roleKey]
-    );
-    if (linkedEntryValidation) {
-      return sdk.notifier.error(linkedEntryValidation);
-    }
-
-    this.linkAssetToTemplate(asset, roleKey);
   };
 
   onLinkAssetClick = async roleKey => {
-    const sdk = this.props.sdk;
-
-    if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
-      const assets = await sdk.dialogs.selectMultipleAssets({
-        locale: 'en-US'
-      });
-      this.handleMultipleAssetsLink(roleKey, assets);
-    } else {
-      const asset = await sdk.dialogs.selectSingleAsset({
-        locale: 'en-US'
-      });
-
-      this.handleSingleAssetLink(roleKey, asset);
-    }
+    await handleLinkAssetClick({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      roleKey
+    });
   };
 
-  linkAssetsToTemplate = (assets, roleKey) => {
-    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    const firstAsset =
-      this.state.entryInternalMapping[roleKey] &&
-      !!this.state.entryInternalMapping[roleKey].value.length
-        ? this.state.entryInternalMapping[roleKey].value.find(el => el.type === c.FIELD_TYPE_ASSET)
-        : undefined;
-
-    const assetStyleClasses = firstAsset
-      ? firstAsset.styleClasses
-      : roleConfigObject.asset.defaultClasses; // duplicate existing asset style classes to maintain consistancy
-    updatedInternalMapping.addEntriesOrAssets({
-      key: roleKey,
-      value: assets.map(asset => {
-        return InternalMapping.assetMapping({
-          type: c.FIELD_TYPE_ASSET,
-          value: asset.sys.id,
-          assetUrl: asset.fields.file['en-US'].url,
-          assetType: roleConfigObject.asset.type,
-          formatting:
-            roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
-              ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
-              : {},
-          styleClasses: assetStyleClasses
-        });
-      }),
-      styleClasses: (roleConfigObject || {}).defaultClasses
-    });
-
-    const updatedAssetList = addStateAssets(this.state.entries, assets);
-
-    this.timeoutUpdateEntry({
-      updatedAssets: updatedAssetList,
-      updatedInternalMapping,
-      ms: 150
-    });
-
-    this.fetchEntryByRoleKey(roleKey);
-  };
-
-  linkAssetToTemplate = (asset, roleKey) => {
-    const updatedEntryList = this.props.sdk.entry.fields.entries.getValue() || [];
-    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
-    const updatedInternalMapping = this.state.entryInternalMapping;
-
-    updatedInternalMapping.addAsset(
+  onLinkEntryClick = async (roleKey, contentType) => {
+    await handleLinkEntryClick({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
       roleKey,
-      asset.sys.id,
-      asset.fields.file['en-US'].url,
-      roleConfigObject.asset.type,
-      roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
-        ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
-        : {},
-      roleConfigObject.asset.defaultClasses
-    );
-
-    const updatedAssetList = addStateAsset(this.state.entries, asset);
-    this.timeoutUpdateEntry({
-      updatedEntries: updatedEntryList,
-      updatedAssets: updatedAssetList,
-      updatedInternalMapping,
-      ms: 0
+      contentType
     });
   };
 
-  handleSingleEntryLink = async (roleKey, contentType) => {
-    const sdk = this.props.sdk;
-    const entry = await sdk.dialogs.selectSingleEntry({
-      locale: 'en-US',
-      contentTypes: getContentTypeArray(contentType)
-    });
-
-    if (!entry) return;
-    const linkedEntryValidation = validateLinkedEntry(
-      entry,
+  onDeepCloneClick = async (roleKey, contentType) => {
+    await handleDeepCloneClick({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
       roleKey,
-      sdk.entry.getSys().id,
-      this.state.templateConfig.fieldRoles
-    );
-    if (linkedEntryValidation) {
-      return sdk.notifier.error(linkedEntryValidation);
-    }
-
-    this.linkEntryToTemplate(entry, roleKey);
-  };
-
-  handleMultipleEntriesLink = async (roleKey, contentType) => {
-    const sdk = this.props.sdk;
-    const entries = await sdk.dialogs.selectMultipleEntries({
-      locale: 'en-US',
-      contentTypes: getContentTypeArray(contentType)
+      contentType
     });
-
-    let linkedEntryValidation;
-    entries.forEach(entry => {
-      linkedEntryValidation = validateLinkedEntry(
-        entry,
-        roleKey,
-        sdk.entry.getSys().id,
-        this.state.templateConfig.fieldRoles
-      );
-
-      if (linkedEntryValidation) {
-        return sdk.notifier.error(linkedEntryValidation);
-      }
-    });
-
-    if (!linkedEntryValidation) {
-      this.linkEntriesToTemplate(entries, roleKey);
-    }
-  };
-
-  onLinkEntryClick = (roleKey, contentType) => {
-    if (this.state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
-      this.handleMultipleEntriesLink(roleKey, contentType);
-    } else {
-      this.handleSingleEntryLink(roleKey, contentType);
-    }
-  };
-
-  linkEntriesToTemplate = (entries, roleKey) => {
-    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
-    const updatedEntryList = [...entriesFieldValue, ...entries.map(entry => constructLink(entry))];
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey];
-    updatedInternalMapping.addEntriesOrAssets({
-      key: roleKey,
-      value: entries.map(entry => entry.sys.id),
-      styleClasses: (roleConfigObject || {}).defaultClasses
-    });
-
-    this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
-
-    this.fetchEntryByRoleKey(roleKey);
-  };
-
-  linkEntryToTemplate = (entry, roleKey) => {
-    const entriesFieldValue = this.props.sdk.entry.fields.entries.getValue() || [];
-
-    const updatedEntryList = [...entriesFieldValue, constructLink(entry)];
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.addEntry(roleKey, entry.sys.id);
-
-    this.timeoutUpdateEntry({ updatedEntries: updatedEntryList, updatedInternalMapping, ms: 150 });
-  };
-
-  setEntryLoading(roleKey, value) {
-    this.setState(prevState => ({
-      loadingEntries: { ...prevState.loadingEntries, [roleKey]: value }
-    }));
-  }
-
-  onDeepCloneLinkClick = async (roleKey, contentType) => {
-    const sdk = this.props.sdk;
-    this.setEntryLoading(roleKey, true);
-    const entry = await sdk.dialogs.selectSingleEntry({
-      locale: 'en-US',
-      contentTypes: getContentTypeArray(contentType)
-    });
-
-    const linkedEntryValidation = validateLinkedEntry(
-      entry,
-      roleKey,
-      sdk.entry.getSys().id,
-      this.state.templateConfig.fieldRoles
-    );
-    if (linkedEntryValidation) {
-      return sdk.notifier.error(linkedEntryValidation);
-    }
-
-    if (entry) {
-      this.setEntryLoading(roleKey, true);
-      const clonedEntry = await cloneEntry(
-        sdk.space,
-        entry,
-        `${sdk.entry.fields.name.getValue()} ${roleKey}`
-      );
-
-      await this.linkEntryToTemplate(clonedEntry, roleKey);
-      sdk.notifier.success('Deep copy completed. New entry is now linked.');
-    }
   };
 
   onEditClick = async (entry, type = 'entry') => {
-    const sdk = this.props.sdk;
-    if (!entry) return null;
-    if (type === 'entry') {
-      await sdk.navigator.openEntry(entry.sys.id, { slideIn: true });
-    } else if (type === 'asset') {
-      await sdk.navigator.openAsset(entry.sys.id, { slideIn: true });
-    }
-    const rolesNavigatedTo = [
-      ...sdk.entry.fields.entries
-        .getValue()
-        .filter(e => e.sys.id === entry.sys.id)
-        .map(e => {
-          return Object.keys(this.state.entries).find(
-            key => (this.state.entries[key].sys || {}).id === e.sys.id // may not work for array multi-references
-          );
-        })
-    ];
-
-    this.setState(prevState => ({
-      rolesNavigatedTo: [...prevState.rolesNavigatedTo, ...rolesNavigatedTo]
-    }));
+    await handleEntryEditClick({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this),
+      entry,
+      type
+    });
   };
 
   onRemoveClick = (roleKey, entryIndex = null) => {
-    if (!roleKey) return null;
-    const thisEntry = this.props.sdk.entry;
-    const entriesValue = thisEntry.fields.entries.getValue();
-    const updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.removeEntry(roleKey, entryIndex);
-    const updatedEntryList = removeByIndex(entriesValue, entryIndex);
-
-    const updatedStateEntryList = removeStateEntry(
-      this.state.entries,
-      updatedInternalMapping,
+    handleRemoveEntry({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      roleKey,
       entryIndex
-    );
-
-    this.setState(
-      prevState => {
-        const prevStateLoadingEntries = { ...prevState.loadingEntries };
-        const prevStateEntries = { ...prevState.entries };
-
-        if (Array.isArray(prevStateEntries[roleKey])) {
-          prevStateEntries[roleKey] = removeByIndex(prevStateEntries[roleKey], entryIndex);
-
-          if (!prevStateEntries[roleKey].length) {
-            delete prevStateEntries[roleKey];
-            delete prevStateLoadingEntries[roleKey];
-          }
-        } else {
-          delete prevStateEntries[roleKey];
-          delete prevStateLoadingEntries[roleKey];
-        }
-
-        return { loadingEntries: prevStateLoadingEntries, entries: updatedStateEntryList };
-      },
-      () => {
-        this.timeoutUpdateEntry({
-          updatedEntries: updatedEntryList,
-          updatedInternalMapping,
-          ms: 0
-        });
-      }
-    );
+    });
   };
 
   timeoutUpdateEntry({ updatedEntries, updatedAssets, updatedInternalMapping, ms = 150 } = {}) {
@@ -609,58 +298,21 @@ export class App extends React.Component {
   loadEntries = async () => {
     await Promise.all(
       await this.state.entryInternalMapping.fieldKeys().map(async roleKey => {
-        await this.fetchEntryByRoleKey(roleKey);
+        await fetchEntryByRoleKey({
+          sdk: this.props.sdk,
+          state: this.state,
+          setState: this.setState.bind(this),
+          timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+          roleKey
+        });
       })
     );
 
-    await this.validateTemplate();
-  };
-
-  validateTemplate = async () => {
-    const sdk = this.props.sdk;
-    const errors = await getTemplateErrors(
-      this.state.templateConfig.fieldRoles,
-      this.state.entryInternalMapping,
-      this.state.entries
-    );
-
-    const isValid = templateIsValid(errors);
-
-    this.setState(
-      {
-        errors
-      },
-      () => {
-        if (isValid) {
-          sdk.field.setInvalid(false);
-        } else {
-          sdk.field.setInvalid(true);
-        }
-      }
-    );
-  };
-
-  fetchEntryByRoleKey = async roleKey => {
-    this.setEntryLoading(roleKey, true);
-
-    const entry = await getEntryOrField(
-      this.props.sdk.space,
-      this.state.entryInternalMapping,
-      roleKey
-    ).catch(err => {
-      if (err.code === 'NotFound') {
-        this.onRemoveClick(roleKey);
-      }
+    await validateTemplate({
+      sdk: this.props.sdk,
+      state: this.state,
+      setState: this.setState.bind(this)
     });
-
-    if (entry) {
-      this.setState(prevState => ({
-        entries: { ...prevState.entries, [roleKey]: entry }
-      }));
-      this.setEntryLoading(roleKey, false);
-    }
-
-    return entry;
   };
 
   fetchNavigatedTo = () => {
@@ -676,31 +328,13 @@ export class App extends React.Component {
   };
 
   onFieldChange = (e, roleKey) => {
-    const value = e.currentTarget.value;
-    if (typeof value === 'string') {
-      let updatedInternalMapping = this.state.entryInternalMapping;
-      updatedInternalMapping[roleKey] = value;
-
-      const styleClasses = cleanStyleClasses(
-        updatedInternalMapping[roleKey].styleClasses,
-        updatedInternalMapping[roleKey].value
-      );
-
-      updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
-
-      const updatedEntries = addStateEntry(
-        this.state.entries,
-        roleKey,
-        InternalMapping.entryMapping({ ...updatedInternalMapping[roleKey], value })
-      );
-
-      this.setState(
-        { entries: updatedEntries, entryInternalMapping: updatedInternalMapping },
-        () => {
-          this.timeoutUpdateEntry({ updatedInternalMapping, ms: 1000 });
-        }
-      );
-    }
+    handleFieldChange({
+      state: this.state,
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      e,
+      roleKey
+    });
   };
 
   updateTemplateStyle(templateStyleKey, templateStyleObject) {
@@ -716,28 +350,22 @@ export class App extends React.Component {
   }
 
   updateEntryStyle(roleKey, styleClasses) {
-    let updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.setStyleClasses(
+    handleUpdateEntryStyle({
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      internalMappingObject: this.state.entryInternalMapping,
       roleKey,
-      cleanStyleClasses(styleClasses, updatedInternalMapping[roleKey].value)
-    );
-    styleClasses = updatedInternalMapping[roleKey].styleClasses;
-
-    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+      styleClasses
     });
   }
 
   updateReferencesStyle(roleKey, styleClasses) {
-    let updatedInternalMapping = this.state.entryInternalMapping;
-    updatedInternalMapping.setReferencesStyleClasses(
+    handleUpdateReferencesStyle({
+      setState: this.setState.bind(this),
+      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      internalMappingObject: this.state.entryInternalMapping,
       roleKey,
-      cleanStyleClasses(styleClasses, updatedInternalMapping[roleKey].value)
-    );
-    styleClasses = updatedInternalMapping[roleKey].styleClasses;
-
-    this.setState({ entryInternalMapping: updatedInternalMapping }, () => {
-      this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+      styleClasses
     });
   }
 
@@ -787,7 +415,6 @@ export class App extends React.Component {
                 roleConfig={roleConfigObject}
                 onEditClick={this.onEditClick}
                 onRemoveClick={this.onRemoveClick}
-                onRemoveFieldClick={this.onRemoveFieldClick}
                 onFieldChange={this.onFieldChange}
               />
             );
@@ -847,7 +474,6 @@ export class App extends React.Component {
             roleConfig={roleConfigObject}
             onEditClick={this.onEditClick}
             onRemoveClick={this.onRemoveClick}
-            onRemoveFieldClick={this.onRemoveFieldClick}
             onFieldChange={this.onFieldChange}
           />
           {renderSingleEntryStyle(roleMappingObject.type, roleConfigObject) && (
@@ -879,7 +505,7 @@ export class App extends React.Component {
           onAddEntryClick={this.onAddEntryClick}
           onLinkAssetClick={this.onLinkAssetClick}
           onLinkEntryClick={this.onLinkEntryClick}
-          onDeepCloneLinkClick={this.onDeepCloneLinkClick}
+          onDeepCloneLinkClick={this.onDeepCloneClick}
         />
       );
     }
@@ -943,7 +569,7 @@ export class App extends React.Component {
                           roleMappingObject={roleMappingObject}
                           renderEntryFields={this.renderEntryFields}
                           stateErrors={this.state.errors}
-                          onRemoveFieldClick={this.onRemoveFieldClick}
+                          onRemoveClick={this.onRemoveClick}
                         />
                       );
                     })}
