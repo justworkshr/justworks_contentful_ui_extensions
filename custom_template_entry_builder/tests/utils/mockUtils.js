@@ -34,7 +34,7 @@ export const mockAssetResponse = ({ id = 0, url = 'localhost', assetType = 'imag
 export const mockEntryResponse = ({ id = 0 } = {}) => {
   return {
     sys: {
-      id: id,
+      id,
       type: 'Entry'
     },
     fields: {
@@ -79,6 +79,8 @@ export const mockSdk = mockCustomTemplateEntry => {
 
   return {
     space: {
+      getEntry: id => mockEntryResponse({ id }),
+      getAsset: id => mockAssetResponse({ id }),
       updateEntry: sinon.spy(),
       createEntry: () => {
         return mockEntryResponse({ id: 'newCreatedEntry1a' });
@@ -96,7 +98,7 @@ export const mockSdk = mockCustomTemplateEntry => {
       onSysChanged: jest.fn(),
       fields: {
         name: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'internalMapping')
+          getValue: () => getValue(mockCustomTemplateEntry, 'name')
         },
         template: {
           getValue: () => getValue(mockCustomTemplateEntry, 'template'),
@@ -109,7 +111,7 @@ export const mockSdk = mockCustomTemplateEntry => {
           getValue: () => getValue(mockCustomTemplateEntry, 'entries')
         },
         assets: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'entries')
+          getValue: () => getValue(mockCustomTemplateEntry, 'assets')
         }
       }
     },

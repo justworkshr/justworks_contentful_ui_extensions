@@ -10,11 +10,11 @@ export const removeByIndex = (array, index) => {
 };
 
 export const getStatus = entry => {
-  if (entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
+  if (entry.sys && entry.sys.publishedAt && entry.sys.publishedAt === entry.sys.updatedAt) {
     return 'published';
-  } else if (entry.sys.publishedAt && entry.sys.publishedAt !== entry.sys.updatedAt) {
+  } else if (entry.sys && entry.sys.publishedAt && entry.sys.publishedAt !== entry.sys.updatedAt) {
     return 'changed';
-  } else if (entry.sys.archivedAt) {
+  } else if (entry.sys && entry.sys.archivedAt) {
     return 'archived';
   } else {
     return 'draft';

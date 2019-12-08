@@ -226,7 +226,6 @@ export class App extends React.Component {
     /*
       Removes fields or assets from internal mapping
     */
-
     const updatedInternalMapping = this.state.entryInternalMapping;
     updatedInternalMapping.removeEntry(roleKey, entryIndex);
     const updatedEntryList = removeStateEntry(

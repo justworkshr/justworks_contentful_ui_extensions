@@ -52,7 +52,7 @@ const RoleSection = props => {
 };
 
 RoleSection.propTypes = {
-  entry: PropTypes.object,
+  entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   roleMappingObject: PropTypes.object,
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,

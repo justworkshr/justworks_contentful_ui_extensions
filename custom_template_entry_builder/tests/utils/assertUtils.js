@@ -1,7 +1,7 @@
 export const resolveAll = async () => {
   jest.runAllTimers();
   await Promise.resolve();
-  jest.advanceTimersByTime(500);
+  jest.advanceTimersByTime(5000);
 };
 
 export const newEntryRole = (newEntryArg, roleKey) => {

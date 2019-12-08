@@ -9,14 +9,7 @@ import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../mocks/templateMocks';
 
-import {
-  mockSdk,
-  mockAssetResponse,
-  mockEntryResponse,
-  mockLink,
-  mockMapping,
-  mockAssetMapping
-} from '../utils/mockUtils';
+import { mockSdk } from '../utils/mockUtils';
 
 import { resolveAll, newEntryAssetIds, newEntryEntryIds, newEntryRole } from '../utils/assertUtils';
 

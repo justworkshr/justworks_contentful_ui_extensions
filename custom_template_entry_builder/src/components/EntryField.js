@@ -35,8 +35,14 @@ export const EntryField = props => {
         dropdownListElements={
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
-            <DropdownListItem onClick={() => props.onEditClick(props.entry)}>Edit</DropdownListItem>
-            <DropdownListItem onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
+            <DropdownListItem
+              className="entry-card__action--edit"
+              onClick={() => props.onEditClick(props.entry)}>
+              Edit
+            </DropdownListItem>
+            <DropdownListItem
+              className="entry-card__action--remove"
+              onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
               Remove
             </DropdownListItem>
           </DropdownList>
@@ -62,6 +68,7 @@ export const EntryField = props => {
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
             <DropdownListItem
+              className="asset-card__action--remove"
               onClick={() => props.onRemoveFieldClick(props.roleKey, props.entryIndex)}>
               Remove
             </DropdownListItem>

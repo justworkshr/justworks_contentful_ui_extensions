@@ -136,7 +136,7 @@ FieldStyleEditor.propTypes = {
   updateAssetFormatting: PropTypes.func,
   useReferenceStyleClasses: PropTypes.bool,
   type: PropTypes.string,
-  entry: PropTypes.object
+  entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 FieldStyleEditor.defaultProps = {
