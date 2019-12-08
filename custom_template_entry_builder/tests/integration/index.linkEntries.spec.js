@@ -66,9 +66,9 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newAsset1b');
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedAsset1b');
       expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'image_asset').value).toEqual(
-        'newAsset1b'
+        'newLinkedAsset1b'
       );
     });
 
@@ -111,18 +111,18 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newAsset1a');
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newAsset2a');
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedAsset1a');
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedAsset2a');
       expect(
         newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field').value.map(
           asset => asset.value
         )
-      ).toEqual(['newAsset1a', 'newAsset2a']);
+      ).toEqual(['newLinkedAsset1a', 'newLinkedAsset2a']);
     });
   });
 
   describe('linking entries', () => {
-    it('should link a single asset', async () => {
+    it('should link a single entry', async () => {
       const mockEntry = {
         name: 'Mock Custom Template Entry',
         template: tm.MOCK_ENTRY_TEMPLATE,
@@ -161,9 +161,9 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newEntry1b');
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedEntry1b');
       expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field').value).toEqual(
-        'newEntry1b'
+        'newLinkedEntry1b'
       );
     });
 
@@ -206,13 +206,61 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newEntry1a');
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newEntry2a');
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedEntry1a');
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedEntry2a');
       expect(
         newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field').value.map(
           asset => asset.value
         )
-      ).toEqual(['newEntry1a', 'newEntry2a']);
+      ).toEqual(['newLinkedEntry1a', 'newLinkedEntry2a']);
+    });
+  });
+
+  describe('creating entries', () => {
+    it('should create and link an entry', async () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_ENTRY_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      sdkUpdateSpy.resetHistory();
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // open dropdown
+      wrapper
+        .find('RoleSection')
+        .find({ roleKey: 'entry_field' })
+        .find('CreateNewLink')
+        .simulate('click');
+
+      // click link asset button
+      wrapper
+        .find('RoleSection')
+        .find({ roleKey: 'entry_field' })
+        .find('CreateNewLink')
+        .findWhere(node => node.key() === 'dropdown-media')
+        .find('button')
+        .simulate('click');
+
+      // updates sdk
+      await resolveAll();
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newCreatedEntry1a');
+      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field').value).toEqual(
+        'newCreatedEntry1a'
+      );
     });
   });
 });

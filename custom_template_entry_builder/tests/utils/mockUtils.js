@@ -79,7 +79,13 @@ export const mockSdk = mockCustomTemplateEntry => {
 
   return {
     space: {
-      updateEntry: sinon.spy()
+      updateEntry: sinon.spy(),
+      createEntry: () => {
+        return mockEntryResponse({ id: 'newCreatedEntry1a' });
+      }
+    },
+    navigator: {
+      openEntry: jest.fn()
     },
     entry: {
       getSys: () => {
@@ -109,16 +115,22 @@ export const mockSdk = mockCustomTemplateEntry => {
     },
     dialogs: {
       selectMultipleAssets: () => {
-        return [mockAssetResponse({ id: 'newAsset1a' }), mockAssetResponse({ id: 'newAsset2a' })];
+        return [
+          mockAssetResponse({ id: 'newLinkedAsset1a' }),
+          mockAssetResponse({ id: 'newLinkedAsset2a' })
+        ];
       },
       selectSingleAsset: () => {
-        return mockAssetResponse({ id: 'newAsset1b' });
+        return mockAssetResponse({ id: 'newLinkedAsset1b' });
       },
       selectMultipleEntries: () => {
-        return [mockEntryResponse({ id: 'newEntry1a' }), mockEntryResponse({ id: 'newEntry2a' })];
+        return [
+          mockEntryResponse({ id: 'newLinkedEntry1a' }),
+          mockEntryResponse({ id: 'newLinkedEntry2a' })
+        ];
       },
       selectSingleEntry: () => {
-        return mockEntryResponse({ id: 'newEntry1b' });
+        return mockEntryResponse({ id: 'newLinkedEntry1b' });
       }
     },
     field: {

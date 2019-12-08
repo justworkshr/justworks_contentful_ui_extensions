@@ -120,7 +120,7 @@ describe('App', () => {
       });
     });
 
-    it('should clear a field', () => {
+    it('should clear a field and add it back', () => {
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
@@ -148,6 +148,20 @@ describe('App', () => {
 
       // Clears roles from App state
       expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(0);
+
+      // adds them back
+      wrapper.find('RoleSection').forEach(node => {
+        node.find('TextLink.entry-action-button__add-field').simulate('click');
+      });
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(0);
+        expect(node.find('EntryField')).toHaveLength(1);
+        expect(node.find('FieldStyleEditor')).toHaveLength(1);
+      });
+
+      // Clears roles from App state
+      expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(2);
     });
   });
 
@@ -380,6 +394,9 @@ describe('App', () => {
       wrapper.find('RoleSection').forEach(node => {
         expect(node.find('EntryCard')).toHaveLength(2);
         expect(node.find('AssetCard')).toHaveLength(1);
+        // Action bar remains
+        expect(node.find('CreateNewLink')).toHaveLength(1);
+        expect(node.find('LinkExisting')).toHaveLength(1);
 
         const multiReferenceStyle =
           templateConfig.fieldRoles[node.props().roleKey].multipleReferenceStyle;

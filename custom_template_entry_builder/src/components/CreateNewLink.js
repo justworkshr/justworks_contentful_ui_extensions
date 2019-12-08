@@ -77,7 +77,7 @@ class CreateNewLink extends React.Component {
               </Dropdown>
             ) : (
               <DropdownListItem
-                key={`dropdown-${index}`}
+                key={`dropdown-${contentType}`}
                 onClick={() =>
                   this.props.onAddEntryClick({ roleKey: this.props.roleKey, contentType })
                 }>
