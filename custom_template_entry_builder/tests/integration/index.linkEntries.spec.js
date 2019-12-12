@@ -256,4 +256,100 @@ describe('App', () => {
       );
     });
   });
+
+  describe('deep copy entries', () => {
+    it('should copy and link a single entry', async () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_ENTRY_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      sdkUpdateSpy.resetHistory();
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // open dropdown
+      wrapper
+        .find('RoleSection')
+        .find({ roleKey: 'entry_field' })
+        .find('LinkExisting')
+        .simulate('click');
+
+      // click link asset button
+      wrapper
+        .find('RoleSection')
+        .find({ roleKey: 'entry_field' })
+        .find('LinkExisting')
+        .find('DropdownListItem.link-entries-row__dropdown--deep-copy button')
+        .simulate('click');
+
+      // updates sdk
+      await resolveAll();
+      await resolveAll();
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newCreatedEntry1a');
+      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field').value).toEqual(
+        'newCreatedEntry1a'
+      );
+    });
+
+    it('should copy and link multiple entries', async () => {
+      const mockEntry = {
+        name: 'Mock Custom Template Entry',
+        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      };
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      sdkUpdateSpy.resetHistory();
+
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={tm.mockCustomTemplates}
+          sdk={sdk}
+        />
+      );
+
+      // open dropdown
+      wrapper
+        .find('RoleSection')
+        .find({ roleKey: 'grid_logo_multi_field' })
+        .find('LinkExisting')
+        .simulate('click');
+
+      // click link asset button
+      wrapper
+        .find('RoleSection')
+        .find({ roleKey: 'grid_logo_multi_field' })
+        .find('LinkExisting')
+        .find('DropdownListItem.link-entries-row__dropdown--deep-copy button')
+        .simulate('click');
+
+      // updates sdk
+      await resolveAll();
+      await resolveAll();
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newCreatedEntry1a');
+      expect(
+        newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field').value.map(
+          asset => asset.value
+        )
+      ).toEqual(['newCreatedEntry1a']);
+    });
+  });
 });

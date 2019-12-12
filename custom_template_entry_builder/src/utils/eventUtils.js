@@ -308,7 +308,6 @@ export const linkEntryToTemplate = ({
   const updatedEntries = [...entriesFieldValue, constructLink(entryResponse)];
   const updatedInternalMapping = state.entryInternalMapping;
   updatedInternalMapping.addEntry(roleKey, entryResponse.sys.id);
-
   updateEntries({
     setState,
     timeoutUpdateEntry,
@@ -525,7 +524,7 @@ export const handleLinkEntryClick = async ({
   }
 };
 
-export const handleDeepCloneClick = async ({
+export const handleDeepCopyClick = async ({
   sdk,
   state,
   setState,
@@ -534,6 +533,7 @@ export const handleDeepCloneClick = async ({
   contentType
 } = {}) => {
   setEntryLoading({ setState, roleKey, value: true });
+
   const entry = await sdk.dialogs.selectSingleEntry({
     locale: 'en-US',
     contentTypes: getContentTypeArray(contentType)
@@ -545,6 +545,7 @@ export const handleDeepCloneClick = async ({
     sdk.entry.getSys().id,
     state.templateConfig.fieldRoles
   );
+
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   }
@@ -557,15 +558,26 @@ export const handleDeepCloneClick = async ({
       `${sdk.entry.fields.name.getValue()} ${roleKey}`
     );
 
-    linkEntryToTemplate({
-      sdk,
-      state,
-      setState,
-      timeoutUpdateEntry,
-      entryResponse: clonedEntry,
-      roleKey
-    });
-
+    // Only links 1 entry at a time, even in multi-reference fields
+    if (state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
+      linkEntriesToTemplate({
+        sdk,
+        state,
+        setState,
+        timeoutUpdateEntry,
+        entryResponses: [clonedEntry],
+        roleKey
+      });
+    } else {
+      linkEntryToTemplate({
+        sdk,
+        state,
+        setState,
+        timeoutUpdateEntry,
+        entryResponse: clonedEntry,
+        roleKey
+      });
+    }
     setEntryLoading({ setState, roleKey, value: false });
     sdk.notifier.success('Deep copy completed. New entry is now linked.');
   }

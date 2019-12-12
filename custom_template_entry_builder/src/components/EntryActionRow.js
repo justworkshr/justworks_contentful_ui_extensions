@@ -32,7 +32,7 @@ const EntryActionRow = props => {
           linkAsset={!!props.allowAsset}
           onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
-          onDeepCloneLinkClick={props.onDeepCloneLinkClick}
+          onDeepCopyLinkClick={props.onDeepCopyLinkClick}
           contentTypes={props.contentTypes}
           roleKey={props.roleKey}
         />
@@ -51,7 +51,7 @@ EntryActionRow.propTypes = {
   onAddEntryClick: PropTypes.func,
   onLinkAssetClick: PropTypes.func,
   onLinkEntryClick: PropTypes.func,
-  onDeepCloneLinkClick: PropTypes.func
+  onDeepCopyLinkClick: PropTypes.func
 };
 
 export default EntryActionRow;

@@ -31,11 +31,51 @@ export const mockAssetResponse = ({ id = 0, url = 'localhost', assetType = 'imag
   };
 };
 
-export const mockEntryResponse = ({ id = 0 } = {}) => {
+export const mockCustomTemplateEntryResponse = ({
+  id = 0,
+  contentType = 'customTemplate',
+  template = undefined
+} = {}) => {
   return {
     sys: {
       id,
-      type: 'Entry'
+      type: 'Entry',
+      contentType: {
+        sys: {
+          id: contentType
+        }
+      }
+    },
+    fields: {
+      name: {
+        'en-US': 'Entry Title.'
+      },
+      f1: {
+        'en-US': 'text!!!'
+      },
+      entries: {
+        'en-US': undefined
+      },
+      template: {
+        'en-US': template
+      },
+      internalMapping: {
+        'en-US': undefined
+      }
+    }
+  };
+};
+
+export const mockEntryResponse = ({ id = 0, contentType = 'text' } = {}) => {
+  return {
+    sys: {
+      id,
+      type: 'Entry',
+      contentType: {
+        sys: {
+          id: contentType
+        }
+      }
     },
     fields: {
       name: {
@@ -141,6 +181,10 @@ export const mockSdk = mockCustomTemplateEntry => {
       setValue: jest.fn(),
       removeValue: jest.fn(),
       setInvalid: jest.fn()
+    },
+    notifier: {
+      success: jest.fn(),
+      error: jest.fn()
     },
     window: {
       startAutoResizer: jest.fn()

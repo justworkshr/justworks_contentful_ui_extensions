@@ -57,7 +57,7 @@ class LinkExisting extends React.Component {
             <DropdownListItem
               className="link-entries-row__dropdown--deep-copy"
               onClick={() =>
-                this.props.onDeepCloneLinkClick(this.props.roleKey, this.props.contentTypes)
+                this.props.onDeepCopyLinkClick(this.props.roleKey, this.props.contentTypes)
               }>
               Deep copy
             </DropdownListItem>
@@ -76,7 +76,7 @@ LinkExisting.defaultProps = {
 LinkExisting.propTypes = {
   onLinkAssetClick: PropTypes.func,
   onLinkEntryClick: PropTypes.func,
-  onDeepCloneLinkClick: PropTypes.func,
+  onDeepCopyLinkClick: PropTypes.func,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   linkAsset: PropTypes.bool,
   roleKey: PropTypes.string

@@ -118,7 +118,9 @@ export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
     circularReferenceFound = true;
   } else if (
     getEntryContentTypeId(linkedEntry) === 'customTemplate' &&
-    !!linkedEntry.fields.entries
+    !!linkedEntry.fields.entries &&
+    !!Object.keys(linkedEntry.fields.entries).length &&
+    !!linkedEntry.fields.entries['en-US']
   ) {
     linkedEntry.fields.entries['en-US'].forEach(e => {
       if (e.sys.id === thisEntryId) {
