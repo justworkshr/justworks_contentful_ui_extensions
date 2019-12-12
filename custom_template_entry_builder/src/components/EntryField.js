@@ -18,6 +18,9 @@ import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
   const renderEntryCard = () => {
+    const contentType = (props.entry.sys || {}).contentType
+      ? getEntryContentTypeId(props.entry)
+      : null;
     return (
       <EntryCard
         draggable
@@ -25,9 +28,7 @@ export const EntryField = props => {
         className="role-section__entity"
         size="small"
         title={props.entry.fields ? props.entry.fields.name['en-US'] : 'Loading...'}
-        contentType={
-          (props.entry.sys || {}).contentType ? getEntryContentTypeId(props.entry) : null
-        }
+        contentType={contentType}
         status={getStatus(props.entry)}
         withDragHandle={true}
         isDragActive={props.isDragActive}
@@ -39,6 +40,11 @@ export const EntryField = props => {
               className="entry-card__action--edit"
               onClick={() => props.onEditClick(props.entry)}>
               Edit
+            </DropdownListItem>
+            <DropdownListItem
+              className="entry-card__action--edit"
+              onClick={() => props.onDeepCopyClick(props.roleKey, contentType)}>
+              Deep Copy
             </DropdownListItem>
             <DropdownListItem
               className="entry-card__action--remove"
@@ -117,6 +123,7 @@ EntryField.propTypes = {
   isDragActive: PropTypes.bool,
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,
+  onDeepCopyClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onFieldChange: PropTypes.func
 };

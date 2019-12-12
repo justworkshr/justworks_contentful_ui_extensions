@@ -301,7 +301,7 @@ export const linkEntryToTemplate = ({
   entryResponse,
   roleKey
 }) => {
-  if (!entryResponse) throw new Error('No entryResponse was passed to linkEntryToTemplate');
+  if (!entryResponse) return;
   const entriesFieldValue = sdk.entry.fields.entries.getValue() || [];
 
   const updatedStateEntries = addStateEntry(state.entries, roleKey, entryResponse);
@@ -456,8 +456,7 @@ export const handleMultipleEntriesLink = async ({
   roleKey,
   entryResponses
 }) => {
-  if (!entryResponses)
-    throw new Error('No entryResponses were passed to handleMultipleEntriesLink');
+  if (!entryResponses) return;
 
   let linkedEntryValidation;
   entryResponses.forEach(entry => {

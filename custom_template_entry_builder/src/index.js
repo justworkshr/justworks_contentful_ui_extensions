@@ -245,7 +245,7 @@ export class App extends React.Component {
     });
   };
 
-  onDeepCloneClick = async (roleKey, contentType) => {
+  onDeepCopyClick = async (roleKey, contentType) => {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
       state: this.state,
@@ -414,6 +414,7 @@ export class App extends React.Component {
                 roleKey={roleKey}
                 roleConfig={roleConfigObject}
                 onEditClick={this.onEditClick}
+                onDeepCopyClick={this.onDeepCopyClick}
                 onRemoveClick={this.onRemoveClick}
                 onFieldChange={this.onFieldChange}
               />
@@ -431,7 +432,7 @@ export class App extends React.Component {
             onAddEntryClick={this.onAddEntryClick}
             onLinkAssetClick={this.onLinkAssetClick}
             onLinkEntryClick={this.onLinkEntryClick}
-            onDeepCopyLinkClick={this.onDeepCopyLinkClick}
+            onDeepCopyLinkClick={this.onDeepCopyClick}
           />
           {renderMultiReferenceStyle(roleConfigObject) && (
             <FieldStyleEditor
@@ -473,6 +474,7 @@ export class App extends React.Component {
             roleKey={roleKey}
             roleConfig={roleConfigObject}
             onEditClick={this.onEditClick}
+            onDeepCopyClick={this.onDeepCopyClick}
             onRemoveClick={this.onRemoveClick}
             onFieldChange={this.onFieldChange}
           />
@@ -505,7 +507,7 @@ export class App extends React.Component {
           onAddEntryClick={this.onAddEntryClick}
           onLinkAssetClick={this.onLinkAssetClick}
           onLinkEntryClick={this.onLinkEntryClick}
-          onDeepCopyLinkClick={this.onDeepCloneClick}
+          onDeepCopyLinkClick={this.onDeepCopyClick}
         />
       );
     }
