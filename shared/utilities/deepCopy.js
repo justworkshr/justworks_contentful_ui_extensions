@@ -67,7 +67,7 @@ const constructFields = async (space, entry, contentType, name) => {
     let parsedField = key === "name" ? name : getParsedFieldValue(value);
 
     if (isSingleReference(parsedField)) {
-      // Single reference
+      // Single reference entry
       const linkEntry = await getEntry(space, parsedField.sys.id);
       const linkEntryContentType = linkEntry.sys.contentType.sys.id;
       const clonedEntry = await cloneEntry(
@@ -79,7 +79,7 @@ const constructFields = async (space, entry, contentType, name) => {
         ["en-US"]: constructLink(clonedEntry)
       };
     } else if (isMultiReference(value)) {
-      // Multi Reference, not customTemplate
+      // Multi Reference entry, not customTemplate
       const references = await fetchMultiReferences(space, parsedField, name);
 
       fields[key] = {
@@ -119,9 +119,11 @@ const constructCustomTemplateFields = async (
     let parsedField = key === "name" ? name : getParsedFieldValue(value);
 
     if (isSingleReference(parsedField)) {
-      // Single reference
-      const linkEntry = await getEntry(space, parsedField.sys.id);
-      const linkEntryContentType = linkEntry.sys.contentType.sys.id;
+      // Single reference entry
+      if (link.sys.linkType === "Asset") {
+        const linkEntry = await getEntry(space, parsedField.sys.id);
+        const linkEntryContentType = linkEntry.sys.contentType.sys.id;
+      }
       const clonedEntry = await cloneEntry(
         space,
         linkEntry,
@@ -132,12 +134,13 @@ const constructCustomTemplateFields = async (
       };
     } else if (isMultiReference(value)) {
       if (key === "entries") continue;
-      // Multi Reference, not customTemplate
+      // Multi Reference entry, custom Template
       const references = await fetchMultiReferences(space, parsedField, name);
 
       fields[key] = {
         ["en-US"]: references
       };
+      // TODO - add isSingleAsset
     } else {
       if (key === "internalMapping") continue;
       // Assets, all other fields except customTemplate's internalMapping field

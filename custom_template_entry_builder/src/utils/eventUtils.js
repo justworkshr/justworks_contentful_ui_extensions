@@ -529,22 +529,23 @@ export const handleDeepCopyClick = async ({
   setState,
   timeoutUpdateEntry,
   roleKey,
-  contentType
+  contentType,
+  entry = undefined
 } = {}) => {
   setEntryLoading({ setState, roleKey, value: true });
 
-  const entry = await sdk.dialogs.selectSingleEntry({
-    locale: 'en-US',
-    contentTypes: getContentTypeArray(contentType)
-  });
-
+  entry =
+    entry ||
+    (await sdk.dialogs.selectSingleEntry({
+      locale: 'en-US',
+      contentTypes: getContentTypeArray(contentType)
+    }));
   const linkedEntryValidation = validateLinkedEntry(
     entry,
     roleKey,
     sdk.entry.getSys().id,
     state.templateConfig.fieldRoles
   );
-
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   }
@@ -556,7 +557,7 @@ export const handleDeepCopyClick = async ({
       entry,
       `${sdk.entry.fields.name.getValue()} ${roleKey}`
     );
-
+    console.log(clonedEntry);
     // Only links 1 entry at a time, even in multi-reference fields
     if (state.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
       linkEntriesToTemplate({

@@ -245,14 +245,15 @@ export class App extends React.Component {
     });
   };
 
-  onDeepCopyClick = async (roleKey, contentType) => {
+  onDeepCopyClick = async (roleKey, contentType, entry = undefined) => {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
       state: this.state,
       setState: this.setState.bind(this),
       timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
       roleKey,
-      contentType
+      contentType,
+      entry
     });
   };
 

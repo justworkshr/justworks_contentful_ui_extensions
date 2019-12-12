@@ -43,7 +43,7 @@ export const EntryField = props => {
             </DropdownListItem>
             <DropdownListItem
               className="entry-card__action--edit"
-              onClick={() => props.onDeepCopyClick(props.roleKey, contentType)}>
+              onClick={() => props.onDeepCopyClick(props.roleKey, contentType, props.entry)}>
               Deep Copy
             </DropdownListItem>
             <DropdownListItem
