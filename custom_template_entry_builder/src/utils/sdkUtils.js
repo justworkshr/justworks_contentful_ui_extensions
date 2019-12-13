@@ -2,7 +2,7 @@ import { templateIsValid, getTemplateErrors } from './validations';
 import { constructLink } from './index';
 
 let versionAttempts = 0;
-let MAX_VERSION_ATTEMPTS = 3;
+let MAX_VERSION_ATTEMPTS = 10;
 
 export const addFieldAsset = (assetsValue, asset) => {
   const linkedAsset = constructLink(asset);
