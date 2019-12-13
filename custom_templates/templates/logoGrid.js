@@ -23,7 +23,7 @@ export const logoGrid = {
       items: constructRole({
         description: "Grid items.",
         required: false,
-        // allowedCustomTemplates: [c.LOGO_ITEM],
+        allowedCustomTemplates: [c.LOGO_ITEM],
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           subType: c.ASSET_SUBTYPE_LOGO,
