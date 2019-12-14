@@ -11,20 +11,18 @@ import {
   RadioButtonField,
   Form
 } from '@contentful/forma-36-react-components';
+
+import TemplateTypePalette from './components/TemplateTypePalette';
+import ShortTextField from './components/ShortTextField';
+import LongTextField from './components/LongTextField';
+
 import { init, locations } from 'contentful-ui-extensions-sdk';
+import { customTemplates, templatePlaceholder } from '../../custom_templates';
+
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
 import './index.css';
-
-/**
- * To use this demo create a Content Type with the following fields:
- *  title: Short text
- *  body: Long text
- *  hasAbstract: Boolean
- *  abstract: Long text
- *
- *  See https://github.com/contentful/create-contentful-extension/blob/master/docs/examples/entry-editor-content-model.json for details.
- */
+import BooleanRadioField from './components/BooleanRadioField';
 
 export class App extends React.Component {
   static propTypes = {
@@ -35,35 +33,41 @@ export class App extends React.Component {
     super(props);
 
     this.state = {
-      title: props.sdk.entry.fields.title.getValue(),
-      body: props.sdk.entry.fields.body.getValue(),
-      abstract: props.sdk.entry.fields.abstract.getValue(),
-      hasAbstract: props.sdk.entry.fields.hasAbstract.getValue() || false
+      name: props.sdk.entry.fields.name ? props.sdk.entry.fields.name.getValue() : null,
+      type: props.sdk.entry.fields.type ? props.sdk.entry.fields.type.getValue() : null,
+      isValid: props.sdk.entry.fields.isValid ? props.sdk.entry.fields.isValid.getValue() : null,
+      internalMapping: props.sdk.entry.fields.internalMapping
+        ? props.sdk.entry.fields.internalMapping.getValue()
+        : null
     };
   }
 
-  onTitleChangeHandler = event => {
+  onNameChangeHandler = event => {
     const value = event.target.value;
-    this.setState({ title: value });
-    this.props.sdk.entry.fields.title.setValue(value);
+    this.setState({ name: value });
+    this.props.sdk.entry.fields.name.setValue(value);
   };
 
-  onBodyChangeHandler = event => {
-    const value = event.target.value;
-    this.setState({ body: value });
-    this.props.sdk.entry.fields.body.setValue(value);
+  onTypeChangeHandler = value => {
+    this.setState({ type: value });
+    if (value) {
+      this.props.sdk.entry.fields.type.setValue(value);
+    } else {
+      this.props.sdk.field.removeValue();
+    }
   };
 
-  onAbstractChangeHandler = event => {
+  onInternalMappingChangeHandler = event => {
     const value = event.target.value;
-    this.setState({ abstract: value });
-    this.props.sdk.entry.fields.abstract.setValue(value);
+    console.log(value);
+    this.setState({ internalMapping: value });
+    this.props.sdk.entry.fields.internalMapping.setValue(value);
   };
 
-  onHasAbstractChangeHandler = event => {
-    const hasAbstract = event.target.value === 'yes';
-    this.setState({ hasAbstract });
-    this.props.sdk.entry.fields.hasAbstract.setValue(hasAbstract);
+  onisValidChangeHandler = event => {
+    const isValid = event.target.value === 'yes';
+    this.setState({ isValid });
+    this.props.sdk.entry.fields.isValid.setValue(isValid);
   };
 
   render() {
@@ -73,43 +77,38 @@ export class App extends React.Component {
         <Paragraph>
           This demo uses a single UI Extension to render the whole editor for an entry.
         </Paragraph>
-        <SectionHeading>Title</SectionHeading>
-        <TextInput
-          testId="field-title"
-          onChange={this.onTitleChangeHandler}
-          value={this.state.title}
+        <ShortTextField
+          heading="Name"
+          testId="field-name"
+          onChange={this.onNameChangeHandler}
+          value={this.state.name}
         />
-        <SectionHeading>Body</SectionHeading>
-        <Textarea testId="field-body" onChange={this.onBodyChangeHandler} value={this.state.body} />
-        <SectionHeading>Has abstract?</SectionHeading>
-        <FieldGroup row={false}>
-          <RadioButtonField
-            labelText="Yes"
-            checked={this.state.hasAbstract === true}
-            value="yes"
-            onChange={this.onHasAbstractChangeHandler}
-            name="abstractOption"
-            id="yesCheckbox"
-          />
-          <RadioButtonField
-            labelText="No"
-            checked={this.state.hasAbstract === false}
-            value="no"
-            onChange={this.onHasAbstractChangeHandler}
-            name="abstractOption"
-            id="noCheckbox"
-          />
-        </FieldGroup>
-        {this.state.hasAbstract && (
-          <React.Fragment>
-            <SectionHeading>Abstract</SectionHeading>
-            <Textarea
-              testId="field-abstract"
-              onChange={this.onAbstractChangeHandler}
-              value={this.state.abstract}
+
+        {this.state.type !== null && (
+          <div>
+            <SectionHeading>Type</SectionHeading>
+            <TemplateTypePalette
+              customTemplates={customTemplates}
+              templatePlaceholder={templatePlaceholder}
+              sdk={this.props.sdk}
+              onChange={this.onTypeChangeHandler}
+              value={this.state.type}
             />
-          </React.Fragment>
+          </div>
         )}
+
+        <LongTextField
+          heading="Internal Mapping"
+          testId="field-internal-mapping"
+          onChange={this.onInternalMappingChangeHandler}
+          value={this.state.internalMapping}
+        />
+        <BooleanRadioField
+          heading="Is Valid?"
+          testId="field-internal-mapping"
+          onChange={this.onisValidChangeHandler}
+          value={this.state.isValid}
+        />
       </Form>
     );
   }
@@ -120,11 +119,3 @@ init(sdk => {
     render(<App sdk={sdk} />, document.getElementById('root'));
   }
 });
-
-/**
- * By default, iframe of the extension is fully reloaded on every save of a source file.
- * If you want to use HMR (hot module reload) instead of full reload, uncomment the following lines
- */
-// if (module.hot) {
-//   module.hot.accept();
-// }
