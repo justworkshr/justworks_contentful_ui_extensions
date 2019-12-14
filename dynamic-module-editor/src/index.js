@@ -13,6 +13,7 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import TemplateTypePalette from './components/TemplateTypePalette';
+import EntryBuilder from './components/EntryBuilder';
 import ShortTextField from './components/ShortTextField';
 import LongTextField from './components/LongTextField';
 
@@ -89,6 +90,19 @@ export class App extends React.Component {
           <div>
             <SectionHeading>Type</SectionHeading>
             <TemplateTypePalette
+              customTemplates={customTemplates}
+              templatePlaceholder={templatePlaceholder}
+              sdk={this.props.sdk}
+              onChange={this.onTypeChangeHandler}
+              value={this.state.type}
+            />
+          </div>
+        )}
+
+        {this.state.internalMapping !== null && (
+          <div>
+            <SectionHeading>Type</SectionHeading>
+            <EntryBuilder
               customTemplates={customTemplates}
               templatePlaceholder={templatePlaceholder}
               sdk={this.props.sdk}

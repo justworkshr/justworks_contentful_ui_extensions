@@ -38,7 +38,7 @@ BooleanRadioField.propTypes = {
   heading: PropTypes.string,
   onChange: PropTypes.func,
   testId: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.bool
 };
 BooleanRadioField.defaultProps = {
   heading: '',
