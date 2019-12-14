@@ -56,7 +56,7 @@ export const mockCustomTemplateEntryResponse = ({
       entries: {
         'en-US': undefined
       },
-      template: {
+      type: {
         'en-US': template
       },
       internalMapping: {
@@ -140,7 +140,7 @@ export const mockSdk = mockCustomTemplateEntry => {
         name: {
           getValue: () => getValue(mockCustomTemplateEntry, 'name')
         },
-        template: {
+        type: {
           getValue: () => getValue(mockCustomTemplateEntry, 'template'),
           onValueChanged: jest.fn()
         },
