@@ -3,5 +3,9 @@ module.exports = {
   moduleNameMapper: {
     '^.+\\.css$': '<rootDir>/tests/MockImports.js'
   },
-  transform: { '^.+\\.jsx?$': 'babel-jest', '^.+\\.css$': 'jest-transform-css' }
+  transform: {
+    '^.+\\.js?$': 'babel-jest',
+    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.css$': 'jest-transform-css'
+  }
 };

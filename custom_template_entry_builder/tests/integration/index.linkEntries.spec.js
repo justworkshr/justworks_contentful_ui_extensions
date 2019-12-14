@@ -7,7 +7,7 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import * as c from '../../../custom_templates/constants';
 
-import * as tm from '../mocks/templateMocks';
+import * as tm from '../../../custom_templates/mocks/templateMocks';
 
 import { mockSdk } from '../utils/mockUtils';
 

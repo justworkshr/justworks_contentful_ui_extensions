@@ -17,7 +17,8 @@ import ShortTextField from './components/ShortTextField';
 import LongTextField from './components/LongTextField';
 
 import { init, locations } from 'contentful-ui-extensions-sdk';
-import { customTemplates, templatePlaceholder } from '../../custom_templates';
+
+import { customTemplates, templatePlaceholder } from '../../custom_templates/';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
