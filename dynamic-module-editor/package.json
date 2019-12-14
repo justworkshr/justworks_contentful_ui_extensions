@@ -43,6 +43,7 @@
     "help": "contentful-extension-scripts help"
   },
   "dependencies": {
+    "@contentful/forma-36-fcss": "0.0.32",
     "@contentful/forma-36-react-components": "^3.11.3",
     "contentful-ui-extensions-sdk": "3.9.0",
     "prop-types": "^15.7.2",
