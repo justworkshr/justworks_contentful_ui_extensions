@@ -119,7 +119,7 @@ export class App extends React.Component {
     sdk.window.startAutoResizer();
     // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
     this.detachExternalChangeHandler = sdk.field.onValueChanged(this.onExternalChange);
-    sdk.entry.fields.template.onValueChanged(this.onTemplateChange);
+    sdk.entry.fields.type.onValueChanged(this.onTemplateChange);
     sdk.entry.onSysChanged(this.onSysChanged);
 
     if (this.state.template) {
@@ -141,7 +141,7 @@ export class App extends React.Component {
       Updates state with new values and validates template
     */
     const sdk = this.props.sdk;
-    const template = sdk.entry.fields.template.getValue();
+    const template = sdk.entry.fields.type.getValue();
     const internalMappingJson = sdk.entry.fields.internalMapping.getValue();
     if (!internalMappingJson) return;
     this.state.entryInternalMapping.assignRolesFromMapping(JSON.parse(internalMappingJson));
