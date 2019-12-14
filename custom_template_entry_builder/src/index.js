@@ -66,7 +66,7 @@ export class App extends React.Component {
 
   constructor(props) {
     super(props);
-    const template = props.sdk.entry.fields.template.getValue();
+    const template = props.sdk.entry.fields.type.getValue();
     const templateConfig =
       props.customTemplates[template && template.toLowerCase()] || props.templatePlaceholder;
     const internalMappingJson = props.sdk.entry.fields.internalMapping.getValue();
