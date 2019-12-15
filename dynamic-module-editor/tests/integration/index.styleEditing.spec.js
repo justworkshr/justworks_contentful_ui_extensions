@@ -92,7 +92,7 @@ describe('App', () => {
       // updates sdk
       await resolveAll();
       expect(
-        internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[1][0], 'text_field')
+        internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[0][0], 'text_field')
       ).toBe('text-left text-navy');
     });
 
@@ -180,7 +180,7 @@ describe('App', () => {
       // updates sdk
       await resolveAll();
       expect(
-        internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[1][0], 'text_field')
+        internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[0][0], 'text_field')
       ).toBe('text-black');
     });
   });
