@@ -12,41 +12,14 @@ import InternalMapping from '../../../utils/InternalMapping';
 
 import { validateLinkedEntry, validateLinkedAsset } from '../utils/validations';
 
-export const handleRemoveEntry = ({
-  props,
-  timeoutUpdateEntry,
-  roleKey,
-  entryIndex = null
-} = {}) => {
+export const handleRemoveEntry = ({ props, updateEntry, roleKey, entryIndex = null } = {}) => {
   if (!roleKey) return null;
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.removeEntry(roleKey, entryIndex);
-  timeoutUpdateEntry({
-    updatedInternalMapping,
-    ms: 0
-  });
+  updateEntry(updatedInternalMapping.asJSON());
 };
 
-const updateInternalMapping = ({ timeoutUpdateEntry, updatedInternalMapping }) => {
-  timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
-};
-
-const updateAssets = ({ updatedInternalMapping, timeoutUpdateEntry }) => {
-  timeoutUpdateEntry({
-    updatedInternalMapping,
-    ms: 0
-  });
-};
-
-const updateField = ({ timeoutUpdateEntry, updatedInternalMapping } = {}) => {
-  timeoutUpdateEntry({ updatedInternalMapping, ms: 0 });
-};
-
-const updateEntries = ({ timeoutUpdateEntry, updatedInternalMapping }) => {
-  timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
-};
-
-const linkAssetsToTemplate = ({ props, assets, roleKey, timeoutUpdateEntry }) => {
+const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
   const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
   const firstAsset =
@@ -75,13 +48,10 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, timeoutUpdateEntry }) =>
     styleClasses: (roleConfigObject || {}).defaultClasses
   });
 
-  updateAssets({
-    updatedInternalMapping,
-    timeoutUpdateEntry
-  });
+  updateEntry(updatedInternalMapping.asJSON());
 };
 
-const linkAssetToTemplate = ({ props, asset, roleKey, timeoutUpdateEntry }) => {
+const linkAssetToTemplate = ({ props, asset, roleKey, updateEntry }) => {
   const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
 
@@ -96,10 +66,7 @@ const linkAssetToTemplate = ({ props, asset, roleKey, timeoutUpdateEntry }) => {
     roleConfigObject.asset.defaultClasses
   );
 
-  updateAssets({
-    updatedInternalMapping,
-    timeoutUpdateEntry
-  });
+  updateEntry(updatedInternalMapping.asJSON());
 };
 
 export const handleMultipleAssetsLink = async ({
@@ -107,7 +74,7 @@ export const handleMultipleAssetsLink = async ({
   props,
   roleKey,
   assets,
-  timeoutUpdateEntry
+  updateEntry
 } = {}) => {
   let linkedEntryValidation;
 
@@ -118,17 +85,11 @@ export const handleMultipleAssetsLink = async ({
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   } else {
-    linkAssetsToTemplate({ props, assets, roleKey, timeoutUpdateEntry });
+    linkAssetsToTemplate({ props, assets, roleKey, updateEntry });
   }
 };
 
-export const handleSingleAssetLink = async ({
-  sdk,
-  props,
-  roleKey,
-  asset,
-  timeoutUpdateEntry
-} = {}) => {
+export const handleSingleAssetLink = async ({ sdk, props, roleKey, asset, updateEntry } = {}) => {
   if (!asset) return;
 
   const linkedEntryValidation = validateLinkedAsset(
@@ -139,10 +100,10 @@ export const handleSingleAssetLink = async ({
     return sdk.notifier.error(linkedEntryValidation);
   }
 
-  linkAssetToTemplate({ props, asset, roleKey, timeoutUpdateEntry });
+  linkAssetToTemplate({ props, asset, roleKey, updateEntry });
 };
 
-export const handleLinkAssetClick = async ({ sdk, props, timeoutUpdateEntry, roleKey } = {}) => {
+export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
   if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
     const assets = await sdk.dialogs.selectMultipleAssets({
       locale: 'en-US'
@@ -152,7 +113,7 @@ export const handleLinkAssetClick = async ({ sdk, props, timeoutUpdateEntry, rol
       props,
       roleKey,
       assets,
-      timeoutUpdateEntry
+      updateEntry
     });
   } else {
     const asset = await sdk.dialogs.selectSingleAsset({
@@ -164,28 +125,20 @@ export const handleLinkAssetClick = async ({ sdk, props, timeoutUpdateEntry, rol
       props,
       roleKey,
       asset,
-      timeoutUpdateEntry
+      updateEntry
     });
   }
 };
 
-export const linkEntryToTemplate = ({ props, timeoutUpdateEntry, entryResponse, roleKey }) => {
+export const linkEntryToTemplate = ({ props, updateEntry, entryResponse, roleKey }) => {
   if (!entryResponse) return;
 
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addEntry(roleKey, entryResponse.sys.id);
-  updateEntries({
-    timeoutUpdateEntry,
-    updatedInternalMapping
-  });
+  updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const linkEntriesToTemplate = ({
-  props,
-  timeoutUpdateEntry,
-  entryResponses,
-  roleKey
-} = {}) => {
+export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, roleKey } = {}) => {
   const updatedInternalMapping = props.entryInternalMapping;
   const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   updatedInternalMapping.addEntriesOrAssets({
@@ -194,13 +147,10 @@ export const linkEntriesToTemplate = ({
     styleClasses: (roleConfigObject || {}).defaultClasses
   });
 
-  updateEntries({
-    timeoutUpdateEntry,
-    updatedInternalMapping
-  });
+  updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const handleAddField = async ({ props, timeoutUpdateEntry, roleKey, field }) => {
+export const handleAddField = async ({ props, setInternalMappingValue, roleKey, field }) => {
   const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addField({
@@ -209,16 +159,13 @@ export const handleAddField = async ({ props, timeoutUpdateEntry, roleKey, field
     styleClasses: roleConfigObject.defaultClasses
   });
 
-  updateField({
-    timeoutUpdateEntry,
-    updatedInternalMapping
-  });
+  setInternalMappingValue(updatedInternalMapping.asJSON());
 };
 
 export const handleAddEntry = async ({
   sdk,
   props,
-  timeoutUpdateEntry,
+  updateEntry,
   roleKey,
   contentType,
   template = undefined,
@@ -235,14 +182,14 @@ export const handleAddEntry = async ({
     if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
       linkEntriesToTemplate({
         props,
-        timeoutUpdateEntry,
+        updateEntry,
         entryResponses: [newEntry],
         roleKey
       });
     } else {
       linkEntryToTemplate({
         props,
-        timeoutUpdateEntry,
+        updateEntry,
         entryResponse: newEntry,
         roleKey
       });
@@ -254,7 +201,7 @@ export const handleAddEntry = async ({
 export const handleSingleEntryLink = async ({
   sdk,
   props,
-  timeoutUpdateEntry,
+  updateEntry,
   roleKey,
   entryResponse
 } = {}) => {
@@ -271,7 +218,7 @@ export const handleSingleEntryLink = async ({
 
   linkEntryToTemplate({
     props,
-    timeoutUpdateEntry,
+    updateEntry,
     entryResponse,
     roleKey
   });
@@ -280,7 +227,7 @@ export const handleSingleEntryLink = async ({
 export const handleMultipleEntriesLink = async ({
   sdk,
   props,
-  timeoutUpdateEntry,
+  updateEntry,
   roleKey,
   entryResponses
 }) => {
@@ -303,7 +250,7 @@ export const handleMultipleEntriesLink = async ({
   if (!linkedEntryValidation) {
     linkEntriesToTemplate({
       props,
-      timeoutUpdateEntry,
+      updateEntry,
       entryResponses,
       roleKey
     });
@@ -313,7 +260,7 @@ export const handleMultipleEntriesLink = async ({
 export const handleLinkEntryClick = async ({
   sdk,
   props,
-  timeoutUpdateEntry,
+  updateEntry,
   roleKey,
   contentType
 } = {}) => {
@@ -326,7 +273,7 @@ export const handleLinkEntryClick = async ({
     handleMultipleEntriesLink({
       sdk,
       props,
-      timeoutUpdateEntry,
+      updateEntry,
       roleKey,
       entryResponses
     });
@@ -339,7 +286,7 @@ export const handleLinkEntryClick = async ({
     handleSingleEntryLink({
       sdk,
       props,
-      timeoutUpdateEntry,
+      updateEntry,
       roleKey,
       entryResponse
     });
@@ -349,7 +296,7 @@ export const handleLinkEntryClick = async ({
 export const handleDeepCopyClick = async ({
   sdk,
   props,
-  timeoutUpdateEntry,
+  updateEntry,
   roleKey,
   contentType,
   entry = undefined
@@ -380,14 +327,14 @@ export const handleDeepCopyClick = async ({
     if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
       linkEntriesToTemplate({
         props,
-        timeoutUpdateEntry,
+        updateEntry,
         entryResponses: [clonedEntry],
         roleKey
       });
     } else {
       linkEntryToTemplate({
         props,
-        timeoutUpdateEntry,
+        updateEntry,
         entryResponse: clonedEntry,
         roleKey
       });
@@ -397,7 +344,7 @@ export const handleDeepCopyClick = async ({
 };
 
 export const handleUpdateEntryStyle = ({
-  timeoutUpdateEntry,
+  setInternalMappingValue,
   internalMappingObject,
   roleKey,
   styleClasses
@@ -408,11 +355,11 @@ export const handleUpdateEntryStyle = ({
   );
   styleClasses = internalMappingObject[roleKey].styleClasses;
 
-  timeoutUpdateEntry({ updatedInternalMapping: internalMappingObject, ms: 0 });
+  setInternalMappingValue(internalMappingObject.asJSON());
 };
 
 export const handleUpdateReferencesStyle = ({
-  timeoutUpdateEntry,
+  setInternalMappingValue,
   internalMappingObject,
   roleKey,
   styleClasses
@@ -423,7 +370,7 @@ export const handleUpdateReferencesStyle = ({
   );
   styleClasses = internalMappingObject[roleKey].styleClasses;
 
-  timeoutUpdateEntry({ updatedInternalMapping: internalMappingObject, ms: 0 });
+  setInternalMappingValue(internalMappingObject.asJSON());
 };
 
 export const handleEntryEditClick = async ({ sdk, entry, type } = {}) => {
@@ -435,7 +382,7 @@ export const handleEntryEditClick = async ({ sdk, entry, type } = {}) => {
   }
 };
 
-export const handleFieldChange = ({ props, timeoutUpdateEntry, e, roleKey } = {}) => {
+export const handleFieldChange = ({ props, setInternalMappingValue, e, roleKey } = {}) => {
   const value = e.currentTarget.value;
   if (typeof value === 'string') {
     let updatedInternalMapping = props.entryInternalMapping;
@@ -447,9 +394,6 @@ export const handleFieldChange = ({ props, timeoutUpdateEntry, e, roleKey } = {}
 
     updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
 
-    updateField({
-      timeoutUpdateEntry,
-      updatedInternalMapping
-    });
+    setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 };

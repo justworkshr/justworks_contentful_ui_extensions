@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 
 import * as c from '../../../../custom_templates/constants';
 
@@ -47,7 +46,6 @@ export default class EntryBuilder extends React.Component {
     const internalMappingJson = props.internalMappingJson;
 
     this.state = {
-      entries: this.props.entries || {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
       entryInternalMapping: type
@@ -57,9 +55,6 @@ export default class EntryBuilder extends React.Component {
       type
     };
 
-    this.sendUpdateRequestTimeout = undefined;
-
-    this.loadEntries = this.loadEntries.bind(this);
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
     this.updateEntryStyle = this.updateEntryStyle.bind(this);
@@ -75,8 +70,7 @@ export default class EntryBuilder extends React.Component {
   onAddFieldClick = (roleKey, field) => {
     handleAddField({
       props: this.props,
-      setState: this.setState.bind(this),
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       roleKey,
       field
     });
@@ -86,7 +80,7 @@ export default class EntryBuilder extends React.Component {
     await handleAddEntry({
       sdk: this.props.sdk,
       props: this.props,
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      updateEntry: this.props.updateEntry.bind(this),
       roleKey,
       contentType,
       template,
@@ -98,7 +92,7 @@ export default class EntryBuilder extends React.Component {
     await handleLinkAssetClick({
       sdk: this.props.sdk,
       props: this.props,
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      updateEntry: this.props.updateEntry.bind(this),
       roleKey
     });
   };
@@ -107,7 +101,7 @@ export default class EntryBuilder extends React.Component {
     await handleLinkEntryClick({
       sdk: this.props.sdk,
       props: this.props,
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      updateEntry: this.props.updateEntry.bind(this),
       roleKey,
       contentType
     });
@@ -117,7 +111,7 @@ export default class EntryBuilder extends React.Component {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
       props: this.props,
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      updateEntry: this.props.updateEntry.bind(this),
       roleKey,
       contentType,
       entry
@@ -135,52 +129,23 @@ export default class EntryBuilder extends React.Component {
   onRemoveClick = (roleKey, entryIndex = null) => {
     handleRemoveEntry({
       props: this.props,
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      updateEntry: this.props.updateEntry.bind(this),
       roleKey,
       entryIndex
     });
   };
 
-  timeoutUpdateEntry = async ({ updatedInternalMapping, ms = 150 } = {}) => {
-    await this.props.setInternalMapping(updatedInternalMapping.asJSON());
-  };
-
-  loadEntries = async () => {
-    await Promise.all(
-      await this.props.entryInternalMapping.fieldKeys().map(async roleKey => {
-        await fetchEntryByRoleKey({
-          sdk: this.props.sdk,
-          state: this.state,
-          setState: this.setState.bind(this),
-          timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
-          roleKey
-        });
-      })
-    );
-
-    await validateTemplate({
-      setInvalid: this.props.setInvalid,
-      state: this.state,
-      setState: this.setState.bind(this)
-    });
-  };
-
   fetchNavigatedTo = () => {
     if (this.state.rolesNavigatedTo && !this.state.rolesNavigatedTo.length) return;
-    this.setState(
-      {
-        rolesNavigatedTo: []
-      },
-      () => {
-        this.loadEntries();
-      }
-    );
+    this.setState({
+      rolesNavigatedTo: []
+    });
   };
 
   onFieldChange = (e, roleKey) => {
     handleFieldChange({
       props: this.props,
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       e,
       roleKey
     });
@@ -193,12 +158,12 @@ export default class EntryBuilder extends React.Component {
       [templateStyleKey]: templateStyleObject
     };
 
-    this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
   updateEntryStyle(roleKey, styleClasses) {
     handleUpdateEntryStyle({
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       internalMappingObject: this.props.entryInternalMapping,
       roleKey,
       styleClasses
@@ -207,7 +172,7 @@ export default class EntryBuilder extends React.Component {
 
   updateReferencesStyle(roleKey, styleClasses) {
     handleUpdateReferencesStyle({
-      timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       internalMappingObject: this.props.entryInternalMapping,
       roleKey,
       styleClasses
@@ -218,21 +183,21 @@ export default class EntryBuilder extends React.Component {
     let updatedInternalMapping = this.props.entryInternalMapping;
     updatedInternalMapping.removeStyleClasses(roleKey, classArray);
 
-    this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
   clearReferencesStyle(roleKey, classArray) {
     let updatedInternalMapping = this.props.entryInternalMapping;
     updatedInternalMapping.removeReferencesStyleClasses(roleKey, classArray);
 
-    this.timeoutUpdateEntry({ updatedInternalMapping, ms: 150 });
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
   updateAssetFormatting(roleKey, formattingObject) {
     let updatedInternalMapping = this.props.entryInternalMapping;
     updatedInternalMapping.setImageFormatting(roleKey, formattingObject);
 
-    this.timeoutUpdateEntry({ updatedInternalMapping, ms: 1000 });
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
   renderEntryFields(roleKey, roleConfigObject, roleMappingObject) {
@@ -369,13 +334,6 @@ export default class EntryBuilder extends React.Component {
   render() {
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
-        <Button
-          buttonType="muted"
-          className="extension__refresh"
-          onClick={this.loadEntries}
-          size="small">
-          Refresh
-        </Button>
         {this.props.templateConfig.style && (
           <div className="custom-template-entry-builder__section">
             <DisplayText className="style-editor__heading--header" element="h1">
@@ -435,7 +393,8 @@ EntryBuilder.propTypes = {
   setInvalid: PropTypes.func,
   hydratedEntries: PropTypes.array,
   hydratedAssets: PropTypes.array,
-  setInternalMapping: PropTypes.func
+  updateEntry: PropTypes.func,
+  setInternalMappingValue: PropTypes.func
 };
 
 EntryBuilder.defaultProps = {

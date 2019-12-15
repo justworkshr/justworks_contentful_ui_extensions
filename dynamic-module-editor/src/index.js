@@ -35,6 +35,8 @@ export class App extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.updateTimeout = undefined;
     const internalMappingJson = props.sdk.entry.fields.internalMapping
       ? props.sdk.entry.fields.internalMapping.getValue()
       : null;
@@ -97,7 +99,6 @@ export class App extends React.Component {
       this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder;
 
     this.setState({
-      assets: undefined,
       internalMapping: internalMappingJson,
       templateConfig,
       entryInternalMapping: new InternalMapping(internalMappingJson, templateConfig) || {}
@@ -106,8 +107,16 @@ export class App extends React.Component {
 
   onInternalMappingChangeHandler = event => {
     const value = event.target.value;
-    this.setState({ internalMapping: value });
-    this.props.sdk.entry.fields.internalMapping.setValue(value);
+    this.setInternalMappingValue(value);
+  };
+
+  setInternalMappingValue = internalMappingJson => {
+    this.setStateFromJson(internalMappingJson);
+    clearTimeout(this.updateTimeout);
+    this.updateTimeout = setTimeout(
+      () => this.props.sdk.entry.fields.internalMapping.setValue(internalMappingJson),
+      500
+    );
   };
 
   onIsValidChangeHandler = event => {
@@ -310,7 +319,8 @@ export class App extends React.Component {
               entryInternalMapping={this.state.entryInternalMapping}
               internalMappingJson={this.state.internalMapping}
               setInvalid={this.setInvalid}
-              setInternalMapping={this.updateEntry}
+              updateEntry={this.updateEntry}
+              setInternalMappingValue={this.setInternalMappingValue}
               hydratedAssets={this.state.hydratedAssets}
               hydratedEntries={this.state.hydratedEntries}
               loadingEntries={this.state.loadingEntries}
