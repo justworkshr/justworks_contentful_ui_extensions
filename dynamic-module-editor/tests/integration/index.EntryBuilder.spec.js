@@ -1,13 +1,14 @@
 import React from 'react';
-import { App } from '../src/index';
+import { App } from '../../src/index';
 
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
 
-import * as c from '../../custom_templates/constants';
+import * as c from '../../../custom_templates/constants';
+import { templatePlaceholder } from '../../../custom_templates/';
 
-import * as tm from '../../custom_templates/mocks/templateMocks';
+import * as tm from '../../../custom_templates/mocks/templateMocks';
 
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
@@ -19,7 +20,7 @@ import {
   mockMapping,
   mockAssetMapping,
   mockSdk
-} from '../../../../tests/utils/mockUtils';
+} from '../utils/mockUtils';
 
 describe('App', () => {
   beforeEach(() => {
@@ -39,7 +40,7 @@ describe('App', () => {
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
+          templatePlaceholder={templatePlaceholder}
           sdk={mockSdk(mockEntry)}
         />
       );
@@ -66,7 +67,7 @@ describe('App', () => {
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates['mock 1']}
+          templatePlaceholder={templatePlaceholder}
           sdk={mockSdk(mockEntry)}
         />
       );
@@ -92,7 +93,7 @@ describe('App', () => {
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
+          templatePlaceholder={templatePlaceholder}
           sdk={sdk}
         />
       );
@@ -113,41 +114,21 @@ describe('App', () => {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(false);
         }
 
-        // Should render the fields and style editors by default
-        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(0);
-        expect(node.find('EntryField')).toHaveLength(1);
-        expect(node.find('FieldStyleEditor')).toHaveLength(1);
-      });
-    });
-
-    it('should clear a field and add it back', () => {
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
-
-      // Expects internal mapping in App state to have same keys as the template config
-      expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
-      );
-
-      wrapper.find('RoleSection').forEach(node => {
-        // Assumes default field creation
-        expect(node.find('EntryField')).toHaveLength(1);
-        node.find('IconButton.role-section__remove-field').simulate('click');
-      });
-
-      wrapper.find('RoleSection').forEach(node => {
+        // Should not render the fields and style editors by default
         expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
         expect(node.find('EntryField')).toHaveLength(0);
         expect(node.find('FieldStyleEditor')).toHaveLength(0);
       });
+    });
 
-      // Clears roles from App state
-      expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(0);
+    it('should add a field and clear it', () => {
+      const wrapper = mount(
+        <App
+          customTemplates={tm.mockCustomTemplates}
+          templatePlaceholder={templatePlaceholder}
+          sdk={sdk}
+        />
+      );
 
       // adds them back
       wrapper.find('RoleSection').forEach(node => {
@@ -162,6 +143,18 @@ describe('App', () => {
 
       // Clears roles from App state
       expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(2);
+
+      wrapper.find('RoleSection').forEach(node => {
+        // Assumes default field creation
+        expect(node.find('EntryField')).toHaveLength(1);
+        node.find('IconButton.role-section__remove-field').simulate('click');
+      });
+
+      wrapper.find('RoleSection').forEach(node => {
+        expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
+        expect(node.find('EntryField')).toHaveLength(0);
+        expect(node.find('FieldStyleEditor')).toHaveLength(0);
+      });
     });
   });
 
@@ -182,7 +175,7 @@ describe('App', () => {
       const wrapper = mount(
         <App
           customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
+          templatePlaceholder={templatePlaceholder}
           sdk={sdk}
         />
       );

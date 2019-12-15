@@ -26,5 +26,5 @@ export const templatePlaceholder = {
   meta: {
     description: ""
   },
-  roles: {}
+  fieldRoles: {}
 };

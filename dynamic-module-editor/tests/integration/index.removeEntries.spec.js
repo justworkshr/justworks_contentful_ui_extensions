@@ -103,7 +103,7 @@ describe('App', () => {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
-                mockMapping({ type: c.FIELD_TYPE_ENTRY, id: 1 }),
+                mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 }),
                 mockAssetMapping({ value: 2 }),
                 mockAssetMapping({ value: 3 })
               ]
@@ -150,14 +150,12 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain(1);
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[0][0])).not.toContain(2);
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[0][0])).toContain(3);
+
       expect(
         newEntryRole(sdk.space.updateEntry.args[0][0], 'grid_logo_multi_field')
           .value.map(asset => asset.value)
           .filter(e => e)
-      ).toEqual([3]);
+      ).toEqual([1, 3]);
     });
   });
 
@@ -214,7 +212,6 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).not.toContain(1);
       expect(newEntryRole(sdk.space.updateEntry.args[0][0], 'entry_field')).toBeUndefined();
     });
 
