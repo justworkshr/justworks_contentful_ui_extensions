@@ -23,8 +23,6 @@ import { resolveAll, newEntryAssetIds, newEntryEntryIds, newEntryRole } from '..
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
-const sdkUpdateSpy = sinon.spy(App.prototype, 'timeoutUpdateEntry');
-
 describe('App', () => {
   describe('removing assets', () => {
     it('should remove from a single asset', async () => {
@@ -45,7 +43,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -181,7 +178,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_ENTRY_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -218,8 +214,8 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).not.toContain(1);
-      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field')).toBeUndefined();
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).not.toContain(1);
+      expect(newEntryRole(sdk.space.updateEntry.args[0][0], 'entry_field')).toBeUndefined();
     });
 
     it('should remove from multi-entry field', async () => {
@@ -285,11 +281,11 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).not.toContain(1);
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain(2);
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain(3);
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).not.toContain(1);
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain(2);
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[0][0])).toContain(3);
       expect(
-        newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field')
+        newEntryRole(sdk.space.updateEntry.args[0][0], 'grid_logo_multi_field')
           .value.map(asset => asset.value)
           .filter(e => e)
       ).toEqual([2, 3]);

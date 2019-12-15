@@ -47,12 +47,12 @@ class TemplateDisplay extends React.Component {
 }
 
 TemplateDisplay.defaultProps = {
-  currentTemplateKey: {},
+  currentTemplateKey: '',
   templates: {}
 };
 
 TemplateDisplay.propTypes = {
-  currentTemplateKey: PropTypes.object,
+  currentTemplateKey: PropTypes.string,
   templates: PropTypes.object,
   onTemplateCardClick: PropTypes.func,
   onSwitchButtonClick: PropTypes.func

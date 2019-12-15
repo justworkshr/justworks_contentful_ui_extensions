@@ -8,7 +8,7 @@ import {
   getContentTypeArray,
   cleanStyleClasses
 } from './index';
-import InternalMapping from '../utils/InternalMapping';
+import InternalMapping from '../../../utils/InternalMapping';
 
 import { validateLinkedEntry, validateLinkedAsset } from '../utils/validations';
 

@@ -12,14 +12,9 @@ import FieldStyleEditor from './components/FieldStyleEditor';
 import EntryActionRow from './components/EntryActionRow';
 import RoleSection from './components/RoleSection';
 
-import InternalMapping from './utils/InternalMapping';
+import InternalMapping from '../../utils/InternalMapping';
 
-import {
-  groupByContentType,
-  displaySnakeCaseName,
-  getRolesToFetch,
-  fetchEntryByRoleKey
-} from './utils';
+import { displaySnakeCaseName, fetchEntryByRoleKey } from './utils';
 
 import {
   renderSingleEntryStyle,
@@ -27,7 +22,7 @@ import {
   renderMultiReferenceItemStyle
 } from './utils/renderUtils';
 
-import { validateTemplate, templateIsValid, getTemplateErrors } from './utils/validations';
+import { validateTemplate } from './utils/validations';
 
 import {
   handleRemoveEntry,

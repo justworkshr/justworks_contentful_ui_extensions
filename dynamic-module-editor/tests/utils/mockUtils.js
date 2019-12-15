@@ -124,6 +124,18 @@ export const mockSdk = mockCustomTemplateEntry => {
       updateEntry: sinon.spy(),
       createEntry: () => {
         return mockEntryResponse({ id: 'newCreatedEntry1a' });
+      },
+      getEntries: query => {
+        const ids = query['sys.id[in]'].split(',');
+        return ids.map(id => {
+          mockEntryResponse({ id });
+        });
+      },
+      getAssets: query => {
+        const ids = query['sys.id[in]'].split(',');
+        return ids.map(id => {
+          mockAssetResponse({ id });
+        });
       }
     },
     navigator: {
@@ -138,20 +150,28 @@ export const mockSdk = mockCustomTemplateEntry => {
       onSysChanged: jest.fn(),
       fields: {
         name: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'name')
+          getValue: () => getValue(mockCustomTemplateEntry, 'name'),
+          setValue: jest.fn()
         },
         type: {
           getValue: () => getValue(mockCustomTemplateEntry, 'template'),
-          onValueChanged: jest.fn()
+          setValue: jest.fn()
         },
         internalMapping: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'internalMapping')
+          getValue: () => getValue(mockCustomTemplateEntry, 'internalMapping'),
+          setValue: sinon.spy()
         },
         entries: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'entries')
+          getValue: () => getValue(mockCustomTemplateEntry, 'entries'),
+          setValue: jest.fn()
         },
         assets: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'assets')
+          getValue: () => getValue(mockCustomTemplateEntry, 'assets'),
+          setValue: jest.fn()
+        },
+        isValid: {
+          getValue: jest.fn(),
+          setValue: jest.fn()
         }
       }
     },

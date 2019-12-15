@@ -8,9 +8,8 @@ export const newEntryRole = (newEntryArg, roleKey) => {
   return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).fieldRoles[roleKey];
 };
 
-export const newEntryRoleStyle = (newEntryArg, roleKey) => {
-  return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).fieldRoles[roleKey]
-    .styleClasses;
+export const internalMappingRoleStyle = (internalMappingArg, roleKey) => {
+  return JSON.parse(internalMappingArg).fieldRoles[roleKey].styleClasses;
 };
 
 export const newEntryAssets = newEntryArg => {

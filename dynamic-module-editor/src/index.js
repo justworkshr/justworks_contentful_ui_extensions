@@ -7,7 +7,7 @@ import {
   SectionHeading,
   Form
 } from '@contentful/forma-36-react-components';
-import InternalMapping from './components/EntryBuilder/utils/InternalMapping';
+import InternalMapping from './utils/InternalMapping';
 
 import * as c from '../../custom_templates/constants';
 
@@ -46,7 +46,6 @@ export class App extends React.Component {
       props.sdk.entry.fields.entries.getValue() || [],
       []
     );
-
     this.state = {
       name: props.sdk.entry.fields.name ? props.sdk.entry.fields.name.getValue() : null,
       type,
@@ -129,6 +128,8 @@ export class App extends React.Component {
     // get all asset links []
     // get all loadingEntries []
     // get all hydratedEntries []
+    // get all hydratedAssets []
+
     const entryEntries = this.props.sdk.entry.fields.entries.getValue() || [];
     const entryAssets = this.props.sdk.entry.fields.assets.getValue() || [];
     let entryLinks = [];

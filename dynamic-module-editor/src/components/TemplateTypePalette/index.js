@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import { Button, DisplayText, EmptyState } from '@contentful/forma-36-react-components';
-import { init } from 'contentful-ui-extensions-sdk';
 
 import TemplateDisplay from './components/TemplateDisplay';
 

@@ -1,4 +1,4 @@
-import InternalMapping from '../../src/utils/InternalMapping';
+import InternalMapping from '../src/utils/InternalMapping';
 
 describe('InternalMapping', () => {
   describe('constructor', () => {
@@ -26,7 +26,7 @@ describe('InternalMapping', () => {
       });
     });
 
-    it('loads fields if internalMapping is blank', () => {
+    it('does not load fields if internalMapping is blank', () => {
       const json = JSON.stringify({
         fieldRoles: {},
         style: {}
@@ -46,9 +46,7 @@ describe('InternalMapping', () => {
       };
 
       const internalMapping = new InternalMapping(json, templateConfig);
-      expect(internalMapping.text_field.type).toEqual('text');
-      expect(internalMapping.text_field.value).toEqual('TEXT!!!');
-      expect(internalMapping.text_field.styleClasses).toEqual('helloClass');
+      expect(internalMapping.text_field).toBeUndefined(undefined);
     });
 
     it('does not load fields if internalMapping is not blank', () => {
@@ -459,7 +457,10 @@ describe('InternalMapping', () => {
       });
       const internalMapping = new InternalMapping(json);
       const styleClasses = [{ className: 'hiClass' }];
-      internalMapping.removeStyleClasses('hi', styleClasses.map(el => el.className));
+      internalMapping.removeStyleClasses(
+        'hi',
+        styleClasses.map(el => el.className)
+      );
       expect(internalMapping.hi.styleClasses).toEqual('');
     });
 
@@ -519,7 +520,10 @@ describe('InternalMapping', () => {
       });
       const internalMapping = new InternalMapping(json);
       const styleClasses = [{ className: 'hiClass' }];
-      internalMapping.removeReferencesStyleClasses('hi', styleClasses.map(el => el.className));
+      internalMapping.removeReferencesStyleClasses(
+        'hi',
+        styleClasses.map(el => el.className)
+      );
       expect(internalMapping.hi.value[0].styleClasses).toEqual('');
     });
 

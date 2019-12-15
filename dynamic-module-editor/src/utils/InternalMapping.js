@@ -1,6 +1,6 @@
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../custom_templates/constants';
 
-import { removeByIndex } from './index';
+import { removeByIndex } from '../components/EntryBuilder/utils/index';
 
 export default class InternalMapping {
   constructor(json, templateConfig = { style: {}, fieldRoles: {} }) {

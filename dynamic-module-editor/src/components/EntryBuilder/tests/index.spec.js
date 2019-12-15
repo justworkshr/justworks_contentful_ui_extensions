@@ -19,7 +19,7 @@ import {
   mockMapping,
   mockAssetMapping,
   mockSdk
-} from './utils/mockUtils';
+} from '../../../../tests/utils/mockUtils';
 
 describe('App', () => {
   beforeEach(() => {

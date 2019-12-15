@@ -4,21 +4,13 @@ import { App } from '../../src/index';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
-import sinon from 'sinon';
 import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
 
-import {
-  mockSdk,
-  mockAssetResponse,
-  mockEntryResponse,
-  mockLink,
-  mockMapping,
-  mockAssetMapping
-} from '../utils/mockUtils';
+import { mockSdk, mockAssetResponse, mockLink, mockAssetMapping } from '../utils/mockUtils';
 
-import { resolveAll, newEntryRoleStyle } from '../utils/assertUtils';
+import { resolveAll, internalMappingRoleStyle } from '../utils/assertUtils';
 
 const getRoleStyle = (internalMapping, roleKey) => {
   return internalMapping.fieldRoles[roleKey].styleClasses;
@@ -68,7 +60,12 @@ describe('App', () => {
         />
       );
 
-      // Starts with default classes
+      // Adds default styles when field added
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('TextLink.entry-action-button__add-field')
+        .simulate('click');
+
       expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
         'text-left text-black'
       );
@@ -94,9 +91,9 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryRoleStyle(sdk.space.updateEntry.args[0][0], 'text_field')).toBe(
-        'text-left text-navy'
-      );
+      expect(
+        internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[1][0], 'text_field')
+      ).toBe('text-left text-navy');
     });
 
     it('should load styleClasses', () => {
@@ -167,7 +164,12 @@ describe('App', () => {
         />
       );
 
-      // Starts with default classes
+      // Adds default styles when field added
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('TextLink.entry-action-button__add-field')
+        .simulate('click');
+
       expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
         'text-left text-black'
       );
@@ -190,7 +192,9 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryRoleStyle(sdk.space.updateEntry.args[0][0], 'text_field')).toBe('text-black');
+      expect(
+        internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[1][0], 'text_field')
+      ).toBe('text-black');
     });
   });
 

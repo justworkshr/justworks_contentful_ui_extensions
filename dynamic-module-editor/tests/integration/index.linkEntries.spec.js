@@ -16,8 +16,6 @@ import { resolveAll, newEntryAssetIds, newEntryEntryIds, newEntryRole } from '..
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
-const sdkUpdateSpy = sinon.spy(App.prototype, 'timeoutUpdateEntry');
-
 describe('App', () => {
   describe('linking assets', () => {
     it('should link a single asset', async () => {
@@ -32,7 +30,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -59,8 +56,8 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedAsset1b');
-      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'image_asset').value).toEqual(
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedAsset1b');
+      expect(newEntryRole(sdk.space.updateEntry.args[0][0], 'image_asset').value).toEqual(
         'newLinkedAsset1b'
       );
     });
@@ -77,7 +74,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -104,10 +100,10 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedAsset1a');
-      expect(newEntryAssetIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedAsset2a');
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedAsset1a');
+      expect(newEntryAssetIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedAsset2a');
       expect(
-        newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field').value.map(
+        newEntryRole(sdk.space.updateEntry.args[0][0], 'grid_logo_multi_field').value.map(
           asset => asset.value
         )
       ).toEqual(['newLinkedAsset1a', 'newLinkedAsset2a']);
@@ -127,7 +123,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -154,8 +149,8 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedEntry1b');
-      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field').value).toEqual(
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedEntry1b');
+      expect(newEntryRole(sdk.space.updateEntry.args[0][0], 'entry_field').value).toEqual(
         'newLinkedEntry1b'
       );
     });
@@ -172,7 +167,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -199,10 +193,10 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedEntry1a');
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newLinkedEntry2a');
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedEntry1a');
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedEntry2a');
       expect(
-        newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field').value.map(
+        newEntryRole(sdk.space.updateEntry.args[0][0], 'grid_logo_multi_field').value.map(
           asset => asset.value
         )
       ).toEqual(['newLinkedEntry1a', 'newLinkedEntry2a']);
@@ -222,7 +216,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -250,8 +243,8 @@ describe('App', () => {
 
       // updates sdk
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newCreatedEntry1a');
-      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field').value).toEqual(
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newCreatedEntry1a');
+      expect(newEntryRole(sdk.space.updateEntry.args[0][0], 'entry_field').value).toEqual(
         'newCreatedEntry1a'
       );
     });
@@ -270,7 +263,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -298,8 +290,8 @@ describe('App', () => {
       // updates sdk
       await resolveAll();
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newCreatedEntry1a');
-      expect(newEntryRole(sdk.space.updateEntry.args[1][0], 'entry_field').value).toEqual(
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newCreatedEntry1a');
+      expect(newEntryRole(sdk.space.updateEntry.args[0][0], 'entry_field').value).toEqual(
         'newCreatedEntry1a'
       );
     });
@@ -316,7 +308,6 @@ describe('App', () => {
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      sdkUpdateSpy.resetHistory();
 
       const wrapper = mount(
         <App
@@ -344,9 +335,9 @@ describe('App', () => {
       // updates sdk
       await resolveAll();
       await resolveAll();
-      expect(newEntryEntryIds(sdk.space.updateEntry.args[1][0])).toContain('newCreatedEntry1a');
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newCreatedEntry1a');
       expect(
-        newEntryRole(sdk.space.updateEntry.args[1][0], 'grid_logo_multi_field').value.map(
+        newEntryRole(sdk.space.updateEntry.args[0][0], 'grid_logo_multi_field').value.map(
           asset => asset.value
         )
       ).toEqual(['newCreatedEntry1a']);

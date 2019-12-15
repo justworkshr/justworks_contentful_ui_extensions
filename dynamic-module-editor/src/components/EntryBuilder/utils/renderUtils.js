@@ -1,4 +1,4 @@
-import InternalMapping from './InternalMapping';
+import InternalMapping from '../../../utils/InternalMapping';
 import * as c from '../../../../../custom_templates/constants';
 import { isDirectField } from './index';
 
