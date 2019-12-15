@@ -98,7 +98,6 @@ export const EntryField = props => {
       />
     );
   };
-  console.log(props.fieldType);
   return (
     <div className="custom-template-entry-field">
       {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}

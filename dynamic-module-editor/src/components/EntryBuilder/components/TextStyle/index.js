@@ -50,7 +50,8 @@ const TextStyle = props => {
                   styleClasses={c.TEXT_ALIGNMENT_CLASSES}
                 />
               )}
-              {isGlobalSection(section) && ( // only use for global section
+              {isGlobalSection(section) && props.styleType === c.FIELD_TYPE_TEXT && (
+                // only use for global section and non-markdown text
                 <StyleEditorFieldGroup
                   label="Text Weight"
                   entryStyleClasses={props.entryStyleClasses}

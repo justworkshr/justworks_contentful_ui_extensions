@@ -29,7 +29,10 @@ const FieldStyleEditor = props => {
   const renderFieldStyle = props => {
     switch (props.type) {
       case c.FIELD_TYPE_MARKDOWN:
-        return renderMarkdownStyle(props.roleMappingObject.styleClasses, props.entry.fields.value);
+        return renderMarkdownStyle(
+          props.roleMappingObject.styleClasses,
+          props.roleMappingObject.value
+        );
       case c.FIELD_TYPE_TEXT:
         return renderTextStyle(props.roleMappingObject.styleClasses);
       case c.FIELD_TYPE_ASSET:
@@ -54,6 +57,7 @@ const FieldStyleEditor = props => {
         onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
         entryStyleClasses={entryStyleClasses}
         updateStyleExclusive={updateStyleExclusive}
+        styleType={c.FIELD_TYPE_TEXT}
       />
     );
   };
@@ -87,6 +91,7 @@ const FieldStyleEditor = props => {
         entryStyleClasses={entryStyleClasses}
         sections={sections}
         updateStyleExclusive={updateStyleExclusive}
+        styleType={c.FIELD_TYPE_MARKDOWN}
       />
     );
   };

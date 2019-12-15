@@ -7,6 +7,7 @@ import {
   SectionHeading,
   Form
 } from '@contentful/forma-36-react-components';
+import InternalMapping from './components/EntryBuilder/utils/InternalMapping';
 
 import * as c from '../../custom_templates/constants';
 
@@ -25,32 +26,39 @@ import './index.css';
 
 export class App extends React.Component {
   static propTypes = {
-    sdk: PropTypes.object.isRequired
+    sdk: PropTypes.object.isRequired,
+    customTemplates: PropTypes.object,
+    templatePlaceholder: PropTypes.object
   };
 
   constructor(props) {
     super(props);
+    const internalMappingJson = props.sdk.entry.fields.internalMapping
+      ? props.sdk.entry.fields.internalMapping.getValue()
+      : null;
 
     const type = props.sdk.entry.fields.type ? props.sdk.entry.fields.type.getValue() : null;
+    const templateConfig =
+      props.customTemplates[type && type.toLowerCase()] || props.templatePlaceholder;
     const loadingEntries = this.getLoadingEntries(
       props.sdk.entry.fields.entries.getValue() || [],
       []
     );
+
     this.state = {
       name: props.sdk.entry.fields.name ? props.sdk.entry.fields.name.getValue() : null,
       type,
-      templateConfig:
-        props.customTemplates[type && type.toLowerCase()] || props.templatePlaceholder,
+      templateConfig,
+      entryInternalMapping: type ? new InternalMapping(internalMappingJson, templateConfig) : {},
       isValid: props.sdk.entry.fields.isValid ? props.sdk.entry.fields.isValid.getValue() : null,
-      internalMapping: props.sdk.entry.fields.internalMapping
-        ? props.sdk.entry.fields.internalMapping.getValue()
-        : null,
+      internalMapping: internalMappingJson,
       loadingEntries,
       hydratedEntries: []
     };
 
     this.setInvalid = this.setInvalid.bind(this);
     this.updateEntry = this.updateEntry.bind(this);
+    this.setStateFromJson = this.setStateFromJson.bind(this);
     this.getHydratedEntries = this.getHydratedEntries.bind(this);
     this.getLoadingEntries = this.getLoadingEntries.bind(this);
   }
@@ -69,23 +77,31 @@ export class App extends React.Component {
     this.props.sdk.entry.fields.name.setValue(value);
   };
 
-  onTypeChangeHandler = value => {
-    this.setState({ type: value });
-    if (value) {
-      this.props.sdk.entry.fields.type.setValue(value);
+  onTypeChangeHandler = type => {
+    this.setState({ type });
+    if (type) {
+      this.props.sdk.entry.fields.type.setValue(type);
     } else {
       this.props.sdk.field.removeValue();
     }
 
-    this.updateEntryData(value);
-  };
+    // clear internalMapping
+    const internalMappingJson = '';
+    // clear entries
+    this.props.sdk.entry.fields.entries.removeValue();
+    // clear assets
+    this.props.sdk.entry.fields.assets.removeValue();
 
-  updateEntryData(type) {
+    const templateConfig =
+      this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder;
+
     this.setState({
-      templateConfig:
-        this.props.customTemplates[type && type.toLowerCase()] || props.templatePlaceholder
+      assets: undefined,
+      internalMapping: internalMappingJson,
+      templateConfig,
+      entryInternalMapping: new InternalMapping(internalMappingJson, templateConfig) || {}
     });
-  }
+  };
 
   onInternalMappingChangeHandler = event => {
     const value = event.target.value;
@@ -137,10 +153,16 @@ export class App extends React.Component {
     // If new entries or assets need to be added
     if (entryLinks.length !== entryEntries.length || assetLinks.length !== entryAssets.length) {
       const entries = (entryLinks = []) => {
+        if (!entryLinks.length) {
+          entryLinks = undefined;
+        }
         return { entries: { 'en-US': entryLinks } };
       };
 
       const assets = (assetLinks = []) => {
+        if (!assetLinks.length) {
+          assetLinks = undefined;
+        }
         return { assets: { 'en-US': assetLinks } };
       };
 
@@ -171,32 +193,55 @@ export class App extends React.Component {
         this.state.hydratedEntries || []
       );
 
-      this.setState(
-        {
-          internalMapping: internalMappingJson,
-          loadingEntries
-        },
-        () => {
-          const existingEntries = this.state.hydratedEntries.filter(entry =>
-            (this.props.sdk.entry.fields.entries.getValue() || []).some(
-              e => e.sys.id === entry.sys.id
-            )
-          );
-          this.getHydratedEntries(this.state.loadingEntries, existingEntries);
-        }
-      );
+      this.setStateFromJson(internalMappingJson, loadingEntries, () => {
+        const existingEntries = this.state.hydratedEntries.filter(entry =>
+          (this.props.sdk.entry.fields.entries.getValue() || []).some(
+            e => e.sys.id === entry.sys.id
+          )
+        );
+        this.getHydratedEntries(this.state.loadingEntries, existingEntries);
+      });
     } else {
-      // Only update internalJSON otherwise
-      this.setState({ internalMapping: internalMappingJson });
+      this.setStateFromJson(internalMappingJson);
       this.props.sdk.entry.fields.internalMapping.setValue(internalMappingJson);
     }
   };
 
+  setStateFromJson = (internalMappingJson, loadingEntries = [], callback = null) => {
+    const type = this.state.type;
+    const templateConfig =
+      this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder;
+
+    this.setState(
+      {
+        loadingEntries,
+        internalMapping: internalMappingJson,
+        templateConfig,
+        entryInternalMapping: new InternalMapping(internalMappingJson, templateConfig) || {}
+      },
+      () => {
+        if (callback) {
+          callback();
+        }
+      }
+    );
+  };
+
   getHydratedEntries = async (loadingEntries, existingEntries = []) => {
+    // Ensure uniqueness in queries
     const hydratedEntries = await this.props.sdk.space.getEntries({
       'sys.id[in]': loadingEntries.join(',')
     });
+
+    const assetsValue = this.props.sdk.entry.fields.assets.getValue();
+    const assetIds = assetsValue ? assetsValue.map(a => a.sys.id) : [];
+
+    const hydratedAssets = await this.props.sdk.space.getAssets({
+      'sys.id[in]': assetIds.join(',')
+    });
+
     this.setState({
+      hydratedAssets: hydratedAssets.items,
       hydratedEntries: [...existingEntries, ...(hydratedEntries.items || [])],
       loadingEntries: []
     });
@@ -209,13 +254,6 @@ export class App extends React.Component {
   };
 
   render() {
-    console.log(this.props.setInternalMapping);
-    console.log('ENTRIES', this.props.sdk.entry.fields.entries.getValue());
-    console.log('ASSETS', this.props.sdk.entry.fields.assets.getValue());
-    console.log('IM', this.props.sdk.entry.fields.internalMapping.getValue());
-    console.log('LOADING', this.state.loadingEntries);
-    console.log('HYDRATED', this.state.hydratedEntries);
-
     return (
       <Form className="f36-margin--l">
         <DisplayText>Entry extension demo</DisplayText>
@@ -242,19 +280,20 @@ export class App extends React.Component {
           </div>
         )}
 
-        {this.state.internalMapping !== null && this.state.internalMapping !== null && (
+        {this.state.internalMapping !== null && this.state.templateConfig !== null && (
           <div>
             <SectionHeading>Type</SectionHeading>
             <EntryBuilder
+              sdk={this.props.sdk}
               customTemplates={customTemplates}
               templatePlaceholder={templatePlaceholder}
-              sdk={this.props.sdk}
-              onChange={this.onTypeChangeHandler}
               type={this.state.type}
               templateConfig={this.state.templateConfig}
+              entryInternalMapping={this.state.entryInternalMapping}
               internalMappingJson={this.state.internalMapping}
               setInvalid={this.setInvalid}
               setInternalMapping={this.updateEntry}
+              hydratedAssets={this.state.hydratedAssets}
               hydratedEntries={this.state.hydratedEntries}
               loadingEntries={this.state.loadingEntries}
             />

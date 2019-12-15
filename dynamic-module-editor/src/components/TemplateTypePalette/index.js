@@ -37,8 +37,7 @@ export default class TemplateTypePalette extends React.Component {
     if (this.props.customTemplates[this.state.value.toLowerCase()]) {
       const confirm = await this.props.sdk.dialogs.openConfirm({
         title: 'Warning',
-        message:
-          'Selecting a new template in the next screen will remove all entries that are linked to this template below. They will not be archived or deleted.',
+        message: 'Switching templates will clear the entry.',
         confirmLabel: 'Ok',
         cancelLabel: 'Cancel',
         intent: 'negative'
