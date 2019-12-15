@@ -18,6 +18,8 @@ import LongTextField from './components/LongTextField';
 
 import { init, locations } from 'contentful-ui-extensions-sdk';
 
+import { templateIsValid, getTemplateErrors } from './components/EntryBuilder/utils/validations';
+
 import { customTemplates, templatePlaceholder } from '../../custom_templates/';
 import { linkFromMapping } from './utils';
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -115,8 +117,10 @@ export class App extends React.Component {
     this.props.sdk.entry.fields.isValid.setValue(isValid);
   };
 
-  setInvalid = isInvalid => {
-    this.props.sdk.entry.fields.isValid.setValue(isInvalid ? 'Yes' : 'No');
+  setInvalid = isValid => {
+    const value = isValid ? 'Yes' : 'No';
+    this.setState({ isValid: value });
+    this.props.sdk.entry.fields.isValid.setValue(value);
   };
 
   updateEntry = async internalMappingJson => {
@@ -177,10 +181,10 @@ export class App extends React.Component {
               [key]: { 'en-US': this.props.sdk.entry.fields[key].getValue() },
               ...entries(entryLinks),
               ...assets(assetLinks),
-              internalMapping: { 'en-US': internalMappingJson }
-              // isValid: {
-              //   'en-US': isValid ? 'Yes' : 'No'
-              // }
+              internalMapping: { 'en-US': internalMappingJson },
+              isValid: {
+                'en-US': 'No' // Invalidate so it can be validated later
+              }
             };
           })
         )
@@ -200,12 +204,25 @@ export class App extends React.Component {
           )
         );
         this.getHydratedEntries(this.state.loadingEntries, existingEntries);
+        this.validateEntry();
       });
     } else {
-      this.setStateFromJson(internalMappingJson);
       this.props.sdk.entry.fields.internalMapping.setValue(internalMappingJson);
+      this.setStateFromJson(internalMappingJson, [], () => {
+        this.validateEntry();
+      });
     }
   };
+
+  validateEntry() {
+    const errors = getTemplateErrors(
+      this.state.templateConfig.fieldRoles,
+      JSON.parse(this.state.internalMapping),
+      this.state.hydratedEntries
+    );
+    const isValid = templateIsValid(errors);
+    this.setInvalid(isValid);
+  }
 
   setStateFromJson = (internalMappingJson, loadingEntries = [], callback = null) => {
     const type = this.state.type;

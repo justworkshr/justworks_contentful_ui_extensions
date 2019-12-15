@@ -77,64 +77,6 @@ export default class EntryBuilder extends React.Component {
     this.onLinkAssetClick = this.onLinkAssetClick.bind(this);
   }
 
-  componentDidMount = async () => {
-    const sdk = this.props.sdk;
-
-    if (this.state.internalMappingJson) {
-      this.timeoutUpdateEntry({ updatedInternalMapping: this.props.entryInternalMapping, ms: 0 });
-      await this.loadEntries();
-    }
-  };
-
-  componentWillUnmount() {}
-
-  onSysChanged = async sysValue => {
-    /*
-      Updates state with new values and validates template
-    */
-    const sdk = this.props.sdk;
-    const type = this.props.type;
-    const internalMappingJson = this.props.internalMappingJson;
-    if (!internalMappingJson) return;
-    this.props.entryInternalMapping.assignRolesFromMapping(JSON.parse(internalMappingJson));
-    this.setState(
-      {
-        type,
-        templateConfig:
-          this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder
-      },
-      async () => {
-        const rolesToFetch = getRolesToFetch(this.props.entryInternalMapping, this.state.entries);
-        await Promise.all(
-          await rolesToFetch.map(async roleKey => {
-            await fetchEntryByRoleKey({
-              sdk: this.props.sdk,
-              state: this.state,
-              setState: this.setState.bind(this),
-              timeoutUpdateEntry: this.timeoutUpdateEntry.bind(this),
-              roleKey
-            });
-          })
-        );
-        if (
-          Object.keys(this.state.entries).length &&
-          internalMappingJson &&
-          templateIsValid(
-            getTemplateErrors(
-              this.props.templateConfig.fieldRoles,
-              JSON.parse(this.props.internalMappingJson),
-              this.state.entries
-            )
-          )
-        ) {
-          this.props.setInvalid(false);
-        } else {
-          this.props.setInvalid(true);
-        }
-      }
-    );
-  };
-
   onAddFieldClick = (roleKey, field) => {
     handleAddField({
       props: this.props,
