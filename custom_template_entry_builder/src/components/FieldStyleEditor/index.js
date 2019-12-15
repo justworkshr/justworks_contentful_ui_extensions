@@ -29,7 +29,10 @@ const FieldStyleEditor = props => {
   const renderFieldStyle = props => {
     switch (props.type) {
       case c.FIELD_TYPE_MARKDOWN:
-        return renderMarkdownStyle(props.roleMappingObject.styleClasses, props.entry.fields.value);
+        return renderMarkdownStyle(
+          props.roleMappingObject.styleClasses,
+          props.roleMappingObject.value
+        );
       case c.FIELD_TYPE_TEXT:
         return renderTextStyle(props.roleMappingObject.styleClasses);
       case c.FIELD_TYPE_ASSET:

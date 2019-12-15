@@ -55,21 +55,11 @@ import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
 
 export default class EntryBuilder extends React.Component {
-  static propTypes = {
-    sdk: PropTypes.object.isRequired,
-    customTemplates: PropTypes.object.isRequired,
-    entries: PropTypes.object,
-    templatePlaceholder: PropTypes.object
-  };
-
-  detachExternalChangeHandler = null;
-
   constructor(props) {
     super(props);
-    const template = props.sdk.entry.fields.type.getValue();
-    const templateConfig =
-      props.customTemplates[template && template.toLowerCase()] || props.templatePlaceholder;
-    const internalMappingJson = props.sdk.entry.fields.internalMapping.getValue();
+    const type = props.type;
+    const templateConfig = props.templateConfig;
+    const internalMappingJson = props.internalMappingJson;
 
     /*
       **** STATE
@@ -91,12 +81,10 @@ export default class EntryBuilder extends React.Component {
       entries: this.props.entries || {},
       errors: {}, // object { roleKey: array[{message: <string>}]}
       loadingEntries: {}, // object { roleKey: id }
-      entryInternalMapping: template
-        ? new InternalMapping(internalMappingJson, templateConfig)
-        : {},
+      entryInternalMapping: type ? new InternalMapping(internalMappingJson, templateConfig) : {},
       templateConfig: templateConfig,
       rolesNavigatedTo: [],
-      template
+      type
     };
 
     this.sendUpdateRequestTimeout = undefined;
@@ -116,45 +104,46 @@ export default class EntryBuilder extends React.Component {
 
   componentDidMount = async () => {
     const sdk = this.props.sdk;
-    sdk.window.startAutoResizer();
-    // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
-    this.detachExternalChangeHandler = sdk.field.onValueChanged(this.onExternalChange);
-    sdk.entry.fields.type.onValueChanged(this.onTemplateChange);
-    sdk.entry.onSysChanged(this.onSysChanged);
 
-    if (this.state.template) {
+    if (this.state.internalMappingJson) {
       this.timeoutUpdateEntry({ updatedInternalMapping: this.state.entryInternalMapping, ms: 0 });
       await this.loadEntries();
     }
   };
 
-  componentWillUnmount() {
-    if (this.detachExternalChangeHandler) {
-      this.detachExternalChangeHandler();
-    }
-  }
+  componentWillUnmount() {}
 
-  onExternalChange = value => {};
+  static getDerivedStateFromProps = async (props, state) => {
+    const internalMappingJson = props.internalMappingJson;
+    const templateConfig = props.templateConfig;
+
+    return {
+      ...state,
+      entryInternalMapping: props.type
+        ? new InternalMapping(internalMappingJson, templateConfig)
+        : {},
+      type: props.type,
+      templateConfig
+    };
+  };
 
   onSysChanged = async sysValue => {
     /*
       Updates state with new values and validates template
     */
     const sdk = this.props.sdk;
-    const template = sdk.entry.fields.type.getValue();
-    const internalMappingJson = sdk.entry.fields.internalMapping.getValue();
+    const type = this.props.type;
+    const internalMappingJson = this.props.internalMappingJson;
     if (!internalMappingJson) return;
     this.state.entryInternalMapping.assignRolesFromMapping(JSON.parse(internalMappingJson));
     this.setState(
       {
-        template,
+        type,
         templateConfig:
-          this.props.customTemplates[template && template.toLowerCase()] ||
-          this.props.templatePlaceholder
+          this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder
       },
       async () => {
         const rolesToFetch = getRolesToFetch(this.state.entryInternalMapping, this.state.entries);
-        //
         await Promise.all(
           await rolesToFetch.map(async roleKey => {
             await fetchEntryByRoleKey({
@@ -171,34 +160,18 @@ export default class EntryBuilder extends React.Component {
           internalMappingJson &&
           templateIsValid(
             getTemplateErrors(
-              this.state.templateConfig.fieldRoles,
-              JSON.parse(sdk.entry.fields.internalMapping.getValue()),
+              this.props.templateConfig.fieldRoles,
+              JSON.parse(this.props.internalMappingJson),
               this.state.entries
             )
           )
         ) {
-          sdk.field.setInvalid(false);
+          this.props.setInvalid(false);
         } else {
-          sdk.field.setInvalid(true);
+          this.props.setInvalid(true);
         }
       }
     );
-  };
-
-  onTemplateChange = async template => {
-    const internalMappingJson = this.props.sdk.entry.fields.internalMapping.getValue();
-    const templateConfig =
-      this.props.customTemplates[template && template.toLowerCase()] ||
-      this.props.templatePlaceholder;
-    if (template !== this.state.template) {
-      this.setState({
-        template,
-        templateConfig,
-        entryInternalMapping: template
-          ? new InternalMapping(internalMappingJson, templateConfig)
-          : {}
-      });
-    }
   };
 
   onAddFieldClick = (roleKey, field) => {
@@ -278,23 +251,30 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  timeoutUpdateEntry({ updatedEntries, updatedAssets, updatedInternalMapping, ms = 150 } = {}) {
-    clearTimeout(this.sendUpdateRequestTimeout);
-    this.sendUpdateRequestTimeout = setTimeout(
-      () =>
-        updateEntry({
-          sdk: this.props.sdk,
-          updatedEntries,
-          updatedAssets,
-          updatedInternalMappingJson: updatedInternalMapping.asJSON(),
-          stateEntries: this.state.entries,
-          stateTemplateMapping: this.state.templateConfig,
-          loadEntriesFunc: this.loadEntries,
-          setStateFunc: this.setState.bind(this)
-        }),
-      ms
-    );
-  }
+  timeoutUpdateEntry = async ({
+    updatedEntries,
+    updatedAssets,
+    updatedInternalMapping,
+    ms = 150
+  } = {}) => {
+    await this.props.setInternalMapping(updatedInternalMapping.asJSON());
+    // clearTimeout(this.sendUpdateRequestTimeout);
+    // this.sendUpdateRequestTimeout = setTimeout(
+    //   () =>
+    //     updateEntry({
+    //       sdk: this.props.sdk,
+    //       updatedEntries,
+    //       updatedAssets,
+    //       updatedInternalMappingJson: updatedInternalMapping.asJSON(),
+    //       stateEntries: this.state.entries,
+    //       stateTemplateMapping: this.props.templateConfig,
+    //       loadEntriesFunc: this.loadEntries,
+    //       setStateFunc: this.setState.bind(this),
+    //       setInternalMappingFunc: this.props.setInternalMapping
+    //     }),
+    //   ms
+    // );
+  };
 
   loadEntries = async () => {
     await Promise.all(
@@ -310,7 +290,7 @@ export default class EntryBuilder extends React.Component {
     );
 
     await validateTemplate({
-      sdk: this.props.sdk,
+      setInvalid: this.props.setInvalid,
       state: this.state,
       setState: this.setState.bind(this)
     });
@@ -398,6 +378,7 @@ export default class EntryBuilder extends React.Component {
   }
 
   renderEntryFields(roleKey, roleConfigObject, roleMappingObject, entry) {
+    // Multi References and with entries
     if (roleConfigObject.allowMultipleReferences && !!entry && !!entry.length) {
       return (
         <div>
@@ -410,7 +391,7 @@ export default class EntryBuilder extends React.Component {
                 entry={e}
                 entryIndex={index}
                 fieldType={entryType}
-                isLoading={!!this.state.loadingEntries[roleKey]}
+                isLoading={!!this.props.loadingEntries.includes(e.sys.id)}
                 isDragActive={entry ? this.state.draggingObject === e.sys.id : false}
                 roleKey={roleKey}
                 roleConfig={roleConfigObject}
@@ -418,16 +399,17 @@ export default class EntryBuilder extends React.Component {
                 onDeepCopyClick={this.onDeepCopyClick}
                 onRemoveClick={this.onRemoveClick}
                 onFieldChange={this.onFieldChange}
+                roleMappingObject={roleMappingObject}
               />
             );
           })}
           <EntryActionRow
-            allowAsset={!!this.state.templateConfig.fieldRoles[roleKey].asset}
+            allowAsset={!!this.props.templateConfig.fieldRoles[roleKey].asset}
             allowedCustomTemplates={
-              this.state.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
+              this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
             }
-            contentTypes={this.state.templateConfig.fieldRoles[roleKey].contentType}
-            fieldObject={this.state.templateConfig.fieldRoles[roleKey].field}
+            contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentType}
+            fieldObject={this.props.templateConfig.fieldRoles[roleKey].field}
             onAddFieldClick={this.onAddFieldClick}
             roleKey={roleKey}
             onAddEntryClick={this.onAddEntryClick}
@@ -464,13 +446,14 @@ export default class EntryBuilder extends React.Component {
           )}
         </div>
       );
+      // Has linked Entry and it isn't loading
     } else if (!!this.state.entries[roleKey] || !!this.state.loadingEntries[roleKey]) {
       return (
         <div>
           <EntryField
             entry={entry}
             fieldType={roleMappingObject.type}
-            isLoading={!!this.state.loadingEntries[roleKey]}
+            isLoading={entry ? !!this.props.loadingEntries.includes(entry.sys.id) : false}
             isDragActive={entry ? this.state.draggingObject === (entry.sys || {}).id : false}
             roleKey={roleKey}
             roleConfig={roleConfigObject}
@@ -478,6 +461,41 @@ export default class EntryBuilder extends React.Component {
             onDeepCopyClick={this.onDeepCopyClick}
             onRemoveClick={this.onRemoveClick}
             onFieldChange={this.onFieldChange}
+            roleMappingObject={roleMappingObject}
+          />
+          {renderSingleEntryStyle(roleMappingObject.type, roleConfigObject) && (
+            <FieldStyleEditor
+              roleKey={roleKey}
+              roleConfig={roleConfigObject}
+              roleMappingObject={roleMappingObject}
+              updateStyle={this.updateEntryStyle}
+              updateAssetFormatting={this.updateAssetFormatting}
+              clearStyleField={this.clearEntryStyleClasses}
+              entry={entry}
+              title={displaySnakeCaseName(roleKey) + ' Style'}
+              type={roleMappingObject.type}
+            />
+          )}
+        </div>
+      );
+    } else if (this.state.entryInternalMapping && !!this.state.entryInternalMapping[roleKey]) {
+      if (entry) {
+        console.log(!!this.props.loadingEntries.includes(entry.sys.id));
+      }
+      return (
+        <div>
+          <EntryField
+            entry={entry}
+            fieldType={roleMappingObject.type}
+            isLoading={entry ? !!this.props.loadingEntries.includes(entry.sys.id) : false}
+            isDragActive={entry ? this.state.draggingObject === (entry.sys || {}).id : false}
+            roleKey={roleKey}
+            roleConfig={roleConfigObject}
+            onEditClick={this.onEditClick}
+            onDeepCopyClick={this.onDeepCopyClick}
+            onRemoveClick={this.onRemoveClick}
+            onFieldChange={this.onFieldChange}
+            roleMappingObject={roleMappingObject}
           />
           {renderSingleEntryStyle(roleMappingObject.type, roleConfigObject) && (
             <FieldStyleEditor
@@ -497,12 +515,12 @@ export default class EntryBuilder extends React.Component {
     } else {
       return (
         <EntryActionRow
-          allowAsset={!!this.state.templateConfig.fieldRoles[roleKey].asset}
+          allowAsset={!!this.props.templateConfig.fieldRoles[roleKey].asset}
           allowedCustomTemplates={
-            this.state.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
+            this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
           }
-          contentTypes={this.state.templateConfig.fieldRoles[roleKey].contentType}
-          fieldObject={this.state.templateConfig.fieldRoles[roleKey].field}
+          contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentType}
+          fieldObject={this.props.templateConfig.fieldRoles[roleKey].field}
           onAddFieldClick={this.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={this.onAddEntryClick}
@@ -515,11 +533,11 @@ export default class EntryBuilder extends React.Component {
   }
 
   render() {
+    // console.log('render entry builder', this.state);
     const contentTypeGroups = groupByContentType(
-      (this.state.templateConfig || {}).fieldRoles,
+      (this.props.templateConfig || {}).fieldRoles,
       this.state.entries
     );
-
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         <Button
@@ -529,17 +547,17 @@ export default class EntryBuilder extends React.Component {
           size="small">
           Refresh
         </Button>
-        {this.state.templateConfig.style && (
+        {this.props.templateConfig.style && (
           <div className="custom-template-entry-builder__section">
             <DisplayText className="style-editor__heading--header" element="h1">
               Styles
             </DisplayText>
-            {Object.keys(this.state.templateConfig.style).map(styleSectionKey => {
+            {Object.keys(this.props.templateConfig.style).map(styleSectionKey => {
               return (
                 <TemplateStyleEditor
                   key={`style-section-${styleSectionKey}`}
                   updateStyle={this.updateTemplateStyle}
-                  templateStyleObject={this.state.templateConfig.style[styleSectionKey]}
+                  templateStyleObject={this.props.templateConfig.style[styleSectionKey]}
                   mappingStyleObject={this.state.entryInternalMapping.style[styleSectionKey]}
                   styleSectionKey={styleSectionKey}
                   title={displaySnakeCaseName(styleSectionKey)}
@@ -552,36 +570,51 @@ export default class EntryBuilder extends React.Component {
           <DisplayText className="style-editor__heading--header" element="h1">
             Fields
           </DisplayText>
-          {Object.keys(contentTypeGroups).map((groupKey, index) => {
-            return (
-              <div className="entry-group" key={`group--${index}`}>
-                <div className="entry-container">
-                  {Object.keys(contentTypeGroups[groupKey])
-                    .sort((a, b) => (!this.state.templateConfig.fieldRoles[b] || {}).required)
-                    .map((roleKey, index) => {
-                      const entry = contentTypeGroups[groupKey][roleKey];
-                      const roleConfigObject = this.state.templateConfig.fieldRoles[roleKey] || {};
-                      const roleMappingObject = this.state.entryInternalMapping.fieldRoles[roleKey];
 
-                      return (
-                        <RoleSection
-                          key={index}
-                          entry={entry}
-                          roleKey={roleKey}
-                          roleConfigObject={roleConfigObject}
-                          roleMappingObject={roleMappingObject}
-                          renderEntryFields={this.renderEntryFields}
-                          stateErrors={this.state.errors}
-                          onRemoveClick={this.onRemoveClick}
-                        />
-                      );
-                    })}
-                </div>
-              </div>
-            );
-          })}
+          {Object.keys(this.props.templateConfig.fieldRoles)
+            .sort((a, b) => (!this.props.templateConfig.fieldRoles[b] || {}).required)
+            .map((roleKey, index) => {
+              const roleConfigObject = this.props.templateConfig.fieldRoles[roleKey] || {};
+              const roleMappingObject = this.state.entryInternalMapping.fieldRoles[roleKey];
+              const entry = this.props.hydratedEntries.find(
+                entry => entry.sys.id === (roleMappingObject || {}).value
+              );
+              return (
+                <RoleSection
+                  key={index}
+                  entry={entry}
+                  roleKey={roleKey}
+                  roleConfigObject={roleConfigObject}
+                  roleMappingObject={roleMappingObject}
+                  renderEntryFields={this.renderEntryFields}
+                  stateErrors={this.state.errors}
+                  onRemoveClick={this.onRemoveClick}
+                />
+              );
+            })}
         </div>
       </div>
     );
   }
 }
+
+EntryBuilder.propTypes = {
+  sdk: PropTypes.object.isRequired,
+  customTemplates: PropTypes.object.isRequired,
+  entries: PropTypes.object,
+  templatePlaceholder: PropTypes.object,
+  type: PropTypes.string,
+  internalMappingJson: PropTypes.string,
+  setInvalid: PropTypes.func,
+  hydratedEntries: PropTypes.array,
+  assets: PropTypes.array,
+  setInternalMapping: PropTypes.func
+};
+
+EntryBuilder.defaultProps = {
+  internalMappingJson: '',
+  type: '',
+  hydratedEntries: [],
+  loadingEntries: [],
+  assets: []
+};

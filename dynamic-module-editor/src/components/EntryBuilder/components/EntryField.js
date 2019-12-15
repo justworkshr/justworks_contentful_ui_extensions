@@ -98,17 +98,14 @@ export const EntryField = props => {
       />
     );
   };
-
+  console.log(props.fieldType);
   return (
     <div className="custom-template-entry-field">
       {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}
       {props.fieldType === c.FIELD_TYPE_ENTRY && renderEntryCard()}
-      {(props.entry.sys || {}).type === 'Field' &&
-        props.entry.fields.type === c.FIELD_TYPE_TEXT &&
-        renderTextField(props.entry.fields.value)}
-      {(props.entry.sys || {}).type === 'Field' &&
-        props.entry.fields.type === c.FIELD_TYPE_MARKDOWN &&
-        renderMarkdownField(props.entry.fields.value)}
+      {props.fieldType === c.FIELD_TYPE_TEXT && renderTextField(props.roleMappingObject.value)}
+      {props.fieldType === c.FIELD_TYPE_MARKDOWN &&
+        renderMarkdownField(props.roleMappingObject.value)}
     </div>
   );
 };
@@ -125,7 +122,8 @@ EntryField.propTypes = {
   onEditClick: PropTypes.func,
   onDeepCopyClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
-  onFieldChange: PropTypes.func
+  onFieldChange: PropTypes.func,
+  value: PropTypes.string
 };
 
 EntryField.defaultProps = {

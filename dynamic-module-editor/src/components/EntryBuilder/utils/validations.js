@@ -1,6 +1,6 @@
 import { getEntryContentTypeId } from './index';
 
-export const validateTemplate = async ({ sdk, state, setState }) => {
+export const validateTemplate = async ({ setInvalid, state, setState }) => {
   const errors = await getTemplateErrors(
     state.templateConfig.fieldRoles,
     state.entryInternalMapping,
@@ -8,16 +8,15 @@ export const validateTemplate = async ({ sdk, state, setState }) => {
   );
 
   const isValid = templateIsValid(errors);
-
   setState(
     {
       errors
     },
     () => {
       if (isValid) {
-        sdk.field.setInvalid(false);
+        setInvalid(false);
       } else {
-        sdk.field.setInvalid(true);
+        setInvalid(true);
       }
     }
   );
@@ -47,12 +46,12 @@ const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, entries)
       entry &&
       !!templateRole.allowedCustomTemplates &&
       getEntryContentTypeId(entry) == 'customTemplate' &&
-      !templateRole.allowedCustomTemplates.includes(entry.fields.template['en-US'].toLowerCase())
+      !templateRole.allowedCustomTemplates.includes(entry.fields.type['en-US'].toLowerCase())
     ) {
       errors[roleKey] = addError(
         errors[roleKey],
         `Invalid template type: ${
-          entry.fields.template['en-US']
+          entry.fields.type['en-US']
         }. Valid types for this role are: ${templateRole.allowedCustomTemplates.join(', ')}`
       );
     }
@@ -134,7 +133,7 @@ export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
 
 export const linkHasInvalidCustomTemplateType = (role, linkedEntry) => {
   if (getEntryContentTypeId(linkedEntry) !== 'customTemplate') return false;
-  const template = linkedEntry.fields.template['en-US'];
+  const template = linkedEntry.fields.type['en-US'];
   return (
     !!role.allowedCustomTemplates.length &&
     !role.allowedCustomTemplates.includes(template ? template.toLowerCase() : undefined)

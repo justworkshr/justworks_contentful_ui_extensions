@@ -33,20 +33,20 @@ export default class InternalMapping {
     }
 
     // load default fields if internalMapping role is blank and the roleConfig allows a field.
-    if (parsedJSON && this._templateConfig) {
-      Object.keys(this._templateConfig.fieldRoles).forEach(roleKey => {
-        const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
-        if (!parsedJSON.fieldRoles[roleKey] && roleConfigObject.field) {
-          const field = roleConfigObject.field;
-          this.addField({
-            key: roleKey,
-            type: field.type,
-            value: field.defaultValue,
-            styleClasses: roleConfigObject.defaultClasses
-          });
-        }
-      });
-    }
+    // if (parsedJSON && this._templateConfig) {
+    //   Object.keys(this._templateConfig.fieldRoles).forEach(roleKey => {
+    //     const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
+    //     if (!parsedJSON.fieldRoles[roleKey] && roleConfigObject.field) {
+    //       const field = roleConfigObject.field;
+    //       this.addField({
+    //         key: roleKey,
+    //         type: field.type,
+    //         value: field.defaultValue,
+    //         styleClasses: roleConfigObject.defaultClasses
+    //       });
+    //     }
+    //   });
+    // }
   }
 
   static entryMapping({ type, styleClasses = '', value = '' } = {}) {
@@ -83,8 +83,12 @@ export default class InternalMapping {
   }
 
   loadInternalMapping(json) {
+    // if blank
     if (!json || !typeof json === 'string') return InternalMapping.blankMapping;
-    return JSON.parse(json);
+    // if malformed object
+    const parsedJSON = JSON.parse(json);
+    if (!parsedJSON.fieldRoles) return InternalMapping.blankMapping;
+    return parsedJSON;
   }
 
   assignRolesFromMapping(parsedJSON) {
@@ -92,7 +96,6 @@ export default class InternalMapping {
     Object.keys(InternalMapping.blankMapping).forEach(key => {
       this[key] = parsedJSON[key] || InternalMapping.blankMapping[key];
     });
-
     // Load values from the entry's internalMapping Json
     Object.keys(parsedJSON.fieldRoles || {}).forEach(key => {
       if (key === 'style')

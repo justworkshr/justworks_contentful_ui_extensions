@@ -23,6 +23,7 @@ export const updateEntry = async ({
   stateTemplateMapping,
   loadEntriesFunc,
   setStateFunc,
+  setInternalMappingFunc,
   version = 0
 } = {}) => {
   if (!updatedInternalMappingJson)
@@ -69,6 +70,8 @@ export const updateEntry = async ({
     setStateFunc({
       errors
     });
+
+    setInternalMappingFunc(updatedInternalMappingJson);
     return newEntry;
   } catch (err) {
     console.log(err);
