@@ -61,6 +61,8 @@ export class App extends React.Component {
 
     this.setInvalid = this.setInvalid.bind(this);
     this.updateEntry = this.updateEntry.bind(this);
+    this.setInternalMappingValue = this.setInternalMappingValue.bind(this);
+    this.validateEntry = this.validateEntry.bind(this);
     this.setStateFromJson = this.setStateFromJson.bind(this);
     this.getHydratedEntries = this.getHydratedEntries.bind(this);
     this.getLoadingEntries = this.getLoadingEntries.bind(this);
@@ -111,7 +113,7 @@ export class App extends React.Component {
   };
 
   setInternalMappingValue = internalMappingJson => {
-    this.setStateFromJson(internalMappingJson);
+    this.setStateFromJson(internalMappingJson, [], this.validateEntry);
     clearTimeout(this.updateTimeout);
     this.updateTimeout = setTimeout(
       () => this.props.sdk.entry.fields.internalMapping.setValue(internalMappingJson),
