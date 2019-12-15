@@ -11,6 +11,8 @@ import * as tm from '../../../custom_templates/mocks/templateMocks';
 
 import {
   mockSdk,
+  mockComponent,
+  mockPrimaryEntry,
   mockAssetResponse,
   mockEntryResponse,
   mockLink,
@@ -26,9 +28,9 @@ jest.useFakeTimers();
 describe('App', () => {
   describe('removing assets', () => {
     it('should remove from a single asset', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_ASSETS_TEMPLATE,
+        type: tm.MOCK_ASSETS_TEMPLATE,
         entries: undefined,
         assets: [mockLink({ id: 1 }), mockLink({ id: 2 }), mockLink({ id: 3 })],
         internalMapping: JSON.stringify({
@@ -38,24 +40,13 @@ describe('App', () => {
             logo_asset: mockAssetMapping({ value: 3 })
           }
         })
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          entries={{
-            image_asset: mockAssetResponse({ id: 1 }),
-            formattable_image_asset: mockAssetResponse({ id: 2 }),
-            logo_asset: mockAssetResponse({ id: 3 })
-          }}
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -85,9 +76,9 @@ describe('App', () => {
     });
 
     it('should remove from multi-asset field', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: [
           mockLink({ id: 1 }),
           mockLink({ id: 2 }),
@@ -110,24 +101,11 @@ describe('App', () => {
             }
           }
         })
-      };
+      });
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          entries={{
-            grid_logo_multi_field: [
-              mockEntryResponse({ id: 1 }),
-              mockAssetResponse({ id: 2 }),
-              mockAssetResponse({ id: 3 })
-            ]
-          }}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -161,9 +139,9 @@ describe('App', () => {
 
   describe('removing entries', () => {
     it('should remove from a single entry', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_ENTRY_TEMPLATE,
+        type: tm.MOCK_ENTRY_TEMPLATE,
         entries: [mockLink({ id: 1 })],
         assets: undefined,
         internalMapping: JSON.stringify({
@@ -171,22 +149,13 @@ describe('App', () => {
             entry_field: mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 })
           }
         })
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_ENTRY_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          entries={{
-            entry_field: mockMapping({ value: 1 })
-          }}
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       await resolveAll();
       wrapper.update();
@@ -216,9 +185,9 @@ describe('App', () => {
     });
 
     it('should remove from multi-entry field', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: [mockLink({ id: 1 }), mockLink({ id: 2 })],
         assets: [mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 3 })],
         internalMapping: JSON.stringify({
@@ -233,24 +202,11 @@ describe('App', () => {
             }
           }
         })
-      };
+      });
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          entries={{
-            grid_logo_multi_field: [
-              mockEntryResponse({ id: 1 }),
-              mockEntryResponse({ id: 2 }),
-              mockAssetResponse({ id: 3 })
-            ]
-          }}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       await resolveAll();
       await resolveAll();

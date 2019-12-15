@@ -138,12 +138,10 @@ FieldStyleEditor.propTypes = {
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
   useReferenceStyleClasses: PropTypes.bool,
-  type: PropTypes.string,
-  entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+  type: PropTypes.string
 };
 
 FieldStyleEditor.defaultProps = {
-  entry: {},
   roleKey: '',
   roleConfig: {},
   roleMappingObject: {},

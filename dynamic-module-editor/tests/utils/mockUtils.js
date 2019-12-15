@@ -1,5 +1,41 @@
+import React from 'react';
+
 import sinon from 'sinon';
 import * as c from '../../../custom_templates/constants';
+import * as tm from '../../../custom_templates/mocks/templateMocks';
+import { templatePlaceholder } from '../../../custom_templates';
+
+import { mount } from 'enzyme';
+
+export const mockPrimaryEntry = ({
+  name = undefined,
+  type = undefined,
+  entries = undefined,
+  assets = undefined,
+  internalMapping = undefined,
+  isValid = undefined,
+  style = undefined
+} = {}) => {
+  return {
+    name,
+    type,
+    entries,
+    assets,
+    internalMapping,
+    isValid,
+    style
+  };
+};
+
+export const mockComponent = ({ Component, sdk = mockSdk(mockPrimaryEntry()) } = {}) => {
+  return mount(
+    <Component
+      customTemplates={tm.mockCustomTemplates}
+      templatePlaceholder={templatePlaceholder}
+      sdk={sdk}
+    />
+  );
+};
 
 export const mockLink = ({ id = 0, type = 'Entry' } = {}) => {
   return {
@@ -112,7 +148,7 @@ export const mockAssetMapping = ({
   };
 };
 
-export const mockSdk = mockCustomTemplateEntry => {
+export const mockSdk = (mockEntry = mockPrimaryEntry()) => {
   const getValue = (entry, field) => {
     return entry[field];
   };
@@ -150,23 +186,23 @@ export const mockSdk = mockCustomTemplateEntry => {
       onSysChanged: jest.fn(),
       fields: {
         name: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'name'),
+          getValue: () => getValue(mockEntry, 'name'),
           setValue: jest.fn()
         },
         type: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'template'),
+          getValue: () => getValue(mockEntry, 'type'),
           setValue: jest.fn()
         },
         internalMapping: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'internalMapping'),
+          getValue: () => getValue(mockEntry, 'internalMapping'),
           setValue: sinon.spy()
         },
         entries: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'entries'),
+          getValue: () => getValue(mockEntry, 'entries'),
           setValue: jest.fn()
         },
         assets: {
-          getValue: () => getValue(mockCustomTemplateEntry, 'assets'),
+          getValue: () => getValue(mockEntry, 'assets'),
           setValue: jest.fn()
         },
         isValid: {

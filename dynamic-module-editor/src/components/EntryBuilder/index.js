@@ -235,13 +235,14 @@ export default class EntryBuilder extends React.Component {
     this.timeoutUpdateEntry({ updatedInternalMapping, ms: 1000 });
   }
 
-  renderEntryFields(roleKey, roleConfigObject, roleMappingObject, entry) {
+  renderEntryFields(roleKey, roleConfigObject, roleMappingObject) {
     // Multi References and with entries
     if (
       roleConfigObject.allowMultipleReferences &&
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {
+      // render multi field
       return (
         <div>
           {roleMappingObject.value.map((entry, index) => {
@@ -287,7 +288,6 @@ export default class EntryBuilder extends React.Component {
               updateStyle={this.updateEntryStyle}
               updateAssetFormatting={this.updateAssetFormatting}
               clearStyleField={this.clearEntryStyleClasses}
-              entry={entry}
               title={displaySnakeCaseName(roleKey) + ' Collection Style'}
               type={roleConfigObject.multipleReferenceStyle}
             />
@@ -300,7 +300,6 @@ export default class EntryBuilder extends React.Component {
               updateStyle={this.updateReferencesStyle}
               updateAssetFormatting={this.updateAssetFormatting}
               clearStyleField={this.clearReferencesStyle}
-              entry={entry}
               title={displaySnakeCaseName(roleKey) + ' Style'}
               type={c.FIELD_TYPE_ASSET}
               useReferenceStyleClasses={true}
@@ -309,6 +308,7 @@ export default class EntryBuilder extends React.Component {
         </div>
       );
     } else if (this.props.entryInternalMapping && !!this.props.entryInternalMapping[roleKey]) {
+      // Render single field
       const entry =
         this.props.hydratedEntries.find(
           he => he.sys.id === this.props.entryInternalMapping[roleKey].value
@@ -339,7 +339,6 @@ export default class EntryBuilder extends React.Component {
               updateStyle={this.updateEntryStyle}
               updateAssetFormatting={this.updateAssetFormatting}
               clearStyleField={this.clearEntryStyleClasses}
-              entry={entry}
               title={displaySnakeCaseName(roleKey) + ' Style'}
               type={roleMappingObject.type}
             />
@@ -347,6 +346,7 @@ export default class EntryBuilder extends React.Component {
         </div>
       );
     } else {
+      // Render empty action row
       return (
         <EntryActionRow
           allowAsset={!!this.props.templateConfig.fieldRoles[roleKey].asset}
@@ -406,29 +406,9 @@ export default class EntryBuilder extends React.Component {
               const roleConfigObject = this.props.templateConfig.fieldRoles[roleKey] || {};
               const roleMappingObject = this.props.entryInternalMapping.fieldRoles[roleKey] || {};
 
-              let entry;
-              if (roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE) {
-                if (!roleMappingObject.value.length) {
-                  entry = undefined;
-                } else {
-                  entry = roleMappingObject.value
-                    .map(e => this.props.hydratedEntries.find(entry => entry.sys.id === e.value))
-                    .filter(e => e);
-
-                  if (!entry.length) {
-                    entry = undefined;
-                  }
-                }
-              } else {
-                entry = this.props.hydratedEntries.find(
-                  entry => entry.sys.id === roleMappingObject.value
-                );
-              }
-
               return (
                 <RoleSection
                   key={index}
-                  entry={entry}
                   roleKey={roleKey}
                   roleConfigObject={roleConfigObject}
                   roleMappingObject={roleMappingObject}

@@ -8,7 +8,13 @@ import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
 
-import { mockSdk, mockAssetResponse, mockLink, mockAssetMapping } from '../utils/mockUtils';
+import {
+  mockSdk,
+  mockComponent,
+  mockPrimaryEntry,
+  mockLink,
+  mockAssetMapping
+} from '../utils/mockUtils';
 
 import { resolveAll, internalMappingRoleStyle } from '../utils/assertUtils';
 
@@ -41,24 +47,18 @@ jest.useFakeTimers();
 describe('App', () => {
   describe('single entry style editing', () => {
     it('should update styleClasses', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_FIELDS_TEMPLATE,
+        type: tm.MOCK_FIELDS_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // Adds default styles when field added
       wrapper
@@ -97,9 +97,9 @@ describe('App', () => {
     });
 
     it('should load styleClasses', () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_FIELDS_TEMPLATE,
+        type: tm.MOCK_FIELDS_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: JSON.stringify({
@@ -111,19 +111,12 @@ describe('App', () => {
             }
           }
         })
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       const value = 'text-black';
 
@@ -145,24 +138,18 @@ describe('App', () => {
     });
 
     it('should clear styleClasses', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_FIELDS_TEMPLATE,
+        type: tm.MOCK_FIELDS_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // Adds default styles when field added
       wrapper
@@ -200,9 +187,9 @@ describe('App', () => {
 
   describe('multi-reference asset reference style editing', () => {
     it('should add classes to all references', () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: [],
         assets: [mockLink({ id: 1 }), mockLink({ id: 2 }), mockLink({ id: 3 })],
         internalMapping: JSON.stringify({
@@ -217,26 +204,12 @@ describe('App', () => {
             }
           }
         })
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
-
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          entries={{
-            grid_logo_multi_field: [
-              mockAssetResponse({ id: 1 }),
-              mockAssetResponse({ id: 2 }),
-              mockAssetResponse({ id: 3 })
-            ]
-          }}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // all assets start with original classes (blank)
       expect(

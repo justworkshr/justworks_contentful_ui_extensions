@@ -273,8 +273,8 @@ export class App extends React.Component {
 
   render() {
     return (
-      <Form className="f36-margin--l">
-        <DisplayText>Entry extension demo</DisplayText>
+      <Form className="dynamic-module-editor f36-margin--l">
+        <DisplayText>{this.props.title}</DisplayText>
         <Paragraph>
           This demo uses a single UI Extension to render the whole editor for an entry.
         </Paragraph>
@@ -338,7 +338,12 @@ export class App extends React.Component {
 init(sdk => {
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
-      <App sdk={sdk} customTemplates={customTemplates} templatePlaceholder={templatePlaceholder} />,
+      <App
+        title={'Module Editor'}
+        sdk={sdk}
+        customTemplates={customTemplates}
+        templatePlaceholder={templatePlaceholder}
+      />,
       document.getElementById('root')
     );
   }

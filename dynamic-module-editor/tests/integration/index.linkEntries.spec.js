@@ -9,7 +9,7 @@ import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
 
-import { mockSdk } from '../utils/mockUtils';
+import { mockSdk, mockPrimaryEntry, mockComponent } from '../utils/mockUtils';
 
 import { resolveAll, newEntryAssetIds, newEntryEntryIds, newEntryRole } from '../utils/assertUtils';
 
@@ -19,25 +19,19 @@ jest.useFakeTimers();
 describe('App', () => {
   describe('linking assets', () => {
     it('should link a single asset', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_ASSETS_TEMPLATE,
+        type: tm.MOCK_ASSETS_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -63,25 +57,19 @@ describe('App', () => {
     });
 
     it('should link multiple assets', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -112,25 +100,19 @@ describe('App', () => {
 
   describe('linking entries', () => {
     it('should link a single entry', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_ENTRY_TEMPLATE,
+        type: tm.MOCK_ENTRY_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -156,25 +138,19 @@ describe('App', () => {
     });
 
     it('should link multiple entries', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -205,25 +181,19 @@ describe('App', () => {
 
   describe('creating entries', () => {
     it('should create and link an entry', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_ENTRY_TEMPLATE,
+        type: tm.MOCK_ENTRY_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -252,25 +222,19 @@ describe('App', () => {
 
   describe('deep copy entries', () => {
     it('should copy and link a single entry', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_ENTRY_TEMPLATE,
+        type: tm.MOCK_ENTRY_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper
@@ -297,25 +261,19 @@ describe('App', () => {
     });
 
     it('should copy and link multiple entries', async () => {
-      const mockEntry = {
+      const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        template: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
-      };
+      });
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
-      const wrapper = mount(
-        <App
-          customTemplates={tm.mockCustomTemplates}
-          templatePlaceholder={tm.mockCustomTemplates}
-          sdk={sdk}
-        />
-      );
+      const wrapper = mockComponent({ Component: App, sdk });
 
       // open dropdown
       wrapper

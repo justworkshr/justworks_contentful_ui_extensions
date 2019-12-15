@@ -32,12 +32,7 @@ const RoleSection = props => {
         )}
       </div>
       <HelpText>{props.roleConfigObject.description}</HelpText>
-      {props.renderEntryFields(
-        props.roleKey,
-        props.roleConfigObject,
-        props.roleMappingObject,
-        props.entry
-      )}
+      {props.renderEntryFields(props.roleKey, props.roleConfigObject, props.roleMappingObject)}
 
       {!!(props.stateErrors[props.roleKey] || {}).length &&
         props.stateErrors[props.roleKey].map((error, index) => {
@@ -52,7 +47,6 @@ const RoleSection = props => {
 };
 
 RoleSection.propTypes = {
-  entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   roleMappingObject: PropTypes.object,
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,
@@ -62,7 +56,6 @@ RoleSection.propTypes = {
 };
 
 RoleSection.defaultProps = {
-  entry: undefined,
   roleConfigObject: {},
   roleMappingObject: {},
   stateErrors: {}

@@ -1,14 +1,13 @@
 import React from 'react';
-import { customTemplates, templatePlaceholder } from '../../custom_templates';
-// import { App } from '../src/index';
+import { App } from '../src/index';
 
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
 
-import * as c from '../../custom_templates/constants';
-
 import * as tm from '../../custom_templates/mocks/templateMocks';
+
+import { mockComponent } from './utils/mockUtils';
 
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
@@ -16,17 +15,6 @@ jest.useFakeTimers();
 configure({
   testIdAttribute: 'data-test-id'
 });
-
-function renderComponent(sdk) {
-  console.log(c.FIELD_TYPE_ENTRY);
-  // return mount(
-  //   <App
-  //     customTemplates={tm.mockCustomTemplates}
-  //     templatePlaceholder={tm.mockCustomTemplates}
-  //     sdk={sdk}
-  //   />
-  // );
-}
 
 const sdk = {
   entry: {
@@ -44,24 +32,14 @@ describe('App', () => {
     jest.resetAllMocks();
   });
 
-  it('should read a values from entry.fields.*', () => {
+  it('should read a values from entry.fields.* and render without crashing', () => {
     sdk.entry.fields.name.getValue.mockReturnValue('name-value');
     sdk.entry.fields.internalMapping.getValue.mockReturnValue('internalMapping-value');
     sdk.entry.fields.type.getValue.mockReturnValue(true);
     sdk.entry.fields.isValid.getValue.mockReturnValue('isValid-value');
 
-    const wrapper = renderComponent(sdk);
+    const wrapper = mockComponent({ Component: App });
 
-    // expect(getByTestId('field-name').value).toEqual('name-value');
-    // expect(getByTestId('field-internalMapping').value).toEqual('internalMapping-value');
-    // expect(getByTestId('field-isValid').value).toEqual('isValid-value');
-
-    // fireEvent.change(getByTestId('field-internalMapping'), {
-    //   target: { value: 'new-internalMapping-value' }
-    // });
-
-    // expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith(
-    //   'new-internalMapping-value'
-    // );
+    expect(wrapper.find('Form.dynamic-module-editor')).toHaveLength(1);
   });
 });
