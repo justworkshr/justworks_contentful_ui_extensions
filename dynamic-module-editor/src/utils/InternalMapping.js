@@ -15,7 +15,7 @@ export default class InternalMapping {
 
     this.assignRolesFromMapping(parsedJSON);
 
-    // Load default style classes if none present
+    // Load template default style classes if none present
     if (templateConfig.style) {
       Object.keys(templateConfig.style).forEach(styleSectionKey => {
         if (!templateConfig.style[styleSectionKey]) return;
@@ -49,10 +49,17 @@ export default class InternalMapping {
     // }
   }
 
-  static entryMapping({ type, styleClasses = '', value = '' } = {}) {
+  static styleMapping({ type = c.STYLE_TYPE_CUSTOM, value = '' } = {}) {
     return {
       type,
-      styleClasses,
+      value
+    };
+  }
+
+  static entryMapping({ type, style = undefined, value = '' } = {}) {
+    return {
+      type,
+      style,
       value
     };
   }
@@ -63,7 +70,7 @@ export default class InternalMapping {
     value = '',
     assetUrl = '',
     formatting = {},
-    styleClasses = ''
+    style = undefined
   } = {}) {
     return {
       type,
@@ -71,7 +78,7 @@ export default class InternalMapping {
       value,
       assetUrl,
       formatting,
-      styleClasses
+      style
     };
   }
 
@@ -92,7 +99,7 @@ export default class InternalMapping {
   }
 
   assignRolesFromMapping(parsedJSON) {
-    // Prepare the blank object structure: {fieldRoles: {}, style: {}}
+    // Prepare the object structure: {fieldRoles: {}, style: {}}
     Object.keys(InternalMapping.blankMapping).forEach(key => {
       this[key] = parsedJSON[key] || InternalMapping.blankMapping[key];
     });
@@ -169,7 +176,7 @@ export default class InternalMapping {
     });
   }
 
-  addEntriesOrAssets({ key = '', value = [], styleClasses = '' } = {}) {
+  addEntriesOrAssets({ key = '', value = [], style = undefined } = {}) {
     /*
      * Adds an entry mapping to the key, unless the value of the key is an array. Then it adds the entries to the array.
      * key - string - the getter key of the internal mapping being assigned to
@@ -187,7 +194,7 @@ export default class InternalMapping {
           assetUrl: entry.assetUrl,
           assetType: entry.assetType,
           formatting: entry.formatting,
-          styleClasses: entry.styleClasses
+          style: entry.style
         });
       } else {
         return InternalMapping.entryMapping({
@@ -204,31 +211,29 @@ export default class InternalMapping {
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_MULTI_REFERENCE,
       value: valueArray,
-      styleClasses: (this.fieldRoles[key] || {}).styleClasses || styleClasses
+      style: (this.fieldRoles[key] || {}).style || style
     });
   }
 
-  addTextField({ key, value = '', styleClasses = '' } = {}) {
+  addTextField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_TEXT,
-      value,
-      styleClasses
+      value
     });
   }
 
-  addMarkdownField({ key, value = '', styleClasses = '' } = {}) {
+  addMarkdownField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_MARKDOWN,
-      value,
-      styleClasses
+      value
     });
   }
 
-  addField({ key, type, value = '', styleClasses = '' } = {}) {
+  addField({ key, type, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.entryMapping({ type: type, value, styleClasses });
+    this.fieldRoles[key] = InternalMapping.entryMapping({ type: type, value });
   }
 
   addFieldToRole(roleKey, fieldType) {
@@ -236,14 +241,12 @@ export default class InternalMapping {
     switch (fieldType) {
       case c.FIELD_TYPE_TEXT:
         this.addTextField({
-          key: roleKey,
-          styleClasses: roleConfigObject.defaultClasses
+          key: roleKey
         });
         break;
       case c.FIELD_TYPE_MARKDOWN:
         this.addMarkdownField({
-          key: roleKey,
-          styleClasses: roleConfigObject.defaultClasses
+          key: roleKey
         });
         break;
       default:
@@ -251,29 +254,58 @@ export default class InternalMapping {
     }
   }
 
+  addStyleCustom(key) {
+    this.fieldRoles[key].style = InternalMapping.styleMapping({ type: c.STYLE_TYPE_CUSTOM });
+  }
+
+  setStyleEntry(key, entryId) {
+    this.fieldRoles[key].style = InternalMapping.styleMapping({
+      type: c.STYLE_TYPE_ENTRY,
+      value: entryId
+    });
+  }
+
   setStyleClasses(key, styleClasses) {
-    this.fieldRoles[key].styleClasses = styleClasses;
+    if (!this.fieldRoles[key].style) return;
+    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+      this.fieldRoles[key].style.value = styleClasses;
+    }
   }
 
   setReferencesStyleClasses(key, styleClasses) {
-    if (!this.fieldRoles[key].value) return;
     this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
-      entry.styleClasses = styleClasses;
+      if ((entry.style || {}).type === c.STYLE_TYPE_ENTRY) return;
+      entry.style = InternalMapping.styleMapping({ value: styleClasses });
       return entry;
     });
   }
 
   addStyleClass(key, styleClass) {
-    const classes = this.fieldRoles[key].styleClasses.split(' ').filter(e => e);
-    this.fieldRoles[key].styleClasses = [...classes, styleClass].join(' ');
+    if (!this.fieldRoles[key].style) return;
+    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+      let existingClasses = this.fieldRoles[key].style.value;
+      existingClasses = existingClasses
+        ? this.fieldRoles[key].style.value.split(' ').filter(e => e)
+        : [];
+      this.fieldRoles[key].style = InternalMapping.styleMapping({
+        value: [...existingClasses, styleClass].join(' ')
+      });
+    }
   }
 
   removeStyleClass(key, styleClass) {
-    const classes = this.fieldRoles[key].styleClasses
-      .split(' ')
-      .filter(e => e)
-      .filter(cl => cl !== styleClass);
-    this.fieldRoles[key].styleClasses = [...classes].join(' ');
+    if (!this.fieldRoles[key].style) return;
+    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+      const classes = this.fieldRoles[key].style.value
+        ? this.fieldRoles[key].style.value
+            .split(' ')
+            .filter(e => e)
+            .filter(cl => cl !== styleClass)
+        : [];
+      this.fieldRoles[key].style = InternalMapping.styleMapping({
+        value: [...classes].join(' ')
+      });
+    }
   }
 
   removeReferencesStyleClasses(key, classArray) {
@@ -281,28 +313,35 @@ export default class InternalMapping {
       // if passed an array of classObjects instead of strings
       classArray = classArray.map(el => el.className);
     }
-
     this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
-      const classes = entry.styleClasses
-        .split(' ')
-        .filter(e => e)
-        .filter(cl => !classArray.includes(cl));
+      if ((entry.style || {}).type === c.STYLE_TYPE_ENTRY) return;
+      const classes = entry.style.value
+        ? entry.style.value
+            .split(' ')
+            .filter(e => e)
+            .filter(cl => !classArray.includes(cl))
+        : [];
 
-      entry.styleClasses = [...classes].join(' ');
+      entry.style = InternalMapping.styleMapping({ value: [...classes].join(' ') });
       return entry;
     });
   }
 
   removeStyleClasses(key, classArray) {
-    if (classArray[0].className) {
-      // if passed an array of classObjects instead of strings
-      classArray = classArray.map(el => el.className);
+    if (!this.fieldRoles[key].style) return;
+    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+      if (classArray[0].className) {
+        // if passed an array of classObjects instead of strings
+        classArray = classArray.map(el => el.className);
+      }
+      const classes = this.fieldRoles[key].style.value
+        ? this.fieldRoles[key].style.value
+            .split(' ')
+            .filter(e => e)
+            .filter(cl => !classArray.includes(cl))
+        : [];
+      this.fieldRoles[key].style = InternalMapping.styleMapping({ value: [...classes].join(' ') });
     }
-    const classes = this.fieldRoles[key].styleClasses
-      .split(' ')
-      .filter(e => e)
-      .filter(cl => !classArray.includes(cl));
-    this.fieldRoles[key].styleClasses = [...classes].join(' ');
   }
 
   setImageFormatting(key, formattingObject) {

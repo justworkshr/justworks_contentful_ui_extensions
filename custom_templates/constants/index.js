@@ -46,7 +46,16 @@ export const FIELD_TYPE_MULTI_REFERENCE = "multi-reference";
 export const FIELD_TYPE_TEXT = "text";
 export const FIELD_TYPE_MARKDOWN = "markdown";
 
-export const DIRECT_FIELD_TYPES = [FIELD_TYPE_TEXT, FIELD_TYPE_MARKDOWN]; // Please keep updated!!
+// Please keep updated!!
+export const DIRECT_FIELD_TYPES = [FIELD_TYPE_TEXT, FIELD_TYPE_MARKDOWN];
+
+/* 
+  Internal Mapping Style types
+  - types of style references in a direct mapping
+*/
+
+export const STYLE_TYPE_CUSTOM = "custom";
+export const STYLE_TYPE_ENTRY = "entry";
 
 /*
   Style types

@@ -17,9 +17,10 @@ import {
 } from '../utils/mockUtils';
 
 import { resolveAll, internalMappingRoleStyle } from '../utils/assertUtils';
+import InternalMapping from '../../src/utils/InternalMapping';
 
 const getRoleStyle = (internalMapping, roleKey) => {
-  return internalMapping.fieldRoles[roleKey].styleClasses;
+  return internalMapping.fieldRoles[roleKey].style.value;
 };
 
 const openStyleEditor = (wrapper, roleKey, type) => {
@@ -46,7 +47,7 @@ jest.useFakeTimers();
 
 describe('App', () => {
   describe('single entry style editing', () => {
-    it('should update styleClasses', async () => {
+    it('should update style value', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_FIELDS_TEMPLATE,
@@ -66,7 +67,7 @@ describe('App', () => {
         .find('TextLink.entry-action-button__add-field')
         .simulate('click');
 
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
         'text-left text-black'
       );
 
@@ -96,7 +97,7 @@ describe('App', () => {
       ).toBe('text-left text-navy');
     });
 
-    it('should load styleClasses', () => {
+    it('should load style object', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_FIELDS_TEMPLATE,
@@ -106,7 +107,7 @@ describe('App', () => {
           fieldRoles: {
             text_field: {
               type: 'text',
-              styleClasses: 'text-black',
+              style: InternalMapping.styleMapping({ value: 'text-black' }),
               value: 'hello'
             }
           }
@@ -121,8 +122,8 @@ describe('App', () => {
       const value = 'text-black';
 
       // Starts with existing value
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
-        value
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style).toEqual(
+        undefined
       );
 
       openStyleEditor(wrapper, 'text_field', 'text');
@@ -137,7 +138,7 @@ describe('App', () => {
       ).toBe(true);
     });
 
-    it('should clear styleClasses', async () => {
+    it('should clear style value', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_FIELDS_TEMPLATE,
@@ -157,7 +158,7 @@ describe('App', () => {
         .find('TextLink.entry-action-button__add-field')
         .simulate('click');
 
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
         'text-left text-black'
       );
 
@@ -173,7 +174,7 @@ describe('App', () => {
         .simulate('click');
 
       // removes corresponding class
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].styleClasses).toEqual(
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
         'text-black'
       );
 
@@ -218,7 +219,7 @@ describe('App', () => {
           .entryInternalMapping.fieldRoles['grid_logo_multi_field'].value.filter(
             e => e.type === c.FIELD_TYPE_ASSET
           )
-          .every(e => e.styleClasses === '')
+          .every(e => e.style.value === '')
       ).toEqual(true);
 
       openStyleEditor(wrapper, 'grid_logo_multi_field', 'asset');
@@ -235,7 +236,7 @@ describe('App', () => {
           .entryInternalMapping.fieldRoles['grid_logo_multi_field'].value.filter(
             e => e.type === c.FIELD_TYPE_ASSET
           )
-          .every(e => e.styleClasses === value)
+          .every(e => e.style.value === value)
       ).toEqual(true);
     });
   });
