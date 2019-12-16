@@ -14,7 +14,7 @@ const ImageStyle = props => {
   };
 
   return (
-    <div className="image-style style-editor__section">
+    <div className="style-section">
       <div className="style-editor__field-group">
         <FormLabel htmlFor="">Width (pixels)</FormLabel>
         <HelpText>

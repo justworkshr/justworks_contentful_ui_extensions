@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../../../../../custom_templates/constants';
 
-import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
+import { Icon, SectionHeading, Subheading } from '@contentful/forma-36-react-components';
 import BackgroundColorStyle from '../BackgroundColorStyle';
 
 import { displaySnakeCaseName, addExclusiveClassName } from '../../utils';
+import classnames from 'classnames';
+
+import { capitalize } from '../../../../../../shared/utilities/elementUtils';
 
 const TemplateStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
@@ -53,16 +56,16 @@ const TemplateStyleEditor = props => {
   };
 
   return (
-    <div className="style-editor">
-      <div className="style-editor__heading" onClick={() => toggleOpen(!open)}>
-        <Icon className="style-editor__heading--icon" icon="Code" size="large" />
-        <SectionHeading className="style-editor__heading--header" element="h1">
-          {props.title}
-        </SectionHeading>
+    <div className={classnames('style-editor', props.className)}>
+      <div className="sub-section__heading" onClick={() => toggleOpen(!open)}>
+        <Icon className="sub-section__heading--icon" icon="Code" size="large" />
+        <Subheading className="sub-section__heading--header" element="h1">
+          {capitalize(props.title)}
+        </Subheading>
         <Icon
           className="style-editor__heading--toggle"
           icon={open ? 'ChevronDown' : 'ChevronUp'}
-          size="small"
+          size="large"
         />
       </div>
       <div className="style-editor__heading" onClick={() => toggleOpen(!open)} />
@@ -72,6 +75,7 @@ const TemplateStyleEditor = props => {
 };
 
 TemplateStyleEditor.propTypes = {
+  className: PropTypes.string,
   clearStyleField: PropTypes.func,
   title: PropTypes.string,
   updateStyle: PropTypes.func,

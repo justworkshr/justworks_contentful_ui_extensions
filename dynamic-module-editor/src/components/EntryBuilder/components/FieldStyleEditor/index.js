@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../../../../custom_templates/constants';
 
-import { Icon, SectionHeading } from '@contentful/forma-36-react-components';
+import { Icon, Subheading } from '@contentful/forma-36-react-components';
 
 import TextStyle from '../TextStyle';
 import ImageStyle from '../ImageStyle';
 import LogoStyle from '../LogoStyle';
 import MultiReferenceStyle from '../MultiReferenceStyle';
 import { getMarkdownSections } from '../utils/styleEditorUtils';
+
+import classnames from 'classnames';
 
 import './style.css';
 
@@ -109,16 +111,16 @@ const FieldStyleEditor = props => {
   };
 
   return (
-    <div className="style-editor">
-      <div className="style-editor__heading" onClick={() => toggleOpen(!open)}>
-        <Icon className="style-editor__heading--icon" icon="Code" size="large" />
-        <SectionHeading className="style-editor__heading--header" element="h1">
+    <div className={classnames('style-editor', props.className)}>
+      <div className="sub-section__heading" onClick={() => toggleOpen(!open)}>
+        <Icon className="sub-section__heading--icon" icon="Code" size="large" />
+        <Subheading className="sub-section__heading--header" element="h1">
           {props.title}
-        </SectionHeading>
+        </Subheading>
         <Icon
           className="style-editor__heading--toggle"
           icon={open ? 'ChevronDown' : 'ChevronUp'}
-          size="small"
+          size="large"
         />
       </div>
       {!!open && renderFieldStyle(props)}

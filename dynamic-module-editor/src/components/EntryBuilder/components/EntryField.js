@@ -9,14 +9,35 @@ import {
   DropdownList,
   DropdownListItem,
   EntryCard,
-  AssetCard
+  AssetCard,
+  Icon,
+  Subheading
 } from '@contentful/forma-36-react-components';
 
 import { getStatus, getEntryContentTypeId } from '../utils';
+import { capitalize } from '../../../../../shared/utilities/elementUtils';
+
+import classnames from 'classnames';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
+  const getFieldIcon = () => {
+    switch (props.fieldType) {
+      case c.FIELD_TYPE_ENTRY:
+        return 'Entry';
+      case c.FIELD_TYPE_ASSET:
+        return 'Asset';
+      case c.FIELD_TYPE_TEXT:
+        return 'Text';
+      case c.FIELD_TYPE_MARKDOWN:
+        return 'Text';
+      case c.FIELD_TYPE_MULTI_REFERENCE:
+        return 'ListBulleted';
+      default:
+        return 'Entry';
+    }
+  };
   const renderEntryCard = () => {
     const contentType = (props.entry.sys || {}).contentType
       ? getEntryContentTypeId(props.entry)
@@ -99,7 +120,13 @@ export const EntryField = props => {
     );
   };
   return (
-    <div className="custom-template-entry-field">
+    <div className={classnames('custom-template-entry-field', props.className)}>
+      <div className="sub-section__heading">
+        <Icon className="sub-section__heading--icon" icon={getFieldIcon()} size="large" />
+        <Subheading className="sub-section__heading--header" element="h1">
+          {capitalize(props.fieldType)}
+        </Subheading>
+      </div>
       {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}
       {props.fieldType === c.FIELD_TYPE_ENTRY && renderEntryCard()}
       {props.fieldType === c.FIELD_TYPE_TEXT && renderTextField(props.roleMappingObject.value)}
@@ -110,6 +137,7 @@ export const EntryField = props => {
 };
 
 EntryField.propTypes = {
+  className: PropTypes.string,
   entry: PropTypes.object,
   entryIndex: PropTypes.number,
   roleKey: PropTypes.string,

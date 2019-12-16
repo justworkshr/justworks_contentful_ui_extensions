@@ -10,7 +10,7 @@ import {
 const BooleanRadioField = props => {
   if (props.value === null) return null;
   return (
-    <div className="boolean-radio-field">
+    <div className="boolean-radio-field max-width-600">
       <SectionHeading>{props.heading}</SectionHeading>
       <FieldGroup row={false}>
         <RadioButtonField

@@ -6,7 +6,7 @@ import { SectionHeading, Textarea } from '@contentful/forma-36-react-components'
 const LongTextField = props => {
   if (props.value === null) return null;
   return (
-    <div className="long-text-field">
+    <div className="long-text-field max-width-600">
       <SectionHeading>{props.heading}</SectionHeading>
       <Textarea testId={props.testId} onChange={props.onChange} value={props.value} />
     </div>

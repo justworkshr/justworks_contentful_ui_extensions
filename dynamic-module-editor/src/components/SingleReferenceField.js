@@ -12,6 +12,8 @@ import LoadingEntryCard from '../../../shared/components/LoadingEntryCard';
 
 import { getStatus } from '../../../shared/utilities/elementUtils';
 
+import '../../../shared/style.css';
+
 const SingleReferenceField = props => {
   const [hydratedEntry, hydrateEntry] = useState(null);
 
@@ -31,7 +33,7 @@ const SingleReferenceField = props => {
   }
 
   return (
-    <div className="single-reference-field">
+    <div className="single-reference-field max-width-600">
       <SectionHeading>{props.heading}</SectionHeading>
       {props.value && hydratedEntry && (
         <EntryCard

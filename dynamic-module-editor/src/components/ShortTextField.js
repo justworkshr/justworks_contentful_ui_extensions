@@ -6,7 +6,7 @@ import { SectionHeading, TextInput } from '@contentful/forma-36-react-components
 const ShortTextField = props => {
   if (props.value === null) return null;
   return (
-    <div className="short-text-field">
+    <div className="short-text-field max-width-600">
       <SectionHeading>{props.heading}</SectionHeading>
       <TextInput testId={props.testId} onChange={props.onChange} value={props.value} />
     </div>

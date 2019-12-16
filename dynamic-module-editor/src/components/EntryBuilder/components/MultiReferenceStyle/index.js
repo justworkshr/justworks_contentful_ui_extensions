@@ -19,8 +19,8 @@ const MultiReferenceStyle = props => {
   const [selected, setSelected] = useState(sections[0]);
 
   return (
-    <div className="text-style">
-      <Tabs withDivider={true}>
+    <div className="style-section">
+      <Tabs className="tabs" withDivider={true}>
         {sections.map(section => {
           const sectionLabel = getSectionLabel(section);
 

@@ -8,3 +8,40 @@ div {
   font: inherit;
   vertical-align: baseline;
 }
+
+.dynamic-module-editor {
+  padding: 10px;
+}
+
+@media (min-width: 992px) {
+  .dynamic-module-editor {
+    padding: 20px 40px;
+  }
+}
+
+.section-row {
+  display: block;
+}
+
+@media (min-width: 992px) {
+  .section-row {
+    display: flex;
+    min-width: 1280px;
+  }
+
+  .section-row > div:first-child {
+    flex: 1;
+    margin-right: 40px;
+  }
+}
+
+.sub-section__heading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.sub-section__heading > * {
+  margin-right: 10px;
+}

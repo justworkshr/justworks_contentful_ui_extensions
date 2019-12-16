@@ -8,29 +8,34 @@
   margin-bottom: 20px;
 }
 
-.style-editor__section {
+.style-editor .tabs {
   background-color: #f5f7f8;
-  margin-top: 10px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border: 1px solid #c8ccd0;
+  box-sizing: border-box;
+}
+
+.style-editor__section {
+  background-color: white;
+  border: 1px solid #c8ccd0;
+  box-sizing: border-box;
   padding: 20px;
 }
 
-.style-editor__heading {
+.style-editor .sub-section__heading {
   outline: none;
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 
-.style-editor__clear-link {
-  margin-left: 10px;
-}
-
-.style-editor__heading:hover {
+.style-editor .sub-section__heading:hover {
   text-decoration: underline;
 }
 
-.style-editor__heading--icon {
-  margin-right: 10px;
+.style-editor__clear-link {
+  margin-left: 10px;
 }
 
 .style-editor__inline-input-section {

@@ -14,7 +14,7 @@ import { isDirectField, displaySnakeCaseName } from '../../utils';
 const RoleSection = props => {
   return (
     <div className="role-section">
-      <div className="role-section__header-section ">
+      <div className="role-section__header-section max-width-600">
         <FormLabel
           className="role-section__heading"
           htmlFor=""

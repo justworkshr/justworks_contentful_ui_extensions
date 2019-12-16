@@ -14,7 +14,7 @@ import { getSectionedClassName, getSectionValue } from '../utils/styleEditorUtil
 
 const ColorStyle = props => {
   return (
-    <div className="style-editor__field-group">
+    <div className="style-section">
       <FormLabel htmlFor="">{`${props.label}${
         props.sectionLabel ? '(' + props.sectionLabel + ')' : ''
       }`}</FormLabel>

@@ -572,7 +572,6 @@ export class App extends React.Component {
                           roleMappingObject={roleMappingObject}
                           renderEntryFields={this.renderEntryFields}
                           stateErrors={this.state.errors}
-                          onRemoveClick={this.onRemoveClick}
                         />
                       );
                     })}

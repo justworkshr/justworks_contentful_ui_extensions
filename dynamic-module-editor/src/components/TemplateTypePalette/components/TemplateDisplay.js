@@ -9,7 +9,7 @@ class TemplateDisplay extends React.Component {
 
   render() {
     return (
-      <div className="template-display">
+      <div className="template-display max-width-600">
         {Object.keys(this.props.templates).map((templateKey, index) => {
           const templateName = templateKey
             .split(' ')

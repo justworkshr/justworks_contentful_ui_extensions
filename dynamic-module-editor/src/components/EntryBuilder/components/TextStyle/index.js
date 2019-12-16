@@ -15,8 +15,8 @@ const TextStyle = props => {
   const [selected, setSelected] = useState(sections[0]);
 
   return (
-    <div className="text-style">
-      <Tabs withDivider={true}>
+    <div className="style-section text-style">
+      <Tabs className="tabs" withDivider={true}>
         {sections.map(section => {
           const sectionLabel = getSectionLabel(section);
 

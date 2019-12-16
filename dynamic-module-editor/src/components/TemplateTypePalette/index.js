@@ -100,7 +100,7 @@ export default class TemplateTypePalette extends React.Component {
         </Button>
       </div>
     ) : (
-      <div className="custom-template__palette">
+      <div className="custom-template__palette  max-width-900">
         {this.state.templateConfig.meta.imageUrl && (
           <img
             className="palette__example-image"

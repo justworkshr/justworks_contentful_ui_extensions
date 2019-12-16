@@ -209,7 +209,7 @@ export default class EntryBuilder extends React.Component {
     ) {
       // render multi field
       return (
-        <div>
+        <div className="section-row">
           {roleMappingObject.value.map((entry, index) => {
             const e =
               this.props.hydratedEntries.find(he => he.sys.id === entry.value) ||
@@ -217,6 +217,7 @@ export default class EntryBuilder extends React.Component {
             return (
               <EntryField
                 key={`entryfield-${roleKey}-${index}`}
+                className="max-width-600"
                 entry={e}
                 entryIndex={index}
                 fieldType={entry.type}
@@ -236,6 +237,7 @@ export default class EntryBuilder extends React.Component {
             allowedCustomTemplates={
               this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
             }
+            className="max-width-600"
             contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentType}
             fieldObject={this.props.templateConfig.fieldRoles[roleKey].field}
             onAddFieldClick={this.onAddFieldClick}
@@ -247,6 +249,7 @@ export default class EntryBuilder extends React.Component {
           />
           {renderMultiReferenceStyle(roleConfigObject) && (
             <FieldStyleEditor
+              className="max-width-600"
               roleKey={roleKey}
               roleConfig={roleConfigObject}
               roleMappingObject={roleMappingObject}
@@ -259,6 +262,7 @@ export default class EntryBuilder extends React.Component {
           )}
           {renderMultiReferenceItemStyle(roleConfigObject, roleMappingObject) && (
             <FieldStyleEditor
+              className="max-width-600"
               roleKey={roleKey}
               roleConfig={roleConfigObject}
               roleMappingObject={roleMappingObject}
@@ -282,8 +286,9 @@ export default class EntryBuilder extends React.Component {
           a => a.sys.id === this.props.entryInternalMapping[roleKey].value
         );
       return (
-        <div>
+        <div className="section-row">
           <EntryField
+            className="max-width-600"
             entry={entry}
             fieldType={roleMappingObject.type}
             isLoading={entry ? !!this.props.loadingEntries.includes(entry.sys.id) : false}
@@ -298,6 +303,7 @@ export default class EntryBuilder extends React.Component {
           />
           {renderSingleEntryStyle(roleMappingObject.type, roleConfigObject) && (
             <FieldStyleEditor
+              className="max-width-600"
               roleKey={roleKey}
               roleConfig={roleConfigObject}
               roleMappingObject={roleMappingObject}
@@ -318,6 +324,7 @@ export default class EntryBuilder extends React.Component {
           allowedCustomTemplates={
             this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
           }
+          className="max-width-600"
           contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentType}
           fieldObject={this.props.templateConfig.fieldRoles[roleKey].field}
           onAddFieldClick={this.onAddFieldClick}
@@ -342,6 +349,7 @@ export default class EntryBuilder extends React.Component {
             {Object.keys(this.props.templateConfig.style).map(styleSectionKey => {
               return (
                 <TemplateStyleEditor
+                  className="max-width-600"
                   key={`style-section-${styleSectionKey}`}
                   updateStyle={this.updateTemplateStyle}
                   templateStyleObject={this.props.templateConfig.style[styleSectionKey]}
