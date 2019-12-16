@@ -15,13 +15,15 @@ import TemplateTypePalette from './components/TemplateTypePalette';
 import EntryBuilder from './components/EntryBuilder';
 import ShortTextField from './components/ShortTextField';
 import LongTextField from './components/LongTextField';
-
+import SingleReferenceField from './components/SingleReferenceField';
 import { init, locations } from 'contentful-ui-extensions-sdk';
 
 import { templateIsValid, getTemplateErrors } from './components/EntryBuilder/utils/validations';
 
 import { customTemplates, templatePlaceholder } from '../../custom_templates/';
 import { linkFromMapping } from './utils';
+import { constructLink } from '../../shared/utilities/apiUtils';
+
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
 import './index.css';
@@ -48,13 +50,17 @@ export class App extends React.Component {
       props.sdk.entry.fields.entries.getValue() || [],
       []
     );
+
+    const style = props.sdk.entry.fields.style ? props.sdk.entry.fields.style.getValue() : null;
+
     this.state = {
       name: props.sdk.entry.fields.name ? props.sdk.entry.fields.name.getValue() : null,
       type,
       templateConfig,
-      entryInternalMapping: type ? new InternalMapping(internalMappingJson, templateConfig) : {},
       isValid: props.sdk.entry.fields.isValid ? props.sdk.entry.fields.isValid.getValue() : null,
       internalMapping: internalMappingJson,
+      style,
+      entryInternalMapping: type ? new InternalMapping(internalMappingJson, templateConfig) : {},
       loadingEntries,
       hydratedEntries: []
     };
@@ -131,6 +137,34 @@ export class App extends React.Component {
     const value = isValid ? 'Yes' : 'No';
     this.setState({ isValid: value });
     this.props.sdk.entry.fields.isValid.setValue(value);
+  };
+
+  onSingleReferenceLinkClick = async event => {
+    let contentTypes = [];
+    if (
+      (this.props.sdk.entry.fields.style || {}).validations &&
+      this.props.sdk.entry.fields.style.validations.length
+    ) {
+      const contentTypeValidation = this.props.sdk.entry.fields.style.validations.find(
+        v => v.linkContentType
+      );
+      if (contentTypeValidation) {
+        contentTypeValidation.linkContentType.forEach(id => contentTypes.push(id));
+      }
+    }
+
+    const entry = await this.props.sdk.dialogs.selectSingleEntry({
+      contentTypes
+    });
+
+    if (entry) {
+      this.onStyleChangeHandler(entry);
+    }
+  };
+
+  onStyleChangeHandler = async value => {
+    this.setState({ style: value });
+    this.props.sdk.entry.fields.style.setValue(constructLink(value));
   };
 
   updateEntry = async internalMappingJson => {
@@ -342,6 +376,15 @@ export class App extends React.Component {
           onChange={this.onIsValidChangeHandler}
           value={this.state.isValid}
         />
+        {this.props.sdk.entry.fields.style && (
+          <SingleReferenceField
+            heading="Section Style"
+            value={this.state.style}
+            onLinkClick={this.onSingleReferenceLinkClick}
+            onRemoveClick={this.onStyleChangeHandler}
+            sdk={this.props.sdk}
+          />
+        )}
       </Form>
     );
   }
