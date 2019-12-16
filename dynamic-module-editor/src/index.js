@@ -343,6 +343,16 @@ export class App extends React.Component {
           </div>
         )}
 
+        {this.props.sdk.entry.fields.style && (
+          <SingleReferenceField
+            heading="Section Style"
+            value={this.state.style}
+            onLinkClick={this.onSingleReferenceLinkClick}
+            onRemoveClick={this.onStyleChangeHandler}
+            sdk={this.props.sdk}
+          />
+        )}
+
         {this.state.internalMapping !== null && this.state.templateConfig !== null && (
           <div>
             <SectionHeading>Type</SectionHeading>
@@ -376,15 +386,6 @@ export class App extends React.Component {
           onChange={this.onIsValidChangeHandler}
           value={this.state.isValid}
         />
-        {this.props.sdk.entry.fields.style && (
-          <SingleReferenceField
-            heading="Section Style"
-            value={this.state.style}
-            onLinkClick={this.onSingleReferenceLinkClick}
-            onRemoveClick={this.onStyleChangeHandler}
-            sdk={this.props.sdk}
-          />
-        )}
       </Form>
     );
   }
