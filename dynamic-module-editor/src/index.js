@@ -199,6 +199,11 @@ export class App extends React.Component {
           }
         });
       }
+
+      // link style entry
+      if (roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY) {
+        entryLinks.push(linkFromMapping(roleMappingObject.style));
+      }
     });
 
     // If new entries or assets need to be added

@@ -361,6 +361,24 @@ describe('InternalMapping', () => {
     });
   });
 
+  describe('clearRoleStyle', () => {
+    it('adds a blank styleMapping', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            type: 'entry',
+            value: 'hello',
+            style: { type: c.STYLE_TYPE_CUSTOM, value: 'helloClass' }
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      expect(internalMapping.hi.style.value).toEqual('helloClass');
+      internalMapping.clearRoleStyle('hi');
+      expect(internalMapping.hi.style).toEqual(undefined);
+    });
+  });
+
   describe('setStyleEntry', () => {
     it('adds a style entry link', () => {
       const json = JSON.stringify({

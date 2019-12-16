@@ -1,0 +1,7 @@
+.role-style-section {
+  margin: 20px 0;
+}
+
+.role-style-section__action-row > * {
+  margin-right: 10px;
+}

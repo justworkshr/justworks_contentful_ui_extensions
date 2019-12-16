@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../../../../custom_templates/constants';
 
-import { Icon, Subheading } from '@contentful/forma-36-react-components';
+import { Icon, Subheading, TextLink } from '@contentful/forma-36-react-components';
 
 import TextStyle from '../TextStyle';
 import ImageStyle from '../ImageStyle';
@@ -16,8 +16,8 @@ import classnames from 'classnames';
 import './style.css';
 
 const FieldStyleEditor = props => {
-  const [open, toggleOpen] = useState(false);
-
+  const [open, toggleOpen] = useState(props.open);
+  if (!props.roleMappingObject.style) return null;
   const updateStyleExclusive = (value, entryStyleClasses, valuesArray) => {
     entryStyleClasses = entryStyleClasses
       .split(' ')
@@ -32,24 +32,24 @@ const FieldStyleEditor = props => {
     switch (props.type) {
       case c.FIELD_TYPE_MARKDOWN:
         return renderMarkdownStyle(
-          props.roleMappingObject.styleClasses,
+          props.roleMappingObject.style.value,
           props.roleMappingObject.value
         );
       case c.FIELD_TYPE_TEXT:
-        return renderTextStyle(props.roleMappingObject.styleClasses);
+        return renderTextStyle(props.roleMappingObject.style.value);
       case c.FIELD_TYPE_ASSET:
         if (
           props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
           props.roleConfig.asset.subType === c.ASSET_SUBTYPE_LOGO
         ) {
           const styleClasses = props.useReferenceStyleClasses
-            ? props.roleMappingObject.value[0].styleClasses
-            : props.roleMappingObject.styleClasses;
+            ? props.roleMappingObject.value[0].style.value
+            : props.roleMappingObject.style.value;
           return renderLogoStyle(styleClasses);
         }
         break;
       case c.MULTI_REFERENCE_STYLE_FLEX:
-        return renderMultiReferenceStyle(props.roleMappingObject.styleClasses);
+        return renderMultiReferenceStyle(props.roleMappingObject.style.value);
     }
   };
 
@@ -111,17 +111,20 @@ const FieldStyleEditor = props => {
   };
 
   return (
-    <div className={classnames('style-editor', props.className)}>
-      <div className="sub-section__heading" onClick={() => toggleOpen(!open)}>
-        <Icon className="sub-section__heading--icon" icon="Code" size="large" />
-        <Subheading className="sub-section__heading--header" element="h1">
-          {props.title}
-        </Subheading>
-        <Icon
-          className="style-editor__heading--toggle"
-          icon={open ? 'ChevronDown' : 'ChevronUp'}
-          size="large"
-        />
+    <div className={classnames('style-editor')}>
+      <div className="style-editor__heading">
+        <div className="sub-section__heading" onClick={() => toggleOpen(!open)}>
+          <Icon className="sub-section__heading--icon" icon="Code" size="large" />
+          <Subheading className="sub-section__heading--header" element="h1">
+            {props.title}
+          </Subheading>
+          <Icon
+            className="style-editor__heading--toggle"
+            icon={open ? 'ChevronDown' : 'ChevronUp'}
+            size="large"
+          />
+        </div>
+        <TextLink onClick={() => props.clearRoleStyle(props.roleKey)}>Remove</TextLink>
       </div>
       {!!open && renderFieldStyle(props)}
       {!!open && // When mapping allows for asset formatting
@@ -135,6 +138,7 @@ const FieldStyleEditor = props => {
 
 FieldStyleEditor.propTypes = {
   clearStyleField: PropTypes.func,
+  open: PropTypes.bool,
   title: PropTypes.string,
   roleKey: PropTypes.string,
   roleConfig: PropTypes.object,
@@ -148,6 +152,7 @@ FieldStyleEditor.propTypes = {
 
 FieldStyleEditor.defaultProps = {
   entry: {},
+  open: false,
   roleKey: '',
   roleConfig: {},
   roleMappingObject: {},

@@ -258,6 +258,10 @@ export default class InternalMapping {
     this.fieldRoles[key].style = InternalMapping.styleMapping({ type: c.STYLE_TYPE_CUSTOM });
   }
 
+  clearRoleStyle(key) {
+    this.fieldRoles[key].style = undefined;
+  }
+
   setStyleEntry(key, entryId) {
     this.fieldRoles[key].style = InternalMapping.styleMapping({
       type: c.STYLE_TYPE_ENTRY,

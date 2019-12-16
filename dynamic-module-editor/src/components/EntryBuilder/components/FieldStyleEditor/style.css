@@ -4,6 +4,11 @@
   margin: 20px 0;
 }
 
+.style-editor__heading {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .style-editor__field-group {
   margin-bottom: 20px;
 }

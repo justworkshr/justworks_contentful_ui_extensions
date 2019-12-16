@@ -69,6 +69,19 @@ const linkAssetToTemplate = ({ props, asset, roleKey, updateEntry }) => {
   updateEntry(updatedInternalMapping.asJSON());
 };
 
+export const handleAddRoleEntryStyle = async ({ sdk, props, roleKey } = {}) => {
+  const entry = await sdk.dialogs.selectSingleEntry({
+    contentTypes: ['style']
+  });
+
+  if (entry) {
+    let updatedInternalMapping = props.entryInternalMapping;
+    updatedInternalMapping.setStyleEntry(roleKey, entry.sys.id);
+
+    props.updateEntry(updatedInternalMapping.asJSON());
+  }
+};
+
 export const handleMultipleAssetsLink = async ({
   sdk,
   props,
@@ -155,8 +168,7 @@ export const handleAddField = async ({ props, setInternalMappingValue, roleKey, 
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addField({
     key: roleKey,
-    type: field.type,
-    styleClasses: roleConfigObject.defaultClasses
+    type: field.type
   });
 
   setInternalMappingValue(updatedInternalMapping.asJSON());
@@ -353,7 +365,6 @@ export const handleUpdateEntryStyle = ({
     roleKey,
     cleanStyleClasses(styleClasses, internalMappingObject[roleKey].value)
   );
-  styleClasses = internalMappingObject[roleKey].styleClasses;
 
   setInternalMappingValue(internalMappingObject.asJSON());
 };
@@ -368,7 +379,6 @@ export const handleUpdateReferencesStyle = ({
     roleKey,
     cleanStyleClasses(styleClasses, internalMappingObject[roleKey].value)
   );
-  styleClasses = internalMappingObject[roleKey].styleClasses;
 
   setInternalMappingValue(internalMappingObject.asJSON());
 };
@@ -387,12 +397,15 @@ export const handleFieldChange = ({ props, setInternalMappingValue, e, roleKey }
   if (typeof value === 'string') {
     let updatedInternalMapping = props.entryInternalMapping;
     updatedInternalMapping[roleKey] = value;
-    const styleClasses = cleanStyleClasses(
-      updatedInternalMapping[roleKey].styleClasses,
-      updatedInternalMapping[roleKey].value
-    );
 
-    updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
+    if ((updatedInternalMapping[roleKey].style || {}).type === c.STYLE_TYPE_CUSTOM) {
+      const styleClasses = cleanStyleClasses(
+        updatedInternalMapping[roleKey].styleClasses,
+        updatedInternalMapping[roleKey].value
+      );
+
+      updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
+    }
 
     setInternalMappingValue(updatedInternalMapping.asJSON());
   }

@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../../custom_templates/constants';
 
-import { Button, DisplayText } from '@contentful/forma-36-react-components';
+import { DisplayText } from '@contentful/forma-36-react-components';
 
 import EntryField from './components/EntryField';
 import TemplateStyleEditor from './components/TemplateStyleEditor';
-import FieldStyleEditor from './components/FieldStyleEditor';
+import RoleStyleSection from './components/RoleStyleSection';
 import EntryActionRow from './components/EntryActionRow';
 import RoleSection from './components/RoleSection';
 
 import InternalMapping from '../../utils/InternalMapping';
 
-import { displaySnakeCaseName, fetchEntryByRoleKey } from './utils';
+import { displaySnakeCaseName } from './utils';
 
 import {
   renderSingleEntryStyle,
   renderMultiReferenceStyle,
   renderMultiReferenceItemStyle
 } from './utils/renderUtils';
-
-import { validateTemplate } from './utils/validations';
 
 import {
   handleRemoveEntry,
@@ -33,7 +31,8 @@ import {
   handleUpdateEntryStyle,
   handleUpdateReferencesStyle,
   handleEntryEditClick,
-  handleFieldChange
+  handleFieldChange,
+  handleAddRoleEntryStyle
 } from './utils/eventUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -65,6 +64,9 @@ export default class EntryBuilder extends React.Component {
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
     this.renderEntryFields = this.renderEntryFields.bind(this);
     this.onLinkAssetClick = this.onLinkAssetClick.bind(this);
+    this.addRoleCustomStyle = this.addRoleCustomStyle.bind(this);
+    this.addRoleEntryStyle = this.addRoleEntryStyle.bind(this);
+    this.clearRoleStyle = this.clearRoleStyle.bind(this);
   }
 
   onAddFieldClick = (roleKey, field) => {
@@ -200,6 +202,29 @@ export default class EntryBuilder extends React.Component {
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
+  addRoleCustomStyle(roleKey) {
+    let updatedInternalMapping = this.props.entryInternalMapping;
+    updatedInternalMapping.addStyleCustom(roleKey);
+
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
+  }
+
+  clearRoleStyle(roleKey) {
+    let updatedInternalMapping = this.props.entryInternalMapping;
+    updatedInternalMapping.clearRoleStyle(roleKey);
+
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
+  }
+
+  addRoleEntryStyle = async roleKey => {
+    handleAddRoleEntryStyle({
+      sdk: this.props.sdk,
+      props: this.props,
+      roleKey,
+      updateEntry: this.props.updateEntry
+    });
+  };
+
   renderEntryFields(roleKey, roleConfigObject, roleMappingObject) {
     // Multi References and with entries
     if (
@@ -251,7 +276,11 @@ export default class EntryBuilder extends React.Component {
           </div>
           <div className="section-column">
             {renderMultiReferenceStyle(roleConfigObject) && (
-              <FieldStyleEditor
+              <RoleStyleSection
+                addCustomStyle={this.addRoleCustomStyle}
+                addEntryStyle={this.addRoleEntryStyle}
+                clearRoleStyle={this.clearRoleStyle}
+                styleEntry={undefined}
                 className="max-width-600"
                 roleKey={roleKey}
                 roleConfig={roleConfigObject}
@@ -264,8 +293,12 @@ export default class EntryBuilder extends React.Component {
               />
             )}
             {renderMultiReferenceItemStyle(roleConfigObject, roleMappingObject) && (
-              <FieldStyleEditor
+              <RoleStyleSection
                 className="max-width-600"
+                addCustomStyle={this.addRoleCustomStyle}
+                addEntryStyle={this.addRoleEntryStyle}
+                clearRoleStyle={this.clearRoleStyle}
+                styleEntry={undefined}
                 roleKey={roleKey}
                 roleConfig={roleConfigObject}
                 roleMappingObject={roleMappingObject}
@@ -306,8 +339,16 @@ export default class EntryBuilder extends React.Component {
             roleMappingObject={roleMappingObject}
           />
           {renderSingleEntryStyle(roleMappingObject.type, roleConfigObject) && (
-            <FieldStyleEditor
+            <RoleStyleSection
               className="max-width-600"
+              addCustomStyle={this.addRoleCustomStyle}
+              addEntryStyle={this.addRoleEntryStyle}
+              clearRoleStyle={this.clearRoleStyle}
+              styleEntry={
+                roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
+                  ? this.props.hydratedEntries.find(e => e.sys.id === roleMappingObject.style.value)
+                  : undefined
+              }
               roleKey={roleKey}
               roleConfig={roleConfigObject}
               roleMappingObject={roleMappingObject}
