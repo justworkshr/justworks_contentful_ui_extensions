@@ -1,5 +1,4 @@
 import { cardBlock } from "./templates/cardBlock";
-import { textCollection } from "./templates/textCollection";
 import { textMediaModule } from "./templates/textMediaModule";
 import { logoItem } from "./templates/logoItem";
 import { logoGrid } from "./templates/logoGrid";
@@ -17,7 +16,6 @@ import { logoGrid } from "./templates/logoGrid";
 export const customTemplates = {
   ...cardBlock,
   ...textMediaModule,
-  ...textCollection,
   ...logoItem,
   ...logoGrid
 };
