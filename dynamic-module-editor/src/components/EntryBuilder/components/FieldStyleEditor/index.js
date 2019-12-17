@@ -42,9 +42,7 @@ const FieldStyleEditor = props => {
           props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
           props.roleConfig.asset.subType === c.ASSET_SUBTYPE_LOGO
         ) {
-          const styleClasses = props.useReferenceStyleClasses
-            ? props.roleMappingObject.value[0].style.value
-            : props.roleMappingObject.style.value;
+          const styleClasses = props.roleMappingObject.style.value;
           return renderLogoStyle(styleClasses);
         }
         break;
@@ -114,17 +112,16 @@ const FieldStyleEditor = props => {
     <div className={classnames('style-editor')}>
       <div className="style-editor__heading">
         <div className="sub-section__heading" onClick={() => toggleOpen(!open)}>
-          <Icon className="sub-section__heading--icon" icon="Code" size="large" />
+          <Icon className="sub-section__heading--icon" icon="Code" size="small" />
           <Subheading className="sub-section__heading--header" element="h1">
             {props.title}
           </Subheading>
           <Icon
             className="style-editor__heading--toggle"
             icon={open ? 'ChevronDown' : 'ChevronUp'}
-            size="large"
+            size="small"
           />
         </div>
-        <TextLink onClick={() => props.clearRoleStyle(props.roleKey)}>Remove</TextLink>
       </div>
       {!!open && renderFieldStyle(props)}
       {!!open && // When mapping allows for asset formatting
@@ -145,7 +142,6 @@ FieldStyleEditor.propTypes = {
   roleMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
-  useReferenceStyleClasses: PropTypes.bool,
   type: PropTypes.string,
   entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };

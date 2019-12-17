@@ -439,7 +439,9 @@ describe('InternalMapping', () => {
   describe('setStyleClasses', () => {
     it('adds style classes to empty value', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: {} } }
+        fieldRoles: {
+          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: '' } }
+        }
       });
       const internalMapping = new InternalMapping(json);
       const styleClass = 'hiClass';
@@ -530,7 +532,9 @@ describe('InternalMapping', () => {
   describe('removeStyleClass', () => {
     it('removes from empty value', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: {} } }
+        fieldRoles: {
+          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: '' } }
+        }
       });
       const internalMapping = new InternalMapping(json);
       const styleClass = 'hiClass';
@@ -574,7 +578,9 @@ describe('InternalMapping', () => {
   describe('removeStyleClasses', () => {
     it('removes from empty value', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: {} } }
+        fieldRoles: {
+          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: '' } }
+        }
       });
       const internalMapping = new InternalMapping(json);
       const styleClasses = [{ className: 'hiClass' }];

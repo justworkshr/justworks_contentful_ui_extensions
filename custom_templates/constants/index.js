@@ -56,6 +56,7 @@ export const DIRECT_FIELD_TYPES = [FIELD_TYPE_TEXT, FIELD_TYPE_MARKDOWN];
 
 export const STYLE_TYPE_CUSTOM = "custom";
 export const STYLE_TYPE_ENTRY = "entry";
+export const STYLE_TYPE_MULTI_ENTRY = "multi-entry";
 
 /*
   Style types

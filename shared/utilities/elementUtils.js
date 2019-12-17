@@ -5,6 +5,13 @@ export const capitalize = string => {
     .join(" ");
 };
 
+export const displaySnakeCaseName = snakeCaseString => {
+  return snakeCaseString
+    .split("_")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
+
 export const getStatus = entry => {
   if (
     entry &&

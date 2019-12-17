@@ -15,11 +15,7 @@ import InternalMapping from '../../utils/InternalMapping';
 
 import { displaySnakeCaseName } from './utils';
 
-import {
-  renderSingleEntryStyle,
-  renderMultiReferenceStyle,
-  renderMultiReferenceItemStyle
-} from './utils/renderUtils';
+import { renderSingleEntryStyle, renderMultiReferenceStyle } from './utils/renderUtils';
 
 import {
   handleRemoveEntry,
@@ -211,9 +207,13 @@ export default class EntryBuilder extends React.Component {
 
   clearRoleStyle(roleKey) {
     let updatedInternalMapping = this.props.entryInternalMapping;
+    const styleType = updatedInternalMapping[roleKey].style.type;
     updatedInternalMapping.clearRoleStyle(roleKey);
-
-    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
+    if (styleType === c.STYLE_TYPE_CUSTOM) {
+      this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
+    } else {
+      this.props.updateEntry(updatedInternalMapping.asJSON());
+    }
   }
 
   addRoleEntryStyle = async roleKey => {
@@ -277,37 +277,25 @@ export default class EntryBuilder extends React.Component {
           <div className="section-column">
             {renderMultiReferenceStyle(roleConfigObject) && (
               <RoleStyleSection
+                className="max-width-600"
                 addCustomStyle={this.addRoleCustomStyle}
                 addEntryStyle={this.addRoleEntryStyle}
                 clearRoleStyle={this.clearRoleStyle}
-                styleEntry={undefined}
-                className="max-width-600"
+                styleEntry={
+                  roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
+                    ? this.props.hydratedEntries.find(
+                        e => e.sys.id === roleMappingObject.style.value
+                      )
+                    : undefined
+                }
                 roleKey={roleKey}
-                roleConfig={roleConfigObject}
+                roleConfigObject={roleConfigObject}
                 roleMappingObject={roleMappingObject}
                 updateStyle={this.updateEntryStyle}
                 updateAssetFormatting={this.updateAssetFormatting}
                 clearStyleField={this.clearEntryStyleClasses}
-                title={displaySnakeCaseName(roleKey) + ' Collection Style'}
-                type={roleConfigObject.multipleReferenceStyle}
-              />
-            )}
-            {renderMultiReferenceItemStyle(roleConfigObject, roleMappingObject) && (
-              <RoleStyleSection
-                className="max-width-600"
-                addCustomStyle={this.addRoleCustomStyle}
-                addEntryStyle={this.addRoleEntryStyle}
-                clearRoleStyle={this.clearRoleStyle}
-                styleEntry={undefined}
-                roleKey={roleKey}
-                roleConfig={roleConfigObject}
-                roleMappingObject={roleMappingObject}
-                updateStyle={this.updateReferencesStyle}
-                updateAssetFormatting={this.updateAssetFormatting}
-                clearStyleField={this.clearReferencesStyle}
                 title={displaySnakeCaseName(roleKey) + ' Style'}
-                type={c.FIELD_TYPE_ASSET}
-                useReferenceStyleClasses={true}
+                type={roleMappingObject.type}
               />
             )}
           </div>
@@ -350,7 +338,7 @@ export default class EntryBuilder extends React.Component {
                   : undefined
               }
               roleKey={roleKey}
-              roleConfig={roleConfigObject}
+              roleConfigObject={roleConfigObject}
               roleMappingObject={roleMappingObject}
               updateStyle={this.updateEntryStyle}
               updateAssetFormatting={this.updateAssetFormatting}

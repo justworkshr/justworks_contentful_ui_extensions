@@ -271,7 +271,7 @@ export default class InternalMapping {
 
   setStyleClasses(key, styleClasses) {
     if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
       this.fieldRoles[key].style.value = styleClasses;
     }
   }
@@ -286,7 +286,7 @@ export default class InternalMapping {
 
   addStyleClass(key, styleClass) {
     if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
       let existingClasses = this.fieldRoles[key].style.value;
       existingClasses = existingClasses
         ? this.fieldRoles[key].style.value.split(' ').filter(e => e)
@@ -299,7 +299,7 @@ export default class InternalMapping {
 
   removeStyleClass(key, styleClass) {
     if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
       const classes = this.fieldRoles[key].style.value
         ? this.fieldRoles[key].style.value
             .split(' ')
@@ -333,7 +333,7 @@ export default class InternalMapping {
 
   removeStyleClasses(key, classArray) {
     if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type !== c.STYLE_TYPE_ENTRY) {
+    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
       if (classArray[0].className) {
         // if passed an array of classObjects instead of strings
         classArray = classArray.map(el => el.className);

@@ -5,7 +5,7 @@ import { isDirectField } from './index';
 export const renderSingleEntryStyle = (roleType, roleConfigObject) => {
   if (isDirectField(roleType)) return true; // if internalMapping type is a field
   if (
-    roleType === InternalMapping.asset &&
+    roleType === c.FIELD_TYPE_ASSET &&
     roleConfigObject.asset &&
     roleConfigObject.asset.formatting.allow
   )

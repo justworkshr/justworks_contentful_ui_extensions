@@ -186,6 +186,10 @@ export class App extends React.Component {
 
     Object.keys(fieldRoles).forEach(roleKey => {
       const roleMappingObject = fieldRoles[roleKey];
+      /*
+        Add all entries and assets which exist as references 
+        inside the internal mapping
+      */
       if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
         entryLinks.push(linkFromMapping(roleMappingObject));
       } else if (roleMappingObject.type === c.FIELD_TYPE_ASSET) {
@@ -200,7 +204,7 @@ export class App extends React.Component {
         });
       }
 
-      // link style entry
+      // link role style entry
       if (roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY) {
         entryLinks.push(linkFromMapping(roleMappingObject.style));
       }

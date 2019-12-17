@@ -6,7 +6,14 @@
 
 .style-editor__heading {
   display: flex;
+  align-items: center;
+  cursor: pointer;
   justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.style-editor__heading > * {
+  margin-right: 10px;
 }
 
 .style-editor__field-group {
