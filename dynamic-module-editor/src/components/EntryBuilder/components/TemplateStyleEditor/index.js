@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import * as c from '../../../../../../custom_templates/constants';
 
 import { Icon, Subheading } from '@contentful/forma-36-react-components';
-import BackgroundColorStyle from '../BackgroundColorStyle';
 import StyleView from '../StyleView';
 import classnames from 'classnames';
 
-import { capitalize, displayCamelCaseName } from '../../../../../../shared/utilities/elementUtils';
-import FieldStyleEditor from '../FieldStyleEditor';
+import { capitalize } from '../../../../../../shared/utilities/elementUtils';
 
 const TemplateStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
@@ -32,6 +30,7 @@ const TemplateStyleEditor = props => {
           onClear={onClearStyleSection}
           styleType={c.FIELD_TYPE_MARKDOWN}
           styleObject={props.mappingStyleObject}
+          styleKey={styleKey}
           helpText={props.templateStyleObject[styleKey].helpText}
         />
       );

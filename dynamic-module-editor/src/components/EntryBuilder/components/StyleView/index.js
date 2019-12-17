@@ -14,6 +14,13 @@ import StyleEditorFieldGroup from '../StyleEditorFieldGroup';
 const StyleView = props => {
   const subSections = ['', ...props.styleView.subSections.filter(e => e)]; // adds blank section for global
   const [selected, setSelected] = useState(subSections[0]);
+
+  const renderSection = (subSection, styleSection) => {
+    // Tests if styleProperty key includes the subsection name at the start
+    // Example: subsection = "header", key = "headerTextColor" => true
+    return new RegExp(`^${subSection}`).test(styleSection.styleProperty.key);
+  };
+
   const renderComponentType = (styleSection, subSection) => {
     const sectionLabel = getSectionLabel(subSection);
     const styleKey = styleSection.styleProperty.key;
@@ -27,6 +34,7 @@ const StyleView = props => {
             onClear={() => props.onClear(styleKey)}
             onChange={value => props.onChange(styleKey, value)}
             section={subSection}
+            styleKey={styleKey}
             sectionLabel={sectionLabel}
             styleValues={styleSection.styleProperty.values}
           />
@@ -40,6 +48,7 @@ const StyleView = props => {
             onClear={() => props.onClear(styleKey)}
             onChange={value => props.onChange(styleKey, value)}
             section={subSection}
+            styleKey={styleKey}
             sectionLabel={sectionLabel}
             styleValues={styleSection.styleProperty.values}
           />
@@ -71,12 +80,16 @@ const StyleView = props => {
           selected === subSection && (
             <div key={`section-${subSection}`} className="style-editor__section">
               {props.styleView.styleSections.map(styleSection => {
-                const styleKey = styleSection.styleProperty.key;
-                if (isGlobalSection(subSection) && styleSection.defaultOnly) {
-                  return renderComponentType(styleSection, subSection);
+                if (isGlobalSection(subSection)) {
+                  // Global (default) section
+                  if (styleSection.defaultOnly || !styleSection.subSectionOnly) {
+                    return renderComponentType(styleSection, subSection);
+                  }
                 } else {
-                  if (!isGlobalSection(subSection) && styleSection.defaultOnly) return null;
-                  return renderComponentType(styleSection, subSection);
+                  // SubSections
+                  if (styleSection.defaultOnly) return null;
+                  if (renderSection(subSection, styleSection))
+                    return renderComponentType(styleSection, subSection);
                 }
               })}
             </div>

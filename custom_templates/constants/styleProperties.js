@@ -39,6 +39,17 @@ export const COLORS = [
   })
 ];
 
+export const TEXT_COLORS = [
+  constructColor({ label: "Black", value: "black", hexValue: "#515151" }),
+  constructColor({ label: "White", value: "white", hexValue: "#ffffff" }),
+  constructColor({
+    label: "Timberwolf",
+    value: "timerwolf",
+    hexValue: "#CDD6DA"
+  }),
+  constructColor({ label: "Navy", value: "navy", hexValue: "#243F69" })
+];
+
 export const STYLE_PROPERTY_BACKGROUND_COLOR = constructStyleProperty({
   key: "backgroundColor",
   values: COLORS.map(color => {
@@ -65,4 +76,34 @@ export const STYLE_PROPERTY_TEXT_ALIGNMENT = constructStyleProperty({
       label: "Right"
     })
   ]
+});
+
+export const STYLE_PROPERTY_HEADER_TEXT_COLOR = constructStyleProperty({
+  key: "headerTextColor",
+  values: TEXT_COLORS.map(color => {
+    return constructStyleValue({
+      value: color.value,
+      label: color.label
+    });
+  })
+});
+
+export const STYLE_PROPERTY_SUBHEADER_TEXT_COLOR = constructStyleProperty({
+  key: "subheaderTextColor",
+  values: TEXT_COLORS.map(color => {
+    return constructStyleValue({
+      value: color.value,
+      label: color.label
+    });
+  })
+});
+
+export const STYLE_PROPERTY_BODY_TEXT_COLOR = constructStyleProperty({
+  key: "bodyTextColor",
+  values: TEXT_COLORS.map(color => {
+    return constructStyleValue({
+      value: color.value,
+      label: color.label
+    });
+  })
 });

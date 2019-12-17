@@ -26,8 +26,18 @@ export const textMediaModule = {
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: {
+          // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
-            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value // left
+            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left
+          // headerColor
+          [c.STYLE_PROPERTY_HEADER_TEXT_COLOR.key]:
+            c.STYLE_PROPERTY_HEADER_TEXT_COLOR.values[0].value, // black
+          //subheaderColor
+          [c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.key]:
+            c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.values[0].value, // black
+          // bodyColor
+          [c.STYLE_PROPERTY_BODY_TEXT_COLOR.key]:
+            c.STYLE_PROPERTY_BODY_TEXT_COLOR.values[0].value // black
         },
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true

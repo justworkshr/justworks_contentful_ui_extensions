@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../../../../custom_templates/constants';
 
-import { Icon, Subheading, TextLink } from '@contentful/forma-36-react-components';
+import { Icon, Subheading } from '@contentful/forma-36-react-components';
 
-import MarkdownStyle from '../MarkdownStyle';
-import ImageStyle from '../ImageStyle';
-import LogoStyle from '../LogoStyle';
-import MultiReferenceStyle from '../MultiReferenceStyle';
 import StyleView from '../StyleView';
 import classnames from 'classnames';
 
@@ -42,61 +38,54 @@ const FieldStyleEditor = props => {
   };
 
   const renderTextStyle = entryStyleClasses => {
-    return (
-      <MarkdownStyle
-        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-        entryStyleClasses={entryStyleClasses}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleType={c.FIELD_TYPE_TEXT}
-      />
-    );
+    return;
+    // <MarkdownStyle
+    //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
+    //   entryStyleClasses={entryStyleClasses}
+    //   onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+    //   styleType={c.FIELD_TYPE_TEXT}
+    // />
   };
 
   const renderLogoStyle = entryStyleClasses => {
-    return (
-      <LogoStyle
-        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-        entryStyleClasses={entryStyleClasses}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-      />
-    );
+    return;
+    // <LogoStyle
+    //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
+    //   entryStyleClasses={entryStyleClasses}
+    //   onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+    // />
   };
 
   const renderFormattingStyle = formattingObject => {
-    return (
-      <ImageStyle
-        roleKey={props.roleKey}
-        formattingObject={formattingObject}
-        onChange={props.updateAssetFormatting}
-      />
-    );
+    return;
+    // <ImageStyle
+    //   roleKey={props.roleKey}
+    //   formattingObject={formattingObject}
+    //   onChange={props.updateAssetFormatting}
+    // />
   };
 
   const renderMarkdownStyle = styleObject => {
-    return Object.keys(styleObject).map(styleKey => {
-      return (
-        <StyleView
-          key={`styleview-${styleKey}`}
-          styleView={c.STYLE_VIEW_MARKDOWN}
-          onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
-          onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-          styleType={c.FIELD_TYPE_MARKDOWN}
-          styleObject={styleObject}
-        />
-      );
-    });
+    return (
+      <StyleView
+        styleView={c.STYLE_VIEW_MARKDOWN}
+        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+        styleType={c.FIELD_TYPE_MARKDOWN}
+        styleObject={styleObject}
+      />
+    );
   };
 
   const renderMultiReferenceStyle = entryStyleClasses => {
     const sections = ['small', 'medium', 'large'];
-    return (
-      <MultiReferenceStyle
-        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-        entryStyleClasses={entryStyleClasses}
-        sections={sections}
-        updateStyleExclusive={updateStyleExclusive}
-      />
-    );
+    return;
+    // <MultiReferenceStyle
+    //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
+    //   entryStyleClasses={entryStyleClasses}
+    //   sections={sections}
+    //   updateStyleExclusive={updateStyleExclusive}
+    // />
   };
 
   return (

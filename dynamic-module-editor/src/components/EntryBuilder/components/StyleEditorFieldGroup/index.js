@@ -17,18 +17,18 @@ const StyleEditorFieldGroup = props => {
       </TextLink>
       <div className="style-editor__inline-input-section">
         {props.styleValues.map((valueObject, index) => {
-          const fieldId = `radio-${valueObject.value}`;
+          const fieldId = `radio-${props.styleKey}-${valueObject.value}`;
           return (
             <div className="style-editor__radio-section" key={`text-alignment-section-${index}`}>
               <RadioButtonField
                 id={fieldId}
                 className="style-editor__radio-field"
-                checked={props.value === getSectionedClassName(props.section, valueObject.value)}
+                checked={props.value === valueObject.value}
                 labelText={valueObject.label}
                 value={valueObject.value}
                 labelIsLight={true}
                 onChange={e => {
-                  props.onChange(getSectionValue(e, props.section));
+                  props.onChange(e.target.value);
                 }}
               />
             </div>
@@ -46,6 +46,7 @@ StyleEditorFieldGroup.propTypes = {
   onChange: PropTypes.func,
   section: PropTypes.string,
   sectionLabel: PropTypes.string,
+  styleKey: PropTypes.string,
   styleValues: PropTypes.array,
   helpText: PropTypes.string
 };

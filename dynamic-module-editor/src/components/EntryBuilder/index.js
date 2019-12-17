@@ -377,7 +377,6 @@ export default class EntryBuilder extends React.Component {
   }
 
   render() {
-    console.log(this.props.templateConfig.style);
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         {this.props.templateConfig.style && (

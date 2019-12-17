@@ -7,13 +7,15 @@ export const constructStyleSection = ({
   componentType = STYLE_VIEW_COMPONENT_RADIO,
   styleProperty = {},
   helpText = "",
-  defaultOnly = false
+  defaultOnly = false,
+  subSectionOnly = false
 }) => {
   return {
     componentType,
     styleProperty,
     helpText,
-    defaultOnly // Whether this style should only appear in the default sub-section or not
+    defaultOnly, // Whether this style should only appear in the default sub-section or not
+    subSectionOnly // Whether this style should only appear in the non-default sub-sections or not
   };
 };
 
@@ -34,6 +36,21 @@ export const STYLE_VIEW_MARKDOWN = constructStyleView({
       componentType: STYLE_VIEW_COMPONENT_RADIO,
       styleProperty: sp.STYLE_PROPERTY_TEXT_ALIGNMENT,
       defaultOnly: true
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_COLOR,
+      styleProperty: sp.STYLE_PROPERTY_HEADER_TEXT_COLOR,
+      subSectionOnly: true
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_COLOR,
+      styleProperty: sp.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR,
+      subSectionOnly: true
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_COLOR,
+      styleProperty: sp.STYLE_PROPERTY_BODY_TEXT_COLOR,
+      subSectionOnly: true
     })
   ]
 });
