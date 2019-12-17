@@ -39,6 +39,20 @@ export const COLORS = [
   })
 ];
 
+// Background Color
+
+export const STYLE_PROPERTY_BACKGROUND_COLOR = constructStyleProperty({
+  key: "backgroundColor",
+  values: COLORS.map(color => {
+    return constructStyleValue({
+      value: color.value,
+      label: color.label
+    });
+  })
+});
+
+// Text Color
+
 export const TEXT_COLORS = [
   constructColor({ label: "Black", value: "black", hexValue: "#515151" }),
   constructColor({ label: "White", value: "white", hexValue: "#ffffff" }),
@@ -50,15 +64,7 @@ export const TEXT_COLORS = [
   constructColor({ label: "Navy", value: "navy", hexValue: "#243F69" })
 ];
 
-export const STYLE_PROPERTY_BACKGROUND_COLOR = constructStyleProperty({
-  key: "backgroundColor",
-  values: COLORS.map(color => {
-    return constructStyleValue({
-      value: color.value,
-      label: color.label
-    });
-  })
-});
+// Typography
 
 export const STYLE_PROPERTY_TEXT_ALIGNMENT = constructStyleProperty({
   key: "textAlignment",
@@ -106,4 +112,24 @@ export const STYLE_PROPERTY_BODY_TEXT_COLOR = constructStyleProperty({
       label: color.label
     });
   })
+});
+
+// Padded Container
+
+export const STYLE_PROPERTY_PADDED_CONTAINER = constructStyleProperty({
+  key: "paddedContainer",
+  values: [
+    constructStyleValue({
+      value: "default",
+      label: "Default"
+    }),
+    constructStyleValue({
+      value: "comfortable",
+      label: "Comfortable"
+    }),
+    constructStyleValue({
+      value: "compact",
+      label: "Compact"
+    })
+  ]
 });
