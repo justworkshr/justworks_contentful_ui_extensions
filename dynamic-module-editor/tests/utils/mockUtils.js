@@ -164,13 +164,13 @@ export const mockSdk = (mockEntry = mockPrimaryEntry()) => {
       getEntries: query => {
         const ids = query['sys.id[in]'].split(',');
         return ids.map(id => {
-          mockEntryResponse({ id });
+          return mockEntryResponse({ id });
         });
       },
       getAssets: query => {
         const ids = query['sys.id[in]'].split(',');
         return ids.map(id => {
-          mockAssetResponse({ id });
+          return mockAssetResponse({ id });
         });
       }
     },

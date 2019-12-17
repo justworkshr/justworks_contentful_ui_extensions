@@ -16,7 +16,7 @@ import {
   mockAssetMapping
 } from '../utils/mockUtils';
 
-import { resolveAll, internalMappingRoleStyle } from '../utils/assertUtils';
+import { resolveAll, newEntryEntryIds, internalMappingRoleStyle } from '../utils/assertUtils';
 import InternalMapping from '../../src/utils/InternalMapping';
 
 const getRoleStyle = (internalMapping, roleKey) => {
@@ -42,26 +42,93 @@ const setStyleValue = (wrapper, roleKey, type, label, value) => {
     .simulate('change', { target: { value } });
 };
 
+const setTemplateStyle = (wrapper, label, value) => {
+  return wrapper
+    .find('TemplateStyleEditor')
+    .find({ label })
+    .find(`input[value="${value}"]`)
+    .simulate('change', { target: { value } });
+};
+
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
+const blankEntry = mockPrimaryEntry({
+  name: 'Mock Custom Template Entry',
+  type: tm.MOCK_FIELDS_TEMPLATE,
+  entries: undefined,
+  assets: undefined,
+  internalMapping: ''
+});
+
 describe('App', () => {
-  describe('single entry style editing', () => {
-    it('should update style value', async () => {
+  describe('global template style editing', () => {
+    it('should load the template editor and default editor', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_FIELDS_TEMPLATE,
+        type: tm.MOCK_TEMPLATE_STYLE_ENTRY,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
       });
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+
+      // starts without FieldStyleEditor
+      expect(wrapper.find('TemplateStyleEditor')).toHaveLength(1);
+
+      // open editor
+      wrapper
+        .find('TemplateStyleEditor')
+        .find('.style-editor .sub-section__heading')
+        .simulate('click');
+
+      expect(wrapper.find('BackgroundColorStyle')).toHaveLength(1);
+    });
+
+    it('should edit global styles', async () => {
+      const mockEntry = mockPrimaryEntry({
+        name: 'Mock Custom Template Entry',
+        type: tm.MOCK_TEMPLATE_STYLE_ENTRY,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: ''
+      });
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+      const value = 'bg-color-strawberry';
+
+      // open editor
+      wrapper
+        .find('TemplateStyleEditor')
+        .find('.style-editor .sub-section__heading')
+        .simulate('click');
+
+      setTemplateStyle(wrapper, 'Background Color', value);
+
+      await resolveAll();
+      expect(
+        JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0])['style']['template_style'][
+          'styleClasses'
+        ]
+      ).toEqual(value);
+    });
+  });
+  describe('single entry style editing', () => {
+    it('should add a custom style editor', () => {
+      const mockEntry = blankEntry;
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
 
-      // Adds default styles when field and custom style are added
+      // starts without FieldStyleEditor
+      expect(wrapper.find('FieldStyleEditor')).toHaveLength(0);
+
+      // add field
       wrapper
         .find({ roleKey: 'text_field' })
         .find('TextLink.entry-action-button__add-field')
@@ -73,6 +140,63 @@ describe('App', () => {
         .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
         .simulate('click');
 
+      // loads default classes
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
+        'text-left text-black'
+      );
+    });
+
+    it('should add a linked style entry', async () => {
+      const mockEntry = blankEntry;
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+
+      // starts without FieldStyleEditor
+      expect(wrapper.find('FieldStyleEditor')).toHaveLength(0);
+
+      // add field
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('TextLink.entry-action-button__add-field')
+        .simulate('click');
+
+      // click custom style button
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('RoleStyleSection TextLink.link-style-section__link-existing-button')
+        .simulate('click');
+
+      // updates sdk
+      await resolveAll();
+      expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0], 'text_field')).toContain(
+        'newLinkedEntry1b'
+      );
+    });
+
+    it('should update style value', async () => {
+      const mockEntry = blankEntry;
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+
+      // add field
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('TextLink.entry-action-button__add-field')
+        .simulate('click');
+
+      // click custom style button
+      wrapper
+        .find({ roleKey: 'text_field' })
+        .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
+        .simulate('click');
+
+      // load default classes
       expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
         'text-left text-black'
       );
@@ -103,7 +227,7 @@ describe('App', () => {
       ).toBe('text-left text-navy');
     });
 
-    it('should load style object', () => {
+    it('should load the custom style object', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_FIELDS_TEMPLATE,
@@ -144,14 +268,8 @@ describe('App', () => {
       ).toBe(true);
     });
 
-    it('should clear style value', async () => {
-      const mockEntry = mockPrimaryEntry({
-        name: 'Mock Custom Template Entry',
-        type: tm.MOCK_FIELDS_TEMPLATE,
-        entries: undefined,
-        assets: undefined,
-        internalMapping: ''
-      });
+    it('should clear a custom style value', async () => {
+      const mockEntry = blankEntry;
 
       const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
@@ -195,6 +313,34 @@ describe('App', () => {
       expect(
         internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[0][0], 'text_field')
       ).toBe('text-black');
+    });
+
+    it('should remove a linked style entry', async () => {
+      const mockEntry = mockPrimaryEntry({
+        name: 'Mock Custom Template Entry',
+        type: tm.MOCK_FIELDS_TEMPLATE,
+        entries: [mockLink({ id: '1' })],
+        assets: undefined,
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            text_field: {
+              type: 'text',
+              style: InternalMapping.styleMapping({ type: c.STYLE_TYPE_ENTRY, value: '1' }),
+              value: 'hello'
+            }
+          }
+        })
+      });
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+
+      // had entry card
+      expect(
+        wrapper.find({ roleKey: 'text_field' }).find('RoleStyleSection EntryCard')
+      ).toHaveLength(1);
     });
   });
 

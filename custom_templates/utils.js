@@ -1,9 +1,9 @@
-import * as c from './constants'
+import * as c from "./constants";
 
 export const constructRole = ({
-  contentType = '',
+  contentType = "",
   asset = null,
-  description = '',
+  description = "",
   allowMultipleReferences = false,
   allowMultiReferenceStyle = false,
   multipleReferenceStyle = undefined,
@@ -26,33 +26,49 @@ export const constructRole = ({
   };
 };
 
-export const fieldObject = ({type, defaultClasses=''}={}) => {
-  return ({
+export const fieldObject = ({ type, defaultClasses = "" } = {}) => {
+  return {
     type,
     defaultClasses
-  })
-}
+  };
+};
 
 export const defaultStyleTypes = () => {
   return {
-    'template_style': {
-      ...styleProperty({label: 'background_color', type: c.STYLE_TYPE_BACKGROUND_COLOR, description: 'The background color for this template.', defaultClasses: 'bg-color-white'})
+    template_style: {
+      ...styleProperty({
+        label: "Background Color",
+        styleKey: c.STYLE_KEY_BACKGROUND_COLOR,
+        description: "The background color for this template.",
+        defaultValue: ""
+      })
     }
-  }
-}
+  };
+};
 
-export const styleProperty = ({label='', type=c.STYLE_TYPE_BACKGROUND_COLOR, description='', defaultClasses=''}={}) => {
+export const styleProperty = ({
+  label = "",
+  styleKey = c.STYLE_KEY_BACKGROUND_COLOR,
+  description = "",
+  defaultValue = ""
+} = {}) => {
   return {
-    [label]: {
-      type,
+    [styleKey]: {
+      label,
       description,
-      defaultClasses
+      defaultValue
     }
-  }
-}
+  };
+};
 
-export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, subType=undefined, allowFormatting = false, maxWidth='2000', defaultClasses=''}={}) => {
-  return ({
+export const allowAsset = ({
+  type = c.ASSET_TYPE_IMAGE,
+  subType = undefined,
+  allowFormatting = false,
+  maxWidth = "2000",
+  defaultClasses = ""
+} = {}) => {
+  return {
     asset: {
       type,
       subType,
@@ -61,15 +77,20 @@ export const allowAsset = ({type=c.ASSET_TYPE_IMAGE, subType=undefined, allowFor
         allow: allowFormatting,
         maxWidth: String(maxWidth)
       }
-    },
-  })
-}
+    }
+  };
+};
 
-export const allowMultipleReferences = ({allow=true, allowStyle=true, styleType=undefined, contentTypes=[]}={}) => {
-  return ({
+export const allowMultipleReferences = ({
+  allow = true,
+  allowStyle = true,
+  styleType = undefined,
+  contentTypes = []
+} = {}) => {
+  return {
     allowMultipleReferences: allow,
     allowMultiReferenceStyle: allowStyle,
     multipleReferenceStyle: styleType,
     contentType: contentTypes
-  })
-}
+  };
+};

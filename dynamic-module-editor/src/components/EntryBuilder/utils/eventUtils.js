@@ -27,7 +27,7 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
       ? props.entryInternalMapping[roleKey].value.find(el => el.type === c.FIELD_TYPE_ASSET)
       : undefined;
 
-  const assetStyleClasses = firstAsset
+  const assetStyleValue = firstAsset
     ? firstAsset.styleClasses
     : roleConfigObject.asset.defaultClasses; // duplicate existing asset style classes to maintain consistancy
   updatedInternalMapping.addEntriesOrAssets({
@@ -42,7 +42,7 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
           roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
             ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
             : {},
-        styleClasses: assetStyleClasses
+        styleClasses: assetStyleValue
       });
     }),
     styleClasses: (roleConfigObject || {}).defaultClasses
@@ -73,7 +73,6 @@ export const handleAddRoleEntryStyle = async ({ sdk, props, roleKey } = {}) => {
   const entry = await sdk.dialogs.selectSingleEntry({
     contentTypes: ['style']
   });
-
   if (entry) {
     let updatedInternalMapping = props.entryInternalMapping;
     updatedInternalMapping.setStyleEntry(roleKey, entry.sys.id);
@@ -359,12 +358,10 @@ export const handleUpdateEntryStyle = ({
   setInternalMappingValue,
   internalMappingObject,
   roleKey,
-  styleClasses
+  styleKey,
+  styleValue
 } = {}) => {
-  internalMappingObject.setStyleClasses(
-    roleKey,
-    cleanStyleClasses(styleClasses, internalMappingObject[roleKey].value)
-  );
+  internalMappingObject.setStyleValue(roleKey, styleKey, styleValue);
 
   setInternalMappingValue(internalMappingObject.asJSON());
 };
@@ -404,7 +401,7 @@ export const handleFieldChange = ({ props, setInternalMappingValue, e, roleKey }
         updatedInternalMapping[roleKey].value
       );
 
-      updatedInternalMapping.setStyleClasses(roleKey, styleClasses);
+      updatedInternalMapping.setStyleValue(roleKey, styleClasses);
     }
 
     setInternalMappingValue(updatedInternalMapping.asJSON());

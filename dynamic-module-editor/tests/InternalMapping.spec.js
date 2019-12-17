@@ -397,6 +397,51 @@ describe('InternalMapping', () => {
     });
   });
 
+  describe('setTemplateStyleValue', () => {
+    it('adds a style value to empty templateStyleKey', () => {
+      const templateStyleKey = 'default';
+      const styleKey = 'color';
+      const json = JSON.stringify({
+        style: {}
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.setTemplateStyleValue(templateStyleKey, styleKey, 'hi');
+      expect(internalMapping.style[templateStyleKey][styleKey]).toEqual('hi');
+    });
+
+    it('overwrtes style value in existing templateStyleKey', () => {
+      const templateStyleKey = 'default';
+      const styleKey = 'color';
+      const json = JSON.stringify({
+        style: {
+          [templateStyleKey]: {
+            [styleKey]: 'hello'
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.setTemplateStyleValue(templateStyleKey, styleKey, 'hi');
+      expect(internalMapping.style[templateStyleKey][styleKey]).toEqual('hi');
+    });
+  });
+
+  describe('removeTemplateStyleKey', () => {
+    it('deletes a templateStyleKey', () => {
+      const templateStyleKey = 'default';
+      const styleKey = 'color';
+      const json = JSON.stringify({
+        style: {
+          [templateStyleKey]: {
+            [styleKey]: 'hi'
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.removeTemplateStyleKey(templateStyleKey, styleKey);
+      expect(internalMapping.style[templateStyleKey]).toBeUndefined();
+    });
+  });
+
   describe('setStyleEntry', () => {
     it('adds a style entry link', () => {
       const json = JSON.stringify({
@@ -409,78 +454,40 @@ describe('InternalMapping', () => {
     });
   });
 
-  describe('addStyleClass', () => {
-    it('adds style class to empty value', () => {
-      const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: InternalMapping.styleMapping() } }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.addStyleClass('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual(styleClass);
-    });
-
-    it('adds style class to existing value', () => {
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: InternalMapping.styleMapping({ value: 'helloClass' })
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.addStyleClass('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual('helloClass hiClass');
-    });
-
-    it('does not replace a linked style', () => {
-      const styleLink = InternalMapping.styleMapping({ type: 'entry', value: '1' });
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: styleLink
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.addStyleClass('hi', styleClass);
-      expect(internalMapping.hi.style).toEqual(styleLink);
-    });
-  });
-
-  describe('setStyleClasses', () => {
+  describe('setStyleValue', () => {
     it('adds style classes to empty value', () => {
       const json = JSON.stringify({
         fieldRoles: {
-          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: '' } }
+          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
         }
       });
       const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.setStyleClasses('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual(styleClass);
+      const styleKey = 'color';
+      const styleValue = 'hiValue';
+      internalMapping.setStyleValue('hi', styleKey, styleValue);
+      expect(internalMapping.hi.style.value[styleKey]).toEqual(styleValue);
     });
 
     it('overwrites an existing value', () => {
+      const styleKey = 'color';
+
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
             type: 'entry',
             value: 'hello',
-            style: InternalMapping.styleMapping({ value: 'helloClass' })
+            style: InternalMapping.styleMapping({
+              value: {
+                [styleKey]: 'helloValue'
+              }
+            })
           }
         }
       });
       const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.setStyleClasses('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual(styleClass);
+      const styleValue = 'hiValue';
+      internalMapping.setStyleValue('hi', styleKey, styleValue);
+      expect(internalMapping.hi.style.value[styleKey]).toEqual(styleValue);
     });
 
     it('does not replace a linked style', () => {
@@ -496,7 +503,7 @@ describe('InternalMapping', () => {
       });
       const internalMapping = new InternalMapping(json);
       const styleClass = 'hiClass';
-      internalMapping.setStyleClasses('hi', styleClass);
+      internalMapping.setStyleValue('hi', styleClass);
       expect(internalMapping.hi.style).toEqual(styleLink);
     });
   });
@@ -547,118 +554,43 @@ describe('InternalMapping', () => {
     });
   });
 
-  describe('removeStyleClass', () => {
+  describe('removeStyleKey', () => {
     it('removes from empty value', () => {
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: '' } }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.removeStyleClass('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual('');
-    });
-
-    it('removes style class from existing value', () => {
-      const styleClass = 'hiClass';
+      const styleKey = 'color';
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
             type: 'entry',
             value: 'hello',
-            style: InternalMapping.styleMapping({ value: styleClass })
+            style: { type: c.STYLE_TYPE_CUSTOM, value: { [styleKey]: 'helloValue' } }
           }
         }
       });
       const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleClass('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual('');
-    });
-
-    it('removes style class from multiple existing values', () => {
-      const styleClass = 'hiClass';
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: InternalMapping.styleMapping({ value: `helloClass ${styleClass}` })
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleClass('hi', styleClass);
-      expect(internalMapping.hi.style.value).toEqual('helloClass');
-    });
-  });
-
-  describe('removeStyleClasses', () => {
-    it('removes from empty value', () => {
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: '' } }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClasses = [{ className: 'hiClass' }];
-      internalMapping.removeStyleClasses(
-        'hi',
-        styleClasses.map(el => el.className)
-      );
-      expect(internalMapping.hi.style.value).toEqual('');
+      internalMapping.removeStyleKey('hi', styleKey);
+      expect(internalMapping.hi.style.value[styleKey]).toBeUndefined();
     });
 
     it('removes style class from existing value', () => {
-      const styleClasses = [{ className: 'hiClass' }, { className: 'class2' }];
+      const styleKey = 'color';
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
             type: 'entry',
             value: 'hello',
             style: InternalMapping.styleMapping({
-              value: styleClasses.map(el => el.className).join(' ')
+              value: {
+                [styleKey]: 'helloClass',
+                otherKey: 'greetings'
+              }
             })
           }
         }
       });
       const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleClasses('hi', styleClasses);
-      expect(internalMapping.hi.style.value).toEqual('');
-    });
-
-    it('removes style class from existing value with string array', () => {
-      const styleClasses = ['hiClass', 'class2'];
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: InternalMapping.styleMapping({ value: styleClasses.join(' ') })
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleClasses('hi', styleClasses);
-      expect(internalMapping.hi.style.value).toEqual('');
-    });
-
-    it('removes style class from existing value 3', () => {
-      const styleClasses = [{ className: 'hiClass' }, { className: 'class2' }];
-      const json = JSON.stringify({
-        fieldRoles: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: InternalMapping.styleMapping({
-              value: [...styleClasses.map(el => el.className), 'class3'].join(' ')
-            })
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleClasses('hi', styleClasses);
-      expect(internalMapping.hi.style.value).toEqual('class3');
+      internalMapping.removeStyleKey('hi', styleKey);
+      expect(internalMapping.hi.style.value[styleKey]).toBeUndefined();
+      expect(internalMapping.hi.style.value.otherKey).toEqual('greetings');
     });
   });
 

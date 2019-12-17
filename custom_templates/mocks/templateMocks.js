@@ -6,11 +6,14 @@ import {
 } from "../utils";
 import * as c from "../constants";
 
+import { defaultStyleTypes } from "../utils";
+
 export const MOCK_TEMPLATE_NAME = "mock 1";
 export const MOCK_FIELDS_TEMPLATE = "fields mock";
 export const MOCK_ASSETS_TEMPLATE = "assets mock";
 export const MOCK_ENTRY_TEMPLATE = "entry mock";
 export const MOCK_MULTI_REFERENCE_TEMPLATE = "multi-reference mock";
+export const MOCK_TEMPLATE_STYLE_ENTRY = "template style mock";
 
 export const mockCustomTemplates = {
   [MOCK_TEMPLATE_NAME]: {
@@ -121,5 +124,12 @@ export const mockCustomTemplates = {
         description: `Multi field`
       })
     }
+  },
+  [MOCK_TEMPLATE_STYLE_ENTRY]: {
+    meta: {},
+    style: {
+      ...defaultStyleTypes()
+    },
+    fieldRoles: {}
   }
 };

@@ -56,6 +56,7 @@ export default class EntryBuilder extends React.Component {
     this.updateReferencesStyle = this.updateReferencesStyle.bind(this);
     this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
     this.updateTemplateStyle = this.updateTemplateStyle.bind(this);
+    this.clearTemplateStyle = this.clearTemplateStyle.bind(this);
     this.clearEntryStyleClasses = this.clearEntryStyleClasses.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
     this.renderEntryFields = this.renderEntryFields.bind(this);
@@ -149,22 +150,27 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  updateTemplateStyle(templateStyleKey, templateStyleObject) {
+  updateTemplateStyle(templateStyleKey, styleKey, styleValue) {
     let updatedInternalMapping = this.props.entryInternalMapping;
-    updatedInternalMapping.style = {
-      ...updatedInternalMapping.style,
-      [templateStyleKey]: templateStyleObject
-    };
+    updatedInternalMapping.setTemplateStyleValue(templateStyleKey, styleKey, styleValue);
 
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
-  updateEntryStyle(roleKey, styleClasses) {
+  clearTemplateStyle(templateStyleKey, styleKey) {
+    let updatedInternalMapping = this.props.entryInternalMapping;
+    updatedInternalMapping.removeTemplateStyleKey(templateStyleKey, styleKey);
+
+    this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
+  }
+
+  updateEntryStyle(roleKey, styleKey, styleValue) {
     handleUpdateEntryStyle({
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       internalMappingObject: this.props.entryInternalMapping,
       roleKey,
-      styleClasses
+      styleKey,
+      styleValue
     });
   }
 
@@ -177,9 +183,9 @@ export default class EntryBuilder extends React.Component {
     });
   }
 
-  clearEntryStyleClasses(roleKey, classArray) {
+  clearEntryStyleClasses(roleKey, styleKey) {
     let updatedInternalMapping = this.props.entryInternalMapping;
-    updatedInternalMapping.removeStyleClasses(roleKey, classArray);
+    updatedInternalMapping.removeStyleKey(roleKey, styleKey);
 
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
@@ -385,6 +391,7 @@ export default class EntryBuilder extends React.Component {
                   className="max-width-600"
                   key={`style-section-${styleSectionKey}`}
                   updateStyle={this.updateTemplateStyle}
+                  clearStyle={this.clearTemplateStyle}
                   templateStyleObject={this.props.templateConfig.style[styleSectionKey]}
                   mappingStyleObject={this.props.entryInternalMapping.style[styleSectionKey]}
                   styleSectionKey={styleSectionKey}

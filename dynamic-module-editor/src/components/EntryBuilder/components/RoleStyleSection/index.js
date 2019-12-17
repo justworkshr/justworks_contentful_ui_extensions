@@ -121,7 +121,7 @@ const RoleStyleSection = props => {
 
               {props.clearRoleStyle && (
                 <DropdownListItem
-                  className="entry-card__action--remove"
+                  className="role-style-section__action--remove"
                   onClick={() => props.clearRoleStyle(props.roleKey)}>
                   Remove
                 </DropdownListItem>

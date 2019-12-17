@@ -49,7 +49,7 @@ export default class InternalMapping {
     // }
   }
 
-  static styleMapping({ type = c.STYLE_TYPE_CUSTOM, value = '' } = {}) {
+  static styleMapping({ type = c.STYLE_TYPE_CUSTOM, value = {} } = {}) {
     return {
       type,
       value
@@ -274,11 +274,20 @@ export default class InternalMapping {
     });
   }
 
-  setStyleClasses(key, styleClasses) {
+  setStyleValue(key, styleKey, styleValue) {
     if (!this.fieldRoles[key].style) return;
     if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
-      this.fieldRoles[key].style.value = styleClasses;
+      this.fieldRoles[key].style.value[styleKey] = styleValue;
     }
+  }
+
+  setTemplateStyleValue(templateStyleKey, styleKey, styleValue) {
+    if (!this.style) return;
+    if (!this.style[templateStyleKey]) {
+      this.style[templateStyleKey] = {};
+    }
+
+    this.style[templateStyleKey][styleKey] = styleValue;
   }
 
   setReferencesStyleClasses(key, styleClasses) {
@@ -287,34 +296,6 @@ export default class InternalMapping {
       entry.style = InternalMapping.styleMapping({ value: styleClasses });
       return entry;
     });
-  }
-
-  addStyleClass(key, styleClass) {
-    if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
-      let existingClasses = this.fieldRoles[key].style.value;
-      existingClasses = existingClasses
-        ? this.fieldRoles[key].style.value.split(' ').filter(e => e)
-        : [];
-      this.fieldRoles[key].style = InternalMapping.styleMapping({
-        value: [...existingClasses, styleClass].join(' ')
-      });
-    }
-  }
-
-  removeStyleClass(key, styleClass) {
-    if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
-      const classes = this.fieldRoles[key].style.value
-        ? this.fieldRoles[key].style.value
-            .split(' ')
-            .filter(e => e)
-            .filter(cl => cl !== styleClass)
-        : [];
-      this.fieldRoles[key].style = InternalMapping.styleMapping({
-        value: [...classes].join(' ')
-      });
-    }
   }
 
   removeReferencesStyleClasses(key, classArray) {
@@ -336,21 +317,17 @@ export default class InternalMapping {
     });
   }
 
-  removeStyleClasses(key, classArray) {
+  removeStyleKey(key, styleKey) {
     if (!this.fieldRoles[key].style) return;
     if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
-      if (classArray[0].className) {
-        // if passed an array of classObjects instead of strings
-        classArray = classArray.map(el => el.className);
-      }
-      const classes = this.fieldRoles[key].style.value
-        ? this.fieldRoles[key].style.value
-            .split(' ')
-            .filter(e => e)
-            .filter(cl => !classArray.includes(cl))
-        : [];
-      this.fieldRoles[key].style = InternalMapping.styleMapping({ value: [...classes].join(' ') });
+      delete this.fieldRoles[key].style.value[styleKey];
     }
+  }
+
+  removeTemplateStyleKey(templateStyleKey, styleKey) {
+    if (!this.fieldRoles.style) return;
+    if (!this.fieldRoles.style[templateStyleKey]) return;
+    delete this.style[templateStyleKey][styleKey];
   }
 
   setImageFormatting(key, formattingObject) {

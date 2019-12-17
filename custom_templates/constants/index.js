@@ -63,7 +63,6 @@ export const STYLE_TYPE_MULTI_ENTRY = "multi-entry";
   - Used for in the custom template config object to determine which style editor to render for template styles or multi-reference styles.
 */
 
-export const STYLE_TYPE_BACKGROUND_COLOR = "backgroundColor";
 export const MULTI_REFERENCE_STYLE_FLEX = "multi-reference-style-flex";
 
 /*
@@ -82,3 +81,6 @@ export const ASSET_TYPE_PDF = "pdf";
 export const ASSET_SUBTYPE_LOGO = "logo";
 
 export * from "./styleClasses";
+export * from "./styleGroups";
+export * from "./styleKeys";
+export * from "./styleValues";

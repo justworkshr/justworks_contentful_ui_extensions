@@ -18,46 +18,25 @@ const ColorStyle = props => {
       <FormLabel htmlFor="">{`${props.label}${
         props.sectionLabel ? '(' + props.sectionLabel + ')' : ''
       }`}</FormLabel>
-      <TextLink
-        className="style-editor__clear-link"
-        icon="Close"
-        onClick={() =>
-          props.onClear(
-            props.styleClasses.map(classObject =>
-              getSectionedClassName(props.section, classObject.className)
-            )
-          )
-        }>
+      <TextLink className="style-editor__clear-link" icon="Close" onClick={() => props.onClear()}>
         Clear
       </TextLink>
       {props.helpText && <HelpText>{props.helpText}</HelpText>}
       <div className="style-editor__inline-input-section">
-        {props.styleClasses.map((classObject, index) => {
-          const color = c.COLORS.find(color => color.label === classObject.label);
-          const fieldId = `radio-${props.roleKey}-${props.section}-${classObject.className}`;
+        {props.styleValues.map((valueObject, index) => {
+          const color = c.COLORS.find(color => color.label === valueObject.label);
+          const fieldId = `radio-${props.roleKey}-${props.section}-${valueObject.value}`;
           return (
             <div className="style-editor__radio-section" key={`text-color-section-${index}`}>
               <RadioButtonField
                 id={fieldId}
                 className="style-editor__radio-field style-editor__color-radio"
-                checked={props.classString
-                  .split(' ')
-                  .filter(e => e)
-                  .includes(getSectionedClassName(props.section, classObject.className))}
+                checked={props.value === getSectionedClassName(props.section, valueObject.value)}
                 helpText={color.hexValue}
-                labelText={classObject.label}
-                value={classObject.className}
+                labelText={valueObject.label}
+                value={valueObject.value}
                 labelIsLight={true}
-                onChange={e =>
-                  props.onChange(
-                    getSectionValue(e, props.section),
-                    props.classString,
-                    props.styleClasses.map(classObject => ({
-                      ...classObject,
-                      className: getSectionedClassName(props.section, classObject.className)
-                    }))
-                  )
-                }
+                onChange={e => props.onChange(getSectionValue(e, props.section))}
               />
               <div className="style-editor__color-section">
                 <div
@@ -76,7 +55,7 @@ const ColorStyle = props => {
 };
 
 ColorStyle.propTypes = {
-  classString: PropTypes.string,
+  value: PropTypes.string,
   helpText: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,
@@ -84,11 +63,11 @@ ColorStyle.propTypes = {
   roleKey: PropTypes.string,
   section: PropTypes.string,
   sectionLabel: PropTypes.string,
-  styleClasses: PropTypes.array
+  styleValues: PropTypes.array
 };
 
 ColorStyle.defaultProps = {
-  classString: '',
+  value: '',
   section: ''
 };
 
