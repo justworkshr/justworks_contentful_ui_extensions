@@ -38,7 +38,7 @@ export const defaultStyleTypes = () => {
     template_style: {
       ...styleProperty({
         label: "Background Color",
-        styleKey: c.STYLE_KEY_BACKGROUND_COLOR,
+        styleKey: c.STYLE_PROPERTY_BACKGROUND_COLOR.key,
         description: "The background color for this template.",
         defaultValue: ""
       })

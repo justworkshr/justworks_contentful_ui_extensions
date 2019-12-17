@@ -14,7 +14,7 @@ const BackgroundColorStyle = props => {
         label={props.title}
         roleKey={props.roleKey}
         onClear={props.onClear}
-        styleValues={c.BACKGROUND_COLOR_VALUES}
+        styleValues={c.STYLE_PROPERTY_BACKGROUND_COLOR.values}
       />
     </div>
   );

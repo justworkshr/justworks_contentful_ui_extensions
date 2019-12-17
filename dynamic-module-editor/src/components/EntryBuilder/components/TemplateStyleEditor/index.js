@@ -5,7 +5,7 @@ import * as c from '../../../../../../custom_templates/constants';
 import { Icon, Subheading } from '@contentful/forma-36-react-components';
 import BackgroundColorStyle from '../BackgroundColorStyle';
 
-import { displaySnakeCaseName, addExclusiveClassName } from '../../utils';
+import { displaySnakeCaseName } from '../../utils';
 import classnames from 'classnames';
 
 import { capitalize } from '../../../../../../shared/utilities/elementUtils';
@@ -14,7 +14,6 @@ const TemplateStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
 
   const onChange = (styleKey, value) => {
-    console.log(styleKey, value);
     props.updateStyle(props.styleSectionKey, styleKey, value);
   };
 
@@ -24,8 +23,9 @@ const TemplateStyleEditor = props => {
 
   const renderStyle = props => {
     return Object.keys(props.templateStyleObject).map(styleKey => {
+      console.log(props.templateStyleObject, c.STYLE_PROPERTY_BACKGROUND_COLOR.key);
       switch (styleKey) {
-        case c.STYLE_KEY_BACKGROUND_COLOR:
+        case c.STYLE_PROPERTY_BACKGROUND_COLOR.key:
           return (
             <BackgroundColorStyle
               key={`template-style--${styleKey}`}
@@ -33,7 +33,7 @@ const TemplateStyleEditor = props => {
               value={props.mappingStyleObject[styleKey]}
               helpText={props.templateStyleObject[styleKey].description}
               onChange={value => onChange(styleKey, value)}
-              roleKey={styleKey}
+              roleKey={props.styleSectionKey + styleKey} // only needed for unique field IDs
               onClear={() => onClearStyleSection(styleKey)}
             />
           );

@@ -5,11 +5,17 @@ export const capitalize = string => {
     .join(" ");
 };
 
-export const displaySnakeCaseName = snakeCaseString => {
-  return snakeCaseString
+export const displaySnakeCaseName = string => {
+  return string
     .split("_")
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
+};
+
+export const displayCamelCaseName = string => {
+  return string
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, str => str.toUpperCase());
 };
 
 export const getStatus = entry => {

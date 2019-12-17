@@ -1,3 +1,10 @@
+const constructStyleProperty = ({ key = "", values = [] } = {}) => {
+  return {
+    key,
+    values
+  };
+};
+
 const constructStyleValue = ({ value = "", label = "" } = {}) => {
   return {
     value,
@@ -32,9 +39,30 @@ export const COLORS = [
   })
 ];
 
-export const BACKGROUND_COLOR_VALUES = COLORS.map(color => {
-  return constructStyleValue({
-    value: color.value,
-    label: color.label
-  });
+export const STYLE_PROPERTY_BACKGROUND_COLOR = constructStyleProperty({
+  key: "backgroundColor",
+  values: COLORS.map(color => {
+    return constructStyleValue({
+      value: color.value,
+      label: color.label
+    });
+  })
+});
+
+export const STYLE_PROPERTY_TEXT_ALIGNMENT = constructStyleProperty({
+  key: "textAlignment",
+  values: [
+    constructStyleValue({
+      value: "left",
+      label: "Left"
+    }),
+    constructStyleValue({
+      value: "center",
+      label: "Center"
+    }),
+    constructStyleValue({
+      value: "right",
+      label: "Right"
+    })
+  ]
 });

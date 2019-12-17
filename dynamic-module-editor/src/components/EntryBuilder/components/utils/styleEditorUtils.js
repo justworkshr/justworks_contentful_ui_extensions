@@ -8,7 +8,7 @@ export const getSectionedClassName = (section, className) => {
 };
 
 export const getSectionLabel = section => {
-  return section.charAt(0).toUpperCase() + section.slice(1).toLowerCase() || 'Section';
+  return section.charAt(0).toUpperCase() + section.slice(1).toLowerCase() || 'Default';
 };
 
 export const getMarkdownSections = entryValue => {

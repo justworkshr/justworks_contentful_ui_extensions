@@ -5,7 +5,7 @@ import * as c from '../../../../../../custom_templates/constants';
 
 import { Icon, Subheading, TextLink } from '@contentful/forma-36-react-components';
 
-import TextStyle from '../TextStyle';
+import MarkdownStyle from '../MarkdownStyle';
 import ImageStyle from '../ImageStyle';
 import LogoStyle from '../LogoStyle';
 import MultiReferenceStyle from '../MultiReferenceStyle';
@@ -18,23 +18,14 @@ import './style.css';
 const FieldStyleEditor = props => {
   const [open, toggleOpen] = useState(props.open);
   if (!props.roleMappingObject.style) return null;
-  const updateStyleExclusive = (value, entryStyleClasses, valuesArray) => {
-    entryStyleClasses = entryStyleClasses
-      .split(' ')
-      .filter(e => e)
-      .filter(className => !valuesArray.some(classObject => classObject.className === className));
-
-    entryStyleClasses = [...entryStyleClasses, value].join(' ');
-    props.updateStyle(props.roleKey, entryStyleClasses);
+  const updateStyleExclusive = (value, styleKey) => {
+    props.updateStyle(props.roleKey, styleKey, value);
   };
 
   const renderFieldStyle = props => {
     switch (props.type) {
       case c.FIELD_TYPE_MARKDOWN:
-        return renderMarkdownStyle(
-          props.roleMappingObject.style.value,
-          props.roleMappingObject.value
-        );
+        return renderMarkdownStyle(props.roleMappingObject.style.value);
       case c.FIELD_TYPE_TEXT:
         return renderTextStyle(props.roleMappingObject.style.value);
       case c.FIELD_TYPE_ASSET:
@@ -53,10 +44,10 @@ const FieldStyleEditor = props => {
 
   const renderTextStyle = entryStyleClasses => {
     return (
-      <TextStyle
+      <MarkdownStyle
         onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
         entryStyleClasses={entryStyleClasses}
-        updateStyleExclusive={updateStyleExclusive}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
         styleType={c.FIELD_TYPE_TEXT}
       />
     );
@@ -67,7 +58,7 @@ const FieldStyleEditor = props => {
       <LogoStyle
         onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
         entryStyleClasses={entryStyleClasses}
-        updateStyleExclusive={updateStyleExclusive}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
       />
     );
   };
@@ -82,15 +73,15 @@ const FieldStyleEditor = props => {
     );
   };
 
-  const renderMarkdownStyle = (entryStyleClasses, entryValue) => {
-    const sections = getMarkdownSections(entryValue);
-
+  const renderMarkdownStyle = styleKey => {
+    // const sections = getMarkdownSections(entryValue);
     return (
-      <TextStyle
+      <MarkdownStyle
+        styleView={c.STYLE_VIEW_MARKDOWN}
         onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-        entryStyleClasses={entryStyleClasses}
-        sections={sections}
-        updateStyleExclusive={updateStyleExclusive}
+        styleKey={styleKey}
+        roleMappingObject={props.roleMappingObject}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
         styleType={c.FIELD_TYPE_MARKDOWN}
       />
     );

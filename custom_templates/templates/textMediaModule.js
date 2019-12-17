@@ -25,14 +25,12 @@ export const textMediaModule = {
         }),
         contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
-        defaultClasses: "text-left text-black",
+        defaultClasses: {
+          [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
+            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value // left
+        },
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
-        // style: {
-        //   default: {
-        //     types: [c.STYLE_TYPE_CUSTOM, c.STYLE_TYPE_ENTRY]
-        //   }
-        // }
       }),
       right_content: constructRole({
         ...allowAsset({

@@ -81,6 +81,5 @@ export const ASSET_TYPE_PDF = "pdf";
 export const ASSET_SUBTYPE_LOGO = "logo";
 
 export * from "./styleClasses";
-export * from "./styleGroups";
-export * from "./styleKeys";
-export * from "./styleValues";
+export * from "./styleViews";
+export * from "./styleProperties";

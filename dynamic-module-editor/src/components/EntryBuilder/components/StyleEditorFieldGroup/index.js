@@ -17,38 +17,26 @@ const StyleEditorFieldGroup = props => {
         icon="Close"
         onClick={() =>
           props.onClear(
-            props.styleClasses.map(classObject =>
-              getSectionedClassName(props.section, classObject.className)
+            props.styleValues.map(classObject =>
+              getSectionedClassName(props.section, classObject.value)
             )
           )
         }>
         Clear
       </TextLink>
       <div className="style-editor__inline-input-section">
-        {props.styleClasses.map((classObject, index) => {
-          const fieldId = `radio-${classObject.className}`;
+        {props.styleValues.map((valueObject, index) => {
+          const fieldId = `radio-${valueObject.value}`;
           return (
             <div className="style-editor__radio-section" key={`text-alignment-section-${index}`}>
               <RadioButtonField
                 id={fieldId}
                 className="style-editor__radio-field"
-                checked={props.entryStyleClasses
-                  .split(' ')
-                  .filter(e => e)
-                  .includes(getSectionedClassName(props.section, classObject.className))}
-                labelText={classObject.label}
-                value={classObject.className}
+                checked={props.value === getSectionedClassName(props.section, valueObject.value)}
+                labelText={valueObject.label}
+                value={valueObject.value}
                 labelIsLight={true}
-                onChange={e =>
-                  props.updateStyleExclusive(
-                    getSectionValue(e, props.section),
-                    props.entryStyleClasses,
-                    props.styleClasses.map(classObject => ({
-                      ...classObject,
-                      className: getSectionedClassName(props.section, classObject.className)
-                    }))
-                  )
-                }
+                onChange={e => props.onChange(props.styleKey, getSectionValue(e, props.section))}
               />
             </div>
           );
@@ -59,13 +47,14 @@ const StyleEditorFieldGroup = props => {
 };
 
 StyleEditorFieldGroup.propTypes = {
-  entryStyleClasses: PropTypes.string,
+  value: PropTypes.string,
+  styleKey: PropTypes.string,
   label: PropTypes.string,
   onClear: PropTypes.func,
-  updateStyleExclusive: PropTypes.func,
+  onChange: PropTypes.func,
   section: PropTypes.string,
   sectionLabel: PropTypes.string,
-  styleClasses: PropTypes.array
+  styleValues: PropTypes.array
 };
 
 export default StyleEditorFieldGroup;
