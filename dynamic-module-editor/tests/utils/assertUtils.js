@@ -9,7 +9,7 @@ export const newEntryRole = (newEntryArg, roleKey) => {
 };
 
 export const internalMappingRoleStyle = (internalMappingArg, roleKey) => {
-  return JSON.parse(internalMappingArg).fieldRoles[roleKey].styleClasses;
+  return JSON.parse(internalMappingArg).fieldRoles[roleKey].style.value;
 };
 
 export const newEntryAssets = newEntryArg => {

@@ -359,6 +359,24 @@ describe('InternalMapping', () => {
       internalMapping.addStyleCustom('hi');
       expect(internalMapping.hi.style).toEqual(InternalMapping.styleMapping());
     });
+
+    it('adds default classes if templateConfig designates', () => {
+      const json = JSON.stringify({
+        fieldRoles: { hi: { type: 'entry', value: 'hello', style: undefined } }
+      });
+
+      const defaultClass = 'defaultClass';
+      const templateConfig = {
+        fieldRoles: {
+          hi: {
+            defaultClasses: defaultClass
+          }
+        }
+      };
+      const internalMapping = new InternalMapping(json, templateConfig);
+      internalMapping.addStyleCustom('hi');
+      expect(internalMapping.hi.style.value).toEqual(defaultClass);
+    });
   });
 
   describe('clearRoleStyle', () => {

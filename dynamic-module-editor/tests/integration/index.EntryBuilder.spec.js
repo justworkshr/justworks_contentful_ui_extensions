@@ -77,7 +77,7 @@ describe('App', () => {
         // Should not render the fields and style editors by default
         expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
         expect(node.find('EntryField')).toHaveLength(0);
-        expect(node.find('FieldStyleEditor')).toHaveLength(0);
+        expect(node.find('RoleStyleSection')).toHaveLength(0);
       });
     });
 
@@ -92,7 +92,7 @@ describe('App', () => {
       wrapper.find('RoleSection').forEach(node => {
         expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(0);
         expect(node.find('EntryField')).toHaveLength(1);
-        expect(node.find('FieldStyleEditor')).toHaveLength(1);
+        expect(node.find('RoleStyleSection')).toHaveLength(1);
       });
 
       // Clears roles from App state
@@ -107,7 +107,7 @@ describe('App', () => {
       wrapper.find('RoleSection').forEach(node => {
         expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
         expect(node.find('EntryField')).toHaveLength(0);
-        expect(node.find('FieldStyleEditor')).toHaveLength(0);
+        expect(node.find('RoleStyleSection')).toHaveLength(0);
       });
     });
   });
@@ -208,7 +208,7 @@ describe('App', () => {
 
       wrapper.find('RoleSection').forEach(node => {
         expect(node.find('EntryCard')).toHaveLength(1);
-        expect(node.find('FieldStyleEditor')).toHaveLength(0);
+        expect(node.find('RoleStyleSection')).toHaveLength(0);
       });
     });
   });
@@ -287,17 +287,13 @@ describe('App', () => {
           templateConfig.fieldRoles[node.props().roleKey].multipleReferenceStyle;
         // Only renders this style if multipleReferenceStyle property is set
         if (multiReferenceStyle) {
-          expect(node.find({ type: multiReferenceStyle })).toHaveLength(1);
+          expect(node.find('RoleStyleSection')).toHaveLength(1);
         }
 
         const asset = templateConfig.fieldRoles[node.props().roleKey].asset;
-        // Only renders this style if multipleReferenceStyle property is set
-        if (asset && asset.subType === c.ASSET_SUBTYPE_LOGO) {
-          expect(node.find({ type: c.FIELD_TYPE_ASSET })).toHaveLength(1);
-        }
 
         if (!multiReferenceStyle && (!asset || (asset && asset.subType !== c.ASSET_SUBTYPE_LOGO))) {
-          expect(node.find('FieldStyleEditor')).toHaveLength(0);
+          expect(node.find('RoleStyleSection')).toHaveLength(0);
         }
       });
     });

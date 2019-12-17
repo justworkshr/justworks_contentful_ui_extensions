@@ -86,10 +86,16 @@ const RoleStyleSection = props => {
       </div>
       {!props.roleMappingObject.style && (
         <div className="role-style-section__action-row">
-          <TextLink onClick={() => props.addCustomStyle(props.roleKey)} icon="Plus">
+          <TextLink
+            className="link-style-section__custom-style-button"
+            onClick={() => props.addCustomStyle(props.roleKey)}
+            icon="Plus">
             Custom style
           </TextLink>
-          <TextLink onClick={() => props.addEntryStyle(props.roleKey)} icon="Link">
+          <TextLink
+            className="link-style-section__link-existing-button"
+            onClick={() => props.addEntryStyle(props.roleKey)}
+            icon="Link">
             Link existing
           </TextLink>
         </div>

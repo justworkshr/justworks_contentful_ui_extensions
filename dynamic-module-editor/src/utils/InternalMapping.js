@@ -255,7 +255,12 @@ export default class InternalMapping {
   }
 
   addStyleCustom(key) {
-    this.fieldRoles[key].style = InternalMapping.styleMapping({ type: c.STYLE_TYPE_CUSTOM });
+    this.fieldRoles[key].style = InternalMapping.styleMapping({
+      type: c.STYLE_TYPE_CUSTOM,
+      value: this._templateConfig.fieldRoles[key]
+        ? this._templateConfig.fieldRoles[key].defaultClasses
+        : ''
+    });
   }
 
   clearRoleStyle(key) {
