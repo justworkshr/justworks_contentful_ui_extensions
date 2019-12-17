@@ -12,16 +12,7 @@ const StyleEditorFieldGroup = props => {
       <FormLabel htmlFor="">
         {props.label} ({props.sectionLabel})
       </FormLabel>
-      <TextLink
-        className="style-editor__clear-link"
-        icon="Close"
-        onClick={() =>
-          props.onClear(
-            props.styleValues.map(classObject =>
-              getSectionedClassName(props.section, classObject.value)
-            )
-          )
-        }>
+      <TextLink className="style-editor__clear-link" icon="Close" onClick={() => props.onClear()}>
         Clear
       </TextLink>
       <div className="style-editor__inline-input-section">
@@ -36,7 +27,9 @@ const StyleEditorFieldGroup = props => {
                 labelText={valueObject.label}
                 value={valueObject.value}
                 labelIsLight={true}
-                onChange={e => props.onChange(props.styleKey, getSectionValue(e, props.section))}
+                onChange={e => {
+                  props.onChange(getSectionValue(e, props.section));
+                }}
               />
             </div>
           );
@@ -48,13 +41,13 @@ const StyleEditorFieldGroup = props => {
 
 StyleEditorFieldGroup.propTypes = {
   value: PropTypes.string,
-  styleKey: PropTypes.string,
   label: PropTypes.string,
   onClear: PropTypes.func,
   onChange: PropTypes.func,
   section: PropTypes.string,
   sectionLabel: PropTypes.string,
-  styleValues: PropTypes.array
+  styleValues: PropTypes.array,
+  helpText: PropTypes.string
 };
 
 export default StyleEditorFieldGroup;

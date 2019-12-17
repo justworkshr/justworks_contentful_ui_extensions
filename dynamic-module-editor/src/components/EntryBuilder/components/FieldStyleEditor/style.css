@@ -57,7 +57,12 @@
 }
 
 .style-editor__radio-section {
+  min-width: 120px;
   margin-right: 40px;
+}
+
+.style-editor__radio-section label {
+  min-width: 80px;
 }
 
 .style-editor__radio-field input,

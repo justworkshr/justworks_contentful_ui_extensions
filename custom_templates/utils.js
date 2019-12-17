@@ -1,4 +1,8 @@
 import * as c from "./constants";
+import {
+  constructStyleView,
+  constructStyleSection
+} from "./constants/styleViews";
 
 export const constructRole = ({
   contentType = "",
@@ -35,30 +39,29 @@ export const fieldObject = ({ type, defaultClasses = "" } = {}) => {
 
 export const defaultStyleTypes = () => {
   return {
-    template_style: {
-      ...styleProperty({
-        label: "Background Color",
-        styleKey: c.STYLE_PROPERTY_BACKGROUND_COLOR.key,
-        description: "The background color for this template.",
-        defaultValue: ""
+    template_style: templateStyleProperty({
+      styleView: constructStyleView({
+        styleSections: [
+          constructStyleSection({
+            componentType: c.STYLE_VIEW_COMPONENT_COLOR,
+            styleProperty: c.STYLE_PROPERTY_BACKGROUND_COLOR,
+            helpText: "The background color for this module."
+          })
+        ]
       })
-    }
+    })
   };
 };
 
-export const styleProperty = ({
-  label = "",
-  styleKey = c.STYLE_KEY_BACKGROUND_COLOR,
-  description = "",
-  defaultValue = ""
-} = {}) => {
-  return {
-    [styleKey]: {
-      label,
-      description,
-      defaultValue
-    }
-  };
+export const templateStyleProperty = ({ styleView = {} } = {}) => {
+  return Object.assign(
+    {},
+    ...styleView.styleSections.map(section => {
+      return {
+        [section.styleProperty.key]: styleView
+      };
+    })
+  );
 };
 
 export const allowAsset = ({

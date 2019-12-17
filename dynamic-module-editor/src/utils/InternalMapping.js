@@ -21,13 +21,8 @@ export default class InternalMapping {
         if (!templateConfig.style[styleSectionKey]) return;
         if (!this.style[styleSectionKey]) {
           this.style[styleSectionKey] = {};
-          let classArray = [];
 
-          Object.keys(templateConfig.style[styleSectionKey]).forEach(stylePropertyKey => {
-            classArray.push(templateConfig.style[styleSectionKey][stylePropertyKey].defaultClasses);
-          });
-
-          this.style[styleSectionKey].styleClasses = classArray.join(' ');
+          this.style[styleSectionKey] = parsedJSON.style[styleSectionKey];
         }
       });
     }

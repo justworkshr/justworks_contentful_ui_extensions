@@ -4,11 +4,11 @@ import * as c from '../../../../../../custom_templates/constants';
 
 import { Icon, Subheading } from '@contentful/forma-36-react-components';
 import BackgroundColorStyle from '../BackgroundColorStyle';
-
-import { displaySnakeCaseName } from '../../utils';
+import StyleView from '../StyleView';
 import classnames from 'classnames';
 
-import { capitalize } from '../../../../../../shared/utilities/elementUtils';
+import { capitalize, displayCamelCaseName } from '../../../../../../shared/utilities/elementUtils';
+import FieldStyleEditor from '../FieldStyleEditor';
 
 const TemplateStyleEditor = props => {
   const [open, toggleOpen] = useState(false);
@@ -23,21 +23,18 @@ const TemplateStyleEditor = props => {
 
   const renderStyle = props => {
     return Object.keys(props.templateStyleObject).map(styleKey => {
-      console.log(props.templateStyleObject, c.STYLE_PROPERTY_BACKGROUND_COLOR.key);
-      switch (styleKey) {
-        case c.STYLE_PROPERTY_BACKGROUND_COLOR.key:
-          return (
-            <BackgroundColorStyle
-              key={`template-style--${styleKey}`}
-              title={displaySnakeCaseName(styleKey)}
-              value={props.mappingStyleObject[styleKey]}
-              helpText={props.templateStyleObject[styleKey].description}
-              onChange={value => onChange(styleKey, value)}
-              roleKey={props.styleSectionKey + styleKey} // only needed for unique field IDs
-              onClear={() => onClearStyleSection(styleKey)}
-            />
-          );
-      }
+      const styleView = props.templateStyleObject[styleKey];
+      return (
+        <StyleView
+          key={`template-style--${styleKey}`}
+          styleView={styleView}
+          onChange={onChange}
+          onClear={onClearStyleSection}
+          styleType={c.FIELD_TYPE_MARKDOWN}
+          styleObject={props.mappingStyleObject}
+          helpText={props.templateStyleObject[styleKey].helpText}
+        />
+      );
     });
   };
 
@@ -55,7 +52,7 @@ const TemplateStyleEditor = props => {
         />
       </div>
       <div className="style-editor__heading" onClick={() => toggleOpen(!open)} />
-      {open && <div className="style-editor__section">{renderStyle(props)}</div>}
+      {open && renderStyle(props)}
     </div>
   );
 };

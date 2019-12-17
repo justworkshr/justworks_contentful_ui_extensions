@@ -2,10 +2,15 @@ import {
   constructRole,
   allowAsset,
   defaultStyleTypes,
-  styleProperty,
+  templateStyleProperty,
   fieldObject
 } from "../utils";
 import * as c from "../constants";
+
+import {
+  constructStyleView,
+  constructStyleSection
+} from "../constants/styleViews";
 
 export const cardBlock = {
   [c.CARD_BLOCK]: {
@@ -17,11 +22,16 @@ export const cardBlock = {
     style: {
       ...defaultStyleTypes(),
       tag_style: {
-        ...styleProperty({
-          label: "Tag Color",
-          type: c.STYLE_KEY_BACKGROUND_COLOR,
-          defaultValue: "cerulean",
-          description: "The background color the top right tag."
+        ...templateStyleProperty({
+          styleView: constructStyleView({
+            styleSections: [
+              constructStyleSection({
+                componentType: c.STYLE_VIEW_COMPONENT_COLOR,
+                stylePropery: c.STYLE_PROPERTY_BACKGROUND_COLOR,
+                helpText: "The color for the top-right tag on this template."
+              })
+            ]
+          })
         })
       }
     },

@@ -1,16 +1,23 @@
 import * as sp from "./styleProperties";
 
-const constructStyleGroupSection = ({
+export const STYLE_VIEW_COMPONENT_RADIO = "radio";
+export const STYLE_VIEW_COMPONENT_COLOR = "color";
+
+export const constructStyleSection = ({
+  componentType = STYLE_VIEW_COMPONENT_RADIO,
   styleProperty = {},
+  helpText = "",
   defaultOnly = false
 }) => {
   return {
+    componentType,
     styleProperty,
+    helpText,
     defaultOnly // Whether this style should only appear in the default sub-section or not
   };
 };
 
-const constructStyleGroup = ({
+export const constructStyleView = ({
   styleSections = [],
   subSections = [""]
 } = {}) => {
@@ -20,10 +27,11 @@ const constructStyleGroup = ({
   };
 };
 
-export const STYLE_VIEW_MARKDOWN = constructStyleGroup({
+export const STYLE_VIEW_MARKDOWN = constructStyleView({
   subSections: ["header", "subheader", "body"],
   styleSections: [
-    constructStyleGroupSection({
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
       styleProperty: sp.STYLE_PROPERTY_TEXT_ALIGNMENT,
       defaultOnly: true
     })

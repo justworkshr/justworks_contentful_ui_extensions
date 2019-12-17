@@ -81,6 +81,10 @@ export class App extends React.Component {
         hydratedEntries: await this.getHydratedEntries(prevState.loadingEntries, [])
       };
     });
+
+    if (!this.state.internalMapping) {
+      this.setInternalMappingValue(JSON.stringify(InternalMapping.blankMapping));
+    }
   }
 
   onNameChangeHandler = event => {

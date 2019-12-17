@@ -153,7 +153,6 @@ export default class EntryBuilder extends React.Component {
   updateTemplateStyle(templateStyleKey, styleKey, styleValue) {
     let updatedInternalMapping = this.props.entryInternalMapping;
     updatedInternalMapping.setTemplateStyleValue(templateStyleKey, styleKey, styleValue);
-
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
@@ -378,6 +377,7 @@ export default class EntryBuilder extends React.Component {
   }
 
   render() {
+    console.log(this.props.templateConfig.style);
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         {this.props.templateConfig.style && (

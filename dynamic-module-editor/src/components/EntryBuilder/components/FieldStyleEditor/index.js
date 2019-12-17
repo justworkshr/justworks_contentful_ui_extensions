@@ -9,8 +9,7 @@ import MarkdownStyle from '../MarkdownStyle';
 import ImageStyle from '../ImageStyle';
 import LogoStyle from '../LogoStyle';
 import MultiReferenceStyle from '../MultiReferenceStyle';
-import { getMarkdownSections } from '../utils/styleEditorUtils';
-
+import StyleView from '../StyleView';
 import classnames from 'classnames';
 
 import './style.css';
@@ -73,18 +72,19 @@ const FieldStyleEditor = props => {
     );
   };
 
-  const renderMarkdownStyle = styleKey => {
-    // const sections = getMarkdownSections(entryValue);
-    return (
-      <MarkdownStyle
-        styleView={c.STYLE_VIEW_MARKDOWN}
-        onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-        styleKey={styleKey}
-        roleMappingObject={props.roleMappingObject}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleType={c.FIELD_TYPE_MARKDOWN}
-      />
-    );
+  const renderMarkdownStyle = styleObject => {
+    return Object.keys(styleObject).map(styleKey => {
+      return (
+        <StyleView
+          key={`styleview-${styleKey}`}
+          styleView={c.STYLE_VIEW_MARKDOWN}
+          onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
+          onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+          styleType={c.FIELD_TYPE_MARKDOWN}
+          styleObject={styleObject}
+        />
+      );
+    });
   };
 
   const renderMultiReferenceStyle = entryStyleClasses => {
@@ -133,17 +133,15 @@ FieldStyleEditor.propTypes = {
   roleMappingObject: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
-  type: PropTypes.string,
-  entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+  type: PropTypes.string
 };
 
 FieldStyleEditor.defaultProps = {
-  entry: {},
   open: false,
   roleKey: '',
   roleConfig: {},
   roleMappingObject: {},
-  type: c.FIELD_TYPE_TEXT
+  type: undefined
 };
 
 export default FieldStyleEditor;
