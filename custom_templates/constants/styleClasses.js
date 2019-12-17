@@ -18,7 +18,7 @@ const COLORS = [
   constructColor({ label: "White", value: "white", hexValue: "#ffffff" }),
   constructColor({
     label: "Timberwolf",
-    value: "timerwolf",
+    value: "timberwolf",
     hexValue: "#CDD6DA"
   }),
   constructColor({ label: "Concrete", value: "concrete", hexValue: "#8199A3" }),
