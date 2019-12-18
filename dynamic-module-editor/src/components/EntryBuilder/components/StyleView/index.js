@@ -104,15 +104,12 @@ StyleView.propTypes = {
   styleView: PropTypes.object,
   onChange: PropTypes.func,
   onClear: PropTypes.func,
-  styleObject: PropTypes.object,
-  sections: PropTypes.array,
-  roleKey: PropTypes.string,
-  onChange: PropTypes.func
+  styleObject: PropTypes.object
 };
 
 StyleView.defaultProps = {
   styleView: {},
-  sections: ['']
+  styleObject: {}
 };
 
 export default StyleView;

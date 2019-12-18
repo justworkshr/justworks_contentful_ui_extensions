@@ -19,8 +19,8 @@ const FieldStyleEditor = props => {
     switch (props.type) {
       case c.FIELD_TYPE_MARKDOWN:
         return renderMarkdownStyle(props.roleMappingObject.style.value);
-      case c.FIELD_TYPE_TEXT:
-        return renderTextStyle(props.roleMappingObject.style.value);
+      case c.FIELD_TYPE_TITLE:
+        return renderTitleStyle(props.roleMappingObject.style.value);
       case c.FIELD_TYPE_ASSET:
         if (
           roleAllowsAssets(props.roleConfig.fieldTypes) &&
@@ -35,14 +35,15 @@ const FieldStyleEditor = props => {
     }
   };
 
-  const renderTextStyle = entryStyleClasses => {
-    return;
-    // <MarkdownStyle
-    //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-    //   entryStyleClasses={entryStyleClasses}
-    //   onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-    //   styleType={c.FIELD_TYPE_TEXT}
-    // />
+  const renderTitleStyle = styleObject => {
+    return (
+      <StyleView
+        styleView={c.STYLE_VIEW_TITLE}
+        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+        styleObject={styleObject}
+      />
+    );
   };
 
   const renderLogoStyle = entryStyleClasses => {
@@ -60,7 +61,6 @@ const FieldStyleEditor = props => {
         styleView={c.STYLE_VIEW_MARKDOWN}
         onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
         onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleType={c.FIELD_TYPE_MARKDOWN}
         styleObject={styleObject}
       />
     );

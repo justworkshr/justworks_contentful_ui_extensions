@@ -86,7 +86,7 @@ export const templateIsValid = errorObject => {
 };
 
 const validateAssetType = (entry, assetTypes) => {
-  if (!assetTypes) return true;
+  if (!assetTypes || !assetTypes.length) return true;
   return assetTypes.some(type => entry.fields.file['en-US'].contentType.includes(type));
 };
 

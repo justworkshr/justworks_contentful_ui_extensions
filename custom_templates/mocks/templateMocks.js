@@ -22,12 +22,12 @@ export const mockCustomTemplates = {
     fieldRoles: {
       left_section: {
         fieldTypes: [c.FIELD_TYPE_ENTRY],
-        contentType: "text",
+        contentTypes: "text",
         description: "A left section"
       },
       right_section: {
         fieldTypes: [c.FIELD_TYPE_ENTRY],
-        contentType: "text",
+        contentTypes: "text",
         description: "A left section"
       }
     }
@@ -37,14 +37,20 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       text_field: constructRole({
-        fieldTypes: [c.FIELD_TYPE_TEXT],
-        defaultClasses: "text-left text-black",
+        fieldTypes: [c.FIELD_TYPE_TITLE],
+        defaultClasses: {
+          textAlignment: "left",
+          textColor: "black"
+        },
         description: `Text Field.`,
         required: true
       }),
       markdown_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_MARKDOWN],
-        defaultClasses: "text-left text-black",
+        defaultClasses: {
+          textAlignment: "left",
+          textColor: "black"
+        },
         description: `Markdown Field.`,
         required: false
       })
@@ -78,7 +84,7 @@ export const mockCustomTemplates = {
     fieldRoles: {
       entry_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_ENTRY],
-        contentType: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+        contentTypes: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
         description: `Entry field`
       })
     }

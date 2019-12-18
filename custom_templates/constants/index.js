@@ -42,11 +42,11 @@ export const FIELD_TYPE_MULTI_REFERENCE = "multi-reference";
   - Directly editable fields whose values are saved in the InternalMapping JSON
 */
 
-export const FIELD_TYPE_TEXT = "text";
+export const FIELD_TYPE_TITLE = "title";
 export const FIELD_TYPE_MARKDOWN = "markdown";
 
 // Please keep updated!!
-export const DIRECT_FIELD_TYPES = [FIELD_TYPE_TEXT, FIELD_TYPE_MARKDOWN];
+export const DIRECT_FIELD_TYPES = [FIELD_TYPE_TITLE, FIELD_TYPE_MARKDOWN];
 
 /* 
   Internal Mapping Style types

@@ -23,19 +23,15 @@ export const logoGrid = {
       items: constructRole({
         description: "Grid items.",
         required: false,
+        fieldTypes: [c.FIELD_TYPE_MULTI_REFERENCE, c.FIELD_TYPE_ASSET],
+        contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+        assetTypes: [c.ASSET_TYPE_IMAGE],
+        assetSubType: c.ASSET_SUBTYPE_LOGO,
         allowedCustomTemplates: [c.LOGO_ITEM],
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          subType: c.ASSET_SUBTYPE_LOGO,
-          allowFormatting: false,
-          maxWidth: "200",
-          defaultClasses: "icon-small icon-center"
-        }),
         ...allowMultipleReferences({
           allow: true,
           styleType: c.MULTI_REFERENCE_STYLE_FLEX,
-          allowStyle: true,
-          contentTypes: ["customTemplate"]
+          allowStyle: true
         }),
         defaultClasses:
           "flex-row flex-align-start flex-justify-center flex-items-per-1 small-flex-items-per-2 large-flex-items-per-4"

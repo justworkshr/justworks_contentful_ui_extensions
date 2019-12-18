@@ -21,7 +21,6 @@ export default class InternalMapping {
         if (!templateConfig.style[styleSectionKey]) return;
         if (!this.style[styleSectionKey]) {
           this.style[styleSectionKey] = {};
-
           this.style[styleSectionKey] = parsedJSON.style[styleSectionKey];
         }
       });
@@ -197,7 +196,7 @@ export default class InternalMapping {
   addTextField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
-      type: c.FIELD_TYPE_TEXT,
+      type: c.FIELD_TYPE_TITLE,
       value
     });
   }
@@ -218,7 +217,7 @@ export default class InternalMapping {
   addFieldToRole(roleKey, fieldType) {
     const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
     switch (fieldType) {
-      case c.FIELD_TYPE_TEXT:
+      case c.FIELD_TYPE_TITLE:
         this.addTextField({
           key: roleKey
         });
@@ -238,7 +237,7 @@ export default class InternalMapping {
       type: c.STYLE_TYPE_CUSTOM,
       value: this._templateConfig.fieldRoles[key]
         ? this._templateConfig.fieldRoles[key].defaultClasses
-        : ''
+        : undefined
     });
   }
 

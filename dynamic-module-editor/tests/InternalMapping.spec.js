@@ -39,7 +39,7 @@ describe('InternalMapping', () => {
           text_field: {
             defaultClasses: 'helloClass',
             field: {
-              type: 'text',
+              type: c.FIELD_TYPE_TITLE,
               defaultValue: 'TEXT!!!'
             }
           }
@@ -54,7 +54,7 @@ describe('InternalMapping', () => {
       const json = JSON.stringify({
         fieldRoles: {
           text_field: {
-            type: 'text',
+            type: c.FIELD_TYPE_TITLE,
             value: 'occupied'
           }
         },
@@ -66,7 +66,7 @@ describe('InternalMapping', () => {
         fieldRoles: {
           text_field: {
             field: {
-              type: 'text',
+              type: c.FIELD_TYPE_TITLE,
               defaultClasses: 'helloClass',
               defaultValue: 'TEXT!!!'
             }
@@ -84,19 +84,25 @@ describe('InternalMapping', () => {
       expect(new InternalMapping(json).constructor.name).toEqual('InternalMapping');
     });
 
-    it('sets default styles', () => {
+    it('loads existing style', () => {
       const templateConfig = {
-        style: {
-          hiSection: {
-            hiProperty: { defaultClasses: 'hiclass' },
-            hiProperty2: { defaultClasses: 'hiclass2 hiclass3' }
-          }
-        },
+        style: {},
         fieldRoles: {}
       };
-      const json = JSON.stringify({ fieldRoles: {} });
+
+      const styleSection = {
+        hiProperty: {},
+        hiProperty2: {}
+      };
+
+      const json = JSON.stringify({
+        style: {
+          hiSection: styleSection
+        },
+        fieldRoles: {}
+      });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
-        hiSection: { styleClasses: 'hiclass hiclass2 hiclass3' }
+        hiSection: styleSection
       });
     });
 
@@ -154,7 +160,9 @@ describe('InternalMapping', () => {
 
     describe('addEntry', () => {
       it('sets the type and sets the value and style', () => {
-        const json = JSON.stringify({ fieldRoles: { hi: { type: 'text', value: 'hello' } } });
+        const json = JSON.stringify({
+          fieldRoles: { hi: { type: c.FIELD_TYPE_TITLE, value: 'hello' } }
+        });
         const internalMapping = new InternalMapping(json);
 
         internalMapping.addEntry('hi', 'bye');
@@ -177,7 +185,7 @@ describe('InternalMapping', () => {
         const json = JSON.stringify({
           fieldRoles: {
             hi: {
-              type: 'text',
+              type: c.FIELD_TYPE_TITLE,
               value: [
                 {
                   type: 'entry',
@@ -221,7 +229,10 @@ describe('InternalMapping', () => {
       it('sets allows entries and assets to mix', () => {
         const json = JSON.stringify({
           fieldRoles: {
-            hi: { type: 'text', value: [{ type: 'entry', style: undefined, value: 'hello' }] }
+            hi: {
+              type: c.FIELD_TYPE_TITLE,
+              value: [{ type: 'entry', style: undefined, value: 'hello' }]
+            }
           }
         });
         const internalMapping = new InternalMapping(json);
@@ -249,12 +260,12 @@ describe('InternalMapping', () => {
 
       internalMapping.addField({
         key: 'hi',
-        type: 'text',
+        type: c.FIELD_TYPE_TITLE,
         value: 'bye'
       });
 
       it('sets the type, value, and classes for the key', () => {
-        expect(internalMapping.hi.type).toEqual('text');
+        expect(internalMapping.hi.type).toEqual(c.FIELD_TYPE_TITLE);
         expect(internalMapping.hi.value).toEqual('bye');
         expect(internalMapping.hi.style).toBeUndefined();
       });
@@ -267,7 +278,7 @@ describe('InternalMapping', () => {
       internalMapping.addTextField({ key: 'hi', value: 'bye', styleClasses: 'text-left' });
 
       it('sets the type and sets the value', () => {
-        expect(internalMapping.hi.type).toEqual('text');
+        expect(internalMapping.hi.type).toEqual(c.FIELD_TYPE_TITLE);
         expect(internalMapping.hi.value).toEqual('bye');
         expect(internalMapping.hi.style).toBeUndefined();
       });
@@ -320,7 +331,7 @@ describe('InternalMapping', () => {
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
-            type: 'text',
+            type: c.FIELD_TYPE_TITLE,
             value: [
               { type: 'entry', style: {}, value: '1' },
               { type: 'entry', style: {}, value: '2' }
@@ -337,7 +348,7 @@ describe('InternalMapping', () => {
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
-            type: 'text',
+            type: c.FIELD_TYPE_TITLE,
             value: [{ type: 'entry', style: {}, value: '2' }]
           }
         }

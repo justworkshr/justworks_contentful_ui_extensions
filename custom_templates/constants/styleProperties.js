@@ -84,6 +84,34 @@ export const STYLE_PROPERTY_TEXT_ALIGNMENT = constructStyleProperty({
   ]
 });
 
+export const STYLE_PROPERTY_TEXT_TRANSFORM = constructStyleProperty({
+  key: "textTransform",
+  values: [
+    constructStyleValue({
+      value: "uppercase",
+      label: "Uppercase"
+    }),
+    constructStyleValue({
+      value: "capitalize",
+      label: "Capitalize"
+    }),
+    constructStyleValue({
+      value: "lowercase",
+      label: "Lowercase"
+    })
+  ]
+});
+
+export const STYLE_PROPERTY_TEXT_COLOR = constructStyleProperty({
+  key: "textColor",
+  values: TEXT_COLORS.map(color => {
+    return constructStyleValue({
+      value: color.value,
+      label: color.label
+    });
+  })
+});
+
 export const STYLE_PROPERTY_HEADER_TEXT_COLOR = constructStyleProperty({
   key: "headerTextColor",
   values: TEXT_COLORS.map(color => {

@@ -143,7 +143,6 @@ export const fetchEntryByRoleKey = async ({
 };
 
 export const getEntryOrField = async (space, internalMapping, roleKey) => {
-  console.log(roleKey);
   const fieldType = internalMapping.getType(roleKey);
   if (fieldType === c.FIELD_TYPE_ENTRY) {
     return await space.getEntry(internalMapping[roleKey].value);
@@ -162,7 +161,6 @@ export const getEntryOrField = async (space, internalMapping, roleKey) => {
     );
   } else {
     const sysType = fieldType === c.FIELD_TYPE_ASSET ? c.SYSTEM_TYPE_ASSET : c.SYSTEM_TYPE_FIELD;
-    console.log('!!!!!!', sysType);
     return constructFieldEntry(sysType, internalMapping[roleKey]);
   }
 };

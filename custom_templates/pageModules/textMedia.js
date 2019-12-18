@@ -29,7 +29,7 @@ export const textMedia = {
           allowFormatting: false,
           maxWidth: "800"
         }),
-        contentType: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
+        contentTypes: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: {
           // textAlignment
@@ -60,7 +60,7 @@ export const textMedia = {
           allowFormatting: false,
           maxWidth: "800"
         }),
-        contentType: [c.CONTENT_TYPE_MEDIA],
+        contentTypes: [c.CONTENT_TYPE_MEDIA],
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: "text-left text-black",
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,

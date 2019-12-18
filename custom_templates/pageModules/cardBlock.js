@@ -37,14 +37,14 @@ export const cardBlock = {
     },
     fieldRoles: {
       left_text: constructRole({
-        contentType: [c.CONTENT_TYPE_TEXT],
+        contentTypes: [c.CONTENT_TYPE_TEXT],
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: "text-black",
         required: true,
         description: `Primary markdown text to display on the left half section.`
       }),
       right_media: constructRole({
-        contentType: c.CONTENT_TYPE_MEDIA,
+        contentTypes: c.CONTENT_TYPE_MEDIA,
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           allowFormatting: false,
@@ -54,19 +54,19 @@ export const cardBlock = {
         description: "Media to display on the right half section."
       }),
       card_link: constructRole({
-        contentType: c.CONTENT_TYPE_LINK,
-        field: fieldObject({ type: c.FIELD_TYPE_TEXT }),
+        contentTypes: c.CONTENT_TYPE_LINK,
+        field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
         required: false,
         description: "Link url for the card."
       }),
       cta_text: constructRole({
-        field: fieldObject({ type: c.FIELD_TYPE_TEXT }),
+        field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
         defaultClasses: "text-cerulean",
         required: false,
         description: "Text for the optional CTA"
       }),
       tag_text: constructRole({
-        field: fieldObject({ type: c.FIELD_TYPE_TEXT }),
+        field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
         defaultClasses: "text-white text-uppercase",
         required: false,
         description:

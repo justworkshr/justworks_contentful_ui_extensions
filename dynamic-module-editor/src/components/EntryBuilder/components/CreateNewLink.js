@@ -156,6 +156,8 @@ class CreateNewLink extends React.Component {
           Create new asset
         </TextLink>
       );
+    } else {
+      return null;
     }
   }
 }

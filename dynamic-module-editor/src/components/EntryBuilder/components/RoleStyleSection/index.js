@@ -154,7 +154,7 @@ RoleStyleSection.defaultProps = {
   roleKey: '',
   roleConfigObject: {},
   roleMappingObject: {},
-  type: c.FIELD_TYPE_TEXT,
+  type: c.FIELD_TYPE_TITLE,
   styleEntry: undefined
 };
 

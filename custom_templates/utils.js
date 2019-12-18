@@ -96,6 +96,6 @@ export const allowMultipleReferences = ({
     allowMultipleReferences: allow,
     allowMultiReferenceStyle: allowStyle,
     multipleReferenceStyle: styleType,
-    contentType: contentTypes
+    contentTypes: contentTypes
   };
 };

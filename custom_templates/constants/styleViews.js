@@ -29,6 +29,24 @@ export const constructStyleView = ({
   };
 };
 
+export const STYLE_VIEW_TITLE = constructStyleView({
+  subSections: [],
+  styleSections: [
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
+      styleProperty: sp.STYLE_PROPERTY_TEXT_ALIGNMENT
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
+      styleProperty: sp.STYLE_PROPERTY_TEXT_TRANSFORM
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_COLOR,
+      styleProperty: sp.STYLE_PROPERTY_TEXT_COLOR
+    })
+  ]
+});
+
 export const STYLE_VIEW_MARKDOWN = constructStyleView({
   subSections: ["header", "subheader", "body"],
   styleSections: [

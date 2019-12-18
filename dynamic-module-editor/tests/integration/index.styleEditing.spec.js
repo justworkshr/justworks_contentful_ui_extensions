@@ -84,7 +84,7 @@ describe('App', () => {
         .find('.style-editor .sub-section__heading')
         .simulate('click');
 
-      expect(wrapper.find('BackgroundColorStyle')).toHaveLength(1);
+      expect(wrapper.find('StyleView')).toHaveLength(1);
     });
 
     it('should edit global styles', async () => {
@@ -98,7 +98,7 @@ describe('App', () => {
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
-      const value = 'bg-color-strawberry';
+      const value = 'navy';
 
       // open editor
       wrapper
@@ -111,7 +111,7 @@ describe('App', () => {
       await resolveAll();
       expect(
         JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0])['style']['template_style'][
-          'styleClasses'
+          'backgroundColor'
         ]
       ).toEqual(value);
     });
@@ -141,9 +141,10 @@ describe('App', () => {
         .simulate('click');
 
       // loads default classes
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
-        'text-left text-black'
-      );
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+        textAlignment: 'left',
+        textColor: 'black'
+      });
     });
 
     it('should add a linked style entry', async () => {
@@ -197,34 +198,33 @@ describe('App', () => {
         .simulate('click');
 
       // load default classes
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
-        'text-left text-black'
-      );
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+        textColor: 'black',
+        textAlignment: 'left'
+      });
 
       // Editor starts closed
-      expect(wrapper.find({ roleKey: 'text_field' }).find('ColorStyle')).toHaveLength(0);
-      expect(wrapper.find({ roleKey: 'text_field' }).find('StyleEditorFieldGroup')).toHaveLength(0);
+      expect(wrapper.find({ roleKey: 'text_field' }).find('StyleView')).toHaveLength(0);
 
-      openStyleEditor(wrapper, 'text_field', 'text');
+      openStyleEditor(wrapper, 'text_field', c.FIELD_TYPE_TITLE);
 
       // Editor open
-      expect(wrapper.find({ roleKey: 'text_field' }).find('ColorStyle')).toHaveLength(1);
-      expect(wrapper.find({ roleKey: 'text_field' }).find('StyleEditorFieldGroup')).toHaveLength(3);
+      expect(wrapper.find({ roleKey: 'text_field' }).find('StyleView')).toHaveLength(1);
 
-      const value = 'text-navy';
-
-      setStyleValue(wrapper, 'text_field', 'text', 'Text Color', value);
+      const value = 'navy';
+      setStyleValue(wrapper, 'text_field', c.FIELD_TYPE_TITLE, 'Text Color', value);
 
       // Adds value
-      expect(getRoleStyle(wrapper.state().entryInternalMapping, 'text_field')).toEqual(
-        `text-left ${value}`
-      );
+      expect(getRoleStyle(wrapper.state().entryInternalMapping, 'text_field')).toEqual({
+        textAlignment: 'left',
+        textColor: 'navy'
+      });
 
       // updates sdk
       await resolveAll();
       expect(
         internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[0][0], 'text_field')
-      ).toBe('text-left text-navy');
+      ).toEqual({ textAlignment: 'left', textColor: 'navy' });
     });
 
     it('should load the custom style object', () => {
@@ -236,8 +236,8 @@ describe('App', () => {
         internalMapping: JSON.stringify({
           fieldRoles: {
             text_field: {
-              type: 'text',
-              style: InternalMapping.styleMapping({ value: 'text-black' }),
+              type: c.FIELD_TYPE_TITLE,
+              style: InternalMapping.styleMapping({ value: { textColor: 'black' } }),
               value: 'hello'
             }
           }
@@ -249,14 +249,14 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
 
-      const value = 'text-black';
+      const value = 'black';
 
       // Starts with existing value
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
-        'text-black'
-      );
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+        textColor: 'black'
+      });
 
-      openStyleEditor(wrapper, 'text_field', 'text');
+      openStyleEditor(wrapper, 'text_field', c.FIELD_TYPE_TITLE);
 
       // radio field is checked
       expect(
@@ -288,11 +288,12 @@ describe('App', () => {
         .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
         .simulate('click');
 
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
-        'text-left text-black'
-      );
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+        textAlignment: 'left',
+        textColor: 'black'
+      });
 
-      openStyleEditor(wrapper, 'text_field', 'text');
+      openStyleEditor(wrapper, 'text_field', c.FIELD_TYPE_TITLE);
 
       wrapper
         .find({ roleKey: 'text_field' })
@@ -304,15 +305,15 @@ describe('App', () => {
         .simulate('click');
 
       // removes corresponding class
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual(
-        'text-black'
-      );
+      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+        textColor: 'black'
+      });
 
       // updates sdk
       await resolveAll();
       expect(
         internalMappingRoleStyle(sdk.entry.fields.internalMapping.setValue.args[0][0], 'text_field')
-      ).toBe('text-black');
+      ).toEqual({ textColor: 'black' });
     });
 
     it('should remove a linked style entry', async () => {
@@ -324,7 +325,7 @@ describe('App', () => {
         internalMapping: JSON.stringify({
           fieldRoles: {
             text_field: {
-              type: 'text',
+              type: c.FIELD_TYPE_TITLE,
               style: InternalMapping.styleMapping({ type: c.STYLE_TYPE_ENTRY, value: '1' }),
               value: 'hello'
             }

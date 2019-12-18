@@ -79,7 +79,6 @@ export const handleMultipleAssetsLink = async ({
   assets.forEach(asset => {
     linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.fieldRoles[roleKey]);
   });
-
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   } else {

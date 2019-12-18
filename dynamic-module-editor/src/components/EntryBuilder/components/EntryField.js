@@ -28,7 +28,7 @@ export const EntryField = props => {
         return 'Entry';
       case c.FIELD_TYPE_ASSET:
         return 'Asset';
-      case c.FIELD_TYPE_TEXT:
+      case c.FIELD_TYPE_TITLE:
         return 'Text';
       case c.FIELD_TYPE_MARKDOWN:
         return 'Text';
@@ -133,7 +133,7 @@ export const EntryField = props => {
       </div>
       {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}
       {props.fieldType === c.FIELD_TYPE_ENTRY && renderEntryCard()}
-      {props.fieldType === c.FIELD_TYPE_TEXT && renderTextField(props.roleMappingObject.value)}
+      {props.fieldType === c.FIELD_TYPE_TITLE && renderTextField(props.roleMappingObject.value)}
       {props.fieldType === c.FIELD_TYPE_MARKDOWN &&
         renderMarkdownField(props.roleMappingObject.value)}
     </div>
