@@ -12,6 +12,8 @@ import InternalMapping from '../../../utils/InternalMapping';
 
 import { validateLinkedEntry, validateLinkedAsset } from '../utils/validations';
 
+import { getAssetType } from '../../../../../shared/utilities/elementUtils';
+
 export const handleRemoveEntry = ({ props, updateEntry, roleKey, entryIndex = null } = {}) => {
   if (!roleKey) return null;
   const updatedInternalMapping = props.entryInternalMapping;
@@ -22,14 +24,7 @@ export const handleRemoveEntry = ({ props, updateEntry, roleKey, entryIndex = nu
 const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
   const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
-  const firstAsset =
-    props.entryInternalMapping[roleKey] && !!props.entryInternalMapping[roleKey].value.length
-      ? props.entryInternalMapping[roleKey].value.find(el => el.type === c.FIELD_TYPE_ASSET)
-      : undefined;
 
-  const assetStyleValue = firstAsset
-    ? firstAsset.styleClasses
-    : roleConfigObject.asset.defaultClasses; // duplicate existing asset style classes to maintain consistancy
   updatedInternalMapping.addEntriesOrAssets({
     key: roleKey,
     value: assets.map(asset => {
@@ -37,12 +32,7 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
         type: c.FIELD_TYPE_ASSET,
         value: asset.sys.id,
         assetUrl: asset.fields.file['en-US'].url,
-        assetType: roleConfigObject.asset.type,
-        formatting:
-          roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
-            ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
-            : {},
-        styleClasses: assetStyleValue
+        assetType: getAssetType(asset.fields.file['en-US'].contentType)
       });
     }),
     styleClasses: (roleConfigObject || {}).defaultClasses
@@ -59,11 +49,7 @@ const linkAssetToTemplate = ({ props, asset, roleKey, updateEntry }) => {
     roleKey,
     asset.sys.id,
     asset.fields.file['en-US'].url,
-    roleConfigObject.asset.type,
-    roleConfigObject.asset.type === c.ASSET_TYPE_IMAGE
-      ? { fm: 'png', w: roleConfigObject.asset.formatting.maxWidth }
-      : {},
-    roleConfigObject.asset.defaultClasses
+    roleConfigObject.assetTypes.length
   );
 
   updateEntry(updatedInternalMapping.asJSON());
@@ -162,12 +148,11 @@ export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, role
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const handleAddField = async ({ props, setInternalMappingValue, roleKey, field }) => {
-  const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
+export const handleAddField = async ({ props, setInternalMappingValue, roleKey, fieldType }) => {
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addField({
     key: roleKey,
-    type: field.type
+    type: fieldType
   });
 
   setInternalMappingValue(updatedInternalMapping.asJSON());

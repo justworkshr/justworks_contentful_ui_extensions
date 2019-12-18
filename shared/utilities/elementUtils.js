@@ -1,3 +1,5 @@
+import * as c from "../../custom_templates/constants";
+
 export const capitalize = string => {
   return string
     .split(" ")
@@ -38,4 +40,10 @@ export const getStatus = entry => {
   } else {
     return "draft";
   }
+};
+
+export const getAssetType = contentType => {
+  if (contentType.includes(c.ASSET_TYPE_IMAGE)) return c.ASSET_TYPE_IMAGE;
+  if (contentType.includes(c.ASSET_TYPE_VIDEO)) return c.ASSET_TYPE_VIDEO;
+  if (contentType.includes(c.ASSET_TYPE_PDF)) return c.ASSET_TYPE_PDF;
 };

@@ -7,15 +7,13 @@ import { Icon, Subheading } from '@contentful/forma-36-react-components';
 
 import StyleView from '../StyleView';
 import classnames from 'classnames';
+import { roleAllowsAssets } from '../../utils';
 
 import './style.css';
 
 const FieldStyleEditor = props => {
   const [open, toggleOpen] = useState(props.open);
   if (!props.roleMappingObject.style) return null;
-  const updateStyleExclusive = (value, styleKey) => {
-    props.updateStyle(props.roleKey, styleKey, value);
-  };
 
   const renderFieldStyle = props => {
     switch (props.type) {
@@ -25,8 +23,8 @@ const FieldStyleEditor = props => {
         return renderTextStyle(props.roleMappingObject.style.value);
       case c.FIELD_TYPE_ASSET:
         if (
-          props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
-          props.roleConfig.asset.subType === c.ASSET_SUBTYPE_LOGO
+          roleAllowsAssets(props.roleConfig.fieldTypes) &&
+          props.roleConfig.assetSubType === c.ASSET_SUBTYPE_LOGO
         ) {
           const styleClasses = props.roleMappingObject.style.value;
           return renderLogoStyle(styleClasses);
@@ -53,15 +51,6 @@ const FieldStyleEditor = props => {
     //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
     //   entryStyleClasses={entryStyleClasses}
     //   onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-    // />
-  };
-
-  const renderFormattingStyle = formattingObject => {
-    return;
-    // <ImageStyle
-    //   roleKey={props.roleKey}
-    //   formattingObject={formattingObject}
-    //   onChange={props.updateAssetFormatting}
     // />
   };
 
@@ -104,11 +93,6 @@ const FieldStyleEditor = props => {
         </div>
       </div>
       {!!open && renderFieldStyle(props)}
-      {!!open && // When mapping allows for asset formatting
-        !!props.type === c.FIELD_TYPE_ASSET &&
-        !!props.roleConfig.asset.type === c.ASSET_TYPE_IMAGE &&
-        !!props.roleConfig.asset.allowFormatting &&
-        renderFormattingStyle(props.roleMappingObject.formatting)}
     </div>
   );
 };

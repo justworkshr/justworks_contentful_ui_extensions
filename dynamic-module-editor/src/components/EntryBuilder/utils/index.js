@@ -8,6 +8,26 @@ export const isDirectField = roleType => {
   return c.DIRECT_FIELD_TYPES.includes(roleType);
 };
 
+export const pluckField = fieldTypes => {
+  return fieldTypes.find(type => c.DIRECT_FIELD_TYPES.some(fType => fType === type));
+};
+
+export const roleAllowsAssets = fieldTypes => {
+  if (!fieldTypes || !fieldTypes.length) return;
+  return fieldTypes.includes(c.FIELD_TYPE_ASSET);
+};
+
+export const roleAllowsFields = fieldTypes => {
+  if (!fieldTypes || !fieldTypes.length) return;
+  return c.DIRECT_FIELD_TYPES.some(type => fieldTypes.some(fType => fType === type));
+};
+
+export const roleAllowsLinks = fieldTypes => {
+  if (!fieldTypes || !fieldTypes.length) return;
+  const linkableTypes = [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_MULTI_REFERENCE, c.FIELD_TYPE_ASSET];
+  return linkableTypes.some(type => fieldTypes.some(fType => type === fType));
+};
+
 export const removeByIndex = (array, index) => {
   if (!array || !array.length) return;
   return [...array.slice(0, index), ...array.slice(index + 1)];
@@ -67,32 +87,6 @@ export const createEntry = async (space, contentType, name, template = undefined
   const newEntry = await space.createEntry(contentType, data);
 
   return newEntry;
-};
-
-// Groups an array of objects by key
-export const groupByContentType = (templateRoles, entries) => {
-  if (!templateRoles || !Object.keys(templateRoles).length) return {};
-  const groups = {};
-
-  // { <"contentType">: {<"mappingId">: <"entryId">}...}
-  // or:
-  // { "text": {"left_text": "1234"}...}
-  Object.keys(templateRoles).forEach(key => {
-    groups[templateRoles[key].contentType] = {
-      ...groups[templateRoles[key].contentType],
-      [key]: undefined
-    };
-  });
-
-  if (!Object.keys(entries).length) return groups;
-  Object.keys(entries)
-    .filter(entryKey => !!templateRoles[entryKey])
-    .forEach(key => {
-      const contentTypeKey = templateRoles[key].contentType;
-      groups[contentTypeKey][key] = entries[key];
-    });
-
-  return groups;
 };
 
 export const displayContentType = contentType => {

@@ -6,7 +6,7 @@ import {
 } from "../utils";
 import * as c from "../constants";
 
-export const textMediaModule = {
+export const textMedia = {
   [c.TEXT_MEDIA_MODULE]: {
     meta: {
       description: "copy pending",
@@ -18,12 +18,18 @@ export const textMediaModule = {
     },
     fieldRoles: {
       left_content: constructRole({
+        fieldTypes: [
+          c.FIELD_TYPE_ASSET,
+          c.FIELD_TYPE_MARKDOWN,
+          c.FIELD_TYPE_ENTRY
+        ],
+        assetTypes: [c.ASSET_TYPE_IMAGE],
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           allowFormatting: false,
           maxWidth: "800"
         }),
-        contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
+        contentType: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: {
           // textAlignment
@@ -43,12 +49,18 @@ export const textMediaModule = {
         required: true
       }),
       right_content: constructRole({
+        fieldTypes: [
+          c.FIELD_TYPE_ASSET,
+          c.FIELD_TYPE_MARKDOWN,
+          c.FIELD_TYPE_ENTRY
+        ],
+        assetTypes: [c.ASSET_TYPE_IMAGE, c.ASSET_TYPE_VIDEO, c.ASSET_TYPE_PDF],
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           allowFormatting: false,
           maxWidth: "800"
         }),
-        contentType: [c.CONTENT_TYPE_TEXT, c.CONTENT_TYPE_MEDIA],
+        contentType: [c.CONTENT_TYPE_MEDIA],
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: "text-left text-black",
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,

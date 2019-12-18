@@ -1,7 +1,7 @@
-import { cardBlock } from "./templates/cardBlock";
-import { textMediaModule } from "./templates/textMediaModule";
-import { logoItem } from "./templates/logoItem";
-import { logoGrid } from "./templates/logoGrid";
+import { cardBlock } from "./pageModules/cardBlock";
+import { textMedia } from "./pageModules/textMedia";
+import { logoItem } from "./pageModules/logoItem";
+import { logoGrid } from "./pageModules/logoGrid";
 
 /////////////////
 // Instructions
@@ -15,7 +15,7 @@ import { logoGrid } from "./templates/logoGrid";
 
 export const customTemplates = {
   ...cardBlock,
-  ...textMediaModule,
+  ...textMedia,
   ...logoItem,
   ...logoGrid
 };

@@ -21,10 +21,12 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       left_section: {
+        fieldTypes: [c.FIELD_TYPE_ENTRY],
         contentType: "text",
         description: "A left section"
       },
       right_section: {
+        fieldTypes: [c.FIELD_TYPE_ENTRY],
         contentType: "text",
         description: "A left section"
       }
@@ -35,13 +37,13 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       text_field: constructRole({
-        field: fieldObject({ type: c.FIELD_TYPE_TEXT }),
+        fieldTypes: [c.FIELD_TYPE_TEXT],
         defaultClasses: "text-left text-black",
         description: `Text Field.`,
         required: true
       }),
       markdown_field: constructRole({
-        field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
+        fieldTypes: [c.FIELD_TYPE_MARKDOWN],
         defaultClasses: "text-left text-black",
         description: `Markdown Field.`,
         required: false
@@ -53,28 +55,19 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       image_asset: constructRole({
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: false,
-          maxWidth: 800
-        }),
+        fieldTypes: [c.FIELD_TYPE_ASSET],
+        assetTypes: [c.ASSET_TYPE_IMAGE],
         description: `Image asset field`
       }),
       formattable_image_asset: constructRole({
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: true,
-          maxWidth: 800
-        }),
+        fieldTypes: [c.FIELD_TYPE_ASSET],
+        assetTypes: [c.ASSET_TYPE_IMAGE],
         description: `Image asset field`
       }),
       logo_asset: constructRole({
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          subType: c.ASSET_SUBTYPE_LOGO,
-          allowFormatting: false,
-          maxWidth: 200
-        }),
+        fieldTypes: [c.FIELD_TYPE_ASSET],
+        assetTypes: [c.ASSET_TYPE_IMAGE],
+        assetSubType: c.ASSET_SUBTYPE_LOGO,
         description: `Logo asset field.`
       })
     }
@@ -84,6 +77,7 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       entry_field: constructRole({
+        fieldTypes: [c.FIELD_TYPE_ENTRY],
         contentType: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
         description: `Entry field`
       })
@@ -94,13 +88,7 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       grid_logo_multi_field: constructRole({
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          subType: c.ASSET_SUBTYPE_LOGO,
-          allowFormatting: false,
-          maxWidth: "200",
-          defaultClasses: "icon-small icon-center"
-        }),
+        fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
         ...allowMultipleReferences({
           allow: true,
           styleType: c.MULTI_REFERENCE_STYLE_FLEX,
@@ -110,12 +98,7 @@ export const mockCustomTemplates = {
         description: `Multi field`
       }),
       no_style_multi_field: constructRole({
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: false,
-          maxWidth: "200",
-          defaultClasses: "icon-small icon-center"
-        }),
+        fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
         ...allowMultipleReferences({
           allow: true,
           allowStyle: false,

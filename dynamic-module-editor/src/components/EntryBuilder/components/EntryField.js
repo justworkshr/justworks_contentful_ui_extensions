@@ -14,8 +14,8 @@ import {
   Subheading
 } from '@contentful/forma-36-react-components';
 
-import { getStatus, getEntryContentTypeId } from '../utils';
-import { capitalize } from '../../../../../shared/utilities/elementUtils';
+import { getEntryContentTypeId } from '../utils';
+import { getStatus, getAssetType, capitalize } from '../../../../../shared/utilities/elementUtils';
 
 import classnames from 'classnames';
 
@@ -86,7 +86,11 @@ export const EntryField = props => {
         size="default"
         title={props.entry.fields ? props.entry.fields.title['en-US'] : ''}
         src={props.entry.fields ? props.entry.fields.file['en-US'].url : ''}
-        type={props.roleConfig.asset.type}
+        type={
+          props.entry.fields
+            ? getAssetType(props.entry.fields.file['en-US'].contentType)
+            : undefined
+        }
         status={getStatus(props.entry)}
         withDragHandle={true}
         onClick={() => props.onEditClick(props.entry, 'asset')}

@@ -7,6 +7,8 @@ import {
   TextLink
 } from '@contentful/forma-36-react-components';
 
+import { roleAllowsAssets } from '../utils';
+
 class LinkExisting extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +48,7 @@ class LinkExisting extends React.Component {
               Link Entry
             </DropdownListItem>
           )}
-          {this.props.linkAsset && (
+          {roleAllowsAssets(this.props.fieldTypes) && (
             <DropdownListItem
               className="link-entries-row__dropdown--link-asset"
               onClick={() => this.props.onLinkAssetClick(this.props.roleKey)}>
@@ -70,7 +72,7 @@ class LinkExisting extends React.Component {
 
 LinkExisting.defaultProps = {
   contentTypes: [],
-  linkAsset: false
+  fieldTypes: []
 };
 
 LinkExisting.propTypes = {
@@ -78,8 +80,8 @@ LinkExisting.propTypes = {
   onLinkEntryClick: PropTypes.func,
   onDeepCopyLinkClick: PropTypes.func,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
-  linkAsset: PropTypes.bool,
-  roleKey: PropTypes.string
+  roleKey: PropTypes.string,
+  fieldTypes: PropTypes.array
 };
 
 export default LinkExisting;

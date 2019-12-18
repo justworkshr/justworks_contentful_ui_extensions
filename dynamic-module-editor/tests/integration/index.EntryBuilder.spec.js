@@ -10,6 +10,8 @@ import { templatePlaceholder } from '../../../custom_templates/';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
 
+import { roleAllowsAssets } from '../../src/components/EntryBuilder/utils';
+
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();
 
@@ -290,9 +292,12 @@ describe('App', () => {
           expect(node.find('RoleStyleSection')).toHaveLength(1);
         }
 
-        const asset = templateConfig.fieldRoles[node.props().roleKey].asset;
-
-        if (!multiReferenceStyle && (!asset || (asset && asset.subType !== c.ASSET_SUBTYPE_LOGO))) {
+        if (
+          !multiReferenceStyle &&
+          (!roleAllowsAssets(templateConfig.fieldRoles[node.props().roleKey].fieldTypes) ||
+            (roleAllowsAssets(templateConfig.fieldRoles[node.props().roleKey].fieldTypes) &&
+              templateConfig.fieldRoles[node.props().roleKey].subType !== c.ASSET_SUBTYPE_LOGO))
+        ) {
           expect(node.find('RoleStyleSection')).toHaveLength(0);
         }
       });

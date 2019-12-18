@@ -66,12 +66,12 @@ export default class EntryBuilder extends React.Component {
     this.clearRoleStyle = this.clearRoleStyle.bind(this);
   }
 
-  onAddFieldClick = (roleKey, field) => {
+  onAddFieldClick = (roleKey, fieldType) => {
     handleAddField({
       props: this.props,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       roleKey,
-      field
+      fieldType
     });
   };
 
@@ -264,19 +264,18 @@ export default class EntryBuilder extends React.Component {
               );
             })}
             <EntryActionRow
-              allowAsset={!!this.props.templateConfig.fieldRoles[roleKey].asset}
               allowedCustomTemplates={
                 this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
               }
               className="max-width-600"
-              contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentType}
-              fieldObject={this.props.templateConfig.fieldRoles[roleKey].field}
+              contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentTypes}
               onAddFieldClick={this.onAddFieldClick}
               roleKey={roleKey}
               onAddEntryClick={this.onAddEntryClick}
               onLinkAssetClick={this.onLinkAssetClick}
               onLinkEntryClick={this.onLinkEntryClick}
               onDeepCopyLinkClick={this.onDeepCopyClick}
+              fieldTypes={this.props.templateConfig.fieldRoles[roleKey].fieldTypes}
             />
           </div>
           <div className="section-column">
@@ -358,19 +357,18 @@ export default class EntryBuilder extends React.Component {
       // Render empty action row
       return (
         <EntryActionRow
-          allowAsset={!!this.props.templateConfig.fieldRoles[roleKey].asset}
           allowedCustomTemplates={
             this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
           }
           className="max-width-600"
-          contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentType}
-          fieldObject={this.props.templateConfig.fieldRoles[roleKey].field}
+          contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentTypes}
           onAddFieldClick={this.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={this.onAddEntryClick}
           onLinkAssetClick={this.onLinkAssetClick}
           onLinkEntryClick={this.onLinkEntryClick}
           onDeepCopyLinkClick={this.onDeepCopyClick}
+          fieldTypes={this.props.templateConfig.fieldRoles[roleKey].fieldTypes}
         />
       );
     }
@@ -441,7 +439,8 @@ EntryBuilder.propTypes = {
   hydratedEntries: PropTypes.array,
   hydratedAssets: PropTypes.array,
   updateEntry: PropTypes.func,
-  setInternalMappingValue: PropTypes.func
+  setInternalMappingValue: PropTypes.func,
+  templateConfig: PropTypes.object
 };
 
 EntryBuilder.defaultProps = {
@@ -450,5 +449,6 @@ EntryBuilder.defaultProps = {
   type: '',
   hydratedEntries: [],
   loadingEntries: [],
-  hydratedAssets: []
+  hydratedAssets: [],
+  templateConfig: {}
 };

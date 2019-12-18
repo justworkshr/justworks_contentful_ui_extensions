@@ -5,28 +5,30 @@ import {
 } from "./constants/styleViews";
 
 export const constructRole = ({
-  contentType = "",
-  asset = null,
+  fieldTypes = [],
+  assetTypes = [],
+  assetSubType = undefined,
+  contentTypes = "",
   description = "",
   allowMultipleReferences = false,
   allowMultiReferenceStyle = false,
   multipleReferenceStyle = undefined,
   allowedCustomTemplates = [],
   defaultClasses,
-  required = true,
-  field = null
+  required = true
 } = {}) => {
   return {
-    contentType,
-    asset,
+    fieldTypes,
+    assetTypes,
+    assetSubType,
+    contentTypes,
     description,
     allowMultipleReferences,
     allowMultiReferenceStyle,
     multipleReferenceStyle,
     allowedCustomTemplates,
     defaultClasses,
-    required,
-    field
+    required
   };
 };
 

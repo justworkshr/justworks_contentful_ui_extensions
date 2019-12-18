@@ -5,36 +5,38 @@ import CreateNewLink from './CreateNewLink';
 import LinkExisting from './LinkExisting';
 import { TextLink } from '@contentful/forma-36-react-components';
 
+import { roleAllowsFields, roleAllowsLinks, pluckField } from '../utils';
+
 const EntryActionRow = props => {
   return (
     <div className="entry-action-row">
-      {!!props.fieldObject && (
+      {!!roleAllowsFields(props.fieldTypes) && (
         <TextLink
           icon="Quote"
           linkType="primary"
           className="entry-action-button__add-field link-entries-row__button"
-          onClick={() => props.onAddFieldClick(props.roleKey, props.fieldObject)}>
+          onClick={() => props.onAddFieldClick(props.roleKey, pluckField(props.fieldTypes))}>
           Add field
         </TextLink>
       )}
-      {(!!props.contentTypes || !!props.allowAsset) && (
+      {!!roleAllowsLinks(props.fieldTypes) && (
         <CreateNewLink
-          allowedCustomTemplates={props.allowedCustomTemplates}
-          allowAsset={!!props.allowAsset}
           className="entry-action-button__create-new link-entries-row__button"
           onAddEntryClick={props.onAddEntryClick}
-          contentTypes={props.contentTypes}
           roleKey={props.roleKey}
+          allowedCustomTemplates={props.allowedCustomTemplates}
+          contentTypes={props.contentTypes}
+          fieldTypes={props.fieldTypes}
         />
       )}
-      {(!!props.contentTypes || !!props.allowAsset) && (
+      {!!roleAllowsLinks(props.fieldTypes) && (
         <LinkExisting
-          linkAsset={!!props.allowAsset}
           onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyLinkClick}
           contentTypes={props.contentTypes}
           roleKey={props.roleKey}
+          fieldTypes={props.fieldTypes}
         />
       )}
     </div>
@@ -42,10 +44,9 @@ const EntryActionRow = props => {
 };
 
 EntryActionRow.propTypes = {
-  allowAsset: PropTypes.bool,
   allowedCustomTemplates: PropTypes.array,
   contentTypes: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fieldObject: PropTypes.object,
+  fieldTypes: PropTypes.array,
   onAddFieldClick: PropTypes.func,
   roleKey: PropTypes.string,
   onAddEntryClick: PropTypes.func,

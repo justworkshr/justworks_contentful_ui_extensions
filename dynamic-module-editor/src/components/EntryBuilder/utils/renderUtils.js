@@ -1,16 +1,13 @@
 import InternalMapping from '../../../utils/InternalMapping';
 import * as c from '../../../../../custom_templates/constants';
-import { isDirectField } from './index';
+import { roleAllowsAssets, isDirectField } from './index';
 
 export const renderSingleEntryStyle = (roleType, roleConfigObject) => {
   if (isDirectField(roleType)) return true; // if internalMapping type is a field
   if (
-    roleType === c.FIELD_TYPE_ASSET &&
-    roleConfigObject.asset &&
-    roleConfigObject.asset.formatting.allow
+    roleAllowsAssets(roleConfigObject.fieldTypes) &&
+    roleConfigObject.assetSubType === c.ASSET_SUBTYPE_LOGO
   )
-    return true; // if internalMapping type is asset and asset formatting is allowed
-  if (roleConfigObject.asset && roleConfigObject.asset.subType === c.ASSET_SUBTYPE_LOGO)
     return true; // if internalMapping type is asset and subtype is logo
 };
 

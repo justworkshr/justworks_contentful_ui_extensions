@@ -26,22 +26,6 @@ export default class InternalMapping {
         }
       });
     }
-
-    // load default fields if internalMapping role is blank and the roleConfig allows a field.
-    // if (parsedJSON && this._templateConfig) {
-    //   Object.keys(this._templateConfig.fieldRoles).forEach(roleKey => {
-    //     const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
-    //     if (!parsedJSON.fieldRoles[roleKey] && roleConfigObject.field) {
-    //       const field = roleConfigObject.field;
-    //       this.addField({
-    //         key: roleKey,
-    //         type: field.type,
-    //         value: field.defaultValue,
-    //         styleClasses: roleConfigObject.defaultClasses
-    //       });
-    //     }
-    //   });
-    // }
   }
 
   static styleMapping({ type = c.STYLE_TYPE_CUSTOM, value = {} } = {}) {

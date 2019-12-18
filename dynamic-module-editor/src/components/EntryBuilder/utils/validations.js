@@ -85,15 +85,16 @@ export const templateIsValid = errorObject => {
   return !Object.keys(errorObject).length;
 };
 
-const validateAssetType = (entry, type) => {
-  return entry.fields.file['en-US'].contentType.includes(type);
+const validateAssetType = (entry, assetTypes) => {
+  if (!assetTypes) return true;
+  return assetTypes.some(type => entry.fields.file['en-US'].contentType.includes(type));
 };
 
 export const validateLinkedAsset = (entry, roleObject) => {
   if (!entry) return;
   let message = '';
-  if (!validateAssetType(entry, roleObject.asset.type)) {
-    message = `Only ${roleObject.asset.type} assets are allowed.`;
+  if (!validateAssetType(entry, roleObject.assetTypes)) {
+    message = `Only ${roleObject.assetTypes.map(t => t).join(', ')} assets are allowed.`;
   }
 
   return message;

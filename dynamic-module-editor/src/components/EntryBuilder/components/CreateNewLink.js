@@ -7,6 +7,8 @@ import {
   TextLink
 } from '@contentful/forma-36-react-components';
 
+import { roleAllowsAssets } from '../utils';
+
 // TODO - refactor to use react hooks
 class CreateNewLink extends React.Component {
   constructor(props) {
@@ -52,7 +54,7 @@ class CreateNewLink extends React.Component {
         isOpen={this.state.isOpen}>
         <DropdownList>
           <DropdownListItem isTitle>Types</DropdownListItem>
-          {this.props.allowAsset && this.renderAssetDropdownItem()}
+          {roleAllowsAssets(this.props.fieldTypes) && this.renderAssetDropdownItem()}
           {this.props.contentTypes.map((contentType, index) => {
             return contentType === 'customTemplate' &&
               !!this.props.allowedCustomTemplates.length ? (
@@ -121,7 +123,7 @@ class CreateNewLink extends React.Component {
   render() {
     if (Array.isArray(this.props.contentTypes)) {
       return this.renderMultipleContentTypes();
-    } else if (!!this.props.contentTypes && !!this.props.allowAsset) {
+    } else if (!!this.props.contentTypes && roleAllowsAssets(this.props.fieldTypes)) {
       return this.renderSingleContentTypeAndAsset();
     } else if (this.props.contentTypes) {
       return (
@@ -138,7 +140,7 @@ class CreateNewLink extends React.Component {
           Create new entry
         </TextLink>
       );
-    } else if (this.props.allowAsset) {
+    } else if (roleAllowsAssets(this.props.fieldTypes)) {
       return (
         <TextLink
           icon="Plus"
@@ -159,17 +161,16 @@ class CreateNewLink extends React.Component {
 }
 
 CreateNewLink.defaultProps = {
-  allowedCustomTemplates: [],
-  allowAsset: false
+  allowedCustomTemplates: []
 };
 
 CreateNewLink.propTypes = {
   onAddEntryClick: PropTypes.func,
   className: PropTypes.string,
-  allowAsset: PropTypes.bool,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   roleKey: PropTypes.string,
-  allowedCustomTemplates: PropTypes.array
+  allowedCustomTemplates: PropTypes.array,
+  fieldTypes: PropTypes.array.isRequired
 };
 
 export default CreateNewLink;
