@@ -38,6 +38,10 @@ export const STYLE_VIEW_TITLE = constructStyleView({
     }),
     constructStyleSection({
       componentType: STYLE_VIEW_COMPONENT_RADIO,
+      styleProperty: sp.STYLE_PROPERTY_TITLE_SIZE
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
       styleProperty: sp.STYLE_PROPERTY_TEXT_TRANSFORM
     }),
     constructStyleSection({

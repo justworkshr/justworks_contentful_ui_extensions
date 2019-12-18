@@ -17,6 +17,24 @@ export const textMedia = {
       ...defaultStyleTypes()
     },
     fieldRoles: {
+      title: constructRole({
+        fieldTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_TITLE],
+        contentTypes: [c.CONTENT_TYPE_TEXT],
+        defaultClasses: {
+          // titleSize
+          [c.STYLE_PROPERTY_TITLE_SIZE.key]:
+            c.STYLE_PROPERTY_TITLE_SIZE.values[0].value, // Display
+          // textColor
+          [c.STYLE_PROPERTY_TEXT_COLOR
+            .key]: c.STYLE_PROPERTY_TEXT_COLOR.values.find(
+            v => v.value === "navy"
+          ).value, // navy
+          // textAlignment
+          [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
+            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value // left
+        },
+        required: false
+      }),
       left_content: constructRole({
         fieldTypes: [
           c.FIELD_TYPE_ASSET,
@@ -30,7 +48,6 @@ export const textMedia = {
           maxWidth: "800"
         }),
         contentTypes: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
-        field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultClasses: {
           // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
@@ -61,8 +78,20 @@ export const textMedia = {
           maxWidth: "800"
         }),
         contentTypes: [c.CONTENT_TYPE_MEDIA],
-        field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
-        defaultClasses: "text-left text-black",
+        defaultClasses: {
+          // textAlignment
+          [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
+            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left
+          // headerColor
+          [c.STYLE_PROPERTY_HEADER_TEXT_COLOR.key]:
+            c.STYLE_PROPERTY_HEADER_TEXT_COLOR.values[0].value, // black
+          //subheaderColor
+          [c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.key]:
+            c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.values[0].value, // black
+          // bodyColor
+          [c.STYLE_PROPERTY_BODY_TEXT_COLOR.key]:
+            c.STYLE_PROPERTY_BODY_TEXT_COLOR.values[0].value // black
+        },
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
       })

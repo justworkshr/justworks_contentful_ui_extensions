@@ -102,6 +102,24 @@ export const STYLE_PROPERTY_TEXT_TRANSFORM = constructStyleProperty({
   ]
 });
 
+export const STYLE_PROPERTY_TITLE_SIZE = constructStyleProperty({
+  key: "titleSize",
+  values: [
+    constructStyleValue({
+      value: "heading-large",
+      label: "Display"
+    }),
+    constructStyleValue({
+      value: "section-default",
+      label: "Section Default"
+    }),
+    constructStyleValue({
+      value: "section-small",
+      label: "Section Small"
+    })
+  ]
+});
+
 export const STYLE_PROPERTY_TEXT_COLOR = constructStyleProperty({
   key: "textColor",
   values: TEXT_COLORS.map(color => {
