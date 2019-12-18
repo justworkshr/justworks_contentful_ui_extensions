@@ -146,7 +146,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 

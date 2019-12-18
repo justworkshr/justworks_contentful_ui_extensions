@@ -233,7 +233,7 @@ export default class EntryBuilder extends React.Component {
   renderEntryFields(roleKey, roleConfigObject, roleMappingObject) {
     // Multi References and with entries
     if (
-      roleConfigObject.allowMultipleReferences &&
+      roleConfigObject.fieldTypes.includes(c.FIELD_TYPE_MULTI_REFERENCE) &&
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {

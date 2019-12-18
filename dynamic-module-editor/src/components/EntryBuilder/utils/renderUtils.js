@@ -12,13 +12,12 @@ export const renderSingleEntryStyle = (roleType, roleConfigObject) => {
 };
 
 export const renderMultiReferenceStyle = roleConfigObject => {
-  return !!roleConfigObject.allowMultiReferenceStyle && !!roleConfigObject.multipleReferenceStyle;
+  return !!roleConfigObject.multiReferenceStyleType;
 };
 
 export const renderMultiReferenceItemStyle = (roleConfigObject, roleMappingObject) => {
   return (
-    !!roleConfigObject.allowMultiReferenceStyle &&
-    !!roleConfigObject.multipleReferenceStyle && // When multi-reference field has assets
+    !!roleConfigObject.multiReferenceStyleType && // When multi-reference field has assets
     !!roleMappingObject.value.find(entry => entry.type === c.FIELD_TYPE_ASSET)
   );
 };

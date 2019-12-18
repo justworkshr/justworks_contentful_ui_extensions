@@ -1,13 +1,8 @@
-import {
-  constructRole,
-  allowAsset,
-  fieldObject,
-  allowMultipleReferences
-} from "../utils";
+import { constructRole, fieldObject } from "../utils";
 import * as c from "../constants";
 
-export const logoGrid = {
-  [c.LOGO_GRID]: {
+export const logoRow = {
+  [c.LOGO_ROW]: {
     meta: {
       hidden: true,
       description: "copy pending",
@@ -18,7 +13,7 @@ export const logoGrid = {
         description: "Template title.",
         required: false,
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
-        defaultClasses: "text-center text-black"
+        defaultStyle: "text-center text-black"
       }),
       items: constructRole({
         description: "Grid items.",
@@ -28,13 +23,13 @@ export const logoGrid = {
         assetTypes: [c.ASSET_TYPE_IMAGE],
         assetSubType: c.ASSET_SUBTYPE_LOGO,
         allowedCustomTemplates: [c.LOGO_ITEM],
-        ...allowMultipleReferences({
-          allow: true,
-          styleType: c.MULTI_REFERENCE_STYLE_FLEX,
-          allowStyle: true
-        }),
-        defaultClasses:
-          "flex-row flex-align-start flex-justify-center flex-items-per-1 small-flex-items-per-2 large-flex-items-per-4"
+        multiReferenceStyleType: c.MULTI_REFERENCE_STYLE_FLEX,
+        assetDefaultStyle: {
+          paddedContainer: "comfortable"
+        },
+        defaultStyle: {
+          flexRowPreset: "flex-row--4-2-2"
+        }
       })
     }
   }

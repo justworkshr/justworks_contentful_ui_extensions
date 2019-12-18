@@ -1,7 +1,7 @@
 import { cardBlock } from "./pageModules/cardBlock";
 import { textMedia } from "./pageModules/textMedia";
 import { logoItem } from "./pageModules/logoItem";
-import { logoGrid } from "./pageModules/logoGrid";
+import { logoRow } from "./pageModules/logoRow";
 
 /////////////////
 // Instructions
@@ -17,7 +17,7 @@ export const customTemplates = {
   ...cardBlock,
   ...textMedia,
   ...logoItem,
-  ...logoGrid
+  ...logoRow
 };
 
 export const templatePlaceholder = {

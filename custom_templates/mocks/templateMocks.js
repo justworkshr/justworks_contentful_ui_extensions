@@ -1,9 +1,4 @@
-import {
-  allowMultipleReferences,
-  constructRole,
-  fieldObject,
-  allowAsset
-} from "../utils";
+import { constructRole } from "../utils";
 import * as c from "../constants";
 
 import { defaultStyleTypes } from "../utils";
@@ -38,7 +33,7 @@ export const mockCustomTemplates = {
     fieldRoles: {
       text_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_TITLE],
-        defaultClasses: {
+        defaultStyle: {
           textAlignment: "left",
           textColor: "black"
         },
@@ -47,7 +42,7 @@ export const mockCustomTemplates = {
       }),
       markdown_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_MARKDOWN],
-        defaultClasses: {
+        defaultStyle: {
           textAlignment: "left",
           textColor: "black"
         },
@@ -95,21 +90,20 @@ export const mockCustomTemplates = {
     fieldRoles: {
       grid_logo_multi_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
-        ...allowMultipleReferences({
-          allow: true,
-          styleType: c.MULTI_REFERENCE_STYLE_FLEX,
-          allowStyle: true,
-          contentTypes: ["customTemplate"]
-        }),
+        contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+        multiReferenceStyleType: c.MULTI_REFERENCE_STYLE_FLEX,
+        assetDefaultStyle: {
+          assetStyle: "assetStyleValue"
+        },
         description: `Multi field`
       }),
       no_style_multi_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
-        ...allowMultipleReferences({
-          allow: true,
-          allowStyle: false,
-          contentTypes: ["customTemplate"]
-        }),
+        contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+        multiReferenceStyleType: c.MULTI_REFERENCE_STYLE_FLEX,
+        assetDefaultStyle: {
+          assetStyle: "assetStyleValue"
+        },
         description: `Multi field`
       })
     }

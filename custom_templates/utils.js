@@ -5,37 +5,35 @@ import {
 } from "./constants/styleViews";
 
 export const constructRole = ({
+  description = "",
   fieldTypes = [],
   assetTypes = [],
   assetSubType = undefined,
-  contentTypes = "",
-  description = "",
-  allowMultipleReferences = false,
-  allowMultiReferenceStyle = false,
-  multipleReferenceStyle = undefined,
+  contentTypes = [],
   allowedCustomTemplates = [],
-  defaultClasses,
+  multiReferenceStyleType = undefined,
+  defaultStyle = {},
+  assetDefaultStyle = {},
   required = true
 } = {}) => {
   return {
+    description,
     fieldTypes,
     assetTypes,
     assetSubType,
     contentTypes,
-    description,
-    allowMultipleReferences,
-    allowMultiReferenceStyle,
-    multipleReferenceStyle,
     allowedCustomTemplates,
-    defaultClasses,
+    multiReferenceStyleType,
+    defaultStyle,
+    assetDefaultStyle,
     required
   };
 };
 
-export const fieldObject = ({ type, defaultClasses = "" } = {}) => {
+export const fieldObject = ({ type, defaultStyle = "" } = {}) => {
   return {
     type,
-    defaultClasses
+    defaultStyle
   };
 };
 
@@ -71,31 +69,17 @@ export const allowAsset = ({
   subType = undefined,
   allowFormatting = false,
   maxWidth = "2000",
-  defaultClasses = ""
+  defaultStyle = ""
 } = {}) => {
   return {
     asset: {
       type,
       subType,
-      defaultClasses,
+      defaultStyle,
       formatting: {
         allow: allowFormatting,
         maxWidth: String(maxWidth)
       }
     }
-  };
-};
-
-export const allowMultipleReferences = ({
-  allow = true,
-  allowStyle = true,
-  styleType = undefined,
-  contentTypes = []
-} = {}) => {
-  return {
-    allowMultipleReferences: allow,
-    allowMultiReferenceStyle: allowStyle,
-    multipleReferenceStyle: styleType,
-    contentTypes: contentTypes
   };
 };

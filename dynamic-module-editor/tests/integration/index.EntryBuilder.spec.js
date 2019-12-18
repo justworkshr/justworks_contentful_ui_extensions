@@ -286,8 +286,8 @@ describe('App', () => {
         expect(node.find('LinkExisting')).toHaveLength(1);
 
         const multiReferenceStyle =
-          templateConfig.fieldRoles[node.props().roleKey].multipleReferenceStyle;
-        // Only renders this style if multipleReferenceStyle property is set
+          templateConfig.fieldRoles[node.props().roleKey].multiReferenceStyleType;
+        // Only renders this style if multiReferenceStyleType property is set
         if (multiReferenceStyle) {
           expect(node.find('RoleStyleSection')).toHaveLength(1);
         }

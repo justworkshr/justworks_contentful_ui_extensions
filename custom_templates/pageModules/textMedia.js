@@ -1,9 +1,4 @@
-import {
-  constructRole,
-  allowAsset,
-  defaultStyleTypes,
-  fieldObject
-} from "../utils";
+import { constructRole, defaultStyleTypes } from "../utils";
 import * as c from "../constants";
 
 export const textMedia = {
@@ -20,7 +15,7 @@ export const textMedia = {
       title: constructRole({
         fieldTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_TITLE],
         contentTypes: [c.CONTENT_TYPE_TEXT],
-        defaultClasses: {
+        defaultStyle: {
           // titleSize
           [c.STYLE_PROPERTY_TITLE_SIZE.key]:
             c.STYLE_PROPERTY_TITLE_SIZE.values[0].value, // Display
@@ -42,13 +37,8 @@ export const textMedia = {
           c.FIELD_TYPE_ENTRY
         ],
         assetTypes: [c.ASSET_TYPE_IMAGE],
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: false,
-          maxWidth: "800"
-        }),
         contentTypes: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
-        defaultClasses: {
+        defaultStyle: {
           // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
             c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left
@@ -71,14 +61,9 @@ export const textMedia = {
           c.FIELD_TYPE_MARKDOWN,
           c.FIELD_TYPE_ENTRY
         ],
-        assetTypes: [c.ASSET_TYPE_IMAGE, c.ASSET_TYPE_VIDEO, c.ASSET_TYPE_PDF],
-        ...allowAsset({
-          type: c.ASSET_TYPE_IMAGE,
-          allowFormatting: false,
-          maxWidth: "800"
-        }),
+        assetTypes: [c.ASSET_TYPE_IMAGE],
         contentTypes: [c.CONTENT_TYPE_MEDIA],
-        defaultClasses: {
+        defaultStyle: {
           // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
             c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left

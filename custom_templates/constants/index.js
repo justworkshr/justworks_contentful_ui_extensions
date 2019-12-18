@@ -6,7 +6,7 @@
 export const CARD_BLOCK = "card block";
 export const TEXT_MEDIA_MODULE = "text media module";
 export const LOGO_ITEM = "logo item";
-export const LOGO_GRID = "logo grid";
+export const LOGO_ROW = "logo row";
 
 /*
   Content types

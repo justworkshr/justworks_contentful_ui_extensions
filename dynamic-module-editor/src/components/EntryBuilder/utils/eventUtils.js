@@ -35,7 +35,7 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
         assetType: getAssetType(asset.fields.file['en-US'].contentType)
       });
     }),
-    styleClasses: (roleConfigObject || {}).defaultClasses
+    styleClasses: (roleConfigObject || {}).defaultStyle
   });
 
   updateEntry(updatedInternalMapping.asJSON());
@@ -101,7 +101,7 @@ export const handleSingleAssetLink = async ({ sdk, props, roleKey, asset, update
 };
 
 export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
-  if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
+  if (props.templateConfig.fieldRoles[roleKey].fieldTypes.includes(c.FIELD_TYPE_MULTI_REFERENCE)) {
     const assets = await sdk.dialogs.selectMultipleAssets({
       locale: 'en-US'
     });
@@ -141,7 +141,7 @@ export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, role
   updatedInternalMapping.addEntriesOrAssets({
     key: roleKey,
     value: entryResponses.map(entry => entry.sys.id),
-    styleClasses: (roleConfigObject || {}).defaultClasses
+    styleClasses: (roleConfigObject || {}).defaultStyle
   });
 
   updateEntry(updatedInternalMapping.asJSON());
@@ -174,7 +174,9 @@ export const handleAddEntry = async ({
     const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
     const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
-    if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
+    if (
+      props.templateConfig.fieldRoles[roleKey].fieldTypes.includes(c.FIELD_TYPE_MULTI_REFERENCE)
+    ) {
       linkEntriesToTemplate({
         props,
         updateEntry,
@@ -259,7 +261,7 @@ export const handleLinkEntryClick = async ({
   roleKey,
   contentType
 } = {}) => {
-  if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
+  if (props.templateConfig.fieldRoles[roleKey].fieldTypes.includes(c.FIELD_TYPE_MULTI_REFERENCE)) {
     const entryResponses = await sdk.dialogs.selectMultipleEntries({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
@@ -319,7 +321,9 @@ export const handleDeepCopyClick = async ({
       `${sdk.entry.fields.name.getValue()} ${roleKey}`
     );
     // Only links 1 entry at a time, even in multi-reference fields
-    if (props.templateConfig.fieldRoles[roleKey].allowMultipleReferences) {
+    if (
+      props.templateConfig.fieldRoles[roleKey].fieldTypes.includes(c.FIELD_TYPE_MULTI_REFERENCE)
+    ) {
       linkEntriesToTemplate({
         props,
         updateEntry,

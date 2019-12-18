@@ -39,7 +39,7 @@ export const cardBlock = {
       left_text: constructRole({
         contentTypes: [c.CONTENT_TYPE_TEXT],
         field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
-        defaultClasses: "text-black",
+        defaultStyle: "text-black",
         required: true,
         description: `Primary markdown text to display on the left half section.`
       }),
@@ -61,13 +61,13 @@ export const cardBlock = {
       }),
       cta_text: constructRole({
         field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
-        defaultClasses: "text-cerulean",
+        defaultStyle: "text-cerulean",
         required: false,
         description: "Text for the optional CTA"
       }),
       tag_text: constructRole({
         field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
-        defaultClasses: "text-white text-uppercase",
+        defaultStyle: "text-white text-uppercase",
         required: false,
         description:
           "Text for the optional tag on the upper right corner of the card."

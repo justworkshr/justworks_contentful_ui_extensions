@@ -37,7 +37,7 @@ describe('InternalMapping', () => {
         style: {},
         fieldRoles: {
           text_field: {
-            defaultClasses: 'helloClass',
+            defaultStyle: 'helloClass',
             field: {
               type: c.FIELD_TYPE_TITLE,
               defaultValue: 'TEXT!!!'
@@ -67,7 +67,7 @@ describe('InternalMapping', () => {
           text_field: {
             field: {
               type: c.FIELD_TYPE_TITLE,
-              defaultClasses: 'helloClass',
+              defaultStyle: 'helloClass',
               defaultValue: 'TEXT!!!'
             }
           }
@@ -107,7 +107,7 @@ describe('InternalMapping', () => {
     });
 
     it('does not set default styles if already defined', () => {
-      const templateConfig = { style: { hi: { defaultClasses: 'hiclass' } }, fieldRoles: {} };
+      const templateConfig = { style: { hi: { defaultStyle: 'hiclass' } }, fieldRoles: {} };
       const json = JSON.stringify({ fieldRoles: {}, style: { hi: { styleClasses: 'byeClass' } } });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
         hi: { styleClasses: 'byeClass' }
@@ -376,17 +376,17 @@ describe('InternalMapping', () => {
         fieldRoles: { hi: { type: 'entry', value: 'hello', style: undefined } }
       });
 
-      const defaultClass = 'defaultClass';
+      const defaultStyle = 'defaultStyle';
       const templateConfig = {
         fieldRoles: {
           hi: {
-            defaultClasses: defaultClass
+            defaultStyle: defaultStyle
           }
         }
       };
       const internalMapping = new InternalMapping(json, templateConfig);
       internalMapping.addStyleCustom('hi');
-      expect(internalMapping.hi.style.value).toEqual(defaultClass);
+      expect(internalMapping.hi.style.value).toEqual(defaultStyle);
     });
   });
 

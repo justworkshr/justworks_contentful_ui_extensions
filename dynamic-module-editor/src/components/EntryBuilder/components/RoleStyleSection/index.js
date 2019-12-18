@@ -55,7 +55,7 @@ const RoleStyleSection = props => {
             updateAssetFormatting={props.updateAssetFormatting}
             clearStyleField={props.clearStyleField}
             title={displaySnakeCaseName(props.roleKey) + ' Collection Style'}
-            type={props.roleConfigObject.multipleReferenceStyle}
+            type={props.roleConfigObject.multiReferenceStyleType}
           />
           {renderMultiReferenceItemStyle(props.roleConfigObject, props.roleMappingObject) && (
             <FieldStyleEditor
