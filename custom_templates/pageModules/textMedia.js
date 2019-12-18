@@ -31,7 +31,7 @@ export const textMedia = {
           ).value, // navy
           // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
-            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value // left
+            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[1].value // center
         },
         required: false
       }),

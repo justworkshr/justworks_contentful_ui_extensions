@@ -106,7 +106,7 @@ export const STYLE_PROPERTY_TITLE_SIZE = constructStyleProperty({
   key: "titleSize",
   values: [
     constructStyleValue({
-      value: "heading-large",
+      value: "display",
       label: "Display"
     }),
     constructStyleValue({
