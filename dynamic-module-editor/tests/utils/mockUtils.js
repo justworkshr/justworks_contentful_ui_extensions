@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import * as c from '../../../custom_templates/constants';
 import * as tm from '../../../custom_templates/mocks/templateMocks';
 import { templatePlaceholder } from '../../../custom_templates';
+import { displayCamelCaseName } from '../../../shared/utilities/elementUtils';
 
 import { mount } from 'enzyme';
 
@@ -69,7 +70,7 @@ export const mockAssetResponse = ({ id = 0, url = 'localhost', assetType = 'imag
 
 export const mockCustomTemplateEntryResponse = ({
   id = 0,
-  contentType = 'customTemplate',
+  contentType = c.CONTENT_TYPE_CUSTOM_TEMPLATE,
   template = undefined
 } = {}) => {
   return {
@@ -283,6 +284,16 @@ export const hoverDeepCopyDropdown = (wrapper, roleKey) => {
     .find('LinkExisting')
     .find('DropdownListItem')
     .find({ testId: 'link-entries-row__dropdown--deep-copy-dropdown' })
+    .find('button')
+    .simulate('mouseenter');
+};
+
+export const hoverCreateCustomTemplateDropdown = (wrapper, roleKey) => {
+  wrapper
+    .find('RoleSection')
+    .find({ roleKey })
+    .find('CreateNewLink')
+    .find({ testId: 'create-new-link__dropdown-custom-type' })
     .find('button')
     .simulate('mouseenter');
 };

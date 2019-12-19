@@ -47,10 +47,10 @@ export const logoRow = {
             assetDefaultStyle: {
               paddedContainer: "default",
               logoSize: "default"
-            }
+            },
+            allowedCustomTemplates: [c.LOGO_ITEM]
           })
         ],
-        allowedCustomTemplates: [c.LOGO_ITEM],
         multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW
       })
     }

@@ -1,5 +1,6 @@
 import { getEntryContentTypeId } from './index';
 import * as c from '../../../../../custom_templates/constants';
+import { getCustomTemplateFieldConfig } from '../../../../../shared/utilities/elementUtils';
 
 export const validateTemplate = async ({ setInvalid, state, setState }) => {
   const errors = await getTemplateErrors(
@@ -40,19 +41,25 @@ const missingRequiredRoles = (errors, templateConfigFieldRoles, internalMapping)
 
 const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, hydratedEntries) => {
   Object.keys(templateConfigFieldRoles).map(roleKey => {
-    const roleMappingObject = templateConfigFieldRoles[roleKey] || {};
-    const entry = hydratedEntries.find(he => roleMappingObject.value === he.sys.id);
+    const roleConfigObject = templateConfigFieldRoles[roleKey] || {};
+    const entry = hydratedEntries.find(he => roleConfigObject.value === he.sys.id);
+    const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(roleConfigObject);
+
     if (
       entry &&
-      !!roleMappingObject.allowedCustomTemplates &&
-      getEntryContentTypeId(entry) == 'customTemplate' &&
-      !roleMappingObject.allowedCustomTemplates.includes(entry.fields.type['en-US'].toLowerCase())
+      !!customTemplateFieldConfigObject.allowedCustomTemplates &&
+      getEntryContentTypeId(entry) == c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
+      !customTemplateFieldConfigObject.allowedCustomTemplates.includes(
+        entry.fields.type['en-US'].toLowerCase()
+      )
     ) {
       errors[roleKey] = addError(
         errors[roleKey],
         `Invalid template type: ${
           entry.fields.type['en-US']
-        }. Valid types for this role are: ${roleMappingObject.allowedCustomTemplates.join(', ')}`
+        }. Valid types for this role are: ${customTemplateFieldConfigObject.allowedCustomTemplates.join(
+          ', '
+        )}`
       );
     }
   });
@@ -111,12 +118,14 @@ export const validateLinkedAsset = (entry, roleObject) => {
 export const validateLinkedEntry = (entry, roleKey, parentEntryId, internalMapping) => {
   if (!entry) return;
   let message = '';
+  const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(internalMapping[roleKey]);
+
   if (linkHasCircularReference(parentEntryId, entry)) {
     message = 'Linked entry has a circular reference to this entry.';
-  } else if (linkHasInvalidCustomTemplateType(internalMapping[roleKey], entry)) {
-    message = `Only the following Custom Template types are allowed: ${internalMapping[
-      roleKey
-    ].allowedCustomTemplates.join(', ')}`;
+  } else if (linkHasInvalidCustomTemplateType(customTemplateFieldConfigObject, entry)) {
+    message = `Only the following Custom Template types are allowed: ${customTemplateFieldConfigObject.allowedCustomTemplates.join(
+      ', '
+    )}`;
   }
 
   return message;
@@ -128,7 +137,7 @@ export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
   if (linkedEntry === thisEntryId) {
     circularReferenceFound = true;
   } else if (
-    getEntryContentTypeId(linkedEntry) === 'customTemplate' &&
+    getEntryContentTypeId(linkedEntry) === c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
     !!linkedEntry.fields.entries &&
     !!Object.keys(linkedEntry.fields.entries).length &&
     !!linkedEntry.fields.entries['en-US']
@@ -143,11 +152,13 @@ export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
   return circularReferenceFound;
 };
 
-export const linkHasInvalidCustomTemplateType = (role, linkedEntry) => {
-  if (getEntryContentTypeId(linkedEntry) !== 'customTemplate') return false;
+export const linkHasInvalidCustomTemplateType = (fieldConfigObject, linkedEntry) => {
+  if (getEntryContentTypeId(linkedEntry) !== c.CONTENT_TYPE_CUSTOM_TEMPLATE) return false;
   const template = linkedEntry.fields.type['en-US'];
   return (
-    !!role.allowedCustomTemplates.length &&
-    !role.allowedCustomTemplates.includes(template ? template.toLowerCase() : undefined)
+    !!fieldConfigObject.allowedCustomTemplates.length &&
+    !fieldConfigObject.allowedCustomTemplates.includes(
+      template ? template.toLowerCase() : undefined
+    )
   );
 };

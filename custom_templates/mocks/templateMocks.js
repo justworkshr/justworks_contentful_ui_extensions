@@ -3,6 +3,8 @@ import * as c from "../constants";
 
 import { defaultStyleTypes } from "../utils";
 
+export const MOCK_CONTENT_TYPE_1 = "ct1";
+
 export const MOCK_TEMPLATE_NAME = "mock 1";
 export const MOCK_FIELDS_TEMPLATE = "fields mock";
 export const MOCK_ASSETS_TEMPLATE = "assets mock";
@@ -114,7 +116,8 @@ export const mockCustomTemplates = {
           }),
           constructField({
             type: c.FIELD_TYPE_ENTRY,
-            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE
+            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE,
+            allowedCustomTemplates: [MOCK_CONTENT_TYPE_1]
           })
         ],
         description: `Entry field`
@@ -136,10 +139,10 @@ export const mockCustomTemplates = {
           }),
           constructField({
             type: c.FIELD_TYPE_ENTRY,
-            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE
+            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE,
+            allowedCustomTemplates: [MOCK_CONTENT_TYPE_1]
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
         description: `Entry field`
       })
     }

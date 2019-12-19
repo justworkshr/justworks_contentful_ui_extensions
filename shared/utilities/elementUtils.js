@@ -47,3 +47,12 @@ export const getAssetType = contentType => {
   if (contentType.includes(c.ASSET_TYPE_VIDEO)) return c.ASSET_TYPE_VIDEO;
   if (contentType.includes(c.ASSET_TYPE_PDF)) return c.ASSET_TYPE_PDF;
 };
+
+export const getCustomTemplateFieldConfig = roleConfig => {
+  return roleConfig.fieldTypes.find(
+    ft =>
+      ft.contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE ||
+      (Array.isArray(ft.contentType) &&
+        ft.contentType.some(ct => ct === c.CONTENT_TYPE_CUSTOM_TEMPLATE))
+  );
+};

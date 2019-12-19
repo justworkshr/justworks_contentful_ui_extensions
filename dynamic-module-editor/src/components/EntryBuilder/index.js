@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as c from '../../../../custom_templates/constants';
+import { getCustomTemplateFieldConfig } from '../../../../shared/utilities/elementUtils';
 
 import { DisplayText } from '@contentful/forma-36-react-components';
 
@@ -274,6 +275,9 @@ export default class EntryBuilder extends React.Component {
 
   renderEntryFields(roleKey, roleConfigObject, roleMappingObject, fieldConfigObject) {
     // Multi References and with entries
+
+    const customTemplateFieldConfig = getCustomTemplateFieldConfig(roleConfigObject) || {};
+
     if (
       roleIsMultiReference(roleConfigObject.fieldTypes) &&
       roleMappingObject.value &&
@@ -312,9 +316,7 @@ export default class EntryBuilder extends React.Component {
               })}
             </div>
             <EntryActionRow
-              allowedCustomTemplates={
-                this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
-              }
+              allowedCustomTemplates={customTemplateFieldConfig.allowedCustomTemplates}
               className="max-width-600"
               contentTypes={getContentTypes(this.props.templateConfig.fieldRoles[roleKey])}
               onAddFieldClick={this.onAddFieldClick}
@@ -430,9 +432,7 @@ export default class EntryBuilder extends React.Component {
       // Render empty action row
       return (
         <EntryActionRow
-          allowedCustomTemplates={
-            this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
-          }
+          allowedCustomTemplates={customTemplateFieldConfig.allowedCustomTemplates}
           className="max-width-600"
           contentTypes={getContentTypes(this.props.templateConfig.fieldRoles[roleKey])}
           onAddFieldClick={this.onAddFieldClick}
@@ -482,6 +482,7 @@ export default class EntryBuilder extends React.Component {
               const roleConfigObject = this.props.templateConfig.fieldRoles[roleKey] || {};
               const roleMappingObject = this.props.entryInternalMapping.fieldRoles[roleKey] || {};
               const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
+
               return (
                 <RoleSection
                   key={index}

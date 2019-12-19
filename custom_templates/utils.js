@@ -7,26 +7,25 @@ import {
 export const constructRole = ({
   description = "",
   fieldTypes = [],
-  allowedCustomTemplates = [],
   required = true
 } = {}) => {
   return {
     description,
     fieldTypes,
-    allowedCustomTemplates,
     required
   };
 };
 
 export const constructField = ({
-  type,
-  styleView = undefined,
-  assetStyleView = undefined,
-  contentType = undefined,
-  assetTypes = undefined,
-  assetSubType = undefined,
-  defaultStyle,
-  assetDefaultStyle
+  type, // *string - use FIELD_TYPE constants to designate
+  styleView = undefined, // *string - style editor type - use STYLE_VIEW constants to designate
+  assetStyleView = undefined, // *string - only for multi-reference asset editing - use STYLE_VIEW constants
+  contentType = undefined, // *string or array - use single string for single-reference entry to designate the link. use Array for multi-reference if multiple types allowed.
+  assetTypes = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_TYPE constants
+  assetSubType = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_SUBTYPE constants
+  defaultStyle, // *object - passes this style object when a custom editor is applied to the field
+  assetDefaultStyle, // *object - only in multi-reference fields, passes this object to all assets when custom field is applied
+  allowedCustomTemplates // *array - use CUSTOM_TEMPLATE constants to specific which are allowed
 } = {}) => {
   if (!type) throw new Error("'type' is required in 'constructField'");
   return {
@@ -37,7 +36,8 @@ export const constructField = ({
     assetTypes,
     assetSubType,
     defaultStyle,
-    assetDefaultStyle
+    assetDefaultStyle,
+    allowedCustomTemplates
   };
 };
 

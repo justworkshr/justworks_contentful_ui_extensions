@@ -59,7 +59,7 @@ export const cloneEntry = async (space, entry, name) => {
   const contentType = entrySys.contentType.sys.id;
   const clonedEntry = await space.createEntry(contentType, {
     fields:
-      contentType === "customTemplate"
+      contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE
         ? await constructCustomTemplateFields(space, entry, contentType, name)
         : await constructFields(space, entry, contentType, name)
   });
@@ -157,7 +157,9 @@ const constructCustomTemplateFields = async (
 
   // Handle customTemplate separately
 
-  if (getEntrySys(entry).contentType.sys.id === "customTemplate") {
+  if (
+    getEntrySys(entry).contentType.sys.id === c.CONTENT_TYPE_CUSTOM_TEMPLATE
+  ) {
     const entries = !!entry.fields.entries
       ? entry.fields.entries["en-US"]
       : undefined;

@@ -6,8 +6,9 @@ import {
   DropdownListItem,
   TextLink
 } from '@contentful/forma-36-react-components';
-
+import * as c from '../../../../../custom_templates/constants';
 import { roleAllowsAssets } from '../utils';
+import { displayCamelCaseName } from '../../../../../shared/utilities/elementUtils';
 
 // TODO - refactor to use react hooks
 class CreateNewLink extends React.Component {
@@ -30,6 +31,7 @@ class CreateNewLink extends React.Component {
   renderAssetDropdownItem() {
     return (
       <DropdownListItem
+        testId="create-new-link__dropdown-asset"
         onClick={() =>
           this.props.onAddEntryClick({
             roleKey: this.props.roleKey,
@@ -56,15 +58,19 @@ class CreateNewLink extends React.Component {
           <DropdownListItem isTitle>Types</DropdownListItem>
           {roleAllowsAssets(this.props.fieldTypes) && this.renderAssetDropdownItem()}
           {this.props.contentTypes.map((contentType, index) => {
-            return contentType === 'customTemplate' &&
+            return contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
               !!this.props.allowedCustomTemplates.length ? (
-              <Dropdown key={`dropdown-${index}`} position="right" submenuToggleLabel={contentType}>
+              <Dropdown
+                testId="create-new-link__dropdown-custom-type"
+                key={`dropdown-${index}`}
+                position="right"
+                submenuToggleLabel={displayCamelCaseName(contentType)}>
                 <DropdownList>
                   {this.props.allowedCustomTemplates.map((allowedTemplate, index) => {
                     return (
                       <DropdownListItem
                         key={`allowed-${index}`}
-                        testId="create-new-link__dropdown-content-type"
+                        testId="create-new-link__custom-type"
                         onClick={() =>
                           this.props.onAddEntryClick({
                             roleKey: this.props.roleKey,
@@ -85,7 +91,7 @@ class CreateNewLink extends React.Component {
                 onClick={() =>
                   this.props.onAddEntryClick({ roleKey: this.props.roleKey, contentType })
                 }>
-                {contentType}
+                {displayCamelCaseName(contentType)}
               </DropdownListItem>
             );
           })}
@@ -109,6 +115,7 @@ class CreateNewLink extends React.Component {
           <DropdownListItem isTitle>Types</DropdownListItem>
           {this.renderAssetDropdownItem()}
           <DropdownListItem
+            testId="create-new-link__dropdown-content-type"
             onClick={() =>
               this.props.onAddEntryClick({
                 roleKey: this.props.roleKey,
