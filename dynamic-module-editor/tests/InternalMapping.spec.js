@@ -378,15 +378,19 @@ describe('InternalMapping', () => {
       });
 
       const defaultStyle = 'defaultStyle';
+      const fieldType = {
+        type: 'field',
+        defaultStyle: defaultStyle
+      };
       const templateConfig = {
         fieldRoles: {
           hi: {
-            defaultStyle: defaultStyle
+            fieldTypes: [fieldType]
           }
         }
       };
       const internalMapping = new InternalMapping(json, templateConfig);
-      internalMapping.addStyleCustom('hi');
+      internalMapping.addStyleCustom('hi', fieldType);
       expect(internalMapping.hi.style.value).toEqual(defaultStyle);
     });
   });

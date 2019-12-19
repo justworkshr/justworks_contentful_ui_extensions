@@ -46,8 +46,7 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
         assetType: getAssetType(asset.fields.file['en-US'].contentType),
         style: assetStyle
       });
-    }),
-    styleClasses: (roleConfigObject || {}).defaultStyle
+    })
   });
 
   updateEntry(updatedInternalMapping.asJSON());
@@ -164,11 +163,9 @@ export const linkEntryToTemplate = ({ props, updateEntry, entryResponse, roleKey
 
 export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, roleKey } = {}) => {
   const updatedInternalMapping = props.entryInternalMapping;
-  const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   updatedInternalMapping.addEntriesOrAssets({
     key: roleKey,
-    value: entryResponses.map(entry => entry.sys.id),
-    styleClasses: (roleConfigObject || {}).defaultStyle
+    value: entryResponses.map(entry => entry.sys.id)
   });
 
   updateEntry(updatedInternalMapping.asJSON());

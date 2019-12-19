@@ -45,13 +45,13 @@ export const mockCustomTemplates = {
         fieldTypes: [
           constructField({
             type: c.FIELD_TYPE_TITLE,
-            styleView: c.STYLE_VIEW_TITLE
+            styleView: c.STYLE_VIEW_TITLE,
+            defaultStyle: {
+              textAlignment: "left",
+              textColor: "black"
+            }
           })
         ],
-        defaultStyle: {
-          textAlignment: "left",
-          textColor: "black"
-        },
         description: `Text Field.`,
         required: true
       }),
@@ -59,13 +59,13 @@ export const mockCustomTemplates = {
         fieldTypes: [
           constructField({
             type: c.FIELD_TYPE_MARKDOWN,
-            styleView: c.STYLE_VIEW_MARKDOWN
+            styleView: c.STYLE_VIEW_MARKDOWN,
+            defaultStyle: {
+              textAlignment: "left",
+              textColor: "black"
+            }
           })
         ],
-        defaultStyle: {
-          textAlignment: "left",
-          textColor: "black"
-        },
         description: `Markdown Field.`,
         required: false
       })
@@ -124,7 +124,11 @@ export const mockCustomTemplates = {
           constructField({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT,
-            styleView: c.STYLE_VIEW_TITLE
+            styleView: c.STYLE_VIEW_TITLE,
+            defaultStyle: {
+              textAlignment: "left",
+              textColor: "black"
+            }
           }),
           constructField({
             type: c.FIELD_TYPE_ENTRY,

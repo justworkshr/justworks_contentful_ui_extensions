@@ -217,9 +217,9 @@ export default class EntryBuilder extends React.Component {
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
-  addRoleCustomStyle(roleKey) {
+  addRoleCustomStyle(roleKey, fieldConfigObject) {
     let updatedInternalMapping = this.props.entryInternalMapping;
-    updatedInternalMapping.addStyleCustom(roleKey);
+    updatedInternalMapping.addStyleCustom(roleKey, fieldConfigObject);
 
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
@@ -333,6 +333,8 @@ export default class EntryBuilder extends React.Component {
                 addCustomStyle={this.addRoleCustomStyle}
                 addEntryStyle={this.addRoleEntryStyle}
                 clearRoleStyle={this.clearRoleStyle}
+                fieldConfigObject={fieldConfigObject}
+                styleView={fieldConfigObject.styleView}
                 styleEntry={
                   roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
                     ? this.props.hydratedEntries.find(
@@ -343,7 +345,6 @@ export default class EntryBuilder extends React.Component {
                 roleKey={roleKey}
                 roleConfigObject={roleConfigObject}
                 roleMappingObject={roleMappingObject}
-                styleView={fieldConfigObject.styleView}
                 updateStyle={this.updateEntryStyle}
                 clearStyleField={this.clearEntryStyleKey}
                 title={displaySnakeCaseName(roleKey) + ' Style'}
@@ -356,6 +357,8 @@ export default class EntryBuilder extends React.Component {
                 addCustomStyle={this.addRoleReferencesCustomStyle}
                 addEntryStyle={this.addRoleReferencesEntryStyle}
                 clearRoleStyle={this.clearRoleReferencesStyle}
+                fieldConfigObject={fieldConfigObject}
+                styleView={fieldConfigObject.assetStyleView}
                 styleEntry={
                   firstAsset.style && firstAsset.style.type === c.STYLE_TYPE_ENTRY
                     ? this.props.hydratedEntries.find(e => e.sys.id === firstAsset.style.value)
@@ -364,7 +367,6 @@ export default class EntryBuilder extends React.Component {
                 roleKey={roleKey}
                 roleConfigObject={roleConfigObject}
                 roleMappingObject={firstAsset}
-                styleView={fieldConfigObject.assetStyleView}
                 updateStyle={this.updateReferencesStyle}
                 clearStyleField={this.clearReferencesStyle}
                 title={displaySnakeCaseName(roleKey) + ' Asset Style'}
@@ -406,6 +408,8 @@ export default class EntryBuilder extends React.Component {
               addCustomStyle={this.addRoleCustomStyle}
               addEntryStyle={this.addRoleEntryStyle}
               clearRoleStyle={this.clearRoleStyle}
+              fieldConfigObject={fieldConfigObject}
+              styleView={fieldConfigObject.styleView}
               styleEntry={
                 roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
                   ? this.props.hydratedEntries.find(e => e.sys.id === roleMappingObject.style.value)
@@ -414,7 +418,6 @@ export default class EntryBuilder extends React.Component {
               roleKey={roleKey}
               roleConfigObject={roleConfigObject}
               roleMappingObject={roleMappingObject}
-              styleView={fieldConfigObject.styleView}
               updateStyle={this.updateEntryStyle}
               clearStyleField={this.clearEntryStyleKey}
               title={displaySnakeCaseName(roleKey) + ' Style'}

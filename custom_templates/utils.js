@@ -36,7 +36,8 @@ export const constructField = ({
   assetStyleView = undefined,
   contentType = undefined,
   assetTypes = undefined,
-  assetSubType = undefined
+  assetSubType = undefined,
+  defaultStyle
 } = {}) => {
   if (!type) throw new Error("'type' is required in 'constructField'");
   return {
@@ -45,7 +46,8 @@ export const constructField = ({
     assetStyleView,
     contentType,
     assetTypes,
-    assetSubType
+    assetSubType,
+    defaultStyle
   };
 };
 

@@ -49,7 +49,7 @@ const RoleStyleSection = props => {
         <div className="role-style-section__action-row">
           <TextLink
             className="link-style-section__custom-style-button"
-            onClick={() => props.addCustomStyle(props.roleKey)}
+            onClick={() => props.addCustomStyle(props.roleKey, props.fieldConfigObject)}
             icon="Plus">
             Custom style
           </TextLink>
@@ -101,6 +101,7 @@ RoleStyleSection.propTypes = {
   clearRoleStyle: PropTypes.func,
   clearStyleField: PropTypes.func,
   className: PropTypes.string,
+  fieldConfigObject: PropTypes.object,
   title: PropTypes.string,
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,
@@ -116,6 +117,7 @@ RoleStyleSection.defaultProps = {
   roleKey: '',
   roleConfigObject: {},
   roleMappingObject: {},
+  fieldConfigObject: {},
   styleView: undefined,
   type: c.FIELD_TYPE_TITLE,
   styleEntry: undefined

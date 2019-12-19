@@ -155,12 +155,11 @@ export default class InternalMapping {
     });
   }
 
-  addEntriesOrAssets({ key = '', value = [], style = undefined } = {}) {
+  addEntriesOrAssets({ key = '', value = [] } = {}) {
     /*
      * Adds an entry mapping to the key, unless the value of the key is an array. Then it adds the entries to the array.
      * key - string - the getter key of the internal mapping being assigned to
      * value - array<string> - an array of the ID strings of all the contentful entries
-     * styleClasses - string - the style classes to apply to the multi-reference field
      */
     if (!Array.isArray(value)) throw new Error('Value for "addEntriesOrAssets" must be an array.');
     this.defineGetterSetters(key);
@@ -190,7 +189,7 @@ export default class InternalMapping {
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_MULTI_REFERENCE,
       value: valueArray,
-      style: (this.fieldRoles[key] || {}).style || style
+      style: (this.fieldRoles[key] || {}).style
     });
   }
 
@@ -233,12 +232,10 @@ export default class InternalMapping {
     }
   }
 
-  addStyleCustom(key) {
+  addStyleCustom(key, fieldConfig = {}) {
     this.fieldRoles[key].style = InternalMapping.styleMapping({
       type: c.STYLE_TYPE_CUSTOM,
-      value: this._templateConfig.fieldRoles[key]
-        ? this._templateConfig.fieldRoles[key].defaultStyle
-        : undefined
+      value: fieldConfig.defaultStyle
     });
   }
 
