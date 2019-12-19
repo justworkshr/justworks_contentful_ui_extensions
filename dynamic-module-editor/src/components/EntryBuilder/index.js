@@ -224,9 +224,9 @@ export default class EntryBuilder extends React.Component {
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 
-  addRoleReferencesCustomStyle(roleKey) {
+  addRoleReferencesCustomStyle(roleKey, fieldConfigObject) {
     let updatedInternalMapping = this.props.entryInternalMapping;
-    updatedInternalMapping.addReferencesStyleCustom(roleKey);
+    updatedInternalMapping.addReferencesStyleCustom(roleKey, fieldConfigObject);
 
     this.props.setInternalMappingValue(updatedInternalMapping.asJSON());
   }

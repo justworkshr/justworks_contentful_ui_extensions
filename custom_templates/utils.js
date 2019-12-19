@@ -7,25 +7,13 @@ import {
 export const constructRole = ({
   description = "",
   fieldTypes = [],
-  assetTypes = [],
-  assetSubType = undefined,
-  contentTypes = [],
   allowedCustomTemplates = [],
-  multiReferenceStyleView = undefined,
-  defaultStyle = undefined,
-  assetDefaultStyle = undefined,
   required = true
 } = {}) => {
   return {
     description,
     fieldTypes,
-    assetTypes,
-    assetSubType,
-    contentTypes,
     allowedCustomTemplates,
-    multiReferenceStyleView,
-    defaultStyle,
-    assetDefaultStyle,
     required
   };
 };
@@ -37,7 +25,8 @@ export const constructField = ({
   contentType = undefined,
   assetTypes = undefined,
   assetSubType = undefined,
-  defaultStyle
+  defaultStyle,
+  assetDefaultStyle
 } = {}) => {
   if (!type) throw new Error("'type' is required in 'constructField'");
   return {
@@ -47,7 +36,8 @@ export const constructField = ({
     contentType,
     assetTypes,
     assetSubType,
-    defaultStyle
+    defaultStyle,
+    assetDefaultStyle
   };
 };
 

@@ -574,17 +574,18 @@ describe('InternalMapping', () => {
       });
 
       const style = { styleKey: 'styleValue' };
+      const fieldConfigObject = {
+        assetDefaultStyle: style
+      };
       const templateConfig = {
         fieldRoles: {
           hi: {
-            assetDefaultStyle: {
-              ...style
-            }
+            fieldTypes: [fieldConfigObject]
           }
         }
       };
       const internalMapping = new InternalMapping(json, templateConfig);
-      internalMapping.addReferencesStyleCustom('hi');
+      internalMapping.addReferencesStyleCustom('hi', fieldConfigObject);
       expect(internalMapping.hi.value[0].style.value).toEqual(style);
       expect(internalMapping.hi.value[1].style.value).toEqual(style);
     });

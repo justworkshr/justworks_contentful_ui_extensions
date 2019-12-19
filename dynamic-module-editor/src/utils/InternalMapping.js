@@ -266,15 +266,13 @@ export default class InternalMapping {
     this.style[templateStyleKey][styleKey] = styleValue;
   }
 
-  addReferencesStyleCustom(key) {
+  addReferencesStyleCustom(key, fieldConfigObject = {}) {
     this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
       if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
       if (!asset.style) asset.style = {};
       asset.style = InternalMapping.styleMapping({
         type: c.STYLE_TYPE_CUSTOM,
-        value: this._templateConfig.fieldRoles[key]
-          ? this._templateConfig.fieldRoles[key].assetDefaultStyle
-          : undefined
+        value: fieldConfigObject.assetDefaultStyle
       });
       return asset;
     });

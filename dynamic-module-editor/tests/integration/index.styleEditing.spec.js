@@ -13,7 +13,8 @@ import {
   mockComponent,
   mockPrimaryEntry,
   mockLink,
-  mockAssetMapping
+  mockAssetMapping,
+  mockAssetResponse
 } from '../utils/mockUtils';
 
 import { resolveAll, newEntryEntryIds, internalMappingRoleStyle } from '../utils/assertUtils';
@@ -346,6 +347,60 @@ describe('App', () => {
   });
 
   describe('multi-reference style editing', () => {
+    it('should add a custom style editor for references', async () => {
+      const mockEntry = mockPrimaryEntry({
+        name: 'Mock Custom Template Entry',
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
+        entries: undefined,
+        assets: [
+          mockAssetResponse({ id: 1 }),
+          mockAssetResponse({ id: 2 }),
+          mockAssetResponse({ id: 3 })
+        ],
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            grid_logo_multi_field: {
+              type: c.FIELD_TYPE_MULTI_REFERENCE,
+              value: [
+                mockAssetMapping({ value: 1 }),
+                mockAssetMapping({ value: 2 }),
+                mockAssetMapping({ value: 3 })
+              ],
+              style: {
+                type: 'custom',
+                value: {
+                  flexRowPreset: 'natural'
+                }
+              }
+            }
+          }
+        })
+      });
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+      const roleKey = 'grid_logo_multi_field';
+
+      // starts with FieldStyleEditor
+      expect(wrapper.find('FieldStyleEditor')).toHaveLength(1);
+      expect(wrapper.find({ roleKey }).find('AssetCard')).toHaveLength(3);
+
+      // click custom style button
+      wrapper
+        .find({ roleKey })
+        .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
+        .simulate('click');
+
+      // loads classes into assets
+      await resolveAll();
+      expect(
+        JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0]).fieldRoles[roleKey]
+          .value[0].style.value
+      ).toEqual({ assetStyle: 'assetStyleValue' });
+    });
+
     it('should load the custom style object', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
@@ -376,29 +431,27 @@ describe('App', () => {
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
-
+      const roleKey = 'grid_logo_multi_field';
       const value = 'natural';
 
       // Starts with existing value
-      expect(
-        wrapper.state().entryInternalMapping.fieldRoles['grid_logo_multi_field'].style.value
-      ).toEqual({
+      expect(wrapper.state().entryInternalMapping.fieldRoles[roleKey].style.value).toEqual({
         flexRowPreset: value
       });
 
-      openStyleEditor(wrapper, 'grid_logo_multi_field', c.FIELD_TYPE_MULTI_REFERENCE);
+      openStyleEditor(wrapper, roleKey, c.FIELD_TYPE_MULTI_REFERENCE);
 
       // radio field is checked
       expect(
         wrapper
-          .find({ roleKey: 'grid_logo_multi_field' })
+          .find({ roleKey })
           .find(`FieldStyleEditor input[value="${value}"]`)
           .at(0)
           .props().checked
       ).toBe(true);
     });
 
-    it('should add classes to all references', () => {
+    it('should add classes to all references', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
@@ -422,46 +475,36 @@ describe('App', () => {
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
-
+      const roleKey = 'grid_logo_multi_field';
       // click custom style button
       wrapper
-        .find({ roleKey: 'grid_logo_multi_field' })
+        .find({ roleKey })
         .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
         .at(1)
         .simulate('click');
 
+      await resolveAll();
       // all assets start with original classes (blank)
       expect(
-        wrapper
-          .state()
-          .entryInternalMapping.fieldRoles['grid_logo_multi_field'].value.filter(
-            e => e.type === c.FIELD_TYPE_ASSET
-          )
+        JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0])
+          .fieldRoles[roleKey].value.filter(e => e.type === c.FIELD_TYPE_ASSET)
           .every(e => {
             return e.style.type === c.STYLE_TYPE_CUSTOM;
           })
       ).toEqual(true);
 
-      openStyleEditor(wrapper, 'grid_logo_multi_field', c.FIELD_TYPE_ASSET);
+      openStyleEditor(wrapper, roleKey, c.FIELD_TYPE_ASSET);
 
       const value = 'default';
       // select value
 
-      setStyleValue(
-        wrapper,
-        'grid_logo_multi_field',
-        c.FIELD_TYPE_ASSET,
-        'Padded Container',
-        value
-      );
+      setStyleValue(wrapper, roleKey, c.FIELD_TYPE_ASSET, 'Padded Container', value);
 
+      await resolveAll();
       // all assets now have selected class
       expect(
-        wrapper
-          .state()
-          .entryInternalMapping.fieldRoles['grid_logo_multi_field'].value.filter(
-            e => e.type === c.FIELD_TYPE_ASSET
-          )
+        JSON.parse(sdk.entry.fields.internalMapping.setValue.args[1][0])
+          .fieldRoles[roleKey].value.filter(e => e.type === c.FIELD_TYPE_ASSET)
           .every(e => {
             return e.style.value['paddedContainer'] === value;
           })

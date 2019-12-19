@@ -157,13 +157,12 @@ export const mockCustomTemplates = {
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
-            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE]
+            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+            assetDefaultStyle: {
+              assetStyle: "assetStyleValue"
+            }
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        assetDefaultStyle: {
-          assetStyle: "assetStyleValue"
-        },
         description: `Multi field`
       }),
       no_style_multi_field: constructRole({
@@ -175,13 +174,12 @@ export const mockCustomTemplates = {
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
-            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE]
+            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+            assetDefaultStyle: {
+              assetStyle: "assetStyleValue"
+            }
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        assetDefaultStyle: {
-          assetStyle: "assetStyleValue"
-        },
         description: `Multi field`
       })
     }

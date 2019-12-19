@@ -1,6 +1,21 @@
 import { constructRole, constructField, defaultStyleTypes } from "../utils";
 import * as c from "../constants";
 
+const markdownDefaultStyle = {
+  // textAlignment
+  [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
+    c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left
+  // headerColor
+  [c.STYLE_PROPERTY_HEADER_TEXT_COLOR.key]:
+    c.STYLE_PROPERTY_HEADER_TEXT_COLOR.values[0].value, // black
+  //subheaderColor
+  [c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.key]:
+    c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.values[0].value, // black
+  // bodyColor
+  [c.STYLE_PROPERTY_BODY_TEXT_COLOR.key]:
+    c.STYLE_PROPERTY_BODY_TEXT_COLOR.values[0].value // black
+};
+
 export const textMedia = {
   [c.TEXT_MEDIA_MODULE]: {
     meta: {
@@ -21,22 +36,22 @@ export const textMedia = {
           }),
           constructField({
             type: c.FIELD_TYPE_TITLE,
-            styleView: c.STYLE_VIEW_TITLE
+            styleView: c.STYLE_VIEW_TITLE,
+            defaultStyle: {
+              // titleSize
+              [c.STYLE_PROPERTY_TITLE_SIZE.key]:
+                c.STYLE_PROPERTY_TITLE_SIZE.values[0].value, // Display
+              // textColor
+              [c.STYLE_PROPERTY_TEXT_COLOR
+                .key]: c.STYLE_PROPERTY_TEXT_COLOR.values.find(
+                v => v.value === "navy"
+              ).value, // navy
+              // textAlignment
+              [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
+                c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[1].value // center
+            }
           })
         ],
-        defaultStyle: {
-          // titleSize
-          [c.STYLE_PROPERTY_TITLE_SIZE.key]:
-            c.STYLE_PROPERTY_TITLE_SIZE.values[0].value, // Display
-          // textColor
-          [c.STYLE_PROPERTY_TEXT_COLOR
-            .key]: c.STYLE_PROPERTY_TEXT_COLOR.values.find(
-            v => v.value === "navy"
-          ).value, // navy
-          // textAlignment
-          [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
-            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[1].value // center
-        },
         required: false
       }),
       left_content: constructRole({
@@ -52,27 +67,16 @@ export const textMedia = {
           constructField({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN,
-            styleView: c.STYLE_VIEW_MARKDOWN
+            styleView: c.STYLE_VIEW_MARKDOWN,
+            defaultStyle: markdownDefaultStyle
           }),
           constructField({
             type: c.FIELD_TYPE_MARKDOWN,
-            styleView: c.STYLE_VIEW_MARKDOWN
+            styleView: c.STYLE_VIEW_MARKDOWN,
+            defaultStyle: markdownDefaultStyle
           })
         ],
-        defaultStyle: {
-          // textAlignment
-          [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
-            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left
-          // headerColor
-          [c.STYLE_PROPERTY_HEADER_TEXT_COLOR.key]:
-            c.STYLE_PROPERTY_HEADER_TEXT_COLOR.values[0].value, // black
-          //subheaderColor
-          [c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.key]:
-            c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.values[0].value, // black
-          // bodyColor
-          [c.STYLE_PROPERTY_BODY_TEXT_COLOR.key]:
-            c.STYLE_PROPERTY_BODY_TEXT_COLOR.values[0].value // black
-        },
+
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
       }),
@@ -89,27 +93,15 @@ export const textMedia = {
           constructField({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN,
-            styleView: c.STYLE_VIEW_MARKDOWN
+            styleView: c.STYLE_VIEW_MARKDOWN,
+            defaultStyle: markdownDefaultStyle
           }),
           constructField({
             type: c.FIELD_TYPE_MARKDOWN,
-            styleView: c.STYLE_VIEW_MARKDOWN
+            styleView: c.STYLE_VIEW_MARKDOWN,
+            defaultStyle: markdownDefaultStyle
           })
         ],
-        defaultStyle: {
-          // textAlignment
-          [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
-            c.STYLE_PROPERTY_TEXT_ALIGNMENT.values[0].value, // left
-          // headerColor
-          [c.STYLE_PROPERTY_HEADER_TEXT_COLOR.key]:
-            c.STYLE_PROPERTY_HEADER_TEXT_COLOR.values[0].value, // black
-          //subheaderColor
-          [c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.key]:
-            c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR.values[0].value, // black
-          // bodyColor
-          [c.STYLE_PROPERTY_BODY_TEXT_COLOR.key]:
-            c.STYLE_PROPERTY_BODY_TEXT_COLOR.values[0].value // black
-        },
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
       })
