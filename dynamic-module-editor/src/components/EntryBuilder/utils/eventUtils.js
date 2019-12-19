@@ -54,14 +54,13 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
 };
 
 const linkAssetToTemplate = ({ props, asset, roleKey, updateEntry }) => {
-  const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
 
   updatedInternalMapping.addAsset(
     roleKey,
     asset.sys.id,
     asset.fields.file['en-US'].url,
-    roleConfigObject.assetTypes.length
+    getAssetType(asset.fields.file['en-US'].contentType)
   );
 
   updateEntry(updatedInternalMapping.asJSON());

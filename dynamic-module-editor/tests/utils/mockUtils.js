@@ -248,3 +248,41 @@ export const mockSdk = (mockEntry = mockPrimaryEntry()) => {
     }
   };
 };
+
+export const openCreateDropdown = (wrapper, roleKey) => {
+  wrapper
+    .find('RoleSection')
+    .find({ roleKey })
+    .find('CreateNewLink')
+    .simulate('click');
+};
+
+export const hoverLinkExistingDropdown = (wrapper, roleKey) => {
+  wrapper
+    .find('RoleSection')
+    .find({ roleKey })
+    .find('LinkExisting')
+    .find('DropdownListItem')
+    .find({ testId: 'link-entries-row__dropdown--link-entry-dropdown' })
+    .find('button')
+    .simulate('mouseenter');
+};
+
+export const openLinkExistingDropdown = (wrapper, roleKey) => {
+  wrapper
+    .find('RoleSection')
+    .find({ roleKey })
+    .find('LinkExisting')
+    .simulate('click');
+};
+
+export const hoverDeepCopyDropdown = (wrapper, roleKey) => {
+  wrapper
+    .find('RoleSection')
+    .find({ roleKey })
+    .find('LinkExisting')
+    .find('DropdownListItem')
+    .find({ testId: 'link-entries-row__dropdown--deep-copy-dropdown' })
+    .find('button')
+    .simulate('mouseenter');
+};

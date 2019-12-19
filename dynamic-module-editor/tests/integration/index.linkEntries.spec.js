@@ -9,7 +9,15 @@ import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
 
-import { mockSdk, mockPrimaryEntry, mockComponent } from '../utils/mockUtils';
+import {
+  mockSdk,
+  mockPrimaryEntry,
+  mockComponent,
+  openCreateDropdown,
+  hoverDeepCopyDropdown,
+  hoverLinkExistingDropdown,
+  openLinkExistingDropdown
+} from '../utils/mockUtils';
 
 import { resolveAll, newEntryAssetIds, newEntryEntryIds, newEntryRole } from '../utils/assertUtils';
 
@@ -113,20 +121,20 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
 
       const wrapper = mockComponent({ Component: App, sdk });
+      const roleKey = 'entry_field';
 
-      // open dropdown
+      openLinkExistingDropdown(wrapper, roleKey);
+      hoverLinkExistingDropdown(wrapper, roleKey);
+
+      // click link entry button
       wrapper
         .find('RoleSection')
-        .find({ roleKey: 'entry_field' })
+        .find({ roleKey })
         .find('LinkExisting')
-        .simulate('click');
-
-      // click link asset button
-      wrapper
-        .find('RoleSection')
-        .find({ roleKey: 'entry_field' })
-        .find('LinkExisting')
-        .find('DropdownListItem.link-entries-row__dropdown--link-entry button')
+        .find('DropdownListItem')
+        .find({ testId: 'link-entries-row__dropdown--link-entry' })
+        .at(0)
+        .find('button')
         .simulate('click');
 
       // updates sdk
@@ -151,20 +159,20 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
 
       const wrapper = mockComponent({ Component: App, sdk });
+      const roleKey = 'grid_logo_multi_field';
 
-      // open dropdown
+      openLinkExistingDropdown(wrapper, roleKey);
+      hoverLinkExistingDropdown(wrapper, roleKey);
+
+      // click link entry button
       wrapper
         .find('RoleSection')
-        .find({ roleKey: 'grid_logo_multi_field' })
+        .find({ roleKey })
         .find('LinkExisting')
-        .simulate('click');
-
-      // click link asset button
-      wrapper
-        .find('RoleSection')
-        .find({ roleKey: 'grid_logo_multi_field' })
-        .find('LinkExisting')
-        .find('DropdownListItem.link-entries-row__dropdown--link-entry button')
+        .find('DropdownListItem')
+        .find({ testId: 'link-entries-row__dropdown--link-entry' })
+        .at(0)
+        .find('button')
         .simulate('click');
 
       // updates sdk
@@ -194,21 +202,18 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
 
       const wrapper = mockComponent({ Component: App, sdk });
+      const roleKey = 'entry_field';
 
-      // open dropdown
+      openCreateDropdown(wrapper, roleKey);
+
+      // click create entry button
       wrapper
         .find('RoleSection')
-        .find({ roleKey: 'entry_field' })
+        .find({ roleKey })
         .find('CreateNewLink')
-        .simulate('click');
-
-      // click link asset button
-      wrapper
-        .find('RoleSection')
-        .find({ roleKey: 'entry_field' })
-        .find('CreateNewLink')
-        .findWhere(node => node.key() === 'dropdown-media')
+        .find({ testId: 'create-new-link__dropdown-content-type' })
         .find('button')
+        .at(0)
         .simulate('click');
 
       // updates sdk
@@ -235,20 +240,20 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
 
       const wrapper = mockComponent({ Component: App, sdk });
+      const roleKey = 'entry_field';
 
-      // open dropdown
+      openLinkExistingDropdown(wrapper, roleKey);
+      hoverDeepCopyDropdown(wrapper, roleKey);
+
+      // click link entry button
       wrapper
         .find('RoleSection')
-        .find({ roleKey: 'entry_field' })
+        .find({ roleKey })
         .find('LinkExisting')
-        .simulate('click');
-
-      // click link asset button
-      wrapper
-        .find('RoleSection')
-        .find({ roleKey: 'entry_field' })
-        .find('LinkExisting')
-        .find('DropdownListItem.link-entries-row__dropdown--deep-copy button')
+        .find('DropdownListItem')
+        .find({ testId: 'link-entries-row__dropdown--deep-copy' })
+        .at(0)
+        .find('button')
         .simulate('click');
 
       // updates sdk
@@ -274,20 +279,20 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
 
       const wrapper = mockComponent({ Component: App, sdk });
+      const roleKey = 'grid_logo_multi_field';
 
-      // open dropdown
+      openLinkExistingDropdown(wrapper, roleKey);
+      hoverDeepCopyDropdown(wrapper, roleKey);
+
+      // click link entry button
       wrapper
         .find('RoleSection')
-        .find({ roleKey: 'grid_logo_multi_field' })
+        .find({ roleKey })
         .find('LinkExisting')
-        .simulate('click');
-
-      // click link asset button
-      wrapper
-        .find('RoleSection')
-        .find({ roleKey: 'grid_logo_multi_field' })
-        .find('LinkExisting')
-        .find('DropdownListItem.link-entries-row__dropdown--deep-copy button')
+        .find('DropdownListItem')
+        .find({ testId: 'link-entries-row__dropdown--deep-copy' })
+        .at(0)
+        .find('button')
         .simulate('click');
 
       // updates sdk

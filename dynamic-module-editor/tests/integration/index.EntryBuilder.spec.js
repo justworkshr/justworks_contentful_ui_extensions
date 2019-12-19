@@ -6,11 +6,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import { mount } from 'enzyme';
 
 import * as c from '../../../custom_templates/constants';
-import { templatePlaceholder } from '../../../custom_templates/';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
-
-import { roleAllowsAssets } from '../../src/components/EntryBuilder/utils';
 
 configure({ adapter: new Adapter() });
 jest.useFakeTimers();

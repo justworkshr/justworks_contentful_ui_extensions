@@ -1,4 +1,5 @@
 import { getEntryContentTypeId } from './index';
+import * as c from '../../../../../custom_templates/constants';
 
 export const validateTemplate = async ({ setInvalid, state, setState }) => {
   const errors = await getTemplateErrors(
@@ -92,9 +93,16 @@ const validateAssetType = (entry, assetTypes) => {
 
 export const validateLinkedAsset = (entry, roleObject) => {
   if (!entry) return;
+  const fieldConfigObject = roleObject.fieldTypes.find(
+    ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE
+  )
+    ? roleObject.fieldTypes.find(ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE)
+    : roleObject.fieldTypes.find(ft => ft.type === c.FIELD_TYPE_ASSET);
+
+  const assetTypes = fieldConfigObject.assetTypes || [];
   let message = '';
-  if (!validateAssetType(entry, roleObject.assetTypes)) {
-    message = `Only ${roleObject.assetTypes.map(t => t).join(', ')} assets are allowed.`;
+  if (!validateAssetType(entry, assetTypes)) {
+    message = `Only ${assetTypes.map(t => t).join(', ')} assets are allowed.`;
   }
 
   return message;

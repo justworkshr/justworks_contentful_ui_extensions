@@ -24,7 +24,6 @@ export const textMedia = {
             styleView: c.STYLE_VIEW_TITLE
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_TEXT],
         defaultStyle: {
           // titleSize
           [c.STYLE_PROPERTY_TITLE_SIZE.key]:
@@ -43,13 +42,16 @@ export const textMedia = {
       left_content: constructRole({
         fieldTypes: [
           constructField({
-            type: c.FIELD_TYPE_ASSET
-          }),
-          constructField({
-            type: c.FIELD_TYPE_ENTRY
+            type: c.FIELD_TYPE_ASSET,
+            assetTypes: [c.ASSET_TYPE_IMAGE]
           }),
           constructField({
             type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_MEDIA
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN,
             styleView: c.STYLE_VIEW_MARKDOWN
           }),
           constructField({
@@ -57,8 +59,6 @@ export const textMedia = {
             styleView: c.STYLE_VIEW_MARKDOWN
           })
         ],
-        assetTypes: [c.ASSET_TYPE_IMAGE],
-        contentTypes: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.
         defaultStyle: {
           // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:
@@ -78,12 +78,24 @@ export const textMedia = {
       }),
       right_content: constructRole({
         fieldTypes: [
-          c.FIELD_TYPE_ASSET,
-          c.FIELD_TYPE_MARKDOWN,
-          c.FIELD_TYPE_ENTRY
+          constructField({
+            type: c.FIELD_TYPE_ASSET,
+            assetTypes: [c.ASSET_TYPE_IMAGE]
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_MEDIA
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN,
+            styleView: c.STYLE_VIEW_MARKDOWN
+          }),
+          constructField({
+            type: c.FIELD_TYPE_MARKDOWN,
+            styleView: c.STYLE_VIEW_MARKDOWN
+          })
         ],
-        assetTypes: [c.ASSET_TYPE_IMAGE],
-        contentTypes: [c.CONTENT_TYPE_MEDIA],
         defaultStyle: {
           // textAlignment
           [c.STYLE_PROPERTY_TEXT_ALIGNMENT.key]:

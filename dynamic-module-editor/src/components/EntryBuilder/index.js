@@ -13,7 +13,12 @@ import RoleSection from './components/RoleSection';
 
 import InternalMapping from '../../utils/InternalMapping';
 
-import { roleIsMultiReference, displaySnakeCaseName, getFieldConfig } from './utils';
+import {
+  roleIsMultiReference,
+  displaySnakeCaseName,
+  getFieldConfig,
+  getContentTypes
+} from './utils';
 
 import {
   renderSingleEntryStyle,
@@ -311,7 +316,7 @@ export default class EntryBuilder extends React.Component {
                 this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
               }
               className="max-width-600"
-              contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentTypes}
+              contentTypes={getContentTypes(this.props.templateConfig.fieldRoles[roleKey])}
               onAddFieldClick={this.onAddFieldClick}
               roleKey={roleKey}
               onAddEntryClick={this.onAddEntryClick}
@@ -426,7 +431,7 @@ export default class EntryBuilder extends React.Component {
             this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates
           }
           className="max-width-600"
-          contentTypes={this.props.templateConfig.fieldRoles[roleKey].contentTypes}
+          contentTypes={getContentTypes(this.props.templateConfig.fieldRoles[roleKey])}
           onAddFieldClick={this.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={this.onAddEntryClick}

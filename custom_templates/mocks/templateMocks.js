@@ -107,9 +107,16 @@ export const mockCustomTemplates = {
           constructField({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_MEDIA
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
         description: `Entry field`
       }),
       entry_field_with_style: constructRole({
@@ -118,6 +125,14 @@ export const mockCustomTemplates = {
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT,
             styleView: c.STYLE_VIEW_TITLE
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_MEDIA
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE
           })
         ],
         contentTypes: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
@@ -137,7 +152,8 @@ export const mockCustomTemplates = {
             assetTypes: [c.ASSET_TYPE_IMAGE],
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
-            assetStyleView: c.STYLE_VIEW_LOGO
+            assetStyleView: c.STYLE_VIEW_LOGO,
+            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE]
           })
         ],
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
@@ -154,7 +170,8 @@ export const mockCustomTemplates = {
             assetTypes: [c.ASSET_TYPE_IMAGE],
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
-            assetStyleView: c.STYLE_VIEW_LOGO
+            assetStyleView: c.STYLE_VIEW_LOGO,
+            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE]
           })
         ],
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],

@@ -14,6 +14,17 @@ export const getFieldConfig = (roleConfigObject, roleMappingObject) => {
   }
 };
 
+export const getContentTypes = roleConfigObject => {
+  return roleConfigObject.fieldTypes.reduce((accumulator, ft) => {
+    if (ft.type === c.FIELD_TYPE_ENTRY) {
+      accumulator.push(ft.contentType);
+    } else if (ft.type === c.FIELD_TYPE_MULTI_REFERENCE) {
+      accumulator = [...accumulator, ...ft.contentType];
+    }
+    return accumulator;
+  }, []);
+};
+
 export const isEditableEntry = contentType => {
   return contentType !== c.CONTENT_TYPE_CUSTOM_TEMPLATE;
 };
@@ -36,7 +47,11 @@ export const roleIsMultiReference = fieldTypes => {
 
 export const roleAllowsAssets = fieldTypes => {
   if (!fieldTypes || !fieldTypes.length) return;
-  return fieldTypes.some(field => field.type === c.FIELD_TYPE_ASSET);
+  if (fieldTypes.some(ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE)) {
+    return fieldTypes.find(ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE).assetTypes;
+  } else {
+    return fieldTypes.some(ft => ft.type === c.FIELD_TYPE_ASSET);
+  }
 };
 
 export const roleAllowsFields = fieldTypes => {

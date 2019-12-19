@@ -22,7 +22,6 @@ export const logoRow = {
             contentType: c.CONTENT_TYPE_GENERIC_TEXT
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_GENERIC_TEXT],
         required: false,
         defaultStyle: {
           textAlignment: "center",
@@ -40,10 +39,10 @@ export const logoRow = {
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
             assetTypes: [c.ASSET_TYPE_IMAGE],
-            assetSubType: c.ASSET_SUBTYPE_LOGO
+            assetSubType: c.ASSET_SUBTYPE_LOGO,
+            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE]
           })
         ],
-        contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
         allowedCustomTemplates: [c.LOGO_ITEM],
         multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {

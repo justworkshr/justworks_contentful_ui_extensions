@@ -131,15 +131,14 @@ export default class InternalMapping {
     }
   }
 
-  addAsset(key, value, assetUrl, assetType, formatting, styleClasses) {
+  addAsset(key, value, assetUrl, assetType, style) {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.assetMapping({
       type: c.FIELD_TYPE_ASSET,
       value,
       assetUrl,
       assetType,
-      formatting,
-      styleClasses
+      style
     });
   }
 

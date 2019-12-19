@@ -31,6 +31,7 @@ const EntryActionRow = props => {
       )}
       {!!roleAllowsLinks(props.fieldTypes) && (
         <LinkExisting
+          className="entry-action-button__link-existing link-entries-row__button"
           onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyLinkClick}

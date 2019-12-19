@@ -7,6 +7,7 @@ import {
   TextLink
 } from '@contentful/forma-36-react-components';
 
+import { displayCamelCaseName } from '../../../../../shared/utilities/elementUtils';
 import { roleAllowsAssets } from '../utils';
 
 class LinkExisting extends React.Component {
@@ -29,7 +30,7 @@ class LinkExisting extends React.Component {
   render() {
     return (
       <Dropdown
-        className="link-entries-row__button"
+        className={this.props.className}
         toggleElement={
           <TextLink icon="Link" linkType="primary">
             Link existing
@@ -40,13 +41,23 @@ class LinkExisting extends React.Component {
         <DropdownList>
           <DropdownListItem isTitle>Actions</DropdownListItem>
           {!!this.props.contentTypes.length && (
-            <DropdownListItem
-              className="link-entries-row__dropdown--link-entry"
-              onClick={() =>
-                this.props.onLinkEntryClick(this.props.roleKey, this.props.contentTypes)
-              }>
-              Link Entry
-            </DropdownListItem>
+            <Dropdown
+              position="right"
+              submenuToggleLabel="Link entry"
+              testId="link-entries-row__dropdown--link-entry-dropdown">
+              <DropdownList>
+                {this.props.contentTypes.map((contentType, index) => {
+                  return (
+                    <DropdownListItem
+                      key={`dropdown-link-${index}`}
+                      testId="link-entries-row__dropdown--link-entry"
+                      onClick={() => this.props.onLinkEntryClick(this.props.roleKey, contentType)}>
+                      {displayCamelCaseName(contentType)}
+                    </DropdownListItem>
+                  );
+                })}
+              </DropdownList>
+            </Dropdown>
           )}
           {roleAllowsAssets(this.props.fieldTypes) && (
             <DropdownListItem
@@ -56,13 +67,25 @@ class LinkExisting extends React.Component {
             </DropdownListItem>
           )}
           {!!this.props.contentTypes.length && (
-            <DropdownListItem
-              className="link-entries-row__dropdown--deep-copy"
-              onClick={() =>
-                this.props.onDeepCopyLinkClick(this.props.roleKey, this.props.contentTypes)
-              }>
-              Deep copy
-            </DropdownListItem>
+            <Dropdown
+              position="right"
+              submenuToggleLabel="Deep copy"
+              testId="link-entries-row__dropdown--deep-copy-dropdown">
+              <DropdownList>
+                {this.props.contentTypes.map((contentType, index) => {
+                  return (
+                    <DropdownListItem
+                      key={`dropdown-deep-copy-${index}`}
+                      testId="link-entries-row__dropdown--deep-copy"
+                      onClick={() =>
+                        this.props.onDeepCopyLinkClick(this.props.roleKey, contentType)
+                      }>
+                      {displayCamelCaseName(contentType)}
+                    </DropdownListItem>
+                  );
+                })}
+              </DropdownList>
+            </Dropdown>
           )}
         </DropdownList>
       </Dropdown>
@@ -76,6 +99,7 @@ LinkExisting.defaultProps = {
 };
 
 LinkExisting.propTypes = {
+  className: PropTypes.string,
   onLinkAssetClick: PropTypes.func,
   onLinkEntryClick: PropTypes.func,
   onDeepCopyLinkClick: PropTypes.func,

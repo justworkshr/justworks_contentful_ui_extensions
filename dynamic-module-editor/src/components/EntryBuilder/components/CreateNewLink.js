@@ -64,6 +64,7 @@ class CreateNewLink extends React.Component {
                     return (
                       <DropdownListItem
                         key={`allowed-${index}`}
+                        testId="create-new-link__dropdown-content-type"
                         onClick={() =>
                           this.props.onAddEntryClick({
                             roleKey: this.props.roleKey,
@@ -80,6 +81,7 @@ class CreateNewLink extends React.Component {
             ) : (
               <DropdownListItem
                 key={`dropdown-${contentType}`}
+                testId="create-new-link__dropdown-content-type"
                 onClick={() =>
                   this.props.onAddEntryClick({ roleKey: this.props.roleKey, contentType })
                 }>
