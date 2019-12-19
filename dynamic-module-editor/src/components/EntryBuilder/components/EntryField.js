@@ -125,7 +125,7 @@ export const EntryField = props => {
   };
 
   return (
-    <div className={classnames('custom-template-entry-field', props.className)}>
+    <div className={classnames('entry-field', props.className)}>
       <div className="sub-section__heading">
         <Icon className="sub-section__heading--icon" icon={getFieldIcon()} size="large" />
         <Subheading className="sub-section__heading--header" element="h1">

@@ -281,29 +281,31 @@ export default class EntryBuilder extends React.Component {
       // render multi field
       return (
         <div className="section-row">
-          <div className="section-column">
-            {roleMappingObject.value.map((entry, index) => {
-              const e =
-                this.props.hydratedEntries.find(he => he.sys.id === entry.value) ||
-                this.props.hydratedAssets.find(a => a.sys.id === entry.value);
-              return (
-                <EntryField
-                  key={`entryfield-${roleKey}-${index}`}
-                  className="max-width-600"
-                  entry={e}
-                  entryIndex={index}
-                  fieldType={entry.type}
-                  isLoading={e && !!this.props.loadingEntries.includes((e.sys || {}).id)}
-                  roleKey={roleKey}
-                  roleConfig={roleConfigObject}
-                  onEditClick={this.onEditClick}
-                  onDeepCopyClick={this.onDeepCopyClick}
-                  onRemoveClick={this.onRemoveClick}
-                  onFieldChange={this.onFieldChange}
-                  roleMappingObject={roleMappingObject}
-                />
-              );
-            })}
+          <div className="section-column max-width-600">
+            <div className="asset-row">
+              {roleMappingObject.value.map((entry, index) => {
+                const e =
+                  this.props.hydratedEntries.find(he => he.sys.id === entry.value) ||
+                  this.props.hydratedAssets.find(a => a.sys.id === entry.value);
+                return (
+                  <EntryField
+                    key={`entryfield-${roleKey}-${index}`}
+                    className="max-width-600"
+                    entry={e}
+                    entryIndex={index}
+                    fieldType={entry.type}
+                    isLoading={e && !!this.props.loadingEntries.includes((e.sys || {}).id)}
+                    roleKey={roleKey}
+                    roleConfig={roleConfigObject}
+                    onEditClick={this.onEditClick}
+                    onDeepCopyClick={this.onDeepCopyClick}
+                    onRemoveClick={this.onRemoveClick}
+                    onFieldChange={this.onFieldChange}
+                    roleMappingObject={roleMappingObject}
+                  />
+                );
+              })}
+            </div>
             <EntryActionRow
               allowedCustomTemplates={
                 this.props.templateConfig.fieldRoles[roleKey].allowedCustomTemplates

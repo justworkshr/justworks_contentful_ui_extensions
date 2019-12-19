@@ -27,6 +27,7 @@ div {
   .section-row {
     display: flex;
     min-width: 1280px;
+    flex-wrap: wrap;
   }
 
   .section-row > div:first-child {
@@ -34,6 +35,25 @@ div {
   }
 
   .section-row > div {
+    flex: 1;
+  }
+}
+
+.asset-row {
+  display: block;
+}
+
+@media (min-width: 992px) {
+  .asset-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .asset-row > div:first-child {
+    margin-right: 40px;
+  }
+
+  .asset-row > div {
     flex: 1;
   }
 }

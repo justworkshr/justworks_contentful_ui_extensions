@@ -45,15 +45,18 @@ const SingleReferenceField = props => {
           title={hydratedEntry.fields ? hydratedEntry.fields.name['en-US'] : 'Loading...'}
           contentType={hydratedEntry.sys.contentType.sys.id}
           status={getStatus(hydratedEntry)}
-          onClick={() => onEditClick(hydratedEntry.sys.id)}
+          onClick={props.editable ? () => onEditClick(hydratedEntry.sys.id) : undefined}
           dropdownListElements={
             <DropdownList>
               <DropdownListItem isTitle>Actions</DropdownListItem>
-              <DropdownListItem
-                className="entry-card__action--edit"
-                onClick={() => onEditClick(hydratedEntry)}>
-                Edit
-              </DropdownListItem>
+              {props.editable && (
+                <DropdownListItem
+                  className="entry-card__action--edit"
+                  onClick={() => onEditClick(hydratedEntry)}>
+                  Edit
+                </DropdownListItem>
+              )}
+
               {props.onDeepCopyClick && (
                 <DropdownListItem
                   className="entry-card__action--edit"
@@ -88,9 +91,11 @@ SingleReferenceField.propTypes = {
   onLinkClick: PropTypes.func,
   onDeepCopyClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
+  editable: PropTypes.bool,
   sdk: PropTypes.object.isRequired
 };
 SingleReferenceField.defaultProps = {
+  editable: false,
   field: undefined
 };
 
