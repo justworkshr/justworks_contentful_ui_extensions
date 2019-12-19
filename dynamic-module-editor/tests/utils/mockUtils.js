@@ -124,25 +124,26 @@ export const mockEntryResponse = ({ id = 0, contentType = 'text' } = {}) => {
   };
 };
 
-export const mockMapping = ({ type, value = '', styleClasses = '' } = {}) => {
+export const mockMapping = ({ type, value = '', contentType = '', style = {} } = {}) => {
   return {
     type,
     value,
-    styleClasses
+    contentType,
+    style
   };
 };
 
 export const mockAssetMapping = ({
   type = c.FIELD_TYPE_ASSET,
   value = '',
-  styleClasses = '',
+  style = {},
   assetUrl = 'localhost',
   formatting = {}
 } = {}) => {
   return {
     type,
     value,
-    styleClasses,
+    style,
     assetUrl,
     formatting
   };

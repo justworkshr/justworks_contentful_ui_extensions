@@ -4,28 +4,50 @@ import * as c from '../../../../../custom_templates/constants';
 import { setEntryLoading } from './stateUtils';
 import { handleRemoveEntry } from './eventUtils';
 
+export const getFieldConfig = (roleConfigObject, roleMappingObject) => {
+  if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
+    return roleConfigObject.fieldTypes.find(ft => {
+      return ft.type === c.FIELD_TYPE_ENTRY && ft.contentType === roleMappingObject.contentType;
+    });
+  } else {
+    return roleConfigObject.fieldTypes.find(ft => ft.type === roleMappingObject.type);
+  }
+};
+
+export const isEditableEntry = contentType => {
+  return contentType !== c.CONTENT_TYPE_CUSTOM_TEMPLATE;
+};
+
 export const isDirectField = roleType => {
   return c.DIRECT_FIELD_TYPES.includes(roleType);
 };
 
-export const pluckField = fieldTypes => {
-  return fieldTypes.find(type => c.DIRECT_FIELD_TYPES.some(fType => fType === type));
+export const pluckFieldType = fieldTypes => {
+  const fieldType = fieldTypes.find(fType =>
+    c.DIRECT_FIELD_TYPES.some(type => fType.type === type)
+  );
+  if (fieldType) return fieldType.type;
+};
+
+export const roleIsMultiReference = fieldTypes => {
+  if (!fieldTypes || !fieldTypes.length) return;
+  return fieldTypes.some(field => field.type === c.FIELD_TYPE_MULTI_REFERENCE);
 };
 
 export const roleAllowsAssets = fieldTypes => {
   if (!fieldTypes || !fieldTypes.length) return;
-  return fieldTypes.includes(c.FIELD_TYPE_ASSET);
+  return fieldTypes.some(field => field.type === c.FIELD_TYPE_ASSET);
 };
 
 export const roleAllowsFields = fieldTypes => {
   if (!fieldTypes || !fieldTypes.length) return;
-  return c.DIRECT_FIELD_TYPES.some(type => fieldTypes.some(fType => fType === type));
+  return c.DIRECT_FIELD_TYPES.some(type => fieldTypes.some(fType => fType.type === type));
 };
 
 export const roleAllowsLinks = fieldTypes => {
   if (!fieldTypes || !fieldTypes.length) return;
   const linkableTypes = [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_MULTI_REFERENCE, c.FIELD_TYPE_ASSET];
-  return linkableTypes.some(type => fieldTypes.some(fType => type === fType));
+  return linkableTypes.some(type => fieldTypes.some(fType => fType.type === type));
 };
 
 export const removeByIndex = (array, index) => {
@@ -165,13 +187,13 @@ export const getEntryOrField = async (space, internalMapping, roleKey) => {
   }
 };
 
-export const constructFieldEntry = (sysType, fieldObject = InternalMapping.entryMapping()) => {
+export const constructFieldEntry = (sysType, entryMapping = InternalMapping.entryMapping()) => {
   return {
     sys: {
       type: sysType
     },
     fields: {
-      ...fieldObject
+      ...entryMapping
     }
   };
 };

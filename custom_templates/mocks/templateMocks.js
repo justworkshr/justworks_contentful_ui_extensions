@@ -1,4 +1,4 @@
-import { constructRole } from "../utils";
+import { constructRole, constructField } from "../utils";
 import * as c from "../constants";
 
 import { defaultStyleTypes } from "../utils";
@@ -16,12 +16,22 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       left_section: {
-        fieldTypes: [c.FIELD_TYPE_ENTRY],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_TEXT
+          })
+        ],
         contentTypes: "text",
         description: "A left section"
       },
       right_section: {
-        fieldTypes: [c.FIELD_TYPE_ENTRY],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_TEXT
+          })
+        ],
         contentTypes: "text",
         description: "A left section"
       }
@@ -32,7 +42,12 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       text_field: constructRole({
-        fieldTypes: [c.FIELD_TYPE_TITLE],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_TITLE,
+            styleView: c.STYLE_VIEW_TITLE
+          })
+        ],
         defaultStyle: {
           textAlignment: "left",
           textColor: "black"
@@ -41,7 +56,12 @@ export const mockCustomTemplates = {
         required: true
       }),
       markdown_field: constructRole({
-        fieldTypes: [c.FIELD_TYPE_MARKDOWN],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_MARKDOWN,
+            styleView: c.STYLE_VIEW_MARKDOWN
+          })
+        ],
         defaultStyle: {
           textAlignment: "left",
           textColor: "black"
@@ -56,17 +76,22 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       image_asset: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ASSET],
+        fieldTypes: [constructField({ type: c.FIELD_TYPE_ASSET })],
         assetTypes: [c.ASSET_TYPE_IMAGE],
         description: `Image asset field`
       }),
       formattable_image_asset: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ASSET],
+        fieldTypes: [constructField({ type: c.FIELD_TYPE_ASSET })],
         assetTypes: [c.ASSET_TYPE_IMAGE],
         description: `Image asset field`
       }),
       logo_asset: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ASSET],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_ASSET,
+            styleView: c.STYLE_VIEW_LOGO
+          })
+        ],
         assetTypes: [c.ASSET_TYPE_IMAGE],
         assetSubType: c.ASSET_SUBTYPE_LOGO,
         description: `Logo asset field.`
@@ -78,7 +103,23 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       entry_field: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ENTRY],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_TEXT
+          })
+        ],
+        contentTypes: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+        description: `Entry field`
+      }),
+      entry_field_with_style: constructRole({
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            contentType: c.CONTENT_TYPE_TEXT,
+            styleView: c.STYLE_VIEW_TITLE
+          })
+        ],
         contentTypes: [c.CONTENT_TYPE_MEDIA, c.CONTENT_TYPE_CUSTOM_TEMPLATE],
         description: `Entry field`
       })
@@ -89,20 +130,34 @@ export const mockCustomTemplates = {
     style: {},
     fieldRoles: {
       grid_logo_multi_field: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
-        assetSubType: c.ASSET_SUBTYPE_LOGO,
+        fieldTypes: [
+          constructField({ type: c.FIELD_TYPE_ASSET }),
+          constructField({
+            type: c.FIELD_TYPE_MULTI_REFERENCE,
+            assetTypes: [c.ASSET_TYPE_IMAGE],
+            assetSubType: c.ASSET_SUBTYPE_LOGO,
+            styleView: c.STYLE_VIEW_FLEX_ROW,
+            assetStyleView: c.STYLE_VIEW_LOGO
+          })
+        ],
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {
           assetStyle: "assetStyleValue"
         },
         description: `Multi field`
       }),
       no_style_multi_field: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
-        assetSubType: c.ASSET_SUBTYPE_LOGO,
+        fieldTypes: [
+          constructField({ type: c.FIELD_TYPE_ASSET }),
+          constructField({
+            type: c.FIELD_TYPE_MULTI_REFERENCE,
+            assetTypes: [c.ASSET_TYPE_IMAGE],
+            assetSubType: c.ASSET_SUBTYPE_LOGO,
+            styleView: c.STYLE_VIEW_FLEX_ROW,
+            assetStyleView: c.STYLE_VIEW_LOGO
+          })
+        ],
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {
           assetStyle: "assetStyleValue"
         },

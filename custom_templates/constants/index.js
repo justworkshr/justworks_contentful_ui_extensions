@@ -14,6 +14,8 @@ export const LOGO_ROW = "logo row";
   - Used in the editor to determine which contentTypes a template can link to.
 */
 export const CONTENT_TYPE_TEXT = "text";
+export const CONTENT_TYPE_GENERIC_TEXT = "genericText";
+export const CONTENT_TYPE_GENERIC_MARKDOWN = "genericMarkdown";
 export const CONTENT_TYPE_MEDIA = "media";
 export const CONTENT_TYPE_CUSTOM_TEMPLATE = "customTemplate";
 export const CONTENT_TYPE_STYLE = "style";

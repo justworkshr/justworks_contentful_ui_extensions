@@ -17,12 +17,10 @@ const isSingleReference = fieldValue => {
   );
 };
 
-const isMultiReference = fieldObject => {
+const isMultiReference = field => {
   return (
-    (fieldObject.type === "Array" &&
-      fieldObject.items &&
-      fieldObject.items.type === "Link") ||
-    Array.isArray(fieldObject["en-US"])
+    (field.type === "Array" && field.items && field.items.type === "Link") ||
+    Array.isArray(field["en-US"])
   );
 };
 

@@ -123,6 +123,7 @@ export const EntryField = props => {
       />
     );
   };
+
   return (
     <div className={classnames('custom-template-entry-field', props.className)}>
       <div className="sub-section__heading">

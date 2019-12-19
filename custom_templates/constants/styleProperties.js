@@ -57,9 +57,9 @@ export const TEXT_COLORS = [
   constructColor({ label: "Black", value: "black", hexValue: "#515151" }),
   constructColor({ label: "White", value: "white", hexValue: "#ffffff" }),
   constructColor({
-    label: "Timberwolf",
-    value: "timberwolf",
-    hexValue: "#CDD6DA"
+    label: "Concrete",
+    value: "concrete",
+    hexValue: "#8199A3"
   }),
   constructColor({ label: "Navy", value: "navy", hexValue: "#243F69" })
 ];

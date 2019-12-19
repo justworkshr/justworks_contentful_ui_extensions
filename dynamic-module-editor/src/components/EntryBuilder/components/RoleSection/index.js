@@ -36,7 +36,7 @@ const RoleSection = props => {
         props.roleKey,
         props.roleConfigObject,
         props.roleMappingObject,
-        props.entry
+        props.fieldConfigObject
       )}
 
       {!!(props.stateErrors[props.roleKey] || {}).length &&
@@ -53,6 +53,7 @@ const RoleSection = props => {
 
 RoleSection.propTypes = {
   entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  fieldConfigObject: PropTypes.object,
   roleMappingObject: PropTypes.object,
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,

@@ -2,8 +2,7 @@ import {
   constructRole,
   allowAsset,
   defaultStyleTypes,
-  templateStyleProperty,
-  fieldObject
+  templateStyleProperty
 } from "../utils";
 import * as c from "../constants";
 
@@ -38,7 +37,6 @@ export const cardBlock = {
     fieldRoles: {
       left_text: constructRole({
         contentTypes: [c.CONTENT_TYPE_TEXT],
-        field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
         defaultStyle: "text-black",
         required: true,
         description: `Primary markdown text to display on the left half section.`
@@ -55,18 +53,15 @@ export const cardBlock = {
       }),
       card_link: constructRole({
         contentTypes: c.CONTENT_TYPE_LINK,
-        field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
         required: false,
         description: "Link url for the card."
       }),
       cta_text: constructRole({
-        field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
         defaultStyle: "text-cerulean",
         required: false,
         description: "Text for the optional CTA"
       }),
       tag_text: constructRole({
-        field: fieldObject({ type: c.FIELD_TYPE_TITLE }),
         defaultStyle: "text-white text-uppercase",
         required: false,
         description:

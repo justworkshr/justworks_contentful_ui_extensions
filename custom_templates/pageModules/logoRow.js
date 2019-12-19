@@ -1,4 +1,4 @@
-import { constructRole, fieldObject } from "../utils";
+import { constructRole, constructField } from "../utils";
 import * as c from "../constants";
 
 export const logoRow = {
@@ -11,17 +11,39 @@ export const logoRow = {
     fieldRoles: {
       title: constructRole({
         description: "Template title.",
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_TITLE,
+            styleView: c.STYLE_VIEW_TITLE
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            styleView: c.STYLE_VIEW_TITLE,
+            contentType: c.CONTENT_TYPE_GENERIC_TEXT
+          })
+        ],
+        contentTypes: [c.CONTENT_TYPE_GENERIC_TEXT],
         required: false,
-        field: fieldObject({ type: c.FIELD_TYPE_MARKDOWN }),
-        defaultStyle: "text-center text-black"
+        defaultStyle: {
+          textAlignment: "center",
+          textTransform: "uppercase",
+          textColor: "navy",
+          titleSize: "section-small"
+        }
       }),
       items: constructRole({
         description: "Grid items.",
         required: false,
-        fieldTypes: [c.FIELD_TYPE_MULTI_REFERENCE, c.FIELD_TYPE_ASSET],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_MULTI_REFERENCE,
+            styleView: c.STYLE_VIEW_FLEX_ROW,
+            assetStyleView: c.STYLE_VIEW_LOGO,
+            assetTypes: [c.ASSET_TYPE_IMAGE],
+            assetSubType: c.ASSET_SUBTYPE_LOGO
+          })
+        ],
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        assetTypes: [c.ASSET_TYPE_IMAGE],
-        assetSubType: c.ASSET_SUBTYPE_LOGO,
         allowedCustomTemplates: [c.LOGO_ITEM],
         multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {

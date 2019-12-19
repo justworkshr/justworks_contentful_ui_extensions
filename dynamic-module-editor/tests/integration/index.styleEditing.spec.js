@@ -345,7 +345,59 @@ describe('App', () => {
     });
   });
 
-  describe('multi-reference asset reference style editing', () => {
+  describe('multi-reference style editing', () => {
+    it('should load the custom style object', () => {
+      const mockEntry = mockPrimaryEntry({
+        name: 'Mock Custom Template Entry',
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
+        entries: undefined,
+        assets: undefined,
+        internalMapping: JSON.stringify({
+          fieldRoles: {
+            grid_logo_multi_field: {
+              type: c.FIELD_TYPE_MULTI_REFERENCE,
+              value: [
+                mockAssetMapping({ value: 1 }),
+                mockAssetMapping({ value: 2 }),
+                mockAssetMapping({ value: 3 })
+              ],
+              style: {
+                type: 'custom',
+                value: {
+                  flexRowPreset: 'natural'
+                }
+              }
+            }
+          }
+        })
+      });
+
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+
+      const sdk = mockSdk(mockEntry);
+      const wrapper = mockComponent({ Component: App, sdk });
+
+      const value = 'natural';
+
+      // Starts with existing value
+      expect(
+        wrapper.state().entryInternalMapping.fieldRoles['grid_logo_multi_field'].style.value
+      ).toEqual({
+        flexRowPreset: value
+      });
+
+      openStyleEditor(wrapper, 'grid_logo_multi_field', c.FIELD_TYPE_MULTI_REFERENCE);
+
+      // radio field is checked
+      expect(
+        wrapper
+          .find({ roleKey: 'grid_logo_multi_field' })
+          .find(`FieldStyleEditor input[value="${value}"]`)
+          .at(0)
+          .props().checked
+      ).toBe(true);
+    });
+
     it('should add classes to all references', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',

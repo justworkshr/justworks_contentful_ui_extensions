@@ -5,7 +5,7 @@ import CreateNewLink from './CreateNewLink';
 import LinkExisting from './LinkExisting';
 import { TextLink } from '@contentful/forma-36-react-components';
 
-import { roleAllowsFields, roleAllowsLinks, pluckField } from '../utils';
+import { roleAllowsFields, roleAllowsLinks, pluckFieldType } from '../utils';
 
 const EntryActionRow = props => {
   return (
@@ -15,7 +15,7 @@ const EntryActionRow = props => {
           icon="Quote"
           linkType="primary"
           className="entry-action-button__add-field link-entries-row__button"
-          onClick={() => props.onAddFieldClick(props.roleKey, pluckField(props.fieldTypes))}>
+          onClick={() => props.onAddFieldClick(props.roleKey, pluckFieldType(props.fieldTypes))}>
           Add field
         </TextLink>
       )}

@@ -159,15 +159,16 @@ describe('InternalMapping', () => {
     });
 
     describe('addEntry', () => {
-      it('sets the type and sets the value and style', () => {
+      it('sets the type and sets the value, style, and contentType', () => {
         const json = JSON.stringify({
           fieldRoles: { hi: { type: c.FIELD_TYPE_TITLE, value: 'hello' } }
         });
         const internalMapping = new InternalMapping(json);
 
-        internalMapping.addEntry('hi', 'bye');
+        internalMapping.addEntry('hi', 'bye', 'content');
         expect(internalMapping.hi.type).toEqual('entry');
         expect(internalMapping.hi.value).toEqual('bye');
+        expect(internalMapping.hi.contentType).toEqual('content');
         expect(internalMapping.hi.style).toBeUndefined();
       });
 

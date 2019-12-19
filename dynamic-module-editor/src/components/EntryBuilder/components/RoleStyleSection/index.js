@@ -14,13 +14,7 @@ import {
   TextLink,
   Icon
 } from '@contentful/forma-36-react-components';
-import { displaySnakeCaseName, getStatus } from '../../../../../../shared/utilities/elementUtils';
-
-import {
-  renderSingleEntryStyle,
-  renderMultiReferenceStyle,
-  renderMultiReferenceAssetStyle
-} from '../../utils/renderUtils';
+import { getStatus } from '../../../../../../shared/utilities/elementUtils';
 
 import './style.css';
 
@@ -32,6 +26,7 @@ const RoleStyleSection = props => {
         roleKey={props.roleKey}
         roleConfig={props.roleConfigObject}
         roleMappingObject={props.roleMappingObject}
+        styleView={props.styleView}
         updateStyle={props.updateStyle}
         clearStyleField={props.clearStyleField}
         title={props.title}
@@ -110,6 +105,7 @@ RoleStyleSection.propTypes = {
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,
   roleMappingObject: PropTypes.object,
+  styleView: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
   type: PropTypes.string,
@@ -120,6 +116,7 @@ RoleStyleSection.defaultProps = {
   roleKey: '',
   roleConfigObject: {},
   roleMappingObject: {},
+  styleView: undefined,
   type: c.FIELD_TYPE_TITLE,
   styleEntry: undefined
 };

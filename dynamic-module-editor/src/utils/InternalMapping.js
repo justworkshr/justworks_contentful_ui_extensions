@@ -34,10 +34,11 @@ export default class InternalMapping {
     };
   }
 
-  static entryMapping({ type, style = undefined, value = '' } = {}) {
+  static entryMapping({ type, style = undefined, value = '', contentType = undefined } = {}) {
     return {
       type,
       style,
+      contentType,
       value
     };
   }
@@ -142,7 +143,7 @@ export default class InternalMapping {
     });
   }
 
-  addEntry(key, value) {
+  addEntry(key, value, contentType) {
     /*
      * key - string - the getter key of the internal mapping being assigned to
      * value - string - the ID of the contentful entry
@@ -150,7 +151,8 @@ export default class InternalMapping {
     this.defineGetterSetters(key);
     this.fieldRoles[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_ENTRY,
-      value
+      value,
+      contentType
     });
   }
 

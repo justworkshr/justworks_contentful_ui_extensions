@@ -30,10 +30,22 @@ export const constructRole = ({
   };
 };
 
-export const fieldObject = ({ type, defaultStyle = "" } = {}) => {
+export const constructField = ({
+  type,
+  styleView = undefined,
+  assetStyleView = undefined,
+  contentType = undefined,
+  assetTypes = undefined,
+  assetSubType = undefined
+} = {}) => {
+  if (!type) throw new Error("'type' is required in 'constructField'");
   return {
     type,
-    defaultStyle
+    styleView,
+    assetStyleView,
+    contentType,
+    assetTypes,
+    assetSubType
   };
 };
 

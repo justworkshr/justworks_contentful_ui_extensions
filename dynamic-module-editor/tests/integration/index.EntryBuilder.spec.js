@@ -200,7 +200,11 @@ describe('App', () => {
         assets: undefined,
         internalMapping: JSON.stringify({
           fieldRoles: {
-            entry_field: mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 })
+            entry_field: mockMapping({
+              type: c.FIELD_TYPE_ENTRY,
+              value: 1,
+              contentType: c.CONTENT_TYPE_TEXT
+            })
           }
         })
       });
@@ -209,8 +213,19 @@ describe('App', () => {
       const wrapper = mockComponent({ Component: App, sdk });
 
       wrapper.find('RoleSection').forEach(node => {
-        expect(node.find('EntryCard')).toHaveLength(1);
-        expect(node.find('RoleStyleSection')).toHaveLength(0);
+        // only render EntryCard if internalMapping object has a value for role
+        if (node.props().roleMappingObject.value) {
+          expect(node.find('EntryCard')).toHaveLength(1);
+        } else {
+          expect(node.find('EntryCard')).toHaveLength(0);
+        }
+
+        // Only render StyleSection if the fieldConfig has a styleView
+        if (node.props().fieldConfigObject && node.props().fieldConfigObject.styleView) {
+          expect(node.find('RoleStyleSection')).toHaveLength(1);
+        } else {
+          expect(node.find('RoleStyleSection')).toHaveLength(0);
+        }
       });
     });
   });
@@ -290,7 +305,9 @@ describe('App', () => {
         // Only renders this asset reference style if templatre config includes assets
         if (
           multiReferenceStyle &&
-          templateConfig.fieldRoles[node.props().roleKey].fieldTypes.includes(c.FIELD_TYPE_ASSET)
+          templateConfig.fieldRoles[node.props().roleKey].fieldTypes.some(
+            entry => entry.type === c.FIELD_TYPE_ASSET
+          )
         ) {
           expect(node.find('RoleStyleSection').find({ type: c.FIELD_TYPE_ASSET })).toHaveLength(1);
         }

@@ -13,7 +13,7 @@ import RoleSection from './components/RoleSection';
 
 import InternalMapping from '../../utils/InternalMapping';
 
-import { displaySnakeCaseName } from './utils';
+import { roleIsMultiReference, displaySnakeCaseName, getFieldConfig } from './utils';
 
 import {
   renderSingleEntryStyle,
@@ -267,10 +267,10 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  renderEntryFields(roleKey, roleConfigObject, roleMappingObject) {
+  renderEntryFields(roleKey, roleConfigObject, roleMappingObject, fieldConfigObject) {
     // Multi References and with entries
     if (
-      roleConfigObject.fieldTypes.includes(c.FIELD_TYPE_MULTI_REFERENCE) &&
+      roleIsMultiReference(roleConfigObject.fieldTypes) &&
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {
@@ -320,7 +320,7 @@ export default class EntryBuilder extends React.Component {
             />
           </div>
           <div className="section-column">
-            {renderMultiReferenceStyle(roleConfigObject) && (
+            {renderMultiReferenceStyle(fieldConfigObject) && (
               <RoleStyleSection
                 className="max-width-600"
                 addCustomStyle={this.addRoleCustomStyle}
@@ -336,13 +336,14 @@ export default class EntryBuilder extends React.Component {
                 roleKey={roleKey}
                 roleConfigObject={roleConfigObject}
                 roleMappingObject={roleMappingObject}
+                styleView={fieldConfigObject.styleView}
                 updateStyle={this.updateEntryStyle}
                 clearStyleField={this.clearEntryStyleKey}
                 title={displaySnakeCaseName(roleKey) + ' Style'}
                 type={roleMappingObject.type}
               />
             )}
-            {renderMultiReferenceAssetStyle(roleConfigObject, roleMappingObject) && (
+            {renderMultiReferenceAssetStyle(roleMappingObject, fieldConfigObject) && (
               <RoleStyleSection
                 className="max-width-600"
                 addCustomStyle={this.addRoleReferencesCustomStyle}
@@ -356,6 +357,7 @@ export default class EntryBuilder extends React.Component {
                 roleKey={roleKey}
                 roleConfigObject={roleConfigObject}
                 roleMappingObject={firstAsset}
+                styleView={fieldConfigObject.assetStyleView}
                 updateStyle={this.updateReferencesStyle}
                 clearStyleField={this.clearReferencesStyle}
                 title={displaySnakeCaseName(roleKey) + ' Asset Style'}
@@ -374,6 +376,7 @@ export default class EntryBuilder extends React.Component {
         this.props.hydratedAssets.find(
           a => a.sys.id === this.props.entryInternalMapping[roleKey].value
         );
+
       return (
         <div className="section-row">
           <EntryField
@@ -390,7 +393,7 @@ export default class EntryBuilder extends React.Component {
             onFieldChange={this.onFieldChange}
             roleMappingObject={roleMappingObject}
           />
-          {renderSingleEntryStyle(roleMappingObject.type, roleConfigObject) && (
+          {renderSingleEntryStyle(fieldConfigObject) && (
             <RoleStyleSection
               className="max-width-600"
               addCustomStyle={this.addRoleCustomStyle}
@@ -404,6 +407,7 @@ export default class EntryBuilder extends React.Component {
               roleKey={roleKey}
               roleConfigObject={roleConfigObject}
               roleMappingObject={roleMappingObject}
+              styleView={fieldConfigObject.styleView}
               updateStyle={this.updateEntryStyle}
               clearStyleField={this.clearEntryStyleKey}
               title={displaySnakeCaseName(roleKey) + ' Style'}
@@ -467,11 +471,12 @@ export default class EntryBuilder extends React.Component {
             .map((roleKey, index) => {
               const roleConfigObject = this.props.templateConfig.fieldRoles[roleKey] || {};
               const roleMappingObject = this.props.entryInternalMapping.fieldRoles[roleKey] || {};
-
+              const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
               return (
                 <RoleSection
                   key={index}
                   roleKey={roleKey}
+                  fieldConfigObject={fieldConfigObject}
                   roleConfigObject={roleConfigObject}
                   roleMappingObject={roleMappingObject}
                   renderEntryFields={this.renderEntryFields}

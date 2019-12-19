@@ -1,4 +1,4 @@
-import { constructRole, defaultStyleTypes } from "../utils";
+import { constructRole, constructField, defaultStyleTypes } from "../utils";
 import * as c from "../constants";
 
 export const textMedia = {
@@ -13,7 +13,17 @@ export const textMedia = {
     },
     fieldRoles: {
       title: constructRole({
-        fieldTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_TITLE],
+        fieldTypes: [
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            styleView: c.STYLE_VIEW_MARKDOWN,
+            contentType: c.CONTENT_TYPE_GENERIC_TEXT
+          }),
+          constructField({
+            type: c.FIELD_TYPE_TITLE,
+            styleView: c.STYLE_VIEW_TITLE
+          })
+        ],
         contentTypes: [c.CONTENT_TYPE_TEXT],
         defaultStyle: {
           // titleSize
@@ -32,9 +42,20 @@ export const textMedia = {
       }),
       left_content: constructRole({
         fieldTypes: [
-          c.FIELD_TYPE_ASSET,
-          c.FIELD_TYPE_MARKDOWN,
-          c.FIELD_TYPE_ENTRY
+          constructField({
+            type: c.FIELD_TYPE_ASSET
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY
+          }),
+          constructField({
+            type: c.FIELD_TYPE_ENTRY,
+            styleView: c.STYLE_VIEW_MARKDOWN
+          }),
+          constructField({
+            type: c.FIELD_TYPE_MARKDOWN,
+            styleView: c.STYLE_VIEW_MARKDOWN
+          })
         ],
         assetTypes: [c.ASSET_TYPE_IMAGE],
         contentTypes: [c.CONTENT_TYPE_MEDIA], // TODO - contantize these and create a component which displays the allowed configurations based on this role.

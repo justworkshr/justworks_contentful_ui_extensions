@@ -7,7 +7,6 @@ import { Icon, Subheading } from '@contentful/forma-36-react-components';
 
 import StyleView from '../StyleView';
 import classnames from 'classnames';
-import { roleAllowsAssets } from '../../utils';
 
 import './style.css';
 
@@ -16,21 +15,17 @@ const FieldStyleEditor = props => {
   if (!props.roleMappingObject.style) return null;
 
   const renderFieldStyle = props => {
-    switch (props.type) {
-      case c.FIELD_TYPE_MARKDOWN:
-        return renderMarkdownStyle(props.roleMappingObject.style.value);
-      case c.FIELD_TYPE_TITLE:
-        return renderTitleStyle(props.roleMappingObject.style.value);
-      case c.FIELD_TYPE_ASSET:
-        if (
-          roleAllowsAssets(props.roleConfig.fieldTypes) &&
-          props.roleConfig.assetSubType === c.ASSET_SUBTYPE_LOGO
-        ) {
-          return renderLogoStyle(props.roleMappingObject.style.value);
-        }
-        break;
-      case c.FIELD_TYPE_MULTI_REFERENCE:
-        return renderMultiReferenceStyle(props.roleMappingObject.style.value, props.roleConfig);
+    if (props.styleView) {
+      return (
+        <StyleView
+          styleView={props.styleView}
+          onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
+          onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+          styleObject={props.roleMappingObject.style.value}
+        />
+      );
+    } else {
+      return null;
     }
   };
 
@@ -105,6 +100,7 @@ FieldStyleEditor.propTypes = {
   roleKey: PropTypes.string,
   roleConfig: PropTypes.object,
   roleMappingObject: PropTypes.object,
+  styleView: PropTypes.object,
   updateStyle: PropTypes.func,
   updateAssetFormatting: PropTypes.func,
   type: PropTypes.string
@@ -115,6 +111,7 @@ FieldStyleEditor.defaultProps = {
   roleKey: '',
   roleConfig: {},
   roleMappingObject: {},
+  styleView: undefined,
   type: undefined
 };
 
