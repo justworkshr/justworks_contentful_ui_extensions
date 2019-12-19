@@ -346,10 +346,10 @@ describe('App', () => {
   });
 
   describe('multi-reference asset reference style editing', () => {
-    xit('should add classes to all references', () => {
+    it('should add classes to all references', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: [],
         assets: [mockLink({ id: 1 }), mockLink({ id: 2 }), mockLink({ id: 3 })],
         internalMapping: JSON.stringify({
@@ -366,7 +366,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_TEMPLATE];
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -375,6 +375,7 @@ describe('App', () => {
       wrapper
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
+        .at(1)
         .simulate('click');
 
       // all assets start with original classes (blank)
@@ -384,15 +385,23 @@ describe('App', () => {
           .entryInternalMapping.fieldRoles['grid_logo_multi_field'].value.filter(
             e => e.type === c.FIELD_TYPE_ASSET
           )
-          .every(e => e.style.value === '')
+          .every(e => {
+            return e.style.type === c.STYLE_TYPE_CUSTOM;
+          })
       ).toEqual(true);
 
-      openStyleEditor(wrapper, 'grid_logo_multi_field', 'asset');
+      openStyleEditor(wrapper, 'grid_logo_multi_field', c.FIELD_TYPE_ASSET);
 
-      const value = 'icon-large';
+      const value = 'default';
       // select value
 
-      setStyleValue(wrapper, 'grid_logo_multi_field', 'asset', 'Icon Size', value);
+      setStyleValue(
+        wrapper,
+        'grid_logo_multi_field',
+        c.FIELD_TYPE_ASSET,
+        'Padded Container',
+        value
+      );
 
       // all assets now have selected class
       expect(
@@ -401,7 +410,9 @@ describe('App', () => {
           .entryInternalMapping.fieldRoles['grid_logo_multi_field'].value.filter(
             e => e.type === c.FIELD_TYPE_ASSET
           )
-          .every(e => e.style.value === value)
+          .every(e => {
+            return e.style.value['paddedContainer'] === value;
+          })
       ).toEqual(true);
     });
   });

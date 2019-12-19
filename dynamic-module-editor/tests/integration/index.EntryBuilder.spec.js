@@ -216,12 +216,12 @@ describe('App', () => {
   });
 
   describe('a template w/ multi-reference fields', () => {
-    const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_TEMPLATE];
+    const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
     it('should render the default editor state', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
@@ -245,7 +245,7 @@ describe('App', () => {
     it('renders multiple entry/asset cards', () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: [
           mockLink({ id: 1 }),
           mockLink({ id: 2 }),
@@ -286,19 +286,13 @@ describe('App', () => {
         expect(node.find('LinkExisting')).toHaveLength(1);
 
         const multiReferenceStyle =
-          templateConfig.fieldRoles[node.props().roleKey].multiReferenceStyleType;
-        // Only renders this style if multiReferenceStyleType property is set
-        if (multiReferenceStyle) {
-          expect(node.find('RoleStyleSection')).toHaveLength(1);
-        }
-
+          templateConfig.fieldRoles[node.props().roleKey].multiReferenceStyleView;
+        // Only renders this asset reference style if templatre config includes assets
         if (
-          !multiReferenceStyle &&
-          (!roleAllowsAssets(templateConfig.fieldRoles[node.props().roleKey].fieldTypes) ||
-            (roleAllowsAssets(templateConfig.fieldRoles[node.props().roleKey].fieldTypes) &&
-              templateConfig.fieldRoles[node.props().roleKey].subType !== c.ASSET_SUBTYPE_LOGO))
+          multiReferenceStyle &&
+          templateConfig.fieldRoles[node.props().roleKey].fieldTypes.includes(c.FIELD_TYPE_ASSET)
         ) {
-          expect(node.find('RoleStyleSection')).toHaveLength(0);
+          expect(node.find('RoleStyleSection').find({ type: c.FIELD_TYPE_ASSET })).toHaveLength(1);
         }
       });
     });

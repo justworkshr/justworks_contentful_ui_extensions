@@ -81,3 +81,23 @@ export const STYLE_VIEW_MARKDOWN = constructStyleView({
     })
   ]
 });
+
+export const STYLE_VIEW_FLEX_ROW = constructStyleView({
+  subSections: [],
+  styleSections: [
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
+      styleProperty: sp.STYLE_PROPERTY_FLEX_ROW
+    })
+  ]
+});
+
+export const STYLE_VIEW_LOGO = constructStyleView({
+  subSections: [],
+  styleSections: [
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
+      styleProperty: sp.STYLE_PROPERTY_PADDED_CONTAINER
+    })
+  ]
+});

@@ -519,49 +519,60 @@ describe('InternalMapping', () => {
     });
   });
 
-  describe('setReferencesStyleClasses', () => {
+  describe('setReferencesStyle', () => {
     it('adds style classes to empty value', () => {
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
             value: [
-              { type: 'entry', value: 'hello', style: {} },
-              { type: 'entry', value: 'bye', style: {} }
+              { type: 'asset', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } },
+              { type: 'asset', value: 'bye', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
             ]
           }
         }
       });
       const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.setReferencesStyleClasses('hi', styleClass);
-      expect(internalMapping.hi.value[0].style.value).toEqual(styleClass);
-      expect(internalMapping.hi.value[1].style.value).toEqual(styleClass);
+      internalMapping.setReferencesStyle('hi', 'styleKey', 'styleValue');
+      expect(internalMapping.hi.value[0].style.value['styleKey']).toEqual('styleValue');
+      expect(internalMapping.hi.value[1].style.value['styleKey']).toEqual('styleValue');
     });
+  });
 
-    it('overwrites an existing value', () => {
+  describe('addReferencesStyleCustom', () => {
+    it('adds custom style to references', () => {
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
             value: [
-              {
-                type: 'entry',
-                value: 'hello',
-                style: InternalMapping.styleMapping({ value: 'helloClass' })
-              },
-              {
-                type: 'entry',
-                value: 'bye',
-                style: InternalMapping.styleMapping({ value: 'helloClass' })
-              }
+              { type: 'asset', value: 'hello', style: {} },
+              { type: 'asset', value: 'bye', style: {} }
             ]
           }
         }
       });
       const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.setReferencesStyleClasses('hi', styleClass);
-      expect(internalMapping.hi.value[0].style.value).toEqual(styleClass);
-      expect(internalMapping.hi.value[1].style.value).toEqual(styleClass);
+      internalMapping.addReferencesStyleCustom('hi');
+      expect(internalMapping.hi.value[0].style.type).toEqual(c.STYLE_TYPE_CUSTOM);
+      expect(internalMapping.hi.value[1].style.type).toEqual(c.STYLE_TYPE_CUSTOM);
+    });
+  });
+
+  describe('clearRoleReferencesStyle', () => {
+    it('removes style from references', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            value: [
+              { type: 'asset', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } },
+              { type: 'asset', value: 'bye', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
+            ]
+          }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+      internalMapping.clearRoleReferencesStyle('hi');
+      expect(internalMapping.hi.value[0].style).toEqual(undefined);
+      expect(internalMapping.hi.value[1].style).toEqual(undefined);
     });
   });
 
@@ -605,22 +616,8 @@ describe('InternalMapping', () => {
     });
   });
 
-  describe('removeReferencesStyleClasses', () => {
-    it('removes from empty value', () => {
-      const json = JSON.stringify({
-        fieldRoles: { hi: { style: {}, value: [{ type: 'asset', style: {} }] } }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClasses = [{ className: 'hiClass' }];
-      internalMapping.removeReferencesStyleClasses(
-        'hi',
-        styleClasses.map(el => el.className)
-      );
-      expect(internalMapping.hi.value[0].style.value).toEqual('');
-    });
-
+  describe('removeReferencesStyleKey', () => {
     it('removes style class from existing value', () => {
-      const styleClasses = [{ className: 'hiClass' }, { className: 'class2' }];
       const json = JSON.stringify({
         fieldRoles: {
           hi: {
@@ -628,7 +625,9 @@ describe('InternalMapping', () => {
               {
                 type: 'asset',
                 style: InternalMapping.styleMapping({
-                  value: styleClasses.map(el => el.className).join(' ')
+                  value: {
+                    styleKey: 'styleValue'
+                  }
                 })
               }
             ],
@@ -637,12 +636,12 @@ describe('InternalMapping', () => {
         }
       });
       const internalMapping = new InternalMapping(json);
-      internalMapping.removeReferencesStyleClasses('hi', styleClasses);
-      expect(internalMapping.hi.value[0].style.value).toEqual('');
+      internalMapping.removeReferencesStyleKey('hi', 'styleKey');
+      expect(internalMapping.hi.value[0].style.value).toEqual({});
     });
   });
 
-  describe('setImageFormatting', () => {
+  describe('setAssetFormatting', () => {
     it('rejects when roleObject isnt an asset', () => {
       const json = JSON.stringify({
         fieldRoles: { hi: { type: 'field', value: 'hello' } }
@@ -650,7 +649,7 @@ describe('InternalMapping', () => {
       const internalMapping = new InternalMapping(json);
       const imageObject = { w: 100 };
 
-      expect(() => internalMapping.setImageFormatting('hi', imageObject)).toThrow(
+      expect(() => internalMapping.setAssetFormatting('hi', imageObject)).toThrow(
         'Can only format an image asset'
       );
     });
@@ -663,7 +662,7 @@ describe('InternalMapping', () => {
       });
       const internalMapping = new InternalMapping(json);
       const imageObject = { w: 100 };
-      internalMapping.setImageFormatting('hi', imageObject);
+      internalMapping.setAssetFormatting('hi', imageObject);
       expect(internalMapping.hi.formatting).toEqual(imageObject);
     });
   });

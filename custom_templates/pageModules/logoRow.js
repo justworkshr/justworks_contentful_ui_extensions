@@ -23,7 +23,7 @@ export const logoRow = {
         assetTypes: [c.ASSET_TYPE_IMAGE],
         assetSubType: c.ASSET_SUBTYPE_LOGO,
         allowedCustomTemplates: [c.LOGO_ITEM],
-        multiReferenceStyleType: c.MULTI_REFERENCE_STYLE_FLEX,
+        multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {
           paddedContainer: "comfortable"
         },

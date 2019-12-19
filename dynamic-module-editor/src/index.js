@@ -167,7 +167,7 @@ export class App extends React.Component {
     }
   };
 
-  onStyleChangeHandler = async value => {
+  onStyleChangeHandler = value => {
     this.setState({ style: value });
     this.props.sdk.entry.fields.style.setValue(constructLink(value));
   };
@@ -187,7 +187,6 @@ export class App extends React.Component {
 
     const parsedJSON = JSON.parse(internalMappingJson);
     const fieldRoles = parsedJSON.fieldRoles;
-
     Object.keys(fieldRoles).forEach(roleKey => {
       const roleMappingObject = fieldRoles[roleKey];
       /*
@@ -212,8 +211,27 @@ export class App extends React.Component {
       if (roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY) {
         entryLinks.push(linkFromMapping(roleMappingObject.style));
       }
-    });
 
+      // link role assets style entry
+      if (
+        roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE &&
+        !!roleMappingObject.value.length
+      ) {
+        let nonDuplicateEntry;
+        roleMappingObject.value.forEach(entry => {
+          if (entry.type === c.FIELD_TYPE_ASSET) {
+            if (entry.style && entry.style.type === c.FIELD_TYPE_ENTRY) {
+              nonDuplicateEntry = linkFromMapping(entry.style);
+            }
+          }
+        });
+
+        entryLinks.push(nonDuplicateEntry);
+      }
+
+      entryLinks = entryLinks.filter(e => e);
+      assetLinks = assetLinks.filter(e => e);
+    });
     // If new entries or assets need to be added
     if (entryLinks.length !== entryEntries.length || assetLinks.length !== entryAssets.length) {
       const entries = (entryLinks = []) => {
@@ -249,7 +267,6 @@ export class App extends React.Component {
           })
         )
       };
-
       await this.props.sdk.space.updateEntry(newEntry);
 
       let loadingEntries = this.getLoadingEntries(

@@ -67,6 +67,18 @@ export const handleAddRoleEntryStyle = async ({ sdk, props, roleKey } = {}) => {
   }
 };
 
+export const handleAddRoleReferencesEntryStyle = async ({ sdk, props, roleKey } = {}) => {
+  const entry = await sdk.dialogs.selectSingleEntry({
+    contentTypes: ['style']
+  });
+  if (entry) {
+    let updatedInternalMapping = props.entryInternalMapping;
+    updatedInternalMapping.setReferencesStyleEntry(roleKey, entry.sys.id);
+
+    props.updateEntry(updatedInternalMapping.asJSON());
+  }
+};
+
 export const handleMultipleAssetsLink = async ({
   sdk,
   props,
@@ -358,12 +370,10 @@ export const handleUpdateReferencesStyle = ({
   setInternalMappingValue,
   internalMappingObject,
   roleKey,
-  styleClasses
+  styleKey,
+  styleValue
 } = {}) => {
-  internalMappingObject.setReferencesStyleClasses(
-    roleKey,
-    cleanStyleClasses(styleClasses, internalMappingObject[roleKey].value)
-  );
+  internalMappingObject.setReferencesStyle(roleKey, styleKey, styleValue);
 
   setInternalMappingValue(internalMappingObject.asJSON());
 };

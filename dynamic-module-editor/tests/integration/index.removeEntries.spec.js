@@ -3,8 +3,7 @@ import { App } from '../../src/index';
 
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { mount } from 'enzyme';
-import sinon from 'sinon';
+
 import * as c from '../../../custom_templates/constants';
 
 import * as tm from '../../../custom_templates/mocks/templateMocks';
@@ -13,8 +12,6 @@ import {
   mockSdk,
   mockComponent,
   mockPrimaryEntry,
-  mockAssetResponse,
-  mockEntryResponse,
   mockLink,
   mockAssetMapping,
   mockMapping
@@ -78,7 +75,7 @@ describe('App', () => {
     it('should remove from multi-asset field', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: [
           mockLink({ id: 1 }),
           mockLink({ id: 2 }),
@@ -187,7 +184,7 @@ describe('App', () => {
     it('should remove from multi-entry field', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: [mockLink({ id: 1 }), mockLink({ id: 2 })],
         assets: [mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 3 })],
         internalMapping: JSON.stringify({

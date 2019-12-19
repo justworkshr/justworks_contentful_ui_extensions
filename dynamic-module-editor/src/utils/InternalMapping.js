@@ -253,14 +253,14 @@ export default class InternalMapping {
   }
 
   setStyleValue(key, styleKey, styleValue) {
-    if (!this.fieldRoles[key].style) return;
+    if (!this.fieldRoles[key].style) this.fieldRoles[key].style = {};
     if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
       this.fieldRoles[key].style.value[styleKey] = styleValue;
     }
   }
 
   setTemplateStyleValue(templateStyleKey, styleKey, styleValue) {
-    if (!this.style) return;
+    if (!this.style) this.style = {};
     if (!this.style[templateStyleKey]) {
       this.style[templateStyleKey] = {};
     }
@@ -268,29 +268,57 @@ export default class InternalMapping {
     this.style[templateStyleKey][styleKey] = styleValue;
   }
 
-  setReferencesStyleClasses(key, styleClasses) {
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
-      if ((entry.style || {}).type === c.STYLE_TYPE_ENTRY) return;
-      entry.style = InternalMapping.styleMapping({ value: styleClasses });
-      return entry;
+  addReferencesStyleCustom(key) {
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+      if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
+      if (!asset.style) asset.style = {};
+      asset.style = InternalMapping.styleMapping({
+        type: c.STYLE_TYPE_CUSTOM,
+        value: this._templateConfig.fieldRoles[key]
+          ? this._templateConfig.fieldRoles[key].defaultStyle
+          : undefined
+      });
+      return asset;
+    });
+    this.fieldRoles[key];
+  }
+
+  setReferencesStyleEntry(key, entryId) {
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+      if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
+      if (!asset.style) asset.style = {};
+      asset.style = InternalMapping.styleMapping({
+        type: c.STYLE_TYPE_ENTRY,
+        value: entryId
+      });
+      return asset;
     });
   }
 
-  removeReferencesStyleClasses(key, classArray) {
-    if (classArray[0].className) {
-      // if passed an array of classObjects instead of strings
-      classArray = classArray.map(el => el.className);
-    }
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
-      if ((entry.style || {}).type === c.STYLE_TYPE_ENTRY) return;
-      const classes = entry.style.value
-        ? entry.style.value
-            .split(' ')
-            .filter(e => e)
-            .filter(cl => !classArray.includes(cl))
-        : [];
+  setReferencesStyle(key, styleKey, styleValue) {
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+      if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
+      if (!asset.style) asset.style = {};
+      asset.style.value[styleKey] = styleValue;
+      return asset;
+    });
+  }
 
-      entry.style = InternalMapping.styleMapping({ value: [...classes].join(' ') });
+  clearRoleReferencesStyle(key) {
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+      if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
+      if (!asset.style) asset.style = {};
+      asset.style = undefined;
+      return asset;
+    });
+  }
+
+  removeReferencesStyleKey(key, styleKey) {
+    this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
+      if (entry.type === c.FIELD_TYPE_ASSET) {
+        delete entry.style.value[styleKey];
+      }
+
       return entry;
     });
   }
@@ -308,7 +336,7 @@ export default class InternalMapping {
     delete this.style[templateStyleKey][styleKey];
   }
 
-  setImageFormatting(key, formattingObject) {
+  setAssetFormatting(key, formattingObject) {
     const roleObject = this.fieldRoles[key];
 
     if (roleObject.type !== c.FIELD_TYPE_ASSET) {

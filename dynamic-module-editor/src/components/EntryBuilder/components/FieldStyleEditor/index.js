@@ -26,12 +26,11 @@ const FieldStyleEditor = props => {
           roleAllowsAssets(props.roleConfig.fieldTypes) &&
           props.roleConfig.assetSubType === c.ASSET_SUBTYPE_LOGO
         ) {
-          const styleClasses = props.roleMappingObject.style.value;
-          return renderLogoStyle(styleClasses);
+          return renderLogoStyle(props.roleMappingObject.style.value);
         }
         break;
-      case c.MULTI_REFERENCE_STYLE_FLEX:
-        return renderMultiReferenceStyle(props.roleMappingObject.style.value);
+      case c.FIELD_TYPE_MULTI_REFERENCE:
+        return renderMultiReferenceStyle(props.roleMappingObject.style.value, props.roleConfig);
     }
   };
 
@@ -46,13 +45,15 @@ const FieldStyleEditor = props => {
     );
   };
 
-  const renderLogoStyle = entryStyleClasses => {
-    return;
-    // <LogoStyle
-    //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-    //   entryStyleClasses={entryStyleClasses}
-    //   onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-    // />
+  const renderLogoStyle = styleObject => {
+    return (
+      <StyleView
+        styleView={c.STYLE_VIEW_LOGO}
+        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+        styleObject={styleObject}
+      />
+    );
   };
 
   const renderMarkdownStyle = styleObject => {
@@ -66,15 +67,15 @@ const FieldStyleEditor = props => {
     );
   };
 
-  const renderMultiReferenceStyle = entryStyleClasses => {
-    const sections = ['small', 'medium', 'large'];
-    return;
-    // <MultiReferenceStyle
-    //   onClear={classArray => props.clearStyleField(props.roleKey, classArray)}
-    //   entryStyleClasses={entryStyleClasses}
-    //   sections={sections}
-    //   updateStyleExclusive={updateStyleExclusive}
-    // />
+  const renderMultiReferenceStyle = (styleObject, roleConfigObject) => {
+    return (
+      <StyleView
+        styleView={roleConfigObject.multiReferenceStyleView}
+        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
+        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
+        styleObject={styleObject}
+      />
+    );
   };
 
   return (

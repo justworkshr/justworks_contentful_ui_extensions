@@ -11,9 +11,9 @@ export const constructRole = ({
   assetSubType = undefined,
   contentTypes = [],
   allowedCustomTemplates = [],
-  multiReferenceStyleType = undefined,
-  defaultStyle = {},
-  assetDefaultStyle = {},
+  multiReferenceStyleView = undefined,
+  defaultStyle = undefined,
+  assetDefaultStyle = undefined,
   required = true
 } = {}) => {
   return {
@@ -23,7 +23,7 @@ export const constructRole = ({
     assetSubType,
     contentTypes,
     allowedCustomTemplates,
-    multiReferenceStyleType,
+    multiReferenceStyleView,
     defaultStyle,
     assetDefaultStyle,
     required

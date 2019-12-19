@@ -19,61 +19,27 @@ import { displaySnakeCaseName, getStatus } from '../../../../../../shared/utilit
 import {
   renderSingleEntryStyle,
   renderMultiReferenceStyle,
-  renderMultiReferenceItemStyle
+  renderMultiReferenceAssetStyle
 } from '../../utils/renderUtils';
 
 import './style.css';
 
 const RoleStyleSection = props => {
   const renderStyleEditor = () => {
-    if (
-      !renderMultiReferenceStyle(props.roleConfigObject) &&
-      renderSingleEntryStyle(props.roleMappingObject.type, props.roleConfigObject)
-    ) {
-      return (
-        <FieldStyleEditor
-          clearRoleStyle={props.clearRoleStyle}
-          roleKey={props.roleKey}
-          roleConfig={props.roleConfigObject}
-          roleMappingObject={props.roleMappingObject}
-          updateStyle={props.updateStyle}
-          updateAssetFormatting={props.updateAssetFormatting}
-          clearStyleField={props.clearStyleField}
-          title={props.title}
-          type={props.type}
-        />
-      );
-    } else if (renderMultiReferenceStyle(props.roleConfigObject)) {
-      return (
-        <div>
-          <FieldStyleEditor
-            clearRoleStyle={props.clearRoleStyle}
-            roleKey={props.roleKey}
-            roleConfig={props.roleConfigObject}
-            roleMappingObject={props.roleMappingObject}
-            updateStyle={props.updateStyle}
-            updateAssetFormatting={props.updateAssetFormatting}
-            clearStyleField={props.clearStyleField}
-            title={displaySnakeCaseName(props.roleKey) + ' Collection Style'}
-            type={props.roleConfigObject.multiReferenceStyleType}
-          />
-          {renderMultiReferenceItemStyle(props.roleConfigObject, props.roleMappingObject) && (
-            <FieldStyleEditor
-              clearRoleStyle={props.clearRoleStyle}
-              roleKey={props.roleKey}
-              roleConfig={props.roleConfigObject}
-              roleMappingObject={props.roleMappingObject}
-              updateStyle={props.updateStyle}
-              updateAssetFormatting={props.updateAssetFormatting}
-              clearStyleField={props.clearStyleField}
-              title={displaySnakeCaseName(props.roleKey) + ' Linked Asset Style'}
-              type={c.FIELD_TYPE_ASSET}
-            />
-          )}
-        </div>
-      );
-    }
+    return (
+      <FieldStyleEditor
+        clearRoleStyle={props.clearRoleStyle}
+        roleKey={props.roleKey}
+        roleConfig={props.roleConfigObject}
+        roleMappingObject={props.roleMappingObject}
+        updateStyle={props.updateStyle}
+        clearStyleField={props.clearStyleField}
+        title={props.title}
+        type={props.type}
+      />
+    );
   };
+
   return (
     <div className={classnames('role-style-section', props.className)}>
       <div className="sub-section__heading">
@@ -84,7 +50,7 @@ const RoleStyleSection = props => {
             <TextLink onClick={() => props.clearRoleStyle(props.roleKey)}>Remove</TextLink>
           )}
       </div>
-      {!props.roleMappingObject.style && (
+      {(!props.roleMappingObject.style || !Object.keys(props.roleMappingObject.style).length) && (
         <div className="role-style-section__action-row">
           <TextLink
             className="link-style-section__custom-style-button"

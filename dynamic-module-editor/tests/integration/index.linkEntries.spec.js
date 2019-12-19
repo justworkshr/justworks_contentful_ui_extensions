@@ -59,7 +59,7 @@ describe('App', () => {
     it('should link multiple assets', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
@@ -140,13 +140,13 @@ describe('App', () => {
     it('should link multiple entries', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_TEMPLATE];
+      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -263,7 +263,7 @@ describe('App', () => {
     it('should copy and link multiple entries', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
-        type: tm.MOCK_MULTI_REFERENCE_TEMPLATE,
+        type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
         entries: undefined,
         assets: undefined,
         internalMapping: ''

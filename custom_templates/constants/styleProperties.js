@@ -179,3 +179,31 @@ export const STYLE_PROPERTY_PADDED_CONTAINER = constructStyleProperty({
     })
   ]
 });
+
+// Flex Row Presets
+
+export const STYLE_PROPERTY_FLEX_ROW = constructStyleProperty({
+  key: "flexRowPreset",
+  values: [
+    constructStyleValue({
+      value: "natural",
+      label: "Natural"
+    }),
+    constructStyleValue({
+      value: "6-4-2",
+      label: "6-4-2"
+    }),
+    constructStyleValue({
+      value: "5-3-2",
+      label: "5-3-2"
+    }),
+    constructStyleValue({
+      value: "4-2-2",
+      label: "4-2-2"
+    }),
+    constructStyleValue({
+      value: "3-2-1",
+      label: "Natural"
+    })
+  ]
+});

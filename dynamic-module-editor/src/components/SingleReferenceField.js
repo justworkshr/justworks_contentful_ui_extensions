@@ -28,7 +28,9 @@ const SingleReferenceField = props => {
     props.sdk.navigator.openEntry(id, { slideIn: true });
   };
 
-  if (!hydratedEntry && props.value) {
+  if (!props.value && hydratedEntry) {
+    hydrateEntry(null);
+  } else if (!hydratedEntry && props.value) {
     loadEntry();
   }
 

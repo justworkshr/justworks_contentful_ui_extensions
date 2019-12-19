@@ -24,13 +24,16 @@ const StyleView = props => {
   const renderComponentType = (styleSection, subSection) => {
     const sectionLabel = getSectionLabel(subSection);
     const styleKey = styleSection.styleProperty.key;
+    const getValue = styleKey => {
+      return props.styleObject[styleKey];
+    };
     switch (styleSection.componentType) {
       case c.STYLE_VIEW_COMPONENT_COLOR:
         return (
           <ColorStyle
             key={`style-group-${styleKey}`}
             label={displayCamelCaseName(styleKey)}
-            value={props.styleObject[styleKey]}
+            value={getValue(styleKey)}
             onClear={() => props.onClear(styleKey)}
             onChange={value => props.onChange(styleKey, value)}
             section={subSection}
@@ -44,7 +47,7 @@ const StyleView = props => {
           <StyleEditorFieldGroup
             key={`style-group-${styleKey}`}
             label={displayCamelCaseName(styleKey)}
-            value={props.styleObject[styleKey]}
+            value={getValue(styleKey)}
             onClear={() => props.onClear(styleKey)}
             onChange={value => props.onChange(styleKey, value)}
             section={subSection}

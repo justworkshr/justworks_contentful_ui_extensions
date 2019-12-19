@@ -7,7 +7,7 @@ export const MOCK_TEMPLATE_NAME = "mock 1";
 export const MOCK_FIELDS_TEMPLATE = "fields mock";
 export const MOCK_ASSETS_TEMPLATE = "assets mock";
 export const MOCK_ENTRY_TEMPLATE = "entry mock";
-export const MOCK_MULTI_REFERENCE_TEMPLATE = "multi-reference mock";
+export const MOCK_MULTI_REFERENCE_LOGO_TEMPLATE = "multi-reference mock";
 export const MOCK_TEMPLATE_STYLE_ENTRY = "template style mock";
 
 export const mockCustomTemplates = {
@@ -84,14 +84,15 @@ export const mockCustomTemplates = {
       })
     }
   },
-  [MOCK_MULTI_REFERENCE_TEMPLATE]: {
+  [MOCK_MULTI_REFERENCE_LOGO_TEMPLATE]: {
     meta: {},
     style: {},
     fieldRoles: {
       grid_logo_multi_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
+        assetSubType: c.ASSET_SUBTYPE_LOGO,
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        multiReferenceStyleType: c.MULTI_REFERENCE_STYLE_FLEX,
+        multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {
           assetStyle: "assetStyleValue"
         },
@@ -99,8 +100,9 @@ export const mockCustomTemplates = {
       }),
       no_style_multi_field: constructRole({
         fieldTypes: [c.FIELD_TYPE_ASSET, c.FIELD_TYPE_MULTI_REFERENCE],
+        assetSubType: c.ASSET_SUBTYPE_LOGO,
         contentTypes: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
-        multiReferenceStyleType: c.MULTI_REFERENCE_STYLE_FLEX,
+        multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {
           assetStyle: "assetStyleValue"
         },
