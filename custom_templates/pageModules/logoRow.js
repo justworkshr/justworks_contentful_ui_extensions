@@ -25,10 +25,11 @@ export const logoRow = {
         allowedCustomTemplates: [c.LOGO_ITEM],
         multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW,
         assetDefaultStyle: {
-          paddedContainer: "comfortable"
+          paddedContainer: "default",
+          logoSize: "default"
         },
         defaultStyle: {
-          flexRowPreset: "flex-row--4-2-2"
+          flexRowPreset: "4-2-2"
         }
       })
     }

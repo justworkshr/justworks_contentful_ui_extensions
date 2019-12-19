@@ -555,6 +555,34 @@ describe('InternalMapping', () => {
       expect(internalMapping.hi.value[0].style.type).toEqual(c.STYLE_TYPE_CUSTOM);
       expect(internalMapping.hi.value[1].style.type).toEqual(c.STYLE_TYPE_CUSTOM);
     });
+
+    it('adds assetDefaultStyle to assets', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: {
+            value: [
+              { type: 'asset', value: 'hello', style: {} },
+              { type: 'asset', value: 'bye', style: {} }
+            ]
+          }
+        }
+      });
+
+      const style = { styleKey: 'styleValue' };
+      const templateConfig = {
+        fieldRoles: {
+          hi: {
+            assetDefaultStyle: {
+              ...style
+            }
+          }
+        }
+      };
+      const internalMapping = new InternalMapping(json, templateConfig);
+      internalMapping.addReferencesStyleCustom('hi');
+      expect(internalMapping.hi.value[0].style.value).toEqual(style);
+      expect(internalMapping.hi.value[1].style.value).toEqual(style);
+    });
   });
 
   describe('clearRoleReferencesStyle', () => {

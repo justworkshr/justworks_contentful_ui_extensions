@@ -98,6 +98,10 @@ export const STYLE_VIEW_LOGO = constructStyleView({
     constructStyleSection({
       componentType: STYLE_VIEW_COMPONENT_RADIO,
       styleProperty: sp.STYLE_PROPERTY_PADDED_CONTAINER
+    }),
+    constructStyleSection({
+      componentType: STYLE_VIEW_COMPONENT_RADIO,
+      styleProperty: sp.STYLE_PROPERTY_LOGO_SIZE
     })
   ]
 });

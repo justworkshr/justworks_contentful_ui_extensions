@@ -25,6 +25,16 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
   const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
 
+  // attaches existing asset style to new assets
+  const firstAsset = updatedInternalMapping.fieldRoles[roleKey]
+    ? updatedInternalMapping.fieldRoles[roleKey].value.find(
+        entry => entry.type === c.FIELD_TYPE_ASSET
+      )
+    : undefined;
+  let assetStyle;
+  if (firstAsset) {
+    assetStyle = firstAsset.style;
+  }
   updatedInternalMapping.addEntriesOrAssets({
     key: roleKey,
     value: assets.map(asset => {
@@ -32,7 +42,8 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
         type: c.FIELD_TYPE_ASSET,
         value: asset.sys.id,
         assetUrl: asset.fields.file['en-US'].url,
-        assetType: getAssetType(asset.fields.file['en-US'].contentType)
+        assetType: getAssetType(asset.fields.file['en-US'].contentType),
+        style: assetStyle
       });
     }),
     styleClasses: (roleConfigObject || {}).defaultStyle

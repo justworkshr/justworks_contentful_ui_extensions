@@ -275,7 +275,7 @@ export default class InternalMapping {
       asset.style = InternalMapping.styleMapping({
         type: c.STYLE_TYPE_CUSTOM,
         value: this._templateConfig.fieldRoles[key]
-          ? this._templateConfig.fieldRoles[key].defaultStyle
+          ? this._templateConfig.fieldRoles[key].assetDefaultStyle
           : undefined
       });
       return asset;

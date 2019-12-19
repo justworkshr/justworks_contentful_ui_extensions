@@ -207,3 +207,23 @@ export const STYLE_PROPERTY_FLEX_ROW = constructStyleProperty({
     })
   ]
 });
+
+// Logo size
+
+export const STYLE_PROPERTY_LOGO_SIZE = constructStyleProperty({
+  key: "logoSize",
+  values: [
+    constructStyleValue({
+      value: "large",
+      label: "Large"
+    }),
+    constructStyleValue({
+      value: "default",
+      label: "Default"
+    }),
+    constructStyleValue({
+      value: "small",
+      label: "Small"
+    })
+  ]
+});
