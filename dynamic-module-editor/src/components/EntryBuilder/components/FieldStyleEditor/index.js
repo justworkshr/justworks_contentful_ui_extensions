@@ -29,50 +29,6 @@ const FieldStyleEditor = props => {
     }
   };
 
-  const renderTitleStyle = styleObject => {
-    return (
-      <StyleView
-        styleView={c.STYLE_VIEW_TITLE}
-        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleObject={styleObject}
-      />
-    );
-  };
-
-  const renderLogoStyle = styleObject => {
-    return (
-      <StyleView
-        styleView={c.STYLE_VIEW_LOGO}
-        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleObject={styleObject}
-      />
-    );
-  };
-
-  const renderMarkdownStyle = styleObject => {
-    return (
-      <StyleView
-        styleView={c.STYLE_VIEW_MARKDOWN}
-        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleObject={styleObject}
-      />
-    );
-  };
-
-  const renderMultiReferenceStyle = (styleObject, roleConfigObject) => {
-    return (
-      <StyleView
-        styleView={roleConfigObject.multiReferenceStyleView}
-        onClear={styleKey => props.clearStyleField(props.roleKey, styleKey)}
-        onChange={(styleKey, value) => props.updateStyle(props.roleKey, styleKey, value)}
-        styleObject={styleObject}
-      />
-    );
-  };
-
   return (
     <div className={classnames('style-editor')}>
       <div className="style-editor__heading">

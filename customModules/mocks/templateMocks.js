@@ -123,7 +123,7 @@ export const mockCustomTemplates = {
           u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_COLLECTION_MODULE,
-            allowedCustomTemplates: [MOCK_CONTENT_TYPE_1]
+            allowedCollectionModules: [MOCK_CONTENT_TYPE_1]
           })
         ],
         description: `Entry field`
@@ -146,7 +146,7 @@ export const mockCustomTemplates = {
           u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_COLLECTION_MODULE,
-            allowedCustomTemplates: [MOCK_CONTENT_TYPE_1]
+            allowedCollectionModules: [MOCK_CONTENT_TYPE_1]
           })
         ],
         description: `Entry field`

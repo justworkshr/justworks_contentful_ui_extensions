@@ -47,9 +47,9 @@ const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, hydrated
 
     if (
       entry &&
-      !!customTemplateFieldConfigObject.allowedCustomTemplates &&
+      !!customTemplateFieldConfigObject.allowedCollectionModules &&
       getEntryContentTypeId(entry) == c.CONTENT_TYPE_COLLECTION_MODULE &&
-      !customTemplateFieldConfigObject.allowedCustomTemplates.includes(
+      !customTemplateFieldConfigObject.allowedCollectionModules.includes(
         entry.fields.type['en-US'].toLowerCase()
       )
     ) {
@@ -57,7 +57,7 @@ const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, hydrated
         errors[roleKey],
         `Invalid template type: ${
           entry.fields.type['en-US']
-        }. Valid types for this role are: ${customTemplateFieldConfigObject.allowedCustomTemplates.join(
+        }. Valid types for this role are: ${customTemplateFieldConfigObject.allowedCollectionModules.join(
           ', '
         )}`
       );
@@ -123,7 +123,7 @@ export const validateLinkedEntry = (entry, roleKey, parentEntryId, internalMappi
   if (linkHasCircularReference(parentEntryId, entry)) {
     message = 'Linked entry has a circular reference to this entry.';
   } else if (linkHasInvalidCustomTemplateType(customTemplateFieldConfigObject, entry)) {
-    message = `Only the following Custom Template types are allowed: ${customTemplateFieldConfigObject.allowedCustomTemplates.join(
+    message = `Only the following Custom Template types are allowed: ${customTemplateFieldConfigObject.allowedCollectionModules.join(
       ', '
     )}`;
   }
@@ -156,8 +156,8 @@ export const linkHasInvalidCustomTemplateType = (fieldConfigObject, linkedEntry)
   if (getEntryContentTypeId(linkedEntry) !== c.CONTENT_TYPE_COLLECTION_MODULE) return false;
   const template = linkedEntry.fields.type['en-US'];
   return (
-    !!fieldConfigObject.allowedCustomTemplates.length &&
-    !fieldConfigObject.allowedCustomTemplates.includes(
+    !!fieldConfigObject.allowedCollectionModules.length &&
+    !fieldConfigObject.allowedCollectionModules.includes(
       template ? template.toLowerCase() : undefined
     )
   );

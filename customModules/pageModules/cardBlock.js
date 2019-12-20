@@ -49,22 +49,10 @@ export const cardBlock = {
       }
     },
     fieldRoles: {
-      left_text: u.constructRoleConfig({
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_MARKDOWN,
-            styleView: c.STYLE_VIEW_MARKDOWN,
-            defaultStyle: markdownDefaultStyle
-          }),
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ENTRY,
-            styleView: c.STYLE_VIEW_MARKDOWN,
-            contentTypes: [c.CONTENT_TYPE_GENERIC_MARKDOWN],
-            defaultStyle: markdownDefaultStyle
-          })
-        ],
+      left_text: u.constructSubcopyRole({
+        defaultStyle: c.defaultStyleMarkdownLeft,
         required: true,
-        description: `Primary markdown text to display on the left half section.`
+        description: "Display text appearing on the left of the block."
       }),
       right_media: u.constructRoleConfig({
         fieldConfigs: [
@@ -89,52 +77,13 @@ export const cardBlock = {
         required: false,
         description: "Link url for the card."
       }),
-      cta_text: u.constructRoleConfig({
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_TEXT
-          }),
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ENTRY,
-            contentTypes: [c.CONTENT_TYPE_GENERIC_TEXT]
-          })
-        ],
+      cta_text: u.constructGenericTextRole({
         required: false,
-        description: "Text for the optional CTA"
+        description: "Text for the optional CTA inside the left block"
       }),
-      tag_text: u.constructRoleConfig({
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_TEXT,
-            defaultStyle: {
-              ...u.constructStyleKeyValue({
-                styleProperty: c.STYLE_PROPERTY_TEXT_COLOR,
-                value: "white"
-              }),
-              ...u.constructStyleKeyValue({
-                styleProperty: c.STYLE_PROPERTY_TEXT_TRANSFORM,
-                value: "uppercase"
-              })
-            }
-          }),
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ENTRY,
-            contentTypes: [c.CONTENT_TYPE_GENERIC_TEXT],
-            defaultStyle: {
-              ...u.constructStyleKeyValue({
-                styleProperty: c.STYLE_PROPERTY_TEXT_COLOR,
-                value: "white"
-              }),
-              ...u.constructStyleKeyValue({
-                styleProperty: c.STYLE_PROPERTY_TEXT_TRANSFORM,
-                value: "uppercase"
-              })
-            }
-          })
-        ],
+      tag_text: u.constructGenericTextRole({
         required: false,
-        description:
-          "Text for the optional tag on the upper right corner of the card."
+        description: "Text for the top-right block tag."
       }),
       background_media: u.constructRoleConfig({
         fieldConfigs: [

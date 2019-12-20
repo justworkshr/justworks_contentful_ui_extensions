@@ -10,20 +10,16 @@ export const logoItem = {
     },
     fieldRoles: {
       title: u.constructTitleRole({
-        defaultStyle: c.defaultStyleTitleSectionSmall
+        defaultStyle: c.defaultStyleTitleSectionSmall,
+        description: "Title above the logo."
       }),
-      logo_asset: u.constructRoleConfig({
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ASSET,
-            assetType: c.ASSET_TYPE_IMAGE,
-            assetSubType: c.ASSET_SUBTYPE_LOGO
-          })
-        ],
-        description: `Logo image asset`,
+      logo_asset: u.constructLogoRole({
         required: true
       }),
-      subcopy: c.defaultRoleMarkdownSubcopy
+      subcopy: u.constructSubcopyRole({
+        defaultStyle: c.defaultStyleMarkdownCenter,
+        description: "Subcopy below the logo."
+      })
     }
   }
 };

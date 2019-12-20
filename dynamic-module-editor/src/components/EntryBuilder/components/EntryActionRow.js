@@ -24,7 +24,7 @@ const EntryActionRow = props => {
           className="entry-action-button__create-new link-entries-row__button"
           onAddEntryClick={props.onAddEntryClick}
           roleKey={props.roleKey}
-          allowedCustomTemplates={props.allowedCustomTemplates}
+          allowedCollectionModules={props.allowedCollectionModules}
           contentTypes={props.contentTypes}
           fieldConfigs={props.fieldConfigs}
         />
@@ -45,7 +45,7 @@ const EntryActionRow = props => {
 };
 
 EntryActionRow.propTypes = {
-  allowedCustomTemplates: PropTypes.array,
+  allowedCollectionModules: PropTypes.array,
   contentTypes: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fieldConfigs: PropTypes.array,
   onAddFieldClick: PropTypes.func,

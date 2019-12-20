@@ -35,7 +35,7 @@ export const constructFieldConfig = ({
   assetSubType = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_SUBTYPE constants
   defaultStyle, // *object - passes this style object when a custom editor is applied to the field
   assetDefaultStyle, // *object - only in multi-reference fields, passes this object to all assets when custom field is applied
-  allowedCustomTemplates // *array - use CUSTOM_TEMPLATE constants to specific which are allowed
+  allowedCollectionModules // *array - use CUSTOM_TEMPLATE constants to specific which are allowed
 } = {}) => {
   if (!type) {
     throw new Error("'type' is required in 'constructFieldConfig'");
@@ -64,7 +64,7 @@ export const constructFieldConfig = ({
     assetSubType,
     defaultStyle,
     assetDefaultStyle,
-    allowedCustomTemplates
+    allowedCollectionModules
   };
 };
 
@@ -99,28 +99,4 @@ export const constructStyleKeyValue = ({ styleProperty, value } = {}) => {
   return {
     [styleProperty.key]: styleProperty.values.find(v => v.value === value).value
   };
-};
-
-export const constructTitleRole = (
-  defaultStyle,
-  required,
-  description = "Title above the module."
-) => {
-  return constructRoleConfig({
-    fieldConfigs: [
-      constructFieldConfig({
-        type: c.FIELD_TYPE_ENTRY,
-        contentType: c.CONTENT_TYPE_GENERIC_TEXT,
-        styleView: c.STYLE_VIEW_TITLE,
-        defaultStyle
-      }),
-      constructFieldConfig({
-        type: c.FIELD_TYPE_TITLE,
-        styleView: c.STYLE_VIEW_TITLE,
-        defaultStyle
-      })
-    ],
-    description,
-    required
-  });
 };

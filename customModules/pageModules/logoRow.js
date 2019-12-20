@@ -9,26 +9,8 @@ export const logoRow = {
       imageUrl: ""
     },
     fieldRoles: {
-      title: u.constructRoleConfig({
-        description: "Template title.",
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_TITLE,
-            styleView: c.STYLE_VIEW_TITLE
-          }),
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ENTRY,
-            styleView: c.STYLE_VIEW_TITLE,
-            contentType: c.CONTENT_TYPE_GENERIC_TEXT,
-            defaultStyle: {
-              textAlignment: "center",
-              textTransform: "uppercase",
-              textColor: "navy",
-              titleSize: "section-small"
-            }
-          })
-        ],
-        required: false
+      title: u.constructTitleRole({
+        defaultStyle: c.defaultStyleTitleSectionSmall
       }),
       items: u.constructRoleConfig({
         description: "Grid items.",
@@ -42,13 +24,13 @@ export const logoRow = {
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             contentType: [c.CONTENT_TYPE_COLLECTION_MODULE],
             defaultStyle: {
-              flexRowPreset: "4-2-2"
+              ...u.constructStyleKeyValue({
+                styleProperty: c.STYLE_PROPERTY_FLEX_ROW,
+                value: "4-2-2"
+              })
             },
-            assetDefaultStyle: {
-              paddedContainer: "default",
-              logoSize: "default"
-            },
-            allowedCustomTemplates: [c.LOGO_ITEM]
+            assetDefaultStyle: c.defaultStyleLogoDefaultComfortable,
+            allowedCollectionModules: [c.LOGO_ITEM]
           })
         ],
         multiReferenceStyleView: c.STYLE_VIEW_FLEX_ROW

@@ -72,7 +72,7 @@ const RoleSection = props => {
               })}
             </div>
             <EntryActionRow
-              allowedCustomTemplates={customTemplateFieldConfig.allowedCustomTemplates}
+              allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
               contentTypes={getContentTypes(props.templateConfig.fieldRoles[roleKey])}
               onAddFieldClick={props.onAddFieldClick}
@@ -181,7 +181,7 @@ const RoleSection = props => {
       // Render empty action row
       return (
         <EntryActionRow
-          allowedCustomTemplates={customTemplateFieldConfig.allowedCustomTemplates}
+          allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
           contentTypes={getContentTypes(props.templateConfig.fieldRoles[roleKey])}
           onAddFieldClick={props.onAddFieldClick}

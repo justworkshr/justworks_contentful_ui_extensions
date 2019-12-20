@@ -272,7 +272,8 @@ export class App extends React.Component {
       try {
         await this.props.sdk.space.updateEntry(newEntry);
       } catch (e) {
-        throw new Error(e);
+        const message = (e || {}).message || e;
+        throw new Error(message);
       }
 
       let loadingEntries = this.getLoadingEntries(

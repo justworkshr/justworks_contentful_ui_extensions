@@ -23,6 +23,10 @@ export const defaultStyleTitleSectionSmall = {
     value: "section-small"
   }),
   ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_TEXT_TRANSFORM,
+    value: "uppercase"
+  }),
+  ...u.constructStyleKeyValue({
     styleProperty: c.STYLE_PROPERTY_TEXT_COLOR,
     value: "navy"
   }),
@@ -33,7 +37,7 @@ export const defaultStyleTitleSectionSmall = {
 };
 
 // MARKDOWN
-export const defaultStyleMarkdown = {
+export const defaultStyleMarkdownLeft = {
   ...u.constructStyleKeyValue({
     styleProperty: c.STYLE_PROPERTY_TEXT_ALIGNMENT,
     value: "left"
@@ -49,5 +53,37 @@ export const defaultStyleMarkdown = {
   ...u.constructStyleKeyValue({
     styleProperty: c.STYLE_PROPERTY_BODY_TEXT_COLOR,
     value: "black"
+  })
+};
+
+export const defaultStyleMarkdownCenter = {
+  ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_TEXT_ALIGNMENT,
+    value: "center"
+  }),
+  ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_HEADER_TEXT_COLOR,
+    value: "black"
+  }),
+  ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_SUBHEADER_TEXT_COLOR,
+    value: "black"
+  }),
+  ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_BODY_TEXT_COLOR,
+    value: "black"
+  })
+};
+
+// Logos
+
+export const defaultStyleLogoDefaultComfortable = {
+  ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_PADDED_CONTAINER,
+    value: "comfortable"
+  }),
+  ...u.constructStyleKeyValue({
+    styleProperty: c.STYLE_PROPERTY_LOGO_SIZE,
+    value: "default"
   })
 };

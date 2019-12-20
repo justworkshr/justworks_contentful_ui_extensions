@@ -59,14 +59,14 @@ class CreateNewLink extends React.Component {
           {roleAllowsAssets(this.props.fieldConfigs) && this.renderAssetDropdownItem()}
           {this.props.contentTypes.map((contentType, index) => {
             return contentType === c.CONTENT_TYPE_COLLECTION_MODULE &&
-              !!this.props.allowedCustomTemplates.length ? (
+              !!this.props.allowedCollectionModules.length ? (
               <Dropdown
                 testId="create-new-link__dropdown-custom-type"
                 key={`dropdown-${index}`}
                 position="right"
                 submenuToggleLabel={displayCamelCaseName(contentType)}>
                 <DropdownList>
-                  {this.props.allowedCustomTemplates.map((allowedTemplate, index) => {
+                  {this.props.allowedCollectionModules.map((allowedTemplate, index) => {
                     return (
                       <DropdownListItem
                         key={`allowed-${index}`}
@@ -172,7 +172,7 @@ class CreateNewLink extends React.Component {
 }
 
 CreateNewLink.defaultProps = {
-  allowedCustomTemplates: []
+  allowedCollectionModules: []
 };
 
 CreateNewLink.propTypes = {
@@ -180,7 +180,7 @@ CreateNewLink.propTypes = {
   className: PropTypes.string,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   roleKey: PropTypes.string,
-  allowedCustomTemplates: PropTypes.array,
+  allowedCollectionModules: PropTypes.array,
   fieldConfigs: PropTypes.array.isRequired
 };
 
