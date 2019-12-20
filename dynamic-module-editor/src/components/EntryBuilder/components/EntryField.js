@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMde from 'react-mde';
 
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../../customModules/constants';
 
 import {
   TextInput,

@@ -1,5 +1,5 @@
 import InternalMapping from '../src/utils/InternalMapping';
-import * as c from '../../custom_templates/constants';
+import * as c from '../../customModules/constants';
 
 describe('InternalMapping', () => {
   describe('constructor', () => {

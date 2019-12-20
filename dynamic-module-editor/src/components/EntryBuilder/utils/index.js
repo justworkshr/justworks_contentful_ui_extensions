@@ -1,5 +1,5 @@
 import InternalMapping from '../../../utils/InternalMapping';
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../../customModules/constants';
 
 import { setEntryLoading } from './stateUtils';
 import { handleRemoveEntry } from './eventUtils';
@@ -202,7 +202,10 @@ export const getEntryOrField = async (space, internalMapping, roleKey) => {
   }
 };
 
-export const constructFieldConfigEntry = (sysType, entryMapping = InternalMapping.entryMapping()) => {
+export const constructFieldConfigEntry = (
+  sysType,
+  entryMapping = InternalMapping.entryMapping()
+) => {
   return {
     sys: {
       type: sysType

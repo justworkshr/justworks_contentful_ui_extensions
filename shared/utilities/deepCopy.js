@@ -1,4 +1,4 @@
-import * as c from "../../custom_templates/constants";
+import * as c from "../../customModules/constants";
 
 export const getEntry = async (space, id) => {
   return await space.getEntry(id);

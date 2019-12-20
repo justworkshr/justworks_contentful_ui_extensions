@@ -6,7 +6,7 @@ import {
   DropdownListItem,
   TextLink
 } from '@contentful/forma-36-react-components';
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../../customModules/constants';
 import { roleAllowsAssets } from '../utils';
 import { displayCamelCaseName } from '../../../../../shared/utilities/elementUtils';
 

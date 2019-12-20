@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as c from '../../../../../../custom_templates/constants';
+import * as c from '../../../../../../customModules/constants';
 
 import { FormLabel, HelpText, TextInput } from '@contentful/forma-36-react-components';
 

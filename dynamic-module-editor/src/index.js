@@ -9,7 +9,7 @@ import {
 } from '@contentful/forma-36-react-components';
 import InternalMapping from './utils/InternalMapping';
 
-import * as c from '../../custom_templates/constants';
+import * as c from '../../customModules/constants';
 
 import TemplateTypePalette from './components/TemplateTypePalette';
 import EntryBuilder from './components/EntryBuilder';
@@ -20,7 +20,7 @@ import { init, locations } from 'contentful-ui-extensions-sdk';
 
 import { templateIsValid, getTemplateErrors } from './components/EntryBuilder/utils/validations';
 
-import { customTemplates, templatePlaceholder } from '../../custom_templates/';
+import { customTemplates, templatePlaceholder } from '../../customModules';
 import { linkFromMapping } from './utils';
 import { constructLink } from '../../shared/utilities/apiUtils';
 

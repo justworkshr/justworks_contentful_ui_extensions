@@ -1,4 +1,4 @@
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../../customModules/constants';
 import { cloneEntry } from '../../../../../shared/utilities/deepCopy';
 
 import {

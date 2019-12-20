@@ -1,4 +1,4 @@
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../../customModules/constants';
 
 export const renderSingleEntryStyle = fieldConfigObject => {
   return !!(fieldConfigObject || {}).styleView;

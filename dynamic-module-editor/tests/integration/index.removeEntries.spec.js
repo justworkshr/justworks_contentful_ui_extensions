@@ -4,9 +4,9 @@ import { App } from '../../src/index';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import * as c from '../../../custom_templates/constants';
+import * as c from '../../../customModules/constants';
 
-import * as tm from '../../../custom_templates/mocks/templateMocks';
+import * as tm from '../../../customModules/mocks/templateMocks';
 
 import {
   mockSdk,

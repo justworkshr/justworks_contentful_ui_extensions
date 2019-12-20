@@ -1,5 +1,5 @@
 import { getEntryContentTypeId } from './index';
-import * as c from '../../../../../custom_templates/constants';
+import * as c from '../../../../../customModules/constants';
 import { getCustomTemplateFieldConfig } from '../../../../../shared/utilities/elementUtils';
 
 export const validateTemplate = async ({ setInvalid, state, setState }) => {

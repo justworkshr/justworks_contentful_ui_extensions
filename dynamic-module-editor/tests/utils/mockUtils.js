@@ -1,9 +1,9 @@
 import React from 'react';
 
 import sinon from 'sinon';
-import * as c from '../../../custom_templates/constants';
-import * as tm from '../../../custom_templates/mocks/templateMocks';
-import { templatePlaceholder } from '../../../custom_templates';
+import * as c from '../../../customModules/constants';
+import * as tm from '../../../customModules/mocks/templateMocks';
+import { templatePlaceholder } from '../../../customModules';
 import { displayCamelCaseName } from '../../../shared/utilities/elementUtils';
 
 import { mount } from 'enzyme';
