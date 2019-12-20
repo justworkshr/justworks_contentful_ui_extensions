@@ -4,11 +4,25 @@ import {
   constructStyleSection
 } from "./constants/styleViews";
 
-export const constructRole = ({
+export const constructRoleConfig = ({
   description = "",
   fieldConfigs = [],
   required = true
 } = {}) => {
+  if (!Array.isArray(fieldConfigs) || !fieldConfigs.length) {
+    throw new Error(
+      "Must include an array of field configs in constructRoleConfig"
+    );
+  }
+
+  if (
+    fieldConfigs.some(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE) &&
+    fieldConfigs.length > 1
+  ) {
+    throw new Error(
+      `A role with fieldConfig of type '${c.FIELD_TYPE_MULTI_REFERENCE}' cannot include any other field configs`
+    );
+  }
   return {
     description,
     fieldConfigs,
@@ -41,6 +55,9 @@ export const constructFieldConfig = ({
   }
 
   if (type === c.FIELD_TYPE_ASSET && !assetType) {
+    throw new Error(
+      `Must include an 'assetType when type is ${c.FIELD_TYPE_ASSET}`
+    );
   }
   return {
     type,

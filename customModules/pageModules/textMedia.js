@@ -1,5 +1,5 @@
 import {
-  constructRole,
+  constructRoleConfig,
   constructFieldConfig,
   defaultStyleTypes
 } from "../utils";
@@ -31,7 +31,7 @@ export const textMedia = {
       ...defaultStyleTypes()
     },
     fieldRoles: {
-      title: constructRole({
+      title: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
@@ -58,7 +58,7 @@ export const textMedia = {
         ],
         required: false
       }),
-      left_content: constructRole({
+      left_content: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
@@ -84,7 +84,7 @@ export const textMedia = {
         description: `Text Field, Image Asset, Text Entry, or Media Entry.`,
         required: true
       }),
-      right_content: constructRole({
+      right_content: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,

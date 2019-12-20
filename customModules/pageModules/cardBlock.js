@@ -1,5 +1,5 @@
 import {
-  constructRole,
+  constructRoleConfig,
   allowAsset,
   defaultStyleTypes,
   templateStyleProperty
@@ -35,13 +35,15 @@ export const cardBlock = {
       }
     },
     fieldRoles: {
-      left_text: constructRole({
+      left_text: constructRoleConfig({
+        fieldConfigs: [{}],
         contentTypes: [c.CONTENT_TYPE_TEXT],
         defaultStyle: "text-black",
         required: true,
         description: `Primary markdown text to display on the left half section.`
       }),
-      right_media: constructRole({
+      right_media: constructRoleConfig({
+        fieldConfigs: [{}],
         contentTypes: c.CONTENT_TYPE_MEDIA,
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
@@ -51,23 +53,27 @@ export const cardBlock = {
         required: true,
         description: "Media to display on the right half section."
       }),
-      card_link: constructRole({
+      card_link: constructRoleConfig({
+        fieldConfigs: [{}],
         contentTypes: c.CONTENT_TYPE_LINK,
         required: false,
         description: "Link url for the card."
       }),
-      cta_text: constructRole({
+      cta_text: constructRoleConfig({
+        fieldConfigs: [{}],
         defaultStyle: "text-cerulean",
         required: false,
         description: "Text for the optional CTA"
       }),
-      tag_text: constructRole({
+      tag_text: constructRoleConfig({
+        fieldConfigs: [{}],
         defaultStyle: "text-white text-uppercase",
         required: false,
         description:
           "Text for the optional tag on the upper right corner of the card."
       }),
-      background_media: constructRole({
+      background_media: constructRoleConfig({
+        fieldConfigs: [{}],
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           allowFormatting: false,

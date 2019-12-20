@@ -1,4 +1,4 @@
-import { constructRole, constructFieldConfig } from "../utils";
+import { constructRoleConfig, constructFieldConfig } from "../utils";
 import * as c from "../constants";
 
 export const logoRow = {
@@ -9,7 +9,7 @@ export const logoRow = {
       imageUrl: ""
     },
     fieldRoles: {
-      title: constructRole({
+      title: constructRoleConfig({
         description: "Template title.",
         fieldConfigs: [
           constructFieldConfig({
@@ -30,7 +30,7 @@ export const logoRow = {
         ],
         required: false
       }),
-      items: constructRole({
+      items: constructRoleConfig({
         description: "Grid items.",
         required: false,
         fieldConfigs: [

@@ -1,4 +1,4 @@
-import { constructRole, constructFieldConfig } from "../utils";
+import { constructRoleConfig, constructFieldConfig } from "../utils";
 import * as c from "../constants";
 
 import { defaultStyleTypes } from "../utils";
@@ -43,7 +43,7 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      text_field: constructRole({
+      text_field: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_TITLE,
@@ -57,7 +57,7 @@ export const mockCustomTemplates = {
         description: `Text Field.`,
         required: true
       }),
-      markdown_field: constructRole({
+      markdown_field: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_MARKDOWN,
@@ -77,25 +77,33 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      image_asset: constructRole({
-        fieldConfigs: [constructFieldConfig({ type: c.FIELD_TYPE_ASSET })],
-        assetType: c.ASSET_TYPE_IMAGE,
-        description: `Image asset field`
-      }),
-      formattable_image_asset: constructRole({
-        fieldConfigs: [constructFieldConfig({ type: c.FIELD_TYPE_ASSET })],
-        assetType: c.ASSET_TYPE_IMAGE,
-        description: `Image asset field`
-      }),
-      logo_asset: constructRole({
+      image_asset: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
+            assetType: c.ASSET_TYPE_IMAGE
+          })
+        ],
+        description: `Image asset field`
+      }),
+      formattable_image_asset: constructRoleConfig({
+        fieldConfigs: [
+          constructFieldConfig({
+            type: c.FIELD_TYPE_ASSET,
+            assetType: c.ASSET_TYPE_IMAGE
+          })
+        ],
+        description: `Image asset field`
+      }),
+      logo_asset: constructRoleConfig({
+        fieldConfigs: [
+          constructFieldConfig({
+            type: c.FIELD_TYPE_ASSET,
+            assetType: c.ASSET_TYPE_IMAGE,
+            assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_LOGO
           })
         ],
-        assetType: c.ASSET_TYPE_IMAGE,
-        assetSubType: c.ASSET_SUBTYPE_LOGO,
         description: `Logo asset field.`
       })
     }
@@ -104,7 +112,7 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      entry_field: constructRole({
+      entry_field: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
@@ -122,7 +130,7 @@ export const mockCustomTemplates = {
         ],
         description: `Entry field`
       }),
-      entry_field_with_style: constructRole({
+      entry_field_with_style: constructRoleConfig({
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
@@ -151,9 +159,8 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      grid_logo_multi_field: constructRole({
+      grid_logo_multi_field: constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({ type: c.FIELD_TYPE_ASSET }),
           constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             assetType: c.ASSET_TYPE_IMAGE,
@@ -168,9 +175,8 @@ export const mockCustomTemplates = {
         ],
         description: `Multi field`
       }),
-      no_style_multi_field: constructRole({
+      no_style_multi_field: constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({ type: c.FIELD_TYPE_ASSET }),
           constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             assetType: c.ASSET_TYPE_IMAGE,

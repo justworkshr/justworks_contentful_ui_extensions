@@ -1,4 +1,4 @@
-import { constructRole, allowAsset } from "../utils";
+import { constructRoleConfig, allowAsset } from "../utils";
 import * as c from "../constants";
 
 export const logoItem = {
@@ -9,7 +9,8 @@ export const logoItem = {
       imageUrl: ""
     },
     fieldRoles: {
-      icon_asset: constructRole({
+      icon_asset: constructRoleConfig({
+        fieldConfigs: [{}],
         ...allowAsset({
           type: c.ASSET_TYPE_IMAGE,
           subType: c.ASSET_SUBTYPE_LOGO,
@@ -20,7 +21,8 @@ export const logoItem = {
         description: `Logo image asset`,
         required: true
       }),
-      label: constructRole({
+      label: constructRoleConfig({
+        fieldConfigs: [{}],
         defaultStyle: "text-center text-black text-bold",
         required: false,
         description: "Text beneath the logo."
