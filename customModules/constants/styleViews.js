@@ -62,11 +62,6 @@ export const STYLE_VIEW_MARKDOWN = constructStyleView({
       defaultOnly: true
     }),
     constructStyleSection({
-      componentType: STYLE_VIEW_COMPONENT_RADIO,
-      styleProperty: sp.STYLE_PROPERTY_PADDED_CONTAINER,
-      defaultOnly: true
-    }),
-    constructStyleSection({
       componentType: STYLE_VIEW_COMPONENT_COLOR,
       styleProperty: sp.STYLE_PROPERTY_HEADER_TEXT_COLOR,
       subSectionOnly: true
