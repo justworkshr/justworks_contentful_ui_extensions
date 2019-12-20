@@ -38,7 +38,7 @@ export const logoRow = {
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
-            assetTypes: [c.ASSET_TYPE_IMAGE],
+            assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
             defaultStyle: {

@@ -77,8 +77,9 @@ export class App extends React.Component {
 
   componentDidMount() {
     this.setState(async prevState => {
+      const hydratedEntries = await this.getHydratedEntries(prevState.loadingEntries, []);
       return {
-        hydratedEntries: await this.getHydratedEntries(prevState.loadingEntries, [])
+        hydratedEntries
       };
     });
 
@@ -267,7 +268,12 @@ export class App extends React.Component {
           })
         )
       };
-      await this.props.sdk.space.updateEntry(newEntry);
+
+      try {
+        await this.props.sdk.space.updateEntry(newEntry);
+      } catch (e) {
+        throw new Error(e);
+      }
 
       let loadingEntries = this.getLoadingEntries(
         this.props.sdk.entry.fields.entries.getValue() || [],
@@ -323,22 +329,26 @@ export class App extends React.Component {
 
   getHydratedEntries = async (loadingEntries, existingEntries = []) => {
     // Ensure uniqueness in queries
-    const hydratedEntries = await this.props.sdk.space.getEntries({
-      'sys.id[in]': loadingEntries.join(',')
-    });
+    try {
+      const hydratedEntries = await this.props.sdk.space.getEntries({
+        'sys.id[in]': loadingEntries.join(',')
+      });
 
-    const assetsValue = this.props.sdk.entry.fields.assets.getValue();
-    const assetIds = assetsValue ? assetsValue.map(a => a.sys.id) : [];
+      const assetsValue = this.props.sdk.entry.fields.assets.getValue();
+      const assetIds = assetsValue ? assetsValue.map(a => a.sys.id) : [];
 
-    const hydratedAssets = await this.props.sdk.space.getAssets({
-      'sys.id[in]': assetIds.join(',')
-    });
+      const hydratedAssets = await this.props.sdk.space.getAssets({
+        'sys.id[in]': assetIds.join(',')
+      });
 
-    this.setState({
-      hydratedAssets: hydratedAssets.items,
-      hydratedEntries: [...existingEntries, ...(hydratedEntries.items || [])],
-      loadingEntries: []
-    });
+      this.setState({
+        hydratedAssets: hydratedAssets.items,
+        hydratedEntries: [...existingEntries, ...(hydratedEntries.items || [])],
+        loadingEntries: []
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   };
 
   getLoadingEntries = (currentEntryLinks = [], entriesToCheck = []) => {

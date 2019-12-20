@@ -79,12 +79,12 @@ export const mockCustomTemplates = {
     fieldRoles: {
       image_asset: constructRole({
         fieldConfigs: [constructFieldConfig({ type: c.FIELD_TYPE_ASSET })],
-        assetTypes: [c.ASSET_TYPE_IMAGE],
+        assetType: c.ASSET_TYPE_IMAGE,
         description: `Image asset field`
       }),
       formattable_image_asset: constructRole({
         fieldConfigs: [constructFieldConfig({ type: c.FIELD_TYPE_ASSET })],
-        assetTypes: [c.ASSET_TYPE_IMAGE],
+        assetType: c.ASSET_TYPE_IMAGE,
         description: `Image asset field`
       }),
       logo_asset: constructRole({
@@ -94,7 +94,7 @@ export const mockCustomTemplates = {
             styleView: c.STYLE_VIEW_LOGO
           })
         ],
-        assetTypes: [c.ASSET_TYPE_IMAGE],
+        assetType: c.ASSET_TYPE_IMAGE,
         assetSubType: c.ASSET_SUBTYPE_LOGO,
         description: `Logo asset field.`
       })
@@ -156,7 +156,7 @@ export const mockCustomTemplates = {
           constructFieldConfig({ type: c.FIELD_TYPE_ASSET }),
           constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
-            assetTypes: [c.ASSET_TYPE_IMAGE],
+            assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
@@ -173,7 +173,7 @@ export const mockCustomTemplates = {
           constructFieldConfig({ type: c.FIELD_TYPE_ASSET }),
           constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
-            assetTypes: [c.ASSET_TYPE_IMAGE],
+            assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,

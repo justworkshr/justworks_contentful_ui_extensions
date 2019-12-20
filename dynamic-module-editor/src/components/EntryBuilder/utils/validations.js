@@ -93,9 +93,9 @@ export const templateIsValid = errorObject => {
   return !Object.keys(errorObject).length;
 };
 
-const validateAssetType = (entry, assetTypes) => {
-  if (!assetTypes || !assetTypes.length) return true;
-  return assetTypes.some(type => entry.fields.file['en-US'].contentType.includes(type));
+const validateAssetType = (entry, assetType) => {
+  if (!assetType) return true;
+  return entry.fields.file['en-US'].contentType.includes(assetType);
 };
 
 export const validateLinkedAsset = (entry, roleObject) => {
@@ -106,10 +106,10 @@ export const validateLinkedAsset = (entry, roleObject) => {
     ? roleObject.fieldConfigs.find(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE)
     : roleObject.fieldConfigs.find(fc => fc.type === c.FIELD_TYPE_ASSET);
 
-  const assetTypes = fieldConfigObject.assetTypes || [];
+  const assetType = fieldConfigObject.assetType;
   let message = '';
-  if (!validateAssetType(entry, assetTypes)) {
-    message = `Only ${assetTypes.map(t => t).join(', ')} assets are allowed.`;
+  if (!validateAssetType(entry, assetType)) {
+    message = `Only ${assetType} assets are allowed.`;
   }
 
   return message;

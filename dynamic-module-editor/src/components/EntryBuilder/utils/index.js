@@ -48,7 +48,7 @@ export const roleIsMultiReference = fieldTypes => {
 export const roleAllowsAssets = fieldTypes => {
   if (!fieldTypes || !fieldTypes.length) return;
   if (fieldTypes.some(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE)) {
-    return fieldTypes.find(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE).assetTypes;
+    return fieldTypes.find(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE).assetType;
   } else {
     return fieldTypes.some(fc => fc.type === c.FIELD_TYPE_ASSET);
   }

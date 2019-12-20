@@ -1,4 +1,8 @@
-import { constructRole, constructFieldConfig, defaultStyleTypes } from "../utils";
+import {
+  constructRole,
+  constructFieldConfig,
+  defaultStyleTypes
+} from "../utils";
 import * as c from "../constants";
 
 const markdownDefaultStyle = {
@@ -58,7 +62,7 @@ export const textMedia = {
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
-            assetTypes: [c.ASSET_TYPE_IMAGE]
+            assetType: c.ASSET_TYPE_IMAGE
           }),
           constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
@@ -84,7 +88,7 @@ export const textMedia = {
         fieldConfigs: [
           constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
-            assetTypes: [c.ASSET_TYPE_IMAGE]
+            assetType: c.ASSET_TYPE_IMAGE
           }),
           constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,

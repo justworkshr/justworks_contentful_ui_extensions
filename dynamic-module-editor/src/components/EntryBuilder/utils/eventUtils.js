@@ -23,7 +23,6 @@ export const handleRemoveEntry = ({ props, updateEntry, roleKey, entryIndex = nu
 };
 
 const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
-  const roleConfigObject = props.templateConfig.fieldRoles[roleKey];
   const updatedInternalMapping = props.entryInternalMapping;
 
   // attaches existing asset style to new assets
@@ -97,7 +96,6 @@ export const handleMultipleAssetsLink = async ({
   updateEntry
 } = {}) => {
   let linkedEntryValidation;
-
   assets.forEach(asset => {
     linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.fieldRoles[roleKey]);
   });
@@ -108,7 +106,7 @@ export const handleMultipleAssetsLink = async ({
   }
 };
 
-export const handleSingleAssetLink = async ({ sdk, props, roleKey, asset, updateEntry } = {}) => {
+export const handleSingleAssetLink = ({ sdk, props, roleKey, asset, updateEntry } = {}) => {
   if (!asset) return;
 
   const linkedEntryValidation = validateLinkedAsset(
@@ -124,28 +122,36 @@ export const handleSingleAssetLink = async ({ sdk, props, roleKey, asset, update
 
 export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
   if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
-    const assets = await sdk.dialogs.selectMultipleAssets({
-      locale: 'en-US'
-    });
-    handleMultipleAssetsLink({
-      sdk,
-      props,
-      roleKey,
-      assets,
-      updateEntry
-    });
+    try {
+      const assets = await sdk.dialogs.selectMultipleAssets({
+        locale: 'en-US'
+      });
+      handleMultipleAssetsLink({
+        sdk,
+        props,
+        roleKey,
+        assets,
+        updateEntry
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   } else {
-    const asset = await sdk.dialogs.selectSingleAsset({
-      locale: 'en-US'
-    });
+    try {
+      const asset = await sdk.dialogs.selectSingleAsset({
+        locale: 'en-US'
+      });
 
-    handleSingleAssetLink({
-      sdk,
-      props,
-      roleKey,
-      asset,
-      updateEntry
-    });
+      handleSingleAssetLink({
+        sdk,
+        props,
+        roleKey,
+        asset,
+        updateEntry
+      });
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 };
 
@@ -171,7 +177,7 @@ export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, role
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const handleAddField = async ({ props, setInternalMappingValue, roleKey, fieldType }) => {
+export const handleAddField = ({ props, setInternalMappingValue, roleKey, fieldType }) => {
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addField({
     key: roleKey,
@@ -191,39 +197,40 @@ export const handleAddEntry = async ({
   type = 'entry'
 }) => {
   if (type === 'asset') {
-    const newAsset = await createAsset(sdk.space);
-
-    sdk.navigator.openAsset(newAsset.sys.id, { slideIn: true });
-  } else if (type === 'entry') {
-    const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
-    const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
-
-    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
-      linkEntriesToTemplate({
-        props,
-        updateEntry,
-        entryResponses: [newEntry],
-        roleKey
-      });
-    } else {
-      linkEntryToTemplate({
-        props,
-        updateEntry,
-        entryResponse: newEntry,
-        roleKey
-      });
+    try {
+      const newAsset = await createAsset(sdk.space);
+      sdk.navigator.openAsset(newAsset.sys.id, { slideIn: true });
+    } catch (e) {
+      throw new Error(e);
     }
-    sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+  } else if (type === 'entry') {
+    try {
+      const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
+      const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
+
+      if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+        linkEntriesToTemplate({
+          props,
+          updateEntry,
+          entryResponses: [newEntry],
+          roleKey
+        });
+      } else {
+        linkEntryToTemplate({
+          props,
+          updateEntry,
+          entryResponse: newEntry,
+          roleKey
+        });
+      }
+      sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 };
 
-export const handleSingleEntryLink = async ({
-  sdk,
-  props,
-  updateEntry,
-  roleKey,
-  entryResponse
-} = {}) => {
+export const handleSingleEntryLink = ({ sdk, props, updateEntry, roleKey, entryResponse } = {}) => {
   if (!entryResponse) throw new Error('No entryResponse was passed to handleSingleEntryLink');
   const linkedEntryValidation = validateLinkedEntry(
     entryResponse,
@@ -231,6 +238,7 @@ export const handleSingleEntryLink = async ({
     sdk.entry.getSys().id,
     props.templateConfig.fieldRoles
   );
+
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   }
@@ -243,13 +251,7 @@ export const handleSingleEntryLink = async ({
   });
 };
 
-export const handleMultipleEntriesLink = async ({
-  sdk,
-  props,
-  updateEntry,
-  roleKey,
-  entryResponses
-}) => {
+export const handleMultipleEntriesLink = ({ sdk, props, updateEntry, roleKey, entryResponses }) => {
   if (!entryResponses) return;
 
   let linkedEntryValidation;

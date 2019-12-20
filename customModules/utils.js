@@ -21,19 +21,33 @@ export const constructFieldConfig = ({
   styleView = undefined, // *string - style editor type - use STYLE_VIEW constants to designate
   assetStyleView = undefined, // *string - only for multi-reference asset editing - use STYLE_VIEW constants
   contentType = undefined, // *string or array - use single string for single-reference entry to designate the link. use Array for multi-reference if multiple types allowed.
-  assetTypes = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_TYPE constants
+  assetType = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_TYPE constants
   assetSubType = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_SUBTYPE constants
   defaultStyle, // *object - passes this style object when a custom editor is applied to the field
   assetDefaultStyle, // *object - only in multi-reference fields, passes this object to all assets when custom field is applied
   allowedCustomTemplates // *array - use CUSTOM_TEMPLATE constants to specific which are allowed
 } = {}) => {
-  if (!type) throw new Error("'type' is required in 'constructFieldConfig'");
+  if (!type) {
+    throw new Error("'type' is required in 'constructFieldConfig'");
+  }
+  if (
+    type === c.FIELD_TYPE_MULTI_REFERENCE &&
+    contentType &&
+    !Array.isArray(contentType)
+  ) {
+    throw new Error(
+      `'contentType' must be an array when type is ${c.FIELD_TYPE_MULTI_REFERENCE}`
+    );
+  }
+
+  if (type === c.FIELD_TYPE_ASSET && !assetType) {
+  }
   return {
     type,
     styleView,
     assetStyleView,
     contentType,
-    assetTypes,
+    assetType,
     assetSubType,
     defaultStyle,
     assetDefaultStyle,
