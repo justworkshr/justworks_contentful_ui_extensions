@@ -279,7 +279,7 @@ export default class EntryBuilder extends React.Component {
     const customTemplateFieldConfig = getCustomTemplateFieldConfig(roleConfigObject) || {};
 
     if (
-      roleIsMultiReference(roleConfigObject.fieldTypes) &&
+      roleIsMultiReference(roleConfigObject.fieldConfigs) &&
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {
@@ -325,7 +325,7 @@ export default class EntryBuilder extends React.Component {
               onLinkAssetClick={this.onLinkAssetClick}
               onLinkEntryClick={this.onLinkEntryClick}
               onDeepCopyLinkClick={this.onDeepCopyClick}
-              fieldTypes={this.props.templateConfig.fieldRoles[roleKey].fieldTypes}
+              fieldConfigs={this.props.templateConfig.fieldRoles[roleKey].fieldConfigs}
             />
           </div>
           <div className="section-column">
@@ -441,7 +441,7 @@ export default class EntryBuilder extends React.Component {
           onLinkAssetClick={this.onLinkAssetClick}
           onLinkEntryClick={this.onLinkEntryClick}
           onDeepCopyLinkClick={this.onDeepCopyClick}
-          fieldTypes={this.props.templateConfig.fieldRoles[roleKey].fieldTypes}
+          fieldConfigs={this.props.templateConfig.fieldRoles[roleKey].fieldConfigs}
         />
       );
     }

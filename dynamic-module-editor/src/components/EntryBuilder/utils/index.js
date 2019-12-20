@@ -6,20 +6,20 @@ import { handleRemoveEntry } from './eventUtils';
 
 export const getFieldConfig = (roleConfigObject, roleMappingObject) => {
   if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
-    return roleConfigObject.fieldTypes.find(ft => {
-      return ft.type === c.FIELD_TYPE_ENTRY && ft.contentType === roleMappingObject.contentType;
+    return roleConfigObject.fieldConfigs.find(fc => {
+      return fc.type === c.FIELD_TYPE_ENTRY && fc.contentType === roleMappingObject.contentType;
     });
   } else {
-    return roleConfigObject.fieldTypes.find(ft => ft.type === roleMappingObject.type);
+    return roleConfigObject.fieldConfigs.find(fc => fc.type === roleMappingObject.type);
   }
 };
 
 export const getContentTypes = roleConfigObject => {
-  return roleConfigObject.fieldTypes.reduce((accumulator, ft) => {
-    if (ft.type === c.FIELD_TYPE_ENTRY) {
-      accumulator.push(ft.contentType);
-    } else if (ft.type === c.FIELD_TYPE_MULTI_REFERENCE) {
-      accumulator = [...accumulator, ...ft.contentType];
+  return roleConfigObject.fieldConfigs.reduce((accumulator, fc) => {
+    if (fc.type === c.FIELD_TYPE_ENTRY) {
+      accumulator.push(fc.contentType);
+    } else if (fc.type === c.FIELD_TYPE_MULTI_REFERENCE) {
+      accumulator = [...accumulator, ...fc.contentType];
     }
     return accumulator;
   }, []);
@@ -47,10 +47,10 @@ export const roleIsMultiReference = fieldTypes => {
 
 export const roleAllowsAssets = fieldTypes => {
   if (!fieldTypes || !fieldTypes.length) return;
-  if (fieldTypes.some(ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE)) {
-    return fieldTypes.find(ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE).assetTypes;
+  if (fieldTypes.some(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE)) {
+    return fieldTypes.find(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE).assetTypes;
   } else {
-    return fieldTypes.some(ft => ft.type === c.FIELD_TYPE_ASSET);
+    return fieldTypes.some(fc => fc.type === c.FIELD_TYPE_ASSET);
   }
 };
 
@@ -198,11 +198,11 @@ export const getEntryOrField = async (space, internalMapping, roleKey) => {
     );
   } else {
     const sysType = fieldType === c.FIELD_TYPE_ASSET ? c.SYSTEM_TYPE_ASSET : c.SYSTEM_TYPE_FIELD;
-    return constructFieldEntry(sysType, internalMapping[roleKey]);
+    return constructFieldConfigEntry(sysType, internalMapping[roleKey]);
   }
 };
 
-export const constructFieldEntry = (sysType, entryMapping = InternalMapping.entryMapping()) => {
+export const constructFieldConfigEntry = (sysType, entryMapping = InternalMapping.entryMapping()) => {
   return {
     sys: {
       type: sysType

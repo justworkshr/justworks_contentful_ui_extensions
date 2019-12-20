@@ -100,11 +100,11 @@ const validateAssetType = (entry, assetTypes) => {
 
 export const validateLinkedAsset = (entry, roleObject) => {
   if (!entry) return;
-  const fieldConfigObject = roleObject.fieldTypes.find(
-    ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE
+  const fieldConfigObject = roleObject.fieldConfigs.find(
+    fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE
   )
-    ? roleObject.fieldTypes.find(ft => ft.type === c.FIELD_TYPE_MULTI_REFERENCE)
-    : roleObject.fieldTypes.find(ft => ft.type === c.FIELD_TYPE_ASSET);
+    ? roleObject.fieldConfigs.find(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE)
+    : roleObject.fieldConfigs.find(fc => fc.type === c.FIELD_TYPE_ASSET);
 
   const assetTypes = fieldConfigObject.assetTypes || [];
   let message = '';

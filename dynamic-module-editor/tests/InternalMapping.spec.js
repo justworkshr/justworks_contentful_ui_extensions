@@ -385,7 +385,7 @@ describe('InternalMapping', () => {
       const templateConfig = {
         fieldRoles: {
           hi: {
-            fieldTypes: [fieldType]
+            fieldConfigs: [fieldType]
           }
         }
       };
@@ -580,7 +580,7 @@ describe('InternalMapping', () => {
       const templateConfig = {
         fieldRoles: {
           hi: {
-            fieldTypes: [fieldConfigObject]
+            fieldConfigs: [fieldConfigObject]
           }
         }
       };

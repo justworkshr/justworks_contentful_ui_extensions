@@ -46,10 +46,10 @@ describe('App', () => {
 
       wrapper.find('CreateNewLink.entry-action-button__create-new').forEach(node => {
         const roleKey = node.props().roleKey;
-        const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldTypes.filter(
+        const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
           e => e.type === c.FIELD_TYPE_ENTRY && e.contentType !== c.CONTENT_TYPE_CUSTOM_TEMPLATE
         );
-        const customTemplateFieldConfigs = templateConfig.fieldRoles[roleKey].fieldTypes.filter(
+        const customTemplateFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
           e => e.type === c.FIELD_TYPE_ENTRY && e.contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE
         );
 
@@ -114,7 +114,7 @@ describe('App', () => {
 
       wrapper.find('LinkExisting.entry-action-button__link-existing').forEach(node => {
         const roleKey = node.props().roleKey;
-        const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldTypes.filter(
+        const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
           e => e.type === c.FIELD_TYPE_ENTRY
         );
 

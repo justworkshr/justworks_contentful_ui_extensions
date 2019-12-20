@@ -56,7 +56,7 @@ class CreateNewLink extends React.Component {
         isOpen={this.state.isOpen}>
         <DropdownList>
           <DropdownListItem isTitle>Types</DropdownListItem>
-          {roleAllowsAssets(this.props.fieldTypes) && this.renderAssetDropdownItem()}
+          {roleAllowsAssets(this.props.fieldConfigs) && this.renderAssetDropdownItem()}
           {this.props.contentTypes.map((contentType, index) => {
             return contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
               !!this.props.allowedCustomTemplates.length ? (
@@ -132,7 +132,7 @@ class CreateNewLink extends React.Component {
   render() {
     if (Array.isArray(this.props.contentTypes)) {
       return this.renderMultipleContentTypes();
-    } else if (!!this.props.contentTypes && roleAllowsAssets(this.props.fieldTypes)) {
+    } else if (!!this.props.contentTypes && roleAllowsAssets(this.props.fieldConfigs)) {
       return this.renderSingleContentTypeAndAsset();
     } else if (this.props.contentTypes) {
       return (
@@ -149,7 +149,7 @@ class CreateNewLink extends React.Component {
           Create new entry
         </TextLink>
       );
-    } else if (roleAllowsAssets(this.props.fieldTypes)) {
+    } else if (roleAllowsAssets(this.props.fieldConfigs)) {
       return (
         <TextLink
           icon="Plus"
@@ -181,7 +181,7 @@ CreateNewLink.propTypes = {
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   roleKey: PropTypes.string,
   allowedCustomTemplates: PropTypes.array,
-  fieldTypes: PropTypes.array.isRequired
+  fieldConfigs: PropTypes.array.isRequired
 };
 
 export default CreateNewLink;

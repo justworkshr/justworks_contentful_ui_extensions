@@ -1,4 +1,4 @@
-import { constructRole, constructField } from "../utils";
+import { constructRole, constructFieldConfig } from "../utils";
 import * as c from "../constants";
 
 export const logoRow = {
@@ -11,12 +11,12 @@ export const logoRow = {
     fieldRoles: {
       title: constructRole({
         description: "Template title.",
-        fieldTypes: [
-          constructField({
+        fieldConfigs: [
+          constructFieldConfig({
             type: c.FIELD_TYPE_TITLE,
             styleView: c.STYLE_VIEW_TITLE
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             styleView: c.STYLE_VIEW_TITLE,
             contentType: c.CONTENT_TYPE_GENERIC_TEXT,
@@ -33,8 +33,8 @@ export const logoRow = {
       items: constructRole({
         description: "Grid items.",
         required: false,
-        fieldTypes: [
-          constructField({
+        fieldConfigs: [
+          constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,

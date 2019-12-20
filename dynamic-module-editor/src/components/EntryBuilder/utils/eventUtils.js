@@ -123,7 +123,7 @@ export const handleSingleAssetLink = async ({ sdk, props, roleKey, asset, update
 };
 
 export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldTypes)) {
+  if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
     const assets = await sdk.dialogs.selectMultipleAssets({
       locale: 'en-US'
     });
@@ -198,7 +198,7 @@ export const handleAddEntry = async ({
     const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
     const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
-    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldTypes)) {
+    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
       linkEntriesToTemplate({
         props,
         updateEntry,
@@ -283,7 +283,7 @@ export const handleLinkEntryClick = async ({
   roleKey,
   contentType
 } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldTypes)) {
+  if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
     const entryResponses = await sdk.dialogs.selectMultipleEntries({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
@@ -343,7 +343,7 @@ export const handleDeepCopyClick = async ({
       `${sdk.entry.fields.name.getValue()} ${roleKey}`
     );
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldTypes)) {
+    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
       linkEntriesToTemplate({
         props,
         updateEntry,

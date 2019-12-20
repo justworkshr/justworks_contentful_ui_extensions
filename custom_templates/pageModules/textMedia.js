@@ -1,4 +1,4 @@
-import { constructRole, constructField, defaultStyleTypes } from "../utils";
+import { constructRole, constructFieldConfig, defaultStyleTypes } from "../utils";
 import * as c from "../constants";
 
 const markdownDefaultStyle = {
@@ -28,13 +28,13 @@ export const textMedia = {
     },
     fieldRoles: {
       title: constructRole({
-        fieldTypes: [
-          constructField({
+        fieldConfigs: [
+          constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             styleView: c.STYLE_VIEW_MARKDOWN,
             contentType: c.CONTENT_TYPE_GENERIC_TEXT
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_TITLE,
             styleView: c.STYLE_VIEW_TITLE,
             defaultStyle: {
@@ -55,22 +55,22 @@ export const textMedia = {
         required: false
       }),
       left_content: constructRole({
-        fieldTypes: [
-          constructField({
+        fieldConfigs: [
+          constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetTypes: [c.ASSET_TYPE_IMAGE]
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_MEDIA
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN,
             styleView: c.STYLE_VIEW_MARKDOWN,
             defaultStyle: markdownDefaultStyle
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_MARKDOWN,
             styleView: c.STYLE_VIEW_MARKDOWN,
             defaultStyle: markdownDefaultStyle
@@ -81,22 +81,22 @@ export const textMedia = {
         required: true
       }),
       right_content: constructRole({
-        fieldTypes: [
-          constructField({
+        fieldConfigs: [
+          constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetTypes: [c.ASSET_TYPE_IMAGE]
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_MEDIA
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN,
             styleView: c.STYLE_VIEW_MARKDOWN,
             defaultStyle: markdownDefaultStyle
           }),
-          constructField({
+          constructFieldConfig({
             type: c.FIELD_TYPE_MARKDOWN,
             styleView: c.STYLE_VIEW_MARKDOWN,
             defaultStyle: markdownDefaultStyle

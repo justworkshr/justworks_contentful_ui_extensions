@@ -49,10 +49,10 @@ export const getAssetType = contentType => {
 };
 
 export const getCustomTemplateFieldConfig = roleConfig => {
-  return roleConfig.fieldTypes.find(
-    ft =>
-      ft.contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE ||
-      (Array.isArray(ft.contentType) &&
-        ft.contentType.some(ct => ct === c.CONTENT_TYPE_CUSTOM_TEMPLATE))
+  return roleConfig.fieldConfigs.find(
+    fc =>
+      fc.contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE ||
+      (Array.isArray(fc.contentType) &&
+        fc.contentType.some(ct => ct === c.CONTENT_TYPE_CUSTOM_TEMPLATE))
   );
 };

@@ -61,13 +61,13 @@ export const cloneEntry = async (space, entry, name) => {
     fields:
       contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE
         ? await constructCustomTemplateFields(space, entry, contentType, name)
-        : await constructFields(space, entry, contentType, name)
+        : await constructFieldConfigs(space, entry, contentType, name)
   });
 
   return clonedEntry;
 };
 
-const constructFields = async (space, entry, contentType, name) => {
+const constructFieldConfigs = async (space, entry, contentType, name) => {
   const fields = {};
   for (let [key, value] of Object.entries(entry.fields)) {
     let parsedField = key === "name" ? name : getParsedFieldValue(value);

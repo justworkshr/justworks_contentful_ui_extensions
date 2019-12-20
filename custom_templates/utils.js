@@ -6,17 +6,17 @@ import {
 
 export const constructRole = ({
   description = "",
-  fieldTypes = [],
+  fieldConfigs = [],
   required = true
 } = {}) => {
   return {
     description,
-    fieldTypes,
+    fieldConfigs,
     required
   };
 };
 
-export const constructField = ({
+export const constructFieldConfig = ({
   type, // *string - use FIELD_TYPE constants to designate
   styleView = undefined, // *string - style editor type - use STYLE_VIEW constants to designate
   assetStyleView = undefined, // *string - only for multi-reference asset editing - use STYLE_VIEW constants
@@ -27,7 +27,7 @@ export const constructField = ({
   assetDefaultStyle, // *object - only in multi-reference fields, passes this object to all assets when custom field is applied
   allowedCustomTemplates // *array - use CUSTOM_TEMPLATE constants to specific which are allowed
 } = {}) => {
-  if (!type) throw new Error("'type' is required in 'constructField'");
+  if (!type) throw new Error("'type' is required in 'constructFieldConfig'");
   return {
     type,
     styleView,

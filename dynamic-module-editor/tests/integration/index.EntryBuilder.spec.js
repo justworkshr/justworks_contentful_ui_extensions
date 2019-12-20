@@ -302,7 +302,7 @@ describe('App', () => {
         // Only renders this asset reference style if templatre config includes assets
         if (
           multiReferenceStyle &&
-          templateConfig.fieldRoles[node.props().roleKey].fieldTypes.some(
+          templateConfig.fieldRoles[node.props().roleKey].fieldConfigs.some(
             entry => entry.type === c.FIELD_TYPE_ASSET
           )
         ) {

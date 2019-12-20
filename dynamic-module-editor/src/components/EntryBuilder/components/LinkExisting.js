@@ -59,7 +59,7 @@ class LinkExisting extends React.Component {
               </DropdownList>
             </Dropdown>
           )}
-          {roleAllowsAssets(this.props.fieldTypes) && (
+          {roleAllowsAssets(this.props.fieldConfigs) && (
             <DropdownListItem
               className="link-entries-row__dropdown--link-asset"
               onClick={() => this.props.onLinkAssetClick(this.props.roleKey)}>
@@ -95,7 +95,7 @@ class LinkExisting extends React.Component {
 
 LinkExisting.defaultProps = {
   contentTypes: [],
-  fieldTypes: []
+  fieldConfigs: []
 };
 
 LinkExisting.propTypes = {
@@ -105,7 +105,7 @@ LinkExisting.propTypes = {
   onDeepCopyLinkClick: PropTypes.func,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
   roleKey: PropTypes.string,
-  fieldTypes: PropTypes.array
+  fieldConfigs: PropTypes.array
 };
 
 export default LinkExisting;

@@ -1,6 +1,6 @@
 import * as c from '../../../../../custom_templates/constants';
 
-import { removeByIndex, constructFieldEntry } from './index';
+import { removeByIndex, constructFieldConfigEntry } from './index';
 
 export const setEntryLoading = ({ setState, roleKey, value }) => {
   setState(prevState => ({
