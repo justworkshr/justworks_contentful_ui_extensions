@@ -335,13 +335,9 @@ export default class EntryBuilder extends React.Component {
 
 EntryBuilder.propTypes = {
   sdk: PropTypes.object.isRequired,
-  customTemplates: PropTypes.object.isRequired,
   type: PropTypes.string,
-  templatePlaceholder: PropTypes.object,
   entryInternalMapping: PropTypes.object,
   internalMappingJson: PropTypes.string,
-  entries: PropTypes.object,
-  setInvalid: PropTypes.func,
   loadingEntries: PropTypes.array,
   hydratedEntries: PropTypes.array,
   hydratedAssets: PropTypes.array,

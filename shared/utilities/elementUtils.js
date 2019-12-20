@@ -8,6 +8,7 @@ export const capitalize = string => {
 };
 
 export const displaySnakeCaseName = string => {
+  if (!string) return;
   return string
     .split("_")
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -15,6 +16,7 @@ export const displaySnakeCaseName = string => {
 };
 
 export const displayCamelCaseName = string => {
+  if (!string) return;
   return string
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, str => str.toUpperCase());
@@ -51,8 +53,8 @@ export const getAssetType = contentType => {
 export const getCustomTemplateFieldConfig = roleConfig => {
   return roleConfig.fieldConfigs.find(
     fc =>
-      fc.contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE ||
+      fc.contentType === c.CONTENT_TYPE_COLLECTION_MODULE ||
       (Array.isArray(fc.contentType) &&
-        fc.contentType.some(ct => ct === c.CONTENT_TYPE_CUSTOM_TEMPLATE))
+        fc.contentType.some(ct => ct === c.CONTENT_TYPE_COLLECTION_MODULE))
   );
 };

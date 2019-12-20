@@ -58,7 +58,7 @@ class CreateNewLink extends React.Component {
           <DropdownListItem isTitle>Types</DropdownListItem>
           {roleAllowsAssets(this.props.fieldConfigs) && this.renderAssetDropdownItem()}
           {this.props.contentTypes.map((contentType, index) => {
-            return contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
+            return contentType === c.CONTENT_TYPE_COLLECTION_MODULE &&
               !!this.props.allowedCustomTemplates.length ? (
               <Dropdown
                 testId="create-new-link__dropdown-custom-type"

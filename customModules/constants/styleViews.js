@@ -5,11 +5,13 @@ export const STYLE_VIEW_COMPONENT_COLOR = "color";
 
 export const constructStyleSection = ({
   componentType = STYLE_VIEW_COMPONENT_RADIO,
-  styleProperty = {},
+  styleProperty = undefined,
   helpText = "",
   defaultOnly = false,
   subSectionOnly = false
 }) => {
+  if (!styleProperty)
+    throw new Error("styleProperty is requred in 'constructStyleSection");
   return {
     componentType,
     styleProperty,

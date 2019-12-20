@@ -28,6 +28,8 @@ export const EntryField = props => {
         return 'Entry';
       case c.FIELD_TYPE_ASSET:
         return 'Asset';
+      case c.FIELD_TYPE_TEXT:
+        return 'Text';
       case c.FIELD_TYPE_TITLE:
         return 'Text';
       case c.FIELD_TYPE_MARKDOWN:
@@ -134,6 +136,7 @@ export const EntryField = props => {
       </div>
       {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}
       {props.fieldType === c.FIELD_TYPE_ENTRY && renderEntryCard()}
+      {props.fieldType === c.FIELD_TYPE_TEXT && renderTextField(props.roleMappingObject.value)}
       {props.fieldType === c.FIELD_TYPE_TITLE && renderTextField(props.roleMappingObject.value)}
       {props.fieldType === c.FIELD_TYPE_MARKDOWN &&
         renderMarkdownField(props.roleMappingObject.value)}
@@ -147,7 +150,7 @@ EntryField.propTypes = {
   entryIndex: PropTypes.number,
   roleKey: PropTypes.string,
   roleConfig: PropTypes.object,
-  roleMapping: PropTypes.object,
+  roleMappingObject: PropTypes.object,
   fieldType: PropTypes.string,
   isDragActive: PropTypes.bool,
   isLoading: PropTypes.bool,
@@ -166,6 +169,7 @@ EntryField.defaultProps = {
   roleConfig: {},
   isLoading: false,
   isDragActive: false,
+  roleMappingObject: {},
   onEditClick: () => {},
   onRemoveClick: () => {}
 };

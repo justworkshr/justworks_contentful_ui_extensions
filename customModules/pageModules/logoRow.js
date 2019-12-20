@@ -1,4 +1,4 @@
-import { constructRoleConfig, constructFieldConfig } from "../utils";
+import * as u from "../utilities";
 import * as c from "../constants";
 
 export const logoRow = {
@@ -9,14 +9,14 @@ export const logoRow = {
       imageUrl: ""
     },
     fieldRoles: {
-      title: constructRoleConfig({
+      title: u.constructRoleConfig({
         description: "Template title.",
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_TITLE,
             styleView: c.STYLE_VIEW_TITLE
           }),
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             styleView: c.STYLE_VIEW_TITLE,
             contentType: c.CONTENT_TYPE_GENERIC_TEXT,
@@ -30,17 +30,17 @@ export const logoRow = {
         ],
         required: false
       }),
-      items: constructRoleConfig({
+      items: u.constructRoleConfig({
         description: "Grid items.",
         required: false,
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
             assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
-            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+            contentType: [c.CONTENT_TYPE_COLLECTION_MODULE],
             defaultStyle: {
               flexRowPreset: "4-2-2"
             },

@@ -26,7 +26,7 @@ export const getContentTypes = roleConfigObject => {
 };
 
 export const isEditableEntry = contentType => {
-  return contentType !== c.CONTENT_TYPE_CUSTOM_TEMPLATE;
+  return contentType !== c.CONTENT_TYPE_COLLECTION_MODULE;
 };
 
 export const isDirectField = roleType => {
@@ -106,19 +106,19 @@ export const createAsset = async space => {
   return newAsset;
 };
 
-export const createEntry = async (space, contentType, name, template = undefined) => {
+export const createEntry = async (space, contentType, name, type = undefined) => {
   let data = {
     fields: {
       name: { 'en-US': name }
     }
   };
 
-  if (template) {
-    template = template
+  if (type) {
+    type = type
       .split(' ')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
-    data = { ...data, fields: { ...data.fields, template: { 'en-US': template } } };
+    data = { ...data, fields: { ...data.fields, type: { 'en-US': type } } };
   }
 
   const newEntry = await space.createEntry(contentType, data);

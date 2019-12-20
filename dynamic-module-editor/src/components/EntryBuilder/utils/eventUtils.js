@@ -225,7 +225,7 @@ export const handleAddEntry = async ({
       }
       sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e.message);
     }
   }
 };

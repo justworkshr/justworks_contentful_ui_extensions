@@ -70,7 +70,7 @@ export const mockAssetResponse = ({ id = 0, url = 'localhost', assetType = 'imag
 
 export const mockCustomTemplateEntryResponse = ({
   id = 0,
-  contentType = c.CONTENT_TYPE_CUSTOM_TEMPLATE,
+  contentType = c.CONTENT_TYPE_COLLECTION_MODULE,
   template = undefined
 } = {}) => {
   return {

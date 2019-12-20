@@ -20,7 +20,7 @@ import { init, locations } from 'contentful-ui-extensions-sdk';
 
 import { templateIsValid, getTemplateErrors } from './components/EntryBuilder/utils/validations';
 
-import { customTemplates, templatePlaceholder } from '../../customModules';
+import * as cm from '../../customModules';
 import { linkFromMapping } from './utils';
 import { constructLink } from '../../shared/utilities/apiUtils';
 
@@ -375,8 +375,8 @@ export class App extends React.Component {
           <div>
             <SectionHeading>Type</SectionHeading>
             <TemplateTypePalette
-              customTemplates={customTemplates}
-              templatePlaceholder={templatePlaceholder}
+              customTemplates={this.props.customTemplates}
+              templatePlaceholder={this.props.templatePlaceholder}
               sdk={this.props.sdk}
               onChange={this.onTypeChangeHandler}
               value={this.state.type}
@@ -399,8 +399,8 @@ export class App extends React.Component {
             <SectionHeading>Type</SectionHeading>
             <EntryBuilder
               sdk={this.props.sdk}
-              customTemplates={customTemplates}
-              templatePlaceholder={templatePlaceholder}
+              customTemplates={this.props.customTemplates}
+              templatePlaceholder={this.props.templatePlaceholder}
               type={this.state.type}
               templateConfig={this.state.templateConfig}
               entryInternalMapping={this.state.entryInternalMapping}
@@ -433,13 +433,14 @@ export class App extends React.Component {
 }
 
 init(sdk => {
+  const contentType = sdk.entry.getSys().contentType.sys.id;
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
       <App
         title={'Module Editor'}
         sdk={sdk}
-        customTemplates={customTemplates}
-        templatePlaceholder={templatePlaceholder}
+        customTemplates={cm[contentType]}
+        templatePlaceholder={cm.templatePlaceholder}
       />,
       document.getElementById('root')
     );

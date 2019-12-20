@@ -48,7 +48,7 @@ const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, hydrated
     if (
       entry &&
       !!customTemplateFieldConfigObject.allowedCustomTemplates &&
-      getEntryContentTypeId(entry) == c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
+      getEntryContentTypeId(entry) == c.CONTENT_TYPE_COLLECTION_MODULE &&
       !customTemplateFieldConfigObject.allowedCustomTemplates.includes(
         entry.fields.type['en-US'].toLowerCase()
       )
@@ -137,7 +137,7 @@ export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
   if (linkedEntry === thisEntryId) {
     circularReferenceFound = true;
   } else if (
-    getEntryContentTypeId(linkedEntry) === c.CONTENT_TYPE_CUSTOM_TEMPLATE &&
+    getEntryContentTypeId(linkedEntry) === c.CONTENT_TYPE_COLLECTION_MODULE &&
     !!linkedEntry.fields.entries &&
     !!Object.keys(linkedEntry.fields.entries).length &&
     !!linkedEntry.fields.entries['en-US']
@@ -153,7 +153,7 @@ export const linkHasCircularReference = (thisEntryId, linkedEntry) => {
 };
 
 export const linkHasInvalidCustomTemplateType = (fieldConfigObject, linkedEntry) => {
-  if (getEntryContentTypeId(linkedEntry) !== c.CONTENT_TYPE_CUSTOM_TEMPLATE) return false;
+  if (getEntryContentTypeId(linkedEntry) !== c.CONTENT_TYPE_COLLECTION_MODULE) return false;
   const template = linkedEntry.fields.type['en-US'];
   return (
     !!fieldConfigObject.allowedCustomTemplates.length &&

@@ -6,7 +6,7 @@ export default class InternalMapping {
   constructor(json, templateConfig = { style: {}, fieldRoles: {} }) {
     /*
       json - string - the raw JSON of the internalMapping field
-      templateConfig - object - the corresponding custom template config object from './customTemplates'
+      templateConfig - object - the corresponding custom template config object from './customModules'
 
     */
     this._templateConfig = templateConfig;

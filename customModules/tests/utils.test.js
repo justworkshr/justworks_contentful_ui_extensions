@@ -1,17 +1,17 @@
 import * as c from "../constants";
-import { constructRoleConfig, constructFieldConfig } from "../utils";
+import * as u from "../utilities";
 
 describe("utils", () => {
-  describe("constructRoleConfig", () => {
+  describe("u.constructRoleConfig", () => {
     describe("validations", () => {
       it("throws error if no fieldConfigs", () => {
         expect(() =>
-          constructRoleConfig({ fieldConfigs: undefined })
+          u.constructRoleConfig({ fieldConfigs: undefined })
         ).toThrowError();
         expect(() =>
-          constructRoleConfig({
+          u.constructRoleConfig({
             fieldConfigs: [
-              constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
+              u.constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
             ]
           })
         ).not.toThrowError();
@@ -19,50 +19,52 @@ describe("utils", () => {
 
       it("throws error if no multi-reference fieldConfig includes other fieldConfigs", () => {
         expect(() =>
-          constructRoleConfig({
+          u.constructRoleConfig({
             fieldConfigs: [
-              constructFieldConfig({ type: c.FIELD_TYPE_MULTI_REFERENCE }),
-              constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
+              u.constructFieldConfig({ type: c.FIELD_TYPE_MULTI_REFERENCE }),
+              u.constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
             ]
           })
         ).toThrowError();
 
         expect(() =>
-          constructRoleConfig({
+          u.constructRoleConfig({
             fieldConfigs: [
-              constructFieldConfig({ type: c.FIELD_TYPE_MULTI_REFERENCE })
+              u.constructFieldConfig({ type: c.FIELD_TYPE_MULTI_REFERENCE })
             ]
           })
         ).not.toThrowError();
       });
     });
   });
-  describe("constructFieldConfig", () => {
+  describe("u.constructFieldConfig", () => {
     describe("validations", () => {
       it("throws error if no type", () => {
-        expect(() => constructFieldConfig({ type: undefined })).toThrowError();
         expect(() =>
-          constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
+          u.constructFieldConfig({ type: undefined })
+        ).toThrowError();
+        expect(() =>
+          u.constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
         ).not.toThrowError();
       });
 
       it("throws error if type is multi-reference and contentType is not array", () => {
         expect(() =>
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             contentType: "hello"
           })
         ).toThrowError();
 
         expect(() =>
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             contentType: undefined
           })
         ).not.toThrowError();
 
         expect(() =>
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             contentType: ["hi"]
           })
@@ -71,13 +73,13 @@ describe("utils", () => {
 
       it("throws error if no assetType when type is asset", () => {
         expect(() =>
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetType: undefined
           })
         ).toThrowError();
         expect(() =>
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetType: c.ASSET_TYPE_IMAGE
           })

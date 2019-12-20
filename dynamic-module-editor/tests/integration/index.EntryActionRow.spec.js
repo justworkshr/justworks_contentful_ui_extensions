@@ -47,10 +47,10 @@ describe('App', () => {
       wrapper.find('CreateNewLink.entry-action-button__create-new').forEach(node => {
         const roleKey = node.props().roleKey;
         const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
-          e => e.type === c.FIELD_TYPE_ENTRY && e.contentType !== c.CONTENT_TYPE_CUSTOM_TEMPLATE
+          e => e.type === c.FIELD_TYPE_ENTRY && e.contentType !== c.CONTENT_TYPE_COLLECTION_MODULE
         );
         const customTemplateFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
-          e => e.type === c.FIELD_TYPE_ENTRY && e.contentType === c.CONTENT_TYPE_CUSTOM_TEMPLATE
+          e => e.type === c.FIELD_TYPE_ENTRY && e.contentType === c.CONTENT_TYPE_COLLECTION_MODULE
         );
 
         openCreateDropdown(wrapper, roleKey);

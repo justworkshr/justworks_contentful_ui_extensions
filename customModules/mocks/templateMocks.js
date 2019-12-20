@@ -1,8 +1,6 @@
-import { constructRoleConfig, constructFieldConfig } from "../utils";
 import * as c from "../constants";
 
-import { defaultStyleTypes } from "../utils";
-
+import * as u from "../utilities";
 export const MOCK_CONTENT_TYPE_1 = "ct1";
 
 export const MOCK_TEMPLATE_NAME = "mock 1";
@@ -19,7 +17,7 @@ export const mockCustomTemplates = {
     fieldRoles: {
       left_section: {
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT
           })
@@ -29,7 +27,7 @@ export const mockCustomTemplates = {
       },
       right_section: {
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT
           })
@@ -43,9 +41,9 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      text_field: constructRoleConfig({
+      text_field: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_TITLE,
             styleView: c.STYLE_VIEW_TITLE,
             defaultStyle: {
@@ -57,9 +55,9 @@ export const mockCustomTemplates = {
         description: `Text Field.`,
         required: true
       }),
-      markdown_field: constructRoleConfig({
+      markdown_field: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MARKDOWN,
             styleView: c.STYLE_VIEW_MARKDOWN,
             defaultStyle: {
@@ -77,27 +75,27 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      image_asset: constructRoleConfig({
+      image_asset: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetType: c.ASSET_TYPE_IMAGE
           })
         ],
         description: `Image asset field`
       }),
-      formattable_image_asset: constructRoleConfig({
+      formattable_image_asset: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetType: c.ASSET_TYPE_IMAGE
           })
         ],
         description: `Image asset field`
       }),
-      logo_asset: constructRoleConfig({
+      logo_asset: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ASSET,
             assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
@@ -112,27 +110,27 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      entry_field: constructRoleConfig({
+      entry_field: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT
           }),
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_MEDIA
           }),
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
-            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE,
+            contentType: c.CONTENT_TYPE_COLLECTION_MODULE,
             allowedCustomTemplates: [MOCK_CONTENT_TYPE_1]
           })
         ],
         description: `Entry field`
       }),
-      entry_field_with_style: constructRoleConfig({
+      entry_field_with_style: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_TEXT,
             styleView: c.STYLE_VIEW_TITLE,
@@ -141,13 +139,13 @@ export const mockCustomTemplates = {
               textColor: "black"
             }
           }),
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
             contentType: c.CONTENT_TYPE_MEDIA
           }),
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,
-            contentType: c.CONTENT_TYPE_CUSTOM_TEMPLATE,
+            contentType: c.CONTENT_TYPE_COLLECTION_MODULE,
             allowedCustomTemplates: [MOCK_CONTENT_TYPE_1]
           })
         ],
@@ -159,15 +157,15 @@ export const mockCustomTemplates = {
     meta: {},
     style: {},
     fieldRoles: {
-      grid_logo_multi_field: constructRoleConfig({
+      grid_logo_multi_field: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
-            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+            contentType: [c.CONTENT_TYPE_COLLECTION_MODULE],
             assetDefaultStyle: {
               assetStyle: "assetStyleValue"
             }
@@ -175,15 +173,15 @@ export const mockCustomTemplates = {
         ],
         description: `Multi field`
       }),
-      no_style_multi_field: constructRoleConfig({
+      no_style_multi_field: u.constructRoleConfig({
         fieldConfigs: [
-          constructFieldConfig({
+          u.constructFieldConfig({
             type: c.FIELD_TYPE_MULTI_REFERENCE,
             assetType: c.ASSET_TYPE_IMAGE,
             assetSubType: c.ASSET_SUBTYPE_LOGO,
             styleView: c.STYLE_VIEW_FLEX_ROW,
             assetStyleView: c.STYLE_VIEW_LOGO,
-            contentType: [c.CONTENT_TYPE_CUSTOM_TEMPLATE],
+            contentType: [c.CONTENT_TYPE_COLLECTION_MODULE],
             assetDefaultStyle: {
               assetStyle: "assetStyleValue"
             }
@@ -196,7 +194,7 @@ export const mockCustomTemplates = {
   [MOCK_TEMPLATE_STYLE_ENTRY]: {
     meta: {},
     style: {
-      ...defaultStyleTypes()
+      ...u.defaultStyleTypes()
     },
     fieldRoles: {}
   }

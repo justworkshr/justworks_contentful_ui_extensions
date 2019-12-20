@@ -1,7 +1,10 @@
+// PAGE MODULES
 import { cardBlock } from "./pageModules/cardBlock";
 import { textMedia } from "./pageModules/textMedia";
-import { logoItem } from "./pageModules/logoItem";
 import { logoRow } from "./pageModules/logoRow";
+
+// COLLECTION MODULES
+import { logoItem } from "./collectionModules/logoItem";
 
 /////////////////
 // Instructions
@@ -13,11 +16,14 @@ import { logoRow } from "./pageModules/logoRow";
 // Warning 2) NEVER change a content type name without changing the name here too.
 ////////////////
 
-export const customTemplates = {
+export const pageModule = {
   ...cardBlock,
   ...textMedia,
-  ...logoItem,
   ...logoRow
+};
+
+export const collectionModule = {
+  ...logoItem
 };
 
 export const templatePlaceholder = {

@@ -1,8 +1,4 @@
-import * as c from "./constants";
-import {
-  constructStyleView,
-  constructStyleSection
-} from "./constants/styleViews";
+import * as c from "../constants";
 
 export const constructRoleConfig = ({
   description = "",
@@ -75,9 +71,9 @@ export const constructFieldConfig = ({
 export const defaultStyleTypes = () => {
   return {
     template_style: templateStyleProperty({
-      styleView: constructStyleView({
+      styleView: c.constructStyleView({
         styleSections: [
-          constructStyleSection({
+          c.constructStyleSection({
             componentType: c.STYLE_VIEW_COMPONENT_COLOR,
             styleProperty: c.STYLE_PROPERTY_BACKGROUND_COLOR,
             helpText: "The background color for this module."
@@ -99,22 +95,32 @@ export const templateStyleProperty = ({ styleView = {} } = {}) => {
   );
 };
 
-export const allowAsset = ({
-  type = c.ASSET_TYPE_IMAGE,
-  subType = undefined,
-  allowFormatting = false,
-  maxWidth = "2000",
-  defaultStyle = ""
-} = {}) => {
+export const constructStyleKeyValue = ({ styleProperty, value } = {}) => {
   return {
-    asset: {
-      type,
-      subType,
-      defaultStyle,
-      formatting: {
-        allow: allowFormatting,
-        maxWidth: String(maxWidth)
-      }
-    }
+    [styleProperty.key]: styleProperty.values.find(v => v.value === value).value
   };
+};
+
+export const constructTitleRole = (
+  defaultStyle,
+  required,
+  description = "Title above the module."
+) => {
+  return constructRoleConfig({
+    fieldConfigs: [
+      constructFieldConfig({
+        type: c.FIELD_TYPE_ENTRY,
+        contentType: c.CONTENT_TYPE_GENERIC_TEXT,
+        styleView: c.STYLE_VIEW_TITLE,
+        defaultStyle
+      }),
+      constructFieldConfig({
+        type: c.FIELD_TYPE_TITLE,
+        styleView: c.STYLE_VIEW_TITLE,
+        defaultStyle
+      })
+    ],
+    description,
+    required
+  });
 };
