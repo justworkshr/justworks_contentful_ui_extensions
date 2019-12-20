@@ -2,30 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import * as c from '../../../../custom_templates/constants';
-import { getCustomTemplateFieldConfig } from '../../../../shared/utilities/elementUtils';
 
 import { DisplayText } from '@contentful/forma-36-react-components';
 
-import EntryField from './components/EntryField';
 import TemplateStyleEditor from './components/TemplateStyleEditor';
-import RoleStyleSection from './components/RoleStyleSection';
-import EntryActionRow from './components/EntryActionRow';
 import RoleSection from './components/RoleSection';
 
 import InternalMapping from '../../utils/InternalMapping';
 
-import {
-  roleIsMultiReference,
-  displaySnakeCaseName,
-  getFieldConfig,
-  getContentTypes
-} from './utils';
-
-import {
-  renderSingleEntryStyle,
-  renderMultiReferenceStyle,
-  renderMultiReferenceAssetStyle
-} from './utils/renderUtils';
+import { displaySnakeCaseName, getFieldConfig } from './utils';
 
 import {
   handleRemoveEntry,
@@ -70,7 +55,6 @@ export default class EntryBuilder extends React.Component {
     this.clearTemplateStyle = this.clearTemplateStyle.bind(this);
     this.clearEntryStyleKey = this.clearEntryStyleKey.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
-    this.renderEntryFields = this.renderEntryFields.bind(this);
     this.onLinkAssetClick = this.onLinkAssetClick.bind(this);
     this.addRoleCustomStyle = this.addRoleCustomStyle.bind(this);
     this.addRoleReferencesCustomStyle = this.addRoleReferencesCustomStyle.bind(this);
@@ -273,180 +257,6 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  renderEntryFields(roleKey, roleConfigObject, roleMappingObject, fieldConfigObject) {
-    // Multi References and with entries
-
-    const customTemplateFieldConfig = getCustomTemplateFieldConfig(roleConfigObject) || {};
-
-    if (
-      roleIsMultiReference(roleConfigObject.fieldConfigs) &&
-      roleMappingObject.value &&
-      roleMappingObject.value.length
-    ) {
-      const firstAsset =
-        roleMappingObject.value && roleMappingObject.value.length
-          ? roleMappingObject.value.find(e => e.type === c.FIELD_TYPE_ASSET)
-          : undefined;
-      // render multi field
-      return (
-        <div className="section-row">
-          <div className="section-column max-width-600">
-            <div className="asset-row">
-              {roleMappingObject.value.map((entry, index) => {
-                const e =
-                  this.props.hydratedEntries.find(he => he.sys.id === entry.value) ||
-                  this.props.hydratedAssets.find(a => a.sys.id === entry.value);
-                return (
-                  <EntryField
-                    key={`entryfield-${roleKey}-${index}`}
-                    className="max-width-600"
-                    entry={e}
-                    entryIndex={index}
-                    fieldType={entry.type}
-                    isLoading={e && !!this.props.loadingEntries.includes((e.sys || {}).id)}
-                    roleKey={roleKey}
-                    roleConfig={roleConfigObject}
-                    onEditClick={this.onEditClick}
-                    onDeepCopyClick={this.onDeepCopyClick}
-                    onRemoveClick={this.onRemoveClick}
-                    onFieldChange={this.onFieldChange}
-                    roleMappingObject={roleMappingObject}
-                  />
-                );
-              })}
-            </div>
-            <EntryActionRow
-              allowedCustomTemplates={customTemplateFieldConfig.allowedCustomTemplates}
-              className="max-width-600"
-              contentTypes={getContentTypes(this.props.templateConfig.fieldRoles[roleKey])}
-              onAddFieldClick={this.onAddFieldClick}
-              roleKey={roleKey}
-              onAddEntryClick={this.onAddEntryClick}
-              onLinkAssetClick={this.onLinkAssetClick}
-              onLinkEntryClick={this.onLinkEntryClick}
-              onDeepCopyLinkClick={this.onDeepCopyClick}
-              fieldConfigs={this.props.templateConfig.fieldRoles[roleKey].fieldConfigs}
-            />
-          </div>
-          <div className="section-column">
-            {renderMultiReferenceStyle(fieldConfigObject) && (
-              <RoleStyleSection
-                className="max-width-600"
-                addCustomStyle={this.addRoleCustomStyle}
-                addEntryStyle={this.addRoleEntryStyle}
-                clearRoleStyle={this.clearRoleStyle}
-                fieldConfigObject={fieldConfigObject}
-                styleView={fieldConfigObject.styleView}
-                styleEntry={
-                  roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
-                    ? this.props.hydratedEntries.find(
-                        e => e.sys.id === roleMappingObject.style.value
-                      )
-                    : undefined
-                }
-                roleKey={roleKey}
-                roleConfigObject={roleConfigObject}
-                roleMappingObject={roleMappingObject}
-                updateStyle={this.updateEntryStyle}
-                clearStyleField={this.clearEntryStyleKey}
-                title={displaySnakeCaseName(roleKey) + ' Style'}
-                type={roleMappingObject.type}
-              />
-            )}
-            {renderMultiReferenceAssetStyle(roleMappingObject, fieldConfigObject) && (
-              <RoleStyleSection
-                className="max-width-600"
-                addCustomStyle={this.addRoleReferencesCustomStyle}
-                addEntryStyle={this.addRoleReferencesEntryStyle}
-                clearRoleStyle={this.clearRoleReferencesStyle}
-                fieldConfigObject={fieldConfigObject}
-                styleView={fieldConfigObject.assetStyleView}
-                styleEntry={
-                  firstAsset.style && firstAsset.style.type === c.STYLE_TYPE_ENTRY
-                    ? this.props.hydratedEntries.find(e => e.sys.id === firstAsset.style.value)
-                    : undefined
-                }
-                roleKey={roleKey}
-                roleConfigObject={roleConfigObject}
-                roleMappingObject={firstAsset}
-                updateStyle={this.updateReferencesStyle}
-                clearStyleField={this.clearReferencesStyle}
-                title={displaySnakeCaseName(roleKey) + ' Asset Style'}
-                type={c.FIELD_TYPE_ASSET}
-              />
-            )}
-          </div>
-        </div>
-      );
-    } else if (this.props.entryInternalMapping && !!this.props.entryInternalMapping[roleKey]) {
-      // Render single field
-      const entry =
-        this.props.hydratedEntries.find(
-          he => he.sys.id === this.props.entryInternalMapping[roleKey].value
-        ) ||
-        this.props.hydratedAssets.find(
-          a => a.sys.id === this.props.entryInternalMapping[roleKey].value
-        );
-
-      return (
-        <div className="section-row">
-          <EntryField
-            className="max-width-600"
-            entry={entry}
-            fieldType={roleMappingObject.type}
-            isLoading={entry ? !!this.props.loadingEntries.includes(entry.sys.id) : false}
-            isDragActive={entry ? this.state.draggingObject === (entry.sys || {}).id : false}
-            roleKey={roleKey}
-            roleConfig={roleConfigObject}
-            onEditClick={this.onEditClick}
-            onDeepCopyClick={this.onDeepCopyClick}
-            onRemoveClick={this.onRemoveClick}
-            onFieldChange={this.onFieldChange}
-            roleMappingObject={roleMappingObject}
-          />
-          {renderSingleEntryStyle(fieldConfigObject) && (
-            <RoleStyleSection
-              className="max-width-600"
-              addCustomStyle={this.addRoleCustomStyle}
-              addEntryStyle={this.addRoleEntryStyle}
-              clearRoleStyle={this.clearRoleStyle}
-              fieldConfigObject={fieldConfigObject}
-              styleView={fieldConfigObject.styleView}
-              styleEntry={
-                roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
-                  ? this.props.hydratedEntries.find(e => e.sys.id === roleMappingObject.style.value)
-                  : undefined
-              }
-              roleKey={roleKey}
-              roleConfigObject={roleConfigObject}
-              roleMappingObject={roleMappingObject}
-              updateStyle={this.updateEntryStyle}
-              clearStyleField={this.clearEntryStyleKey}
-              title={displaySnakeCaseName(roleKey) + ' Style'}
-              type={roleMappingObject.type}
-            />
-          )}
-        </div>
-      );
-    } else {
-      // Render empty action row
-      return (
-        <EntryActionRow
-          allowedCustomTemplates={customTemplateFieldConfig.allowedCustomTemplates}
-          className="max-width-600"
-          contentTypes={getContentTypes(this.props.templateConfig.fieldRoles[roleKey])}
-          onAddFieldClick={this.onAddFieldClick}
-          roleKey={roleKey}
-          onAddEntryClick={this.onAddEntryClick}
-          onLinkAssetClick={this.onLinkAssetClick}
-          onLinkEntryClick={this.onLinkEntryClick}
-          onDeepCopyLinkClick={this.onDeepCopyClick}
-          fieldConfigs={this.props.templateConfig.fieldRoles[roleKey].fieldConfigs}
-        />
-      );
-    }
-  }
-
   render() {
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
@@ -490,9 +300,30 @@ export default class EntryBuilder extends React.Component {
                   fieldConfigObject={fieldConfigObject}
                   roleConfigObject={roleConfigObject}
                   roleMappingObject={roleMappingObject}
-                  renderEntryFields={this.renderEntryFields}
                   stateErrors={this.state.errors}
+                  loadingEntries={this.props.loadingEntries}
+                  entryInternalMapping={this.props.entryInternalMapping}
+                  templateConfig={this.props.templateConfig}
+                  hydratedEntries={this.props.hydratedEntries}
+                  hydratedAssets={this.props.hydratedAssets}
+                  onEditClick={this.onEditClick}
+                  onDeepCopyClick={this.onDeepCopyClick}
                   onRemoveClick={this.onRemoveClick}
+                  onFieldChange={this.onFieldChange}
+                  onAddFieldClick={this.onAddFieldClick}
+                  onAddEntryClick={this.onAddEntryClick}
+                  onLinkAssetClick={this.onLinkAssetClick}
+                  onLinkEntryClick={this.onLinkEntryClick}
+                  addRoleCustomStyle={this.addRoleCustomStyle}
+                  addRoleEntryStyle={this.addRoleEntryStyle}
+                  clearRoleStyle={this.clearRoleStyle}
+                  updateEntryStyle={this.updateEntryStyle}
+                  clearEntryStyleKey={this.clearEntryStyleKey}
+                  addRoleReferencesCustomStyle={this.addRoleReferencesCustomStyle}
+                  addRoleReferencesEntryStyle={this.addRoleReferencesEntryStyle}
+                  clearRoleReferencesStyle={this.clearRoleReferencesStyle}
+                  updateReferencesStyle={this.updateReferencesStyle}
+                  clearReferencesStyle={this.clearReferencesStyle}
                 />
               );
             })}
@@ -511,6 +342,7 @@ EntryBuilder.propTypes = {
   internalMappingJson: PropTypes.string,
   entries: PropTypes.object,
   setInvalid: PropTypes.func,
+  loadingEntries: PropTypes.array,
   hydratedEntries: PropTypes.array,
   hydratedAssets: PropTypes.array,
   updateEntry: PropTypes.func,
