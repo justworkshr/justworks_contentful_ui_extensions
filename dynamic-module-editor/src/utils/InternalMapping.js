@@ -388,4 +388,13 @@ export default class InternalMapping {
       delete this[key];
     }
   }
+
+  switchMultiReferenceValues({ roleKey, draggedIndex, draggedOverIndex } = {}) {
+    if (!Array.isArray(this.fieldRoles[roleKey].value)) return;
+    const array = this.fieldRoles[roleKey].value;
+
+    [array[draggedIndex], array[draggedOverIndex]] = [array[draggedOverIndex], array[draggedIndex]];
+
+    this.fieldRoles[roleKey].value = array;
+  }
 }

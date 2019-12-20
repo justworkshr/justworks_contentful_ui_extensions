@@ -700,4 +700,23 @@ describe('InternalMapping', () => {
       expect(internalMapping.hi.formatting).toEqual(imageObject);
     });
   });
+
+  describe('switchMultiReferenceValues', () => {
+    it('swaps the array position', () => {
+      const json = JSON.stringify({
+        fieldRoles: {
+          hi: { type: 'multi-reference', value: ['a', 'b', 'c', 'd'] }
+        }
+      });
+      const internalMapping = new InternalMapping(json);
+
+      internalMapping.switchMultiReferenceValues({
+        roleKey: 'hi',
+        draggedIndex: 0,
+        draggedOverIndex: 1
+      });
+      expect(internalMapping.hi.value[0]).toEqual('b');
+      expect(internalMapping.hi.value[1]).toEqual('a');
+    });
+  });
 });

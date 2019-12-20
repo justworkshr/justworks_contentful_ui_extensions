@@ -56,6 +56,10 @@ div {
   .asset-row > div {
     flex: 1;
   }
+
+  .asset-row .entry-card {
+    min-width: 300px;
+  }
 }
 
 .section-column {

@@ -46,15 +46,18 @@ export const EntryField = props => {
       : null;
     return (
       <EntryCard
-        draggable
+        draggable={!!props.onDragStart}
+        onDragStart={props.onDragStart}
+        onDragOver={props.onDragOver}
+        onDragEnd={props.onDragEnd}
+        isDragActive={props.isDragActive}
         loading={props.isLoading}
-        className="role-section__entity"
+        className="role-section__entity entry-card"
         size="small"
         title={props.entry.fields ? props.entry.fields.name['en-US'] : 'Loading...'}
         contentType={contentType}
         status={getStatus(props.entry)}
         withDragHandle={true}
-        isDragActive={props.isDragActive}
         onClick={() => props.onEditClick(props.entry)}
         dropdownListElements={
           <DropdownList>
@@ -83,7 +86,11 @@ export const EntryField = props => {
   const renderAssetCard = () => {
     return (
       <AssetCard
-        draggable
+        draggable={!!props.onDragStart}
+        onDragStart={props.onDragStart}
+        onDragOver={props.onDragOver}
+        onDragEnd={props.onDragEnd}
+        isDragActive={props.isDragActive}
         className="role-section__entity"
         size="default"
         title={props.entry.fields ? props.entry.fields.title['en-US'] : ''}
@@ -158,6 +165,10 @@ EntryField.propTypes = {
   onDeepCopyClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onFieldChange: PropTypes.func,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDragEnd: PropTypes.func,
+  isDragActive: PropTypes.bool,
   value: PropTypes.string
 };
 

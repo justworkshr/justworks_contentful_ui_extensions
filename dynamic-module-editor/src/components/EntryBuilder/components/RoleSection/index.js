@@ -27,6 +27,7 @@ import {
   renderMultiReferenceStyle,
   renderMultiReferenceAssetStyle
 } from '../../utils/renderUtils';
+import MultiRow from '../MultiRow';
 
 const RoleSection = props => {
   const renderEntryFields = (roleKey, roleConfigObject, roleMappingObject, fieldConfigObject) => {
@@ -47,30 +48,19 @@ const RoleSection = props => {
       return (
         <div className="section-row">
           <div className="section-column max-width-600">
-            <div className="asset-row">
-              {roleMappingObject.value.map((entry, index) => {
-                const e =
-                  props.hydratedEntries.find(he => he.sys.id === entry.value) ||
-                  props.hydratedAssets.find(a => a.sys.id === entry.value);
-                return (
-                  <EntryField
-                    key={`entryfield-${roleKey}-${index}`}
-                    className="max-width-600"
-                    entry={e}
-                    entryIndex={index}
-                    fieldType={entry.type}
-                    isLoading={e && !!props.loadingEntries.includes((e.sys || {}).id)}
-                    roleKey={roleKey}
-                    roleConfig={roleConfigObject}
-                    onEditClick={props.onEditClick}
-                    onDeepCopyClick={props.onDeepCopyClick}
-                    onRemoveClick={props.onRemoveClick}
-                    onFieldChange={props.onFieldChange}
-                    roleMappingObject={roleMappingObject}
-                  />
-                );
-              })}
-            </div>
+            <MultiRow
+              roleKey={roleKey}
+              hydratedEntries={props.hydratedEntries}
+              hydratedAssets={props.hydratedAssets}
+              loadingEntries={props.loadingEntries}
+              roleConfigObject={roleConfigObject}
+              roleMappingObject={props.roleMappingObject}
+              onEditClick={props.onEditClick}
+              onDeepCopyClick={props.onDeepCopyClick}
+              onRemoveClick={props.onRemoveClick}
+              onFieldChange={props.onFieldChange}
+              onMultiReferenceDragEnd={props.onMultiReferenceDragEnd}
+            />
             <EntryActionRow
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
@@ -264,7 +254,8 @@ RoleSection.propTypes = {
   addRoleReferencesEntryStyle: PropTypes.func,
   clearRoleReferencesStyle: PropTypes.func,
   updateReferencesStyle: PropTypes.func,
-  clearReferencesStyle: PropTypes.func
+  clearReferencesStyle: PropTypes.func,
+  onMultiReferenceDragEnd: PropTypes.func
 };
 
 RoleSection.defaultProps = {

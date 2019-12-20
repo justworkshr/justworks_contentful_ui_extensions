@@ -415,3 +415,15 @@ export const handleFieldChange = ({ props, setInternalMappingValue, e, roleKey }
     setInternalMappingValue(updatedInternalMapping.asJSON());
   }
 };
+
+export const handleMultiReferenceDragEnd = ({
+  entryInternalMapping,
+  setInternalMappingValue,
+  roleKey,
+  draggedIndex,
+  draggedOverIndex
+} = {}) => {
+  const updatedInternalMapping = entryInternalMapping;
+  updatedInternalMapping.switchMultiReferenceValues({ roleKey, draggedIndex, draggedOverIndex });
+  setInternalMappingValue(updatedInternalMapping.asJSON());
+};

@@ -24,7 +24,8 @@ import {
   handleEntryEditClick,
   handleFieldChange,
   handleAddRoleEntryStyle,
-  handleAddRoleReferencesEntryStyle
+  handleAddRoleReferencesEntryStyle,
+  handleMultiReferenceDragEnd
 } from './utils/eventUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -56,6 +57,7 @@ export default class EntryBuilder extends React.Component {
     this.clearEntryStyleKey = this.clearEntryStyleKey.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
     this.onLinkAssetClick = this.onLinkAssetClick.bind(this);
+    this.onMultiReferenceDragEnd = this.onMultiReferenceDragEnd.bind(this);
     this.addRoleCustomStyle = this.addRoleCustomStyle.bind(this);
     this.addRoleReferencesCustomStyle = this.addRoleReferencesCustomStyle.bind(this);
     this.addRoleEntryStyle = this.addRoleEntryStyle.bind(this);
@@ -72,6 +74,16 @@ export default class EntryBuilder extends React.Component {
       fieldType
     });
   };
+
+  onMultiReferenceDragEnd(roleKey, draggedIndex, draggedOverIndex) {
+    handleMultiReferenceDragEnd({
+      entryInternalMapping: this.props.entryInternalMapping,
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
+      roleKey,
+      draggedIndex,
+      draggedOverIndex
+    });
+  }
 
   onAddEntryClick = async ({ roleKey, contentType, template = undefined, type = 'entry' } = {}) => {
     await handleAddEntry({
@@ -324,6 +336,7 @@ export default class EntryBuilder extends React.Component {
                   clearRoleReferencesStyle={this.clearRoleReferencesStyle}
                   updateReferencesStyle={this.updateReferencesStyle}
                   clearReferencesStyle={this.clearReferencesStyle}
+                  onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
                 />
               );
             })}
