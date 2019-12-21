@@ -18,6 +18,7 @@ import {
   handleAddEntry,
   handleLinkAssetClick,
   handleLinkEntryClick,
+  handleDuplicateClick,
   handleDeepCopyClick,
   handleUpdateEntryStyle,
   handleUpdateReferencesStyle,
@@ -118,6 +119,17 @@ export default class EntryBuilder extends React.Component {
 
   onDeepCopyClick = async (roleKey, contentType, entry = undefined) => {
     await handleDeepCopyClick({
+      sdk: this.props.sdk,
+      props: this.props,
+      updateEntry: this.props.updateEntry.bind(this),
+      roleKey,
+      contentType,
+      entry
+    });
+  };
+
+  onDuplicateClick = async (roleKey, contentType, entry = undefined) => {
+    await handleDuplicateClick({
       sdk: this.props.sdk,
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
@@ -320,6 +332,7 @@ export default class EntryBuilder extends React.Component {
                   hydratedAssets={this.props.hydratedAssets}
                   onEditClick={this.onEditClick}
                   onDeepCopyClick={this.onDeepCopyClick}
+                  onDuplicateClick={this.onDuplicateClick}
                   onRemoveClick={this.onRemoveClick}
                   onFieldChange={this.onFieldChange}
                   onAddFieldClick={this.onAddFieldClick}

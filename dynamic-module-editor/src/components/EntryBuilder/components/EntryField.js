@@ -67,11 +67,20 @@ export const EntryField = props => {
               onClick={() => props.onEditClick(props.entry)}>
               Edit
             </DropdownListItem>
-            <DropdownListItem
-              className="entry-card__action--edit"
-              onClick={() => props.onDeepCopyClick(props.roleKey, contentType, props.entry)}>
-              Deep Copy
-            </DropdownListItem>
+            {props.onDeepCopyClick && (
+              <DropdownListItem
+                className="entry-card__action--edit"
+                onClick={() => props.onDeepCopyClick(props.roleKey, contentType, props.entry)}>
+                Deep Copy
+              </DropdownListItem>
+            )}
+            {props.onDuplicateClick && (
+              <DropdownListItem
+                className="entry-card__action--edit"
+                onClick={() => props.onDuplicateClick(props.roleKey, contentType, props.entry)}>
+                Duplicate
+              </DropdownListItem>
+            )}
             <DropdownListItem
               className="entry-card__action--remove"
               onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
@@ -163,6 +172,7 @@ EntryField.propTypes = {
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,
   onDeepCopyClick: PropTypes.func,
+  onDuplicateClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onFieldChange: PropTypes.func,
   onDragStart: PropTypes.func,

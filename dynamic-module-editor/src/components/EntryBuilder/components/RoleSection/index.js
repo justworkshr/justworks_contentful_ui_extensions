@@ -57,6 +57,7 @@ const RoleSection = props => {
               roleMappingObject={props.roleMappingObject}
               onEditClick={props.onEditClick}
               onDeepCopyClick={props.onDeepCopyClick}
+              onDuplicateClick={props.onDuplicateClick}
               onRemoveClick={props.onRemoveClick}
               onFieldChange={props.onFieldChange}
               onMultiReferenceDragEnd={props.onMultiReferenceDragEnd}
@@ -71,6 +72,7 @@ const RoleSection = props => {
               onLinkAssetClick={props.onLinkAssetClick}
               onLinkEntryClick={props.onLinkEntryClick}
               onDeepCopyLinkClick={props.onDeepCopyClick}
+              onDuplicateClick={props.onDuplicateClick}
               fieldConfigs={props.templateConfig.fieldRoles[roleKey].fieldConfigs}
             />
           </div>
@@ -139,6 +141,7 @@ const RoleSection = props => {
             roleConfig={roleConfigObject}
             onEditClick={props.onEditClick}
             onDeepCopyClick={props.onDeepCopyClick}
+            onDuplicateClick={props.onDuplicateClick}
             onRemoveClick={props.onRemoveClick}
             onFieldChange={props.onFieldChange}
             roleMappingObject={roleMappingObject}
@@ -180,12 +183,12 @@ const RoleSection = props => {
           onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyClick}
+          onDuplicateClick={props.onDuplicateClick}
           fieldConfigs={props.templateConfig.fieldRoles[roleKey].fieldConfigs}
         />
       );
     }
   };
-
   return (
     <div className="role-section">
       <div className="role-section__header-section max-width-600">
@@ -239,6 +242,7 @@ RoleSection.propTypes = {
   hydratedAssets: PropTypes.array,
   onEditClick: PropTypes.func,
   onDeepCopyClick: PropTypes.func,
+  onDuplicateClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onFieldChange: PropTypes.func,
   onAddFieldClick: PropTypes.func,

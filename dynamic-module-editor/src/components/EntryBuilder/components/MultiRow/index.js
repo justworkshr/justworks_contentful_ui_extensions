@@ -42,6 +42,7 @@ const MultiRow = props => {
             roleConfig={props.roleConfigObject}
             onEditClick={props.onEditClick}
             onDeepCopyClick={props.onDeepCopyClick}
+            onDuplicateClick={props.onDuplicateClick}
             onRemoveClick={props.onRemoveClick}
             onFieldChange={props.onFieldChange}
             roleMappingObject={props.roleMappingObject}
@@ -62,9 +63,10 @@ MultiRow.propTypes = {
   hydratedAssets: PropTypes.array,
   loadingEntries: PropTypes.array,
   roleConfigObject: PropTypes.object,
-  roleMappingObject: PropTypes.func,
+  roleMappingObject: PropTypes.object,
   onEditClick: PropTypes.func,
   onDeepCopyClick: PropTypes.func,
+  onDuplicateClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onFieldChange: PropTypes.func,
   onMultiReferenceDragEnd: PropTypes.func

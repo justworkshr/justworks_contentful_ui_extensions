@@ -1,5 +1,6 @@
 import * as c from '../../../../../customModules/constants';
 import { cloneEntry } from '../../../../../shared/utilities/deepCopy';
+import { duplicateEntry } from '../../../../../shared/utilities/duplicate';
 
 import {
   createEntry,
@@ -361,6 +362,51 @@ export const handleDeepCopyClick = async ({
       });
     }
     sdk.notifier.success('Deep copy completed. New entry is now linked.');
+  }
+};
+
+export const handleDuplicateClick = async ({
+  sdk,
+  props,
+  updateEntry,
+  roleKey,
+  contentType,
+  entry = undefined
+} = {}) => {
+  entry =
+    entry ||
+    (await sdk.dialogs.selectSingleEntry({
+      locale: 'en-US',
+      contentTypes: getContentTypeArray(contentType)
+    }));
+  const linkedEntryValidation = validateLinkedEntry(
+    entry,
+    roleKey,
+    sdk.entry.getSys().id,
+    props.templateConfig.fieldRoles
+  );
+  if (linkedEntryValidation) {
+    return sdk.notifier.error(linkedEntryValidation);
+  }
+
+  if (entry) {
+    const duplicatedEntry = await duplicateEntry(sdk.space, entry);
+    // Only links 1 entry at a time, even in multi-reference fields
+    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+      linkEntriesToTemplate({
+        props,
+        updateEntry,
+        entryResponses: [duplicatedEntry],
+        roleKey
+      });
+    } else {
+      linkEntryToTemplate({
+        props,
+        updateEntry,
+        entryResponse: duplicatedEntry,
+        roleKey
+      });
+    }
   }
 };
 
