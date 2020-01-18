@@ -43,6 +43,7 @@ export const SYSTEM_TYPE_ENTRY = "Entry";
   - Used to render the correct template on the website
 */
 
+export const FIELD_TYPE_FIELD = "field";
 export const FIELD_TYPE_ENTRY = "entry";
 export const FIELD_TYPE_ASSET = "asset";
 export const FIELD_TYPE_MULTI_REFERENCE = "multi-reference";

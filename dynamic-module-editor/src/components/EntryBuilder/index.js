@@ -4,17 +4,13 @@ import PropTypes from 'prop-types';
 import * as c from '../../../../customModules/constants';
 
 import {
-  FieldGroup,
   RadioButtonField,
   Subheading,
   DisplayText,
-  Select,
-  Option,
   TextLink
 } from '@contentful/forma-36-react-components';
 
 import TemplateStyleEditor from './components/TemplateStyleEditor';
-import ComponentZone from './components/ComponentZone';
 
 import RoleSection from './components/RoleSection';
 
@@ -353,7 +349,7 @@ export default class EntryBuilder extends React.Component {
                   </TextLink>
                 </Subheading>
 
-                <div className="style-editor__radio-section">
+                {/* <div className="style-editor__radio-section">
                   {Object.keys(roleConfigObject.componentOptions).map(componentOption => {
                     return (
                       <RadioButtonField
@@ -368,7 +364,7 @@ export default class EntryBuilder extends React.Component {
                       />
                     );
                   })}
-                </div>
+                </div> */}
               </div>
             );
           })}

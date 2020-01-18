@@ -16,10 +16,23 @@ export default class ComponentMapping {
     this.assignRolesFromMapping(parsedJSON);
   }
 
-  static entryMapping({ type, value = '', contentType = undefined } = {}) {
+  static propertyMapping({ type, value = '' } = {}) {
     return {
       type,
-      contentType,
+      value
+    };
+  }
+
+  static fieldMapping({ type = 'field', value = '' } = {}) {
+    return {
+      type,
+      value
+    };
+  }
+
+  static entryMapping({ type = 'entry', value = '' } = {}) {
+    return {
+      type,
       value
     };
   }
@@ -45,7 +58,7 @@ export default class ComponentMapping {
     if (!json || !typeof json === 'string') return ComponentMapping.blankMapping;
     // if malformed object
     const parsedJSON = JSON.parse(json);
-    if (!parsedJSON.componentZones) return ComponentMapping.blankMapping;
+    if (!parsedJSON.properties) return ComponentMapping.blankMapping;
     return parsedJSON;
   }
 
@@ -55,46 +68,42 @@ export default class ComponentMapping {
       this[key] = parsedJSON[key] || ComponentMapping.blankMapping[key];
     });
     // Load values from the entry's ComponentMapping Json
-    Object.keys(parsedJSON.componentZones || {}).forEach(key => {
-      this.componentZones[key] = parsedJSON.componentZones[key];
+    Object.keys(parsedJSON.properties || {}).forEach(key => {
+      this.properties[key] = parsedJSON.properties[key];
       this.defineGetterSetters(key);
     });
   }
+
+  // {
+  //   componentName: "titledList",
+  //   properties: {
+  //     titleText: {
+  //       type: "entry",
+  //       value: "1234"
+  //     },
+  //     listMarkdown: {
+  //       type: "field",
+  //       value: "<p>Hello!</p>"
+  //     },
+  //   }
+  // }
 
   defineGetterSetters(key) {
     if (!this.hasOwnProperty(key)) {
       Object.defineProperty(this, key, {
         get: () => {
           // if its an array, return array of mappings. Else, return direct object mapping.
-          if (Array.isArray(this.componentZones[key])) {
-            return this.componentZones[key].map(entry => {
-              if (entry.type === c.FIELD_TYPE_ASSET) {
-                return ComponentMapping.assetMapping({ ...entry });
-              } else {
-                return ComponentMapping.entryMapping({ ...entry });
-              }
+          if (Array.isArray(this.properties[key])) {
+            return this.properties[key].map(entry => {
+              return entry;
             });
           } else {
-            if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
-              return ComponentMapping.assetMapping({ ...this.componentZones[key] });
-            } else {
-              return ComponentMapping.entryMapping({ ...this.componentZones[key] });
-            }
+            return this.properties[key];
           }
         },
 
         set: value => {
-          if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
-            this.componentZones[key] = ComponentMapping.assetMapping({
-              ...this.componentZones[key],
-              value
-            });
-          } else {
-            this.componentZones[key] = ComponentMapping.entryMapping({
-              ...this.componentZones[key],
-              value
-            });
-          }
+          this.properties[key] = value;
         },
         configurable: true
       });
@@ -103,7 +112,7 @@ export default class ComponentMapping {
 
   addAsset(key, value, assetUrl, assetType) {
     this.defineGetterSetters(key);
-    this.componentZones[key] = ComponentMapping.assetMapping({
+    this.properties[key] = ComponentMapping.assetMapping({
       type: c.FIELD_TYPE_ASSET,
       value,
       assetUrl,
@@ -117,7 +126,7 @@ export default class ComponentMapping {
      * value - string - the ID of the contentful entry
      */
     this.defineGetterSetters(key);
-    this.componentZones[key] = ComponentMapping.entryMapping({
+    this.properties[key] = ComponentMapping.entryMapping({
       type: c.FIELD_TYPE_ENTRY,
       value,
       contentType
@@ -150,11 +159,11 @@ export default class ComponentMapping {
       }
     });
 
-    if (Array.isArray((this.componentZones[key] || {}).value)) {
-      valueArray = [...this.componentZones[key].value, ...valueArray];
+    if (Array.isArray((this.properties[key] || {}).value)) {
+      valueArray = [...this.properties[key].value, ...valueArray];
     }
 
-    this.componentZones[key] = ComponentMapping.entryMapping({
+    this.properties[key] = ComponentMapping.entryMapping({
       type: c.FIELD_TYPE_MULTI_REFERENCE,
       value: valueArray
     });
@@ -162,7 +171,7 @@ export default class ComponentMapping {
 
   addTextField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.componentZones[key] = ComponentMapping.entryMapping({
+    this.properties[key] = ComponentMapping.entryMapping({
       type: c.FIELD_TYPE_TITLE,
       value
     });
@@ -170,7 +179,7 @@ export default class ComponentMapping {
 
   addMarkdownField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.componentZones[key] = ComponentMapping.entryMapping({
+    this.properties[key] = ComponentMapping.entryMapping({
       type: c.FIELD_TYPE_MARKDOWN,
       value
     });
@@ -178,11 +187,11 @@ export default class ComponentMapping {
 
   addField({ key, type, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.componentZones[key] = ComponentMapping.entryMapping({ type: type, value });
+    this.properties[key] = ComponentMapping.entryMapping({ type: type, value });
   }
 
   addFieldToRole(roleKey, fieldType) {
-    const roleConfigObject = this._templateConfig.componentZones[roleKey];
+    const roleConfigObject = this._templateConfig.properties[roleKey];
     switch (fieldType) {
       case c.FIELD_TYPE_TITLE:
         this.addTextField({
@@ -214,44 +223,44 @@ export default class ComponentMapping {
   }
 
   fieldKeys() {
-    return Object.keys(this.componentZones);
+    return Object.keys(this.properties);
   }
 
   getType(key) {
-    if (Array.isArray(this.componentZones[key])) {
+    if (Array.isArray(this.properties[key])) {
       return c.FIELD_TYPE_MULTI_REFERENCE;
     } else {
-      return this.componentZones[key].type;
+      return this.properties[key].type;
     }
   }
 
   isEntry(key) {
-    return this.componentZones[key].type === c.FIELD_TYPE_ENTRY;
+    return this.properties[key].type === c.FIELD_TYPE_ENTRY;
   }
 
   removeEntry(key, entryIndex = null) {
     // Only remove the entry with the passed in sysId if it's a multi-reference array
     // Otherwise remove the entire key.
-    if (Array.isArray((this.componentZones[key] || {}).value)) {
-      this.componentZones[key].value = removeByIndex(this.componentZones[key].value, entryIndex);
+    if (Array.isArray((this.properties[key] || {}).value)) {
+      this.properties[key].value = removeByIndex(this.properties[key].value, entryIndex);
 
       // delete key entirely if array is now empty
-      if (!this.componentZones[key].value.length) {
-        delete this.componentZones[key];
+      if (!this.properties[key].value.length) {
+        delete this.properties[key];
         delete this[key];
       }
     } else {
-      delete this.componentZones[key];
+      delete this.properties[key];
       delete this[key];
     }
   }
 
   switchMultiReferenceValues({ roleKey, draggedIndex, draggedOverIndex } = {}) {
-    if (!Array.isArray(this.componentZones[roleKey].value)) return;
-    const array = this.componentZones[roleKey].value;
+    if (!Array.isArray(this.properties[roleKey].value)) return;
+    const array = this.properties[roleKey].value;
 
     [array[draggedIndex], array[draggedOverIndex]] = [array[draggedOverIndex], array[draggedIndex]];
 
-    this.componentZones[roleKey].value = array;
+    this.properties[roleKey].value = array;
   }
 }

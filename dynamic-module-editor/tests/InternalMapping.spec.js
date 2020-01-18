@@ -722,18 +722,4 @@ describe('InternalMapping', () => {
       expect(internalMapping.hi.value[1]).toEqual('a');
     });
   });
-
-  describe('addComponentZone', () => {
-    it('adds an empty component zone key', () => {
-      const json = JSON.stringify({});
-      const internalMapping = new InternalMapping(json);
-
-      internalMapping.addComponentZone({
-        roleKey: 'hi',
-        componentZoneKey: 'zone1'
-      });
-      expect(internalMapping.hi).toEqual('b');
-      expect(internalMapping.hi).toEqual('a');
-    });
-  });
 });

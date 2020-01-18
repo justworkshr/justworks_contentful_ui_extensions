@@ -150,7 +150,10 @@ export const mockAssetMapping = ({
   };
 };
 
-export const mockSdk = (mockEntry = mockPrimaryEntry()) => {
+export const mockSdk = (
+  mockEntry = mockPrimaryEntry(),
+  contentType = c.CONTENT_TYPE_PAGE_MODULE
+) => {
   const getValue = (entry, field) => {
     return entry[field];
   };
@@ -182,6 +185,11 @@ export const mockSdk = (mockEntry = mockPrimaryEntry()) => {
     entry: {
       getSys: () => {
         return {
+          contentType: {
+            sys: {
+              id: contentType
+            }
+          },
           version: 1
         };
       },

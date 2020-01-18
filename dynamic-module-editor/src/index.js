@@ -56,7 +56,7 @@ export class App extends React.Component {
     );
 
     const style = props.sdk.entry.fields.style ? props.sdk.entry.fields.style.getValue() : null;
-    console.log(type);
+
     this.state = {
       name: props.sdk.entry.fields.name ? props.sdk.entry.fields.name.getValue() : null,
       type,
@@ -98,7 +98,6 @@ export class App extends React.Component {
   };
 
   onTypeChangeHandler = type => {
-    console.log(type);
     if (type) {
       this.props.sdk.entry.fields.type.setValue(type);
     } else {

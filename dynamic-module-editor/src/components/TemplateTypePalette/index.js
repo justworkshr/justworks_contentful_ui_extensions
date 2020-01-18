@@ -26,8 +26,6 @@ export default class TemplateTypePalette extends React.Component {
       displayingTemplates: !props.customTemplates[props.value]
     };
 
-    console.log(props.customTemplates, props.value);
-
     this.handleChange = this.handleChange.bind(this);
     this.onSwitchButtonClick = this.onSwitchButtonClick.bind(this);
   }
@@ -82,7 +80,6 @@ export default class TemplateTypePalette extends React.Component {
   }
 
   render() {
-    console.log(this.state.displayingTemplates);
     if (!!this.state.value && !this.state.templateConfig)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
 

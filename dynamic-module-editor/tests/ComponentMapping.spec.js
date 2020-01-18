@@ -77,7 +77,7 @@ describe('ComponentMapping', () => {
     });
 
     it('returns class', () => {
-      const object = { componentZones: { hi: 'hello' } };
+      const object = { properties: { hi: 'hello' } };
       const json = JSON.stringify(object);
       expect(new ComponentMapping(json).constructor.name).toEqual('ComponentMapping');
     });
@@ -85,7 +85,7 @@ describe('ComponentMapping', () => {
 
   describe('getters', () => {
     it('returns object value', () => {
-      const object = { componentZones: { hi: { type: 'entry', value: 'hello' } } };
+      const object = { properties: { hi: { type: 'entry', value: 'hello' } } };
       const json = JSON.stringify(object);
       expect(new ComponentMapping(json).hi).toEqual({
         type: 'entry',
@@ -96,7 +96,7 @@ describe('ComponentMapping', () => {
 
   describe('setters', () => {
     describe('default', () => {
-      it('preserves other attributes and sets the value', () => {
+      it('sets the value', () => {
         const json = JSON.stringify({
           properties: {
             hi: {
@@ -107,26 +107,21 @@ describe('ComponentMapping', () => {
         });
         const componentMapping = new ComponentMapping(json);
 
-        componentMapping.hi = 'bye';
+        componentMapping.hi = {
+          type: 'entry',
+          value: 'hello'
+        };
 
         expect(componentMapping.hi.type).toEqual('entry');
+        expect(componentMapping.hi.value).toEqual('hello');
+
+        componentMapping.hi.value = 'bye';
+
         expect(componentMapping.hi.value).toEqual('bye');
       });
     });
 
     describe('addEntry', () => {
-      it('sets the type and sets the value, and contentType', () => {
-        const json = JSON.stringify({
-          componentZones: { hi: { type: c.FIELD_TYPE_TITLE, value: 'hello' } }
-        });
-        const componentMapping = new ComponentMapping(json);
-
-        componentMapping.addEntry('hi', 'bye', 'content');
-        expect(componentMapping.hi.type).toEqual('entry');
-        expect(componentMapping.hi.value).toEqual('bye');
-        expect(componentMapping.hi.contentType).toEqual('content');
-      });
-
       it('with blank start - sets the type and sets the value', () => {
         const json = JSON.stringify({});
         const componentMapping = new ComponentMapping(json);
@@ -139,7 +134,7 @@ describe('ComponentMapping', () => {
     describe('addEntriesOrAssets', () => {
       it('sets the type and sets the value', () => {
         const json = JSON.stringify({
-          componentZones: {
+          properties: {
             hi: {
               type: c.FIELD_TYPE_TITLE,
               value: [
@@ -178,7 +173,7 @@ describe('ComponentMapping', () => {
 
       it('sets allows entries and assets to mix', () => {
         const json = JSON.stringify({
-          componentZones: {
+          properties: {
             hi: {
               type: c.FIELD_TYPE_TITLE,
               value: [{ type: 'entry', value: 'hello' }]
@@ -203,7 +198,7 @@ describe('ComponentMapping', () => {
     });
 
     describe('addfield', () => {
-      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ properties: { hi: { type: 'entry', value: 'hello' } } });
       const componentMapping = new ComponentMapping(json);
 
       componentMapping.addField({
@@ -219,7 +214,7 @@ describe('ComponentMapping', () => {
     });
 
     describe('addTextField', () => {
-      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ properties: { hi: { type: 'entry', value: 'hello' } } });
       const componentMapping = new ComponentMapping(json);
 
       componentMapping.addTextField({ key: 'hi', value: 'bye' });
@@ -231,7 +226,7 @@ describe('ComponentMapping', () => {
     });
 
     describe('addMarkdownField', () => {
-      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ properties: { hi: { type: 'entry', value: 'hello' } } });
       const componentMapping = new ComponentMapping(json);
 
       componentMapping.addMarkdownField({ key: 'hi', value: 'bye' });
@@ -244,18 +239,18 @@ describe('ComponentMapping', () => {
   });
 
   describe('asJSON', () => {
-    const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
+    const json = JSON.stringify({ properties: { hi: { type: 'entry', value: 'hello' } } });
     const componentMapping = new ComponentMapping(json);
 
     it('returns the class and properties as json', () => {
       expect(componentMapping.asJSON()).toEqual(
-        '{"componentZones":{"hi":{"type":"entry","value":"hello"}}}'
+        '{"properties":{"hi":{"type":"entry","value":"hello"}},"componentName":""}'
       );
     });
   });
 
   describe('fieldKeys', () => {
-    const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
+    const json = JSON.stringify({ properties: { hi: { type: 'entry', value: 'hello' } } });
     const componentMapping = new ComponentMapping(json);
 
     it('returns the class and properties as json', () => {
@@ -265,7 +260,7 @@ describe('ComponentMapping', () => {
 
   describe('removeEntry', () => {
     it('removes the role and key', () => {
-      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ properties: { hi: { type: 'entry', value: 'hello' } } });
       const componentMapping = new ComponentMapping(json);
       componentMapping.removeEntry('hi');
       expect(componentMapping.hi).toBeUndefined();
@@ -274,7 +269,7 @@ describe('ComponentMapping', () => {
 
     it('only removes the entry with passed in ID if the entry value is an array', () => {
       const json = JSON.stringify({
-        componentZones: {
+        properties: {
           hi: {
             type: c.FIELD_TYPE_TITLE,
             value: [
@@ -291,7 +286,7 @@ describe('ComponentMapping', () => {
 
     it('removes the entire key if the array becomes empty from removal', () => {
       const json = JSON.stringify({
-        componentZones: {
+        properties: {
           hi: {
             type: c.FIELD_TYPE_TITLE,
             value: [{ type: 'entry', value: '2' }]
@@ -309,7 +304,7 @@ describe('ComponentMapping', () => {
   describe('switchMultiReferenceValues', () => {
     it('swaps the array position', () => {
       const json = JSON.stringify({
-        componentZones: {
+        properties: {
           hi: { type: 'multi-reference', value: ['a', 'b', 'c', 'd'] }
         }
       });
