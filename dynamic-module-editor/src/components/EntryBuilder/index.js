@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { componentModule } from '../../../../customModules';
+
 import * as c from '../../../../customModules/constants';
 
 import {
@@ -36,7 +38,9 @@ import {
   handleFieldChange,
   handleAddRoleEntryStyle,
   handleAddRoleReferencesEntryStyle,
-  handleMultiReferenceDragEnd
+  handleMultiReferenceDragEnd,
+  handleAddComponentZone,
+  handleClearComponentZone
 } from '../../utils/eventUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -300,13 +304,24 @@ export default class EntryBuilder extends React.Component {
   };
 
   addComponentZone = (mappingKey, componentZoneName) => {
-    this.entryInternalMapping.addComponentZone({ mappingKey, componentZoneName });
+    const componentConfig = componentModule[componentZoneName];
 
-    debugger;
+    if (!componentConfig) throw `No component configuration found for ${componentZoneName}`;
+
+    handleAddComponentZone({
+      mappingKey,
+      componentConfig,
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
+      entryInternalMapping: this.props.entryInternalMapping
+    });
   };
 
   clearComponentZone = mappingKey => {
-    debugger;
+    handleClearComponentZone({
+      mappingKey,
+      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
+      entryInternalMapping: this.props.entryInternalMapping
+    });
   };
 
   render() {
@@ -347,14 +362,16 @@ export default class EntryBuilder extends React.Component {
               <div key={`component-zone-menu--${roleKey}`}>
                 <Subheading className="sub-section__heading--header" element="h2">
                   {displaySnakeCaseName(roleKey)}
-                  <TextLink
-                    className="style-editor__clear-link"
-                    icon="Close"
-                    onClick={() => {
-                      this.clearComponentZone(roleKey);
-                    }}>
-                    Clear
-                  </TextLink>
+                  {roleMappingObject && (
+                    <TextLink
+                      className="style-editor__clear-link"
+                      icon="Close"
+                      onClick={() => {
+                        this.clearComponentZone(roleKey);
+                      }}>
+                      Clear
+                    </TextLink>
+                  )}
                 </Subheading>
 
                 <div className="style-editor__radio-section">
@@ -365,7 +382,11 @@ export default class EntryBuilder extends React.Component {
                         id={`${roleKey}-${componentOption}`}
                         name={`${roleKey}-${componentOption}`}
                         labelText={displayCamelCaseName(componentOption)}
-                        checked={roleMappingObject ? roleMappingObject[componentOption] : false}
+                        checked={
+                          roleMappingObject
+                            ? roleMappingObject.componentName === componentOption
+                            : false
+                        }
                         value={componentOption}
                         onChange={e => {
                           this.addComponentZone(roleKey, componentOption);
@@ -384,13 +405,13 @@ export default class EntryBuilder extends React.Component {
               this.props.entryInternalMapping.componentZones[roleKey] || null;
 
             if (roleMappingObject) {
-              const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
+              // const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
               return (
                 <div>
                   <Subheading className="sub-section__heading--header" element="h2">
                     {displaySnakeCaseName(roleKey)}
                   </Subheading>
-                  <RoleSection
+                  {/* <RoleSection
                     key={index}
                     roleKey={roleKey}
                     fieldConfigObject={fieldConfigObject}
@@ -422,7 +443,7 @@ export default class EntryBuilder extends React.Component {
                     updateReferencesStyle={this.updateReferencesStyle}
                     clearReferencesStyle={this.clearReferencesStyle}
                     onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
-                  />
+                  /> */}
                 </div>
               );
             }

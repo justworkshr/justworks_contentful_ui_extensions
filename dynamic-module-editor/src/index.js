@@ -7,7 +7,7 @@ import {
   SectionHeading,
   Form
 } from '@contentful/forma-36-react-components';
-import InternalMapping from './utils/InternalMapping';
+import InternalMapping from './classes/InternalMapping';
 import ComponentMapping from './classes/ComponentMapping';
 
 import * as c from '../../customModules/constants';

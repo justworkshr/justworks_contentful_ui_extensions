@@ -493,3 +493,24 @@ export const handleMultiReferenceDragEnd = ({
   updatedInternalMapping.switchMultiReferenceValues({ roleKey, draggedIndex, draggedOverIndex });
   setInternalMappingValue(updatedInternalMapping.asJSON());
 };
+
+export const handleAddComponentZone = ({
+  mappingKey,
+  componentConfig,
+  entryInternalMapping,
+  setInternalMappingValue
+} = {}) => {
+  const updatedInternalMapping = entryInternalMapping;
+  updatedInternalMapping.addComponentZone({ mappingKey, componentConfig });
+  setInternalMappingValue(updatedInternalMapping.asJSON());
+};
+
+export const handleClearComponentZone = ({
+  mappingKey,
+  entryInternalMapping,
+  setInternalMappingValue
+} = {}) => {
+  const updatedInternalMapping = entryInternalMapping;
+  updatedInternalMapping.clearComponentZone({ mappingKey });
+  setInternalMappingValue(updatedInternalMapping.asJSON());
+};

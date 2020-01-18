@@ -5,7 +5,7 @@ import * as c from '../../../customModules/constants';
 import * as tm from '../../../customModules/mocks/templateMocks';
 import { templatePlaceholder } from '../../../customModules';
 import { displayCamelCaseName } from '../../../shared/utilities/elementUtils';
-
+import { constructComponentZone } from '../../../customModules/utilities/constructUtils';
 import { mount } from 'enzyme';
 
 export const mockPrimaryEntry = ({
@@ -151,6 +151,15 @@ export const mockComponentMapping = ({
   return {
     componentName,
     properties
+  };
+};
+
+export const mockComponentEntry = () => {
+  return {
+    ...constructComponentZone({
+      componentOptions: [mockComponentConfig]
+    }),
+    type: 'entry'
   };
 };
 

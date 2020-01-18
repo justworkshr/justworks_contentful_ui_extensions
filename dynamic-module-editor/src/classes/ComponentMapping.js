@@ -6,8 +6,10 @@ export default class ComponentMapping {
   constructor(
     json,
     templateConfig = {
+      meta: {},
       properties: {}
-    }
+    },
+    type = 'entry'
   ) {
     /*
       json - string - the raw JSON of the ComponentMapping field
@@ -15,8 +17,8 @@ export default class ComponentMapping {
 
     */
     this._templateConfig = templateConfig;
+    this._type = type;
     const parsedJSON = this.loadComponentMapping(json);
-
     this.assignRolesFromMapping(parsedJSON);
   }
 
@@ -50,7 +52,7 @@ export default class ComponentMapping {
     };
   }
 
-  static blankMapping(componentName = '') {
+  static blankMapping(componentName) {
     return {
       properties: {},
       componentName
@@ -59,18 +61,24 @@ export default class ComponentMapping {
 
   loadComponentMapping(json) {
     // if blank
-    if (!json || !typeof json === 'string') return ComponentMapping.blankMapping();
+    if (!json || !typeof json === 'string')
+      return ComponentMapping.blankMapping(this._templateConfig.meta.componentName);
     // if malformed object
     const parsedJSON = JSON.parse(json);
-    if (!parsedJSON.properties) return ComponentMapping.blankMapping();
+    if (!parsedJSON.properties)
+      return ComponentMapping.blankMapping(this._templateConfig.meta.componentName);
     return parsedJSON;
   }
 
   assignRolesFromMapping(parsedJSON) {
     // Prepare the object structure: {componentName: {}, properties: {}}
-    Object.keys(ComponentMapping.blankMapping()).forEach(key => {
-      this[key] = parsedJSON[key] || ComponentMapping.blankMapping()[key];
-    });
+    Object.keys(ComponentMapping.blankMapping(this._templateConfig.meta.componentName)).forEach(
+      key => {
+        this[key] =
+          parsedJSON[key] ||
+          ComponentMapping.blankMapping(this._templateConfig.meta.componentName)[key];
+      }
+    );
     // Load values from the entry's ComponentMapping Json
     Object.keys(parsedJSON.properties || {}).forEach(key => {
       this.properties[key] = parsedJSON.properties[key];
@@ -79,6 +87,7 @@ export default class ComponentMapping {
   }
 
   // {
+  //   type: 'entry',
   //   componentName: "titledList",
   //   properties: {
   //     titleText: {

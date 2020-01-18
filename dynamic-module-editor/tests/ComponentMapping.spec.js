@@ -1,19 +1,20 @@
 import ComponentMapping from '../src/classes/ComponentMapping';
 import * as c from '../../customModules/constants';
+import { mockComponentConfig } from './utils/mockUtils';
 
 describe('ComponentMapping', () => {
   describe('constructor', () => {
     it('returns empty object if blank string', () => {
       const json = '';
       const mapping = new ComponentMapping(json);
-      expect(mapping.componentName).toEqual('');
+      expect(mapping.componentName).toEqual(undefined);
       expect(mapping.properties).toEqual({});
     });
 
     it('returns empty object if invalid', () => {
       const json = undefined;
       const mapping = new ComponentMapping(json);
-      expect(mapping.componentName).toEqual('');
+      expect(mapping.componentName).toEqual(undefined);
       expect(mapping.properties).toEqual({});
     });
 
@@ -23,47 +24,10 @@ describe('ComponentMapping', () => {
         componentName: ''
       });
 
-      const templateConfig = {
-        componentName: '',
-        properties: {
-          text_field: {
-            field: {
-              type: c.FIELD_TYPE_TITLE,
-              defaultValue: 'TEXT!!!'
-            }
-          }
-        }
-      };
+      const templateConfig = mockComponentConfig();
 
       const componentMapping = new ComponentMapping(json, templateConfig);
       expect(componentMapping.text_field).toBeUndefined(undefined);
-    });
-
-    it('does not load fields if ComponentMapping is not blank', () => {
-      const json = JSON.stringify({
-        properties: {
-          text_field: {
-            type: c.FIELD_TYPE_TITLE,
-            value: 'occupied'
-          }
-        },
-        componentName: ''
-      });
-
-      const templateConfig = {
-        componentName: '',
-        properties: {
-          text_field: {
-            field: {
-              type: c.FIELD_TYPE_TITLE,
-              defaultValue: 'TEXT!!!'
-            }
-          }
-        }
-      };
-
-      const componentMapping = new ComponentMapping(json, templateConfig);
-      expect(componentMapping.text_field.value).toEqual('occupied');
     });
 
     it('returns class', () => {
@@ -234,7 +198,7 @@ describe('ComponentMapping', () => {
 
     it('returns the class and properties as json', () => {
       expect(componentMapping.asJSON()).toEqual(
-        '{"properties":{"hi":{"type":"entry","value":"hello"}},"componentName":""}'
+        '{"type":"entry","properties":{"hi":{"type":"entry","value":"hello"}}}'
       );
     });
   });
