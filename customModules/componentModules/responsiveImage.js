@@ -4,6 +4,7 @@ import * as c from "../constants";
 export const responsiveImage = {
   [c.COMPONENT_RESPONSIVE_IMAGE]: {
     meta: {
+      componentName: c.COMPONENT_RESPONSIVE_IMAGE,
       description: "",
       imageUrl: ""
     },

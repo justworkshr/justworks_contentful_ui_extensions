@@ -3,14 +3,18 @@ import * as c from '../../../../customModules/constants';
 import { removeByIndex } from '../../components/EntryBuilder/utils/index';
 
 export default class ComponentMapping {
-  constructor(json, templateConfig = { properties: {}, componentName: '' }) {
+  constructor(
+    json,
+    templateConfig = {
+      properties: {}
+    }
+  ) {
     /*
       json - string - the raw JSON of the ComponentMapping field
       templateConfig - object - the corresponding custom template config object from './customModules'
 
     */
     this._templateConfig = templateConfig;
-
     const parsedJSON = this.loadComponentMapping(json);
 
     this.assignRolesFromMapping(parsedJSON);
@@ -46,26 +50,26 @@ export default class ComponentMapping {
     };
   }
 
-  static get blankMapping() {
+  static blankMapping(componentName = '') {
     return {
       properties: {},
-      componentName: ''
+      componentName
     };
   }
 
   loadComponentMapping(json) {
     // if blank
-    if (!json || !typeof json === 'string') return ComponentMapping.blankMapping;
+    if (!json || !typeof json === 'string') return ComponentMapping.blankMapping();
     // if malformed object
     const parsedJSON = JSON.parse(json);
-    if (!parsedJSON.properties) return ComponentMapping.blankMapping;
+    if (!parsedJSON.properties) return ComponentMapping.blankMapping();
     return parsedJSON;
   }
 
   assignRolesFromMapping(parsedJSON) {
     // Prepare the object structure: {componentName: {}, properties: {}}
-    Object.keys(ComponentMapping.blankMapping).forEach(key => {
-      this[key] = parsedJSON[key] || ComponentMapping.blankMapping[key];
+    Object.keys(ComponentMapping.blankMapping()).forEach(key => {
+      this[key] = parsedJSON[key] || ComponentMapping.blankMapping()[key];
     });
     // Load values from the entry's ComponentMapping Json
     Object.keys(parsedJSON.properties || {}).forEach(key => {

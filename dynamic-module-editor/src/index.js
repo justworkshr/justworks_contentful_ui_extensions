@@ -91,7 +91,7 @@ export class App extends React.Component {
     });
 
     if (!this.state.internalMapping) {
-      this.setInternalMappingValue(JSON.stringify(InternalMapping.blankMapping));
+      this.setInternalMappingValue(JSON.stringify(InternalMapping.blankMapping()));
     }
   }
 
@@ -119,7 +119,7 @@ export class App extends React.Component {
     }
 
     // clear internalMapping
-    const internalMappingJson = JSON.stringify(InternalMapping.blankMapping);
+    const internalMappingJson = JSON.stringify(InternalMapping.blankMapping());
     // clear entries
     this.props.sdk.entry.fields.entries.removeValue();
     // clear assets
@@ -475,8 +475,8 @@ init(sdk => {
         customTemplates={cm[contentType]}
         templatePlaceholder={
           contentType === c.CONTENT_TYPE_PAGE_MODULE
-            ? InternalMapping.blankMapping
-            : ComponentMapping.blankMapping
+            ? InternalMapping.blankMapping()
+            : ComponentMapping.blankMapping()
         }
       />,
       document.getElementById('root')

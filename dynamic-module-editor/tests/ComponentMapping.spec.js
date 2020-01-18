@@ -5,26 +5,16 @@ describe('ComponentMapping', () => {
   describe('constructor', () => {
     it('returns empty object if blank string', () => {
       const json = '';
-      expect(new ComponentMapping(json)).toEqual({
-        _templateConfig: {
-          properties: {},
-          componentName: ''
-        },
-        componentName: '',
-        properties: {}
-      });
+      const mapping = new ComponentMapping(json);
+      expect(mapping.componentName).toEqual('');
+      expect(mapping.properties).toEqual({});
     });
 
     it('returns empty object if invalid', () => {
       const json = undefined;
-      expect(new ComponentMapping(json)).toEqual({
-        _templateConfig: {
-          properties: {},
-          componentName: ''
-        },
-        componentName: '',
-        properties: {}
-      });
+      const mapping = new ComponentMapping(json);
+      expect(mapping.componentName).toEqual('');
+      expect(mapping.properties).toEqual({});
     });
 
     it('does not load fields if ComponentMapping is blank', () => {

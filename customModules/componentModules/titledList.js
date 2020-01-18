@@ -4,6 +4,7 @@ import * as c from "../constants";
 export const titledList = {
   [c.COMPONENT_TITLED_LIST]: {
     meta: {
+      componentName: c.COMPONENT_TITLED_LIST,
       description: "",
       imageUrl: ""
     },
