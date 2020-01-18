@@ -205,9 +205,9 @@ export class App extends React.Component {
     let assetLinks = [];
 
     const parsedJSON = JSON.parse(internalMappingJson);
-    const componentZones = parsedJSON.componentZones;
-    Object.keys(componentZones).forEach(roleKey => {
-      const roleMappingObject = componentZones[roleKey];
+    const componentProperties = parsedJSON.properties; // may need to expand this when parsing a pattern object
+    Object.keys(componentProperties).forEach(roleKey => {
+      const roleMappingObject = componentProperties[roleKey];
       /*
         Add all entries and assets which exist as references 
         inside the internal mapping
@@ -317,13 +317,13 @@ export class App extends React.Component {
   };
 
   validateEntry() {
-    const errors = getTemplateErrors(
-      this.state.templateConfig.componentZones,
-      JSON.parse(this.state.internalMapping),
-      this.state.hydratedEntries
-    );
-    const isValid = templateIsValid(errors);
-    this.setInvalid(isValid);
+    // const errors = getTemplateErrors(
+    //   this.state.templateConfig.componentProperties,
+    //   JSON.parse(this.state.internalMapping),
+    //   this.state.hydratedEntries
+    // );
+    // const isValid = templateIsValid(errors);
+    // this.setInvalid(isValid);
   }
 
   setStateFromJson = (internalMappingJson, loadingEntries = [], callback = null) => {
@@ -467,7 +467,6 @@ export class App extends React.Component {
 
 init(sdk => {
   const contentType = sdk.entry.getSys().contentType.sys.id;
-  console.log(cm[contentType]);
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
       <App

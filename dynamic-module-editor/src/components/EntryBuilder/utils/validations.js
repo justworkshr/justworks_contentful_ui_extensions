@@ -4,7 +4,7 @@ import { getCustomTemplateFieldConfig } from '../../../../../shared/utilities/el
 
 export const validateTemplate = async ({ setInvalid, state, setState }) => {
   const errors = await getTemplateErrors(
-    state.templateConfig.componentZones,
+    state.templateConfig.properties,
     state.entryInternalMapping,
     state.entries
   );
@@ -28,9 +28,11 @@ const addError = (errorArray, message) => {
   return Array.isArray(errorArray) ? errorArray.push({ message: message }) : [{ message: message }];
 };
 
-const missingRequiredRoles = (errors, templateConfigcomponentZones, internalMapping) => {
-  Object.keys(templateConfigcomponentZones).forEach(roleKey => {
-    const templateRole = templateConfigcomponentZones[roleKey] || {};
+const missingRequiredRoles = (errors, componentProperties, internalMapping) => {
+  console.log(componentProperties);
+
+  Object.keys(componentProperties).forEach(roleKey => {
+    const templateRole = componentProperties[roleKey] || {};
     if (!!templateRole.required && !internalMapping[roleKey]) {
       errors[roleKey] = addError(errors[roleKey], 'Entry is required.');
     }
@@ -39,9 +41,9 @@ const missingRequiredRoles = (errors, templateConfigcomponentZones, internalMapp
   return errors;
 };
 
-const hasInvalidCustomTemplateType = (errors, templateConfigcomponentZones, hydratedEntries) => {
-  Object.keys(templateConfigcomponentZones).map(roleKey => {
-    const roleConfigObject = templateConfigcomponentZones[roleKey] || {};
+const hasInvalidCustomTemplateType = (errors, componentProperties, hydratedEntries) => {
+  Object.keys(componentProperties).map(roleKey => {
+    const roleConfigObject = componentProperties[roleKey] || {};
     const entry = hydratedEntries.find(he => roleConfigObject.value === he.sys.id);
     const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(roleConfigObject);
 
@@ -65,18 +67,11 @@ const hasInvalidCustomTemplateType = (errors, templateConfigcomponentZones, hydr
   return errors;
 };
 
-export const getTemplateErrors = (
-  templateConfigcomponentZones,
-  updatedInternalMapping,
-  hydratedEntries
-) => {
+export const getTemplateErrors = (componentProperties, updatedInternalMapping, hydratedEntries) => {
   let errors = {};
-  errors = missingRequiredRoles(
-    errors,
-    templateConfigcomponentZones,
-    updatedInternalMapping.componentZones
-  );
-  errors = hasInvalidCustomTemplateType(errors, templateConfigcomponentZones, hydratedEntries);
+  console.log(componentProperties);
+  errors = missingRequiredRoles(errors, componentProperties, updatedInternalMapping.componentZones);
+  errors = hasInvalidCustomTemplateType(errors, componentProperties, hydratedEntries);
 
   return errors;
 };
@@ -113,10 +108,11 @@ export const validateLinkedAsset = (entry, roleObject) => {
   return message;
 };
 
-export const validateLinkedEntry = (entry, roleKey, parentEntryId, internalMapping) => {
+export const validateLinkedEntry = (entry, mappingKey, parentEntryId, internalMapping) => {
   if (!entry) return;
+  console.log(mappingKey, internalMapping);
   let message = '';
-  const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(internalMapping[roleKey]);
+  const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(internalMapping[mappingKey]);
 
   if (linkHasCircularReference(parentEntryId, entry)) {
     message = 'Linked entry has a circular reference to this entry.';

@@ -2,10 +2,9 @@ import InternalMapping from '../../../utils/InternalMapping';
 import * as c from '../../../../../customModules/constants';
 
 import { setEntryLoading } from './stateUtils';
-import { handleRemoveEntry } from './eventUtils';
+import { handleRemoveMappingKey } from '../../../utils/eventUtils';
 
 export const getFieldConfig = (roleConfigObject, roleMappingObject) => {
-  debugger;
   if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
     return roleConfigObject.fieldConfigs.find(fc => {
       return fc.type === c.FIELD_TYPE_ENTRY && fc.contentType === roleMappingObject.contentType;
@@ -160,7 +159,7 @@ export const fetchEntryByRoleKey = async ({
   setEntryLoading({ setState, roleKey, value: true });
   const entry = await getEntryOrField(sdk.space, state.entryInternalMapping, roleKey).catch(err => {
     if (err.code === 'NotFound') {
-      handleRemoveEntry({
+      handleRemoveMappingKey({
         sdk,
         state,
         setState,

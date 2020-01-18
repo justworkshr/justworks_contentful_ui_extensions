@@ -1,6 +1,6 @@
-import * as c from '../../../../../customModules/constants';
-import { cloneEntry } from '../../../../../shared/utilities/deepCopy';
-import { duplicateEntry } from '../../../../../shared/utilities/duplicate';
+import * as c from '../../../customModules/constants';
+import { cloneEntry } from '../../../shared/utilities/deepCopy';
+import { duplicateEntry } from '../../../shared/utilities/duplicate';
 
 import {
   createEntry,
@@ -9,17 +9,25 @@ import {
   getContentTypeArray,
   cleanStyleClasses,
   roleIsMultiReference
-} from './index';
-import InternalMapping from '../../../utils/InternalMapping';
+} from '../components/EntryBuilder/utils/index';
+import InternalMapping from './InternalMapping';
 
-import { validateLinkedEntry, validateLinkedAsset } from '../utils/validations';
+import {
+  validateLinkedEntry,
+  validateLinkedAsset
+} from '../components/EntryBuilder/utils/validations';
 
-import { getAssetType } from '../../../../../shared/utilities/elementUtils';
+import { getAssetType } from '../../../shared/utilities/elementUtils';
 
-export const handleRemoveEntry = ({ props, updateEntry, roleKey, entryIndex = null } = {}) => {
-  if (!roleKey) return null;
+export const handleRemoveMappingKey = ({
+  props,
+  updateEntry,
+  mappingKey,
+  entryIndex = null
+} = {}) => {
+  if (!mappingKey) return null;
   const updatedInternalMapping = props.entryInternalMapping;
-  updatedInternalMapping.removeEntry(roleKey, entryIndex);
+  updatedInternalMapping.removeEntry(mappingKey, entryIndex);
   updateEntry(updatedInternalMapping.asJSON());
 };
 
@@ -27,8 +35,8 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
   const updatedInternalMapping = props.entryInternalMapping;
 
   // attaches existing asset style to new assets
-  const firstAsset = updatedInternalMapping.componentZones[roleKey]
-    ? updatedInternalMapping.componentZones[roleKey].value.find(
+  const firstAsset = updatedInternalMapping.properties[roleKey]
+    ? updatedInternalMapping.properties[roleKey].value.find(
         entry => entry.type === c.FIELD_TYPE_ASSET
       )
     : undefined;
@@ -98,7 +106,7 @@ export const handleMultipleAssetsLink = async ({
 } = {}) => {
   let linkedEntryValidation;
   assets.forEach(asset => {
-    linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.componentZones[roleKey]);
+    linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.properties[roleKey]);
   });
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -112,7 +120,7 @@ export const handleSingleAssetLink = ({ sdk, props, roleKey, asset, updateEntry 
 
   const linkedEntryValidation = validateLinkedAsset(
     asset,
-    props.templateConfig.componentZones[roleKey]
+    props.templateConfig.properties[roleKey]
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -122,7 +130,7 @@ export const handleSingleAssetLink = ({ sdk, props, roleKey, asset, updateEntry 
 };
 
 export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
+  if (roleIsMultiReference(props.templateConfig.properties[roleKey].fieldConfigs)) {
     try {
       const assets = await sdk.dialogs.selectMultipleAssets({
         locale: 'en-US'
@@ -156,32 +164,32 @@ export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } 
   }
 };
 
-export const linkEntryToTemplate = ({ props, updateEntry, entryResponse, roleKey }) => {
+export const linkEntryToTemplate = ({ props, updateEntry, entryResponse, mappingKey }) => {
   if (!entryResponse) return;
 
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addEntry(
-    roleKey,
+    mappingKey,
     entryResponse.sys.id,
     entryResponse.sys.contentType.sys.id
   );
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, roleKey } = {}) => {
+export const linkEntriesToTemplate = ({ props, updateEntry, entryResponses, mappingKey } = {}) => {
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addEntriesOrAssets({
-    key: roleKey,
+    key: mappingKey,
     value: entryResponses.map(entry => entry.sys.id)
   });
 
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const handleAddField = ({ props, setInternalMappingValue, roleKey, fieldType }) => {
+export const handleAddField = ({ props, setInternalMappingValue, mappingKey, fieldType }) => {
   const updatedInternalMapping = props.entryInternalMapping;
   updatedInternalMapping.addField({
-    key: roleKey,
+    key: mappingKey,
     type: fieldType
   });
 
@@ -192,7 +200,7 @@ export const handleAddEntry = async ({
   sdk,
   props,
   updateEntry,
-  roleKey,
+  mappingKey,
   contentType,
   template = undefined,
   type = 'entry'
@@ -206,22 +214,22 @@ export const handleAddEntry = async ({
     }
   } else if (type === 'entry') {
     try {
-      const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
+      const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), mappingKey);
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
-      if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
+      if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
         linkEntriesToTemplate({
           props,
           updateEntry,
           entryResponses: [newEntry],
-          roleKey
+          mappingKey
         });
       } else {
         linkEntryToTemplate({
           props,
           updateEntry,
           entryResponse: newEntry,
-          roleKey
+          mappingKey
         });
       }
       sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
@@ -231,13 +239,19 @@ export const handleAddEntry = async ({
   }
 };
 
-export const handleSingleEntryLink = ({ sdk, props, updateEntry, roleKey, entryResponse } = {}) => {
+export const handleSingleEntryLink = ({
+  sdk,
+  props,
+  updateEntry,
+  mappingKey,
+  entryResponse
+} = {}) => {
   if (!entryResponse) throw new Error('No entryResponse was passed to handleSingleEntryLink');
   const linkedEntryValidation = validateLinkedEntry(
     entryResponse,
-    roleKey,
+    mappingKey,
     sdk.entry.getSys().id,
-    props.templateConfig.componentZones
+    props.templateConfig.properties
   );
 
   if (linkedEntryValidation) {
@@ -248,20 +262,26 @@ export const handleSingleEntryLink = ({ sdk, props, updateEntry, roleKey, entryR
     props,
     updateEntry,
     entryResponse,
-    roleKey
+    mappingKey
   });
 };
 
-export const handleMultipleEntriesLink = ({ sdk, props, updateEntry, roleKey, entryResponses }) => {
+export const handleMultipleEntriesLink = ({
+  sdk,
+  props,
+  updateEntry,
+  mappingKey,
+  entryResponses
+}) => {
   if (!entryResponses) return;
 
   let linkedEntryValidation;
   entryResponses.forEach(entry => {
     linkedEntryValidation = validateLinkedEntry(
       entry,
-      roleKey,
+      mappingKey,
       sdk.entry.getSys().id,
-      props.templateConfig.componentZones
+      props.templateConfig.properties
     );
 
     if (linkedEntryValidation) {
@@ -274,7 +294,7 @@ export const handleMultipleEntriesLink = ({ sdk, props, updateEntry, roleKey, en
       props,
       updateEntry,
       entryResponses,
-      roleKey
+      mappingKey
     });
   }
 };
@@ -283,10 +303,11 @@ export const handleLinkEntryClick = async ({
   sdk,
   props,
   updateEntry,
-  roleKey,
+  mappingKey,
   contentType
 } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
+  console.log(mappingKey, props.templateConfig.properties[mappingKey]);
+  if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
     const entryResponses = await sdk.dialogs.selectMultipleEntries({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
@@ -296,7 +317,7 @@ export const handleLinkEntryClick = async ({
       sdk,
       props,
       updateEntry,
-      roleKey,
+      mappingKey,
       entryResponses
     });
   } else {
@@ -309,7 +330,7 @@ export const handleLinkEntryClick = async ({
       sdk,
       props,
       updateEntry,
-      roleKey,
+      mappingKey,
       entryResponse
     });
   }
@@ -319,7 +340,7 @@ export const handleDeepCopyClick = async ({
   sdk,
   props,
   updateEntry,
-  roleKey,
+  mappingKey,
   contentType,
   entry = undefined
 } = {}) => {
@@ -331,9 +352,9 @@ export const handleDeepCopyClick = async ({
     }));
   const linkedEntryValidation = validateLinkedEntry(
     entry,
-    roleKey,
+    mappingKey,
     sdk.entry.getSys().id,
-    props.templateConfig.componentZones
+    props.templateConfig.properties
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -343,22 +364,22 @@ export const handleDeepCopyClick = async ({
     const clonedEntry = await cloneEntry(
       sdk.space,
       entry,
-      `${sdk.entry.fields.name.getValue()} ${roleKey}`
+      `${sdk.entry.fields.name.getValue()} ${mappingKey}`
     );
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
+    if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
       linkEntriesToTemplate({
         props,
         updateEntry,
         entryResponses: [clonedEntry],
-        roleKey
+        mappingKey
       });
     } else {
       linkEntryToTemplate({
         props,
         updateEntry,
         entryResponse: clonedEntry,
-        roleKey
+        mappingKey
       });
     }
     sdk.notifier.success('Deep copy completed. New entry is now linked.');
@@ -369,7 +390,7 @@ export const handleDuplicateClick = async ({
   sdk,
   props,
   updateEntry,
-  roleKey,
+  mappingKey,
   contentType,
   entry = undefined
 } = {}) => {
@@ -381,9 +402,9 @@ export const handleDuplicateClick = async ({
     }));
   const linkedEntryValidation = validateLinkedEntry(
     entry,
-    roleKey,
+    mappingKey,
     sdk.entry.getSys().id,
-    props.templateConfig.componentZones
+    props.templateConfig.properties
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -392,19 +413,19 @@ export const handleDuplicateClick = async ({
   if (entry) {
     const duplicatedEntry = await duplicateEntry(sdk.space, entry);
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
+    if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
       linkEntriesToTemplate({
         props,
         updateEntry,
         entryResponses: [duplicatedEntry],
-        roleKey
+        mappingKey
       });
     } else {
       linkEntryToTemplate({
         props,
         updateEntry,
         entryResponse: duplicatedEntry,
-        roleKey
+        mappingKey
       });
     }
   }
@@ -443,20 +464,20 @@ export const handleEntryEditClick = async ({ sdk, entry, type } = {}) => {
   }
 };
 
-export const handleFieldChange = ({ props, setInternalMappingValue, e, roleKey } = {}) => {
+export const handleFieldChange = ({ props, setInternalMappingValue, e, mappingKey } = {}) => {
   const value = e.currentTarget.value;
   if (typeof value === 'string') {
     let updatedInternalMapping = props.entryInternalMapping;
-    updatedInternalMapping[roleKey] = value;
+    updatedInternalMapping[mappingKey].value = value;
 
-    if ((updatedInternalMapping[roleKey].style || {}).type === c.STYLE_TYPE_CUSTOM) {
-      const styleClasses = cleanStyleClasses(
-        updatedInternalMapping[roleKey].styleClasses,
-        updatedInternalMapping[roleKey].value
-      );
+    // if ((updatedInternalMapping[mappingKey].style || {}).type === c.STYLE_TYPE_CUSTOM) {
+    //   const styleClasses = cleanStyleClasses(
+    //     updatedInternalMapping[mappingKey].styleClasses,
+    //     updatedInternalMapping[mappingKey].value
+    //   );
 
-      updatedInternalMapping.setStyleValue(roleKey, styleClasses);
-    }
+    //   updatedInternalMapping.setStyleValue(mappingKey, styleClasses);
+    // }
 
     setInternalMappingValue(updatedInternalMapping.asJSON());
   }

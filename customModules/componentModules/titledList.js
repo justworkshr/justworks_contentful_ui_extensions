@@ -24,7 +24,7 @@ export const titledList = {
         description: "Markdown formatted list.",
         fieldConfigs: [
           u.constructFieldConfig({
-            type: c.FIELD_TYPE_TEXT
+            type: c.FIELD_TYPE_MARKDOWN
           }),
           u.constructFieldConfig({
             type: c.FIELD_TYPE_ENTRY,

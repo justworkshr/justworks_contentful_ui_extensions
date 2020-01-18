@@ -1,6 +1,7 @@
 import * as c from "../../customModules/constants";
 
 export const capitalize = string => {
+  if (!string) return;
   return string
     .split(" ")
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -51,6 +52,7 @@ export const getAssetType = contentType => {
 };
 
 export const getCustomTemplateFieldConfig = roleConfig => {
+  console.log(roleConfig);
   return roleConfig.fieldConfigs.find(
     fc =>
       fc.contentType === c.CONTENT_TYPE_COLLECTION_MODULE ||

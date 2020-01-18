@@ -34,7 +34,7 @@ class CreateNewLink extends React.Component {
         testId="create-new-link__dropdown-asset"
         onClick={() =>
           this.props.onAddEntryClick({
-            roleKey: this.props.roleKey,
+            mappingKey: this.props.roleKey,
             type: 'asset'
           })
         }>
@@ -73,7 +73,7 @@ class CreateNewLink extends React.Component {
                         testId="create-new-link__custom-type"
                         onClick={() =>
                           this.props.onAddEntryClick({
-                            roleKey: this.props.roleKey,
+                            mappingKey: this.props.roleKey,
                             contentType,
                             template: allowedTemplate
                           })
@@ -89,7 +89,7 @@ class CreateNewLink extends React.Component {
                 key={`dropdown-${contentType}`}
                 testId="create-new-link__dropdown-content-type"
                 onClick={() =>
-                  this.props.onAddEntryClick({ roleKey: this.props.roleKey, contentType })
+                  this.props.onAddEntryClick({ mappingKey: this.props.roleKey, contentType })
                 }>
                 {displayCamelCaseName(contentType)}
               </DropdownListItem>
@@ -118,7 +118,7 @@ class CreateNewLink extends React.Component {
             testId="create-new-link__dropdown-content-type"
             onClick={() =>
               this.props.onAddEntryClick({
-                roleKey: this.props.roleKey,
+                mappingKey: this.props.roleKey,
                 contentType: this.props.contentTypes
               })
             }>
@@ -142,7 +142,7 @@ class CreateNewLink extends React.Component {
           className={this.props.className}
           onClick={() =>
             this.props.onAddEntryClick({
-              roleKey: this.props.roleKey,
+              mappingKey: this.props.roleKey,
               contentType: this.props.contentTypes
             })
           }>

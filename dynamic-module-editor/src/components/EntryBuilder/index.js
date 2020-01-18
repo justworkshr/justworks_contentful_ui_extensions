@@ -12,7 +12,7 @@ import {
 
 import TemplateStyleEditor from './components/TemplateStyleEditor';
 
-import RoleSection from './components/RoleSection';
+import RoleSection from '../RoleSection';
 
 import InternalMapping from '../../utils/InternalMapping';
 
@@ -23,7 +23,7 @@ import {
 } from '../../../../shared/utilities/elementUtils';
 
 import {
-  handleRemoveEntry,
+  handleRemoveMappingKey,
   handleAddField,
   handleAddEntry,
   handleLinkAssetClick,
@@ -37,7 +37,7 @@ import {
   handleAddRoleEntryStyle,
   handleAddRoleReferencesEntryStyle,
   handleMultiReferenceDragEnd
-} from './utils/eventUtils';
+} from '../../utils/eventUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -60,6 +60,7 @@ export default class EntryBuilder extends React.Component {
 
     this.fetchNavigatedTo = this.fetchNavigatedTo.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
+    this.onRemoveClick = this.onRemoveClick.bind(this);
     this.updateEntryStyle = this.updateEntryStyle.bind(this);
     this.updateReferencesStyle = this.updateReferencesStyle.bind(this);
     this.updateAssetFormatting = this.updateAssetFormatting.bind(this);
@@ -98,12 +99,17 @@ export default class EntryBuilder extends React.Component {
     });
   }
 
-  onAddEntryClick = async ({ roleKey, contentType, template = undefined, type = 'entry' } = {}) => {
+  onAddEntryClick = async ({
+    mappingKey,
+    contentType,
+    template = undefined,
+    type = 'entry'
+  } = {}) => {
     await handleAddEntry({
       sdk: this.props.sdk,
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey,
+      mappingKey,
       contentType,
       template,
       type
@@ -119,33 +125,33 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onLinkEntryClick = async (roleKey, contentType) => {
+  onLinkEntryClick = async (mappingKey, contentType) => {
     await handleLinkEntryClick({
       sdk: this.props.sdk,
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey,
+      mappingKey,
       contentType
     });
   };
 
-  onDeepCopyClick = async (roleKey, contentType, entry = undefined) => {
+  onDeepCopyClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey,
+      mappingKey,
       contentType,
       entry
     });
   };
 
-  onDuplicateClick = async (roleKey, contentType, entry = undefined) => {
+  onDuplicateClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDuplicateClick({
       sdk: this.props.sdk,
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey,
+      mappingKey,
       contentType,
       entry
     });
@@ -160,7 +166,7 @@ export default class EntryBuilder extends React.Component {
   };
 
   onRemoveClick = (roleKey, entryIndex = null) => {
-    handleRemoveEntry({
+    handleRemoveMappingKey({
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       roleKey,

@@ -1,33 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import EntryField from '../EntryField';
-import RoleStyleSection from '../RoleStyleSection';
-import EntryActionRow from '../EntryActionRow';
+import EntryField from '../EntryBuilder/components/EntryField';
+import RoleStyleSection from '../EntryBuilder/components/RoleStyleSection';
+import EntryActionRow from '../EntryBuilder/components/EntryActionRow';
 
 import {
   FormLabel,
   HelpText,
   ValidationMessage,
   IconButton,
-  SectionHeading
+  SectionHeading,
+  Subheading
 } from '@contentful/forma-36-react-components';
 
-import * as c from '../../../../../../customModules/constants';
-import { getCustomTemplateFieldConfig } from '../../../../../../shared/utilities/elementUtils';
-
+import * as c from '../../../../customModules/constants';
 import {
-  isDirectField,
-  roleIsMultiReference,
-  displaySnakeCaseName,
-  getContentTypes
-} from '../../utils';
+  getCustomTemplateFieldConfig,
+  displayCamelCaseName
+} from '../../../../shared/utilities/elementUtils';
+
+import { isDirectField, roleIsMultiReference, getContentTypes } from '../EntryBuilder/utils';
 
 import {
   renderSingleEntryStyle,
   renderMultiReferenceStyle,
   renderMultiReferenceAssetStyle
-} from '../../utils/renderUtils';
-import MultiRow from '../MultiRow';
+} from '../EntryBuilder/utils/renderUtils';
+
+import MultiRow from '../EntryBuilder/components/MultiRow';
 
 const RoleSection = props => {
   const renderEntryFields = (roleKey, roleConfigObject, roleMappingObject, fieldConfigObject) => {
@@ -65,7 +65,7 @@ const RoleSection = props => {
             <EntryActionRow
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
-              contentTypes={getContentTypes(props.templateConfig.componentZones[roleKey])}
+              contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
               onAddFieldClick={props.onAddFieldClick}
               roleKey={roleKey}
               onAddEntryClick={props.onAddEntryClick}
@@ -73,7 +73,7 @@ const RoleSection = props => {
               onLinkEntryClick={props.onLinkEntryClick}
               onDeepCopyLinkClick={props.onDeepCopyClick}
               onDuplicateClick={props.onDuplicateClick}
-              fieldConfigs={props.templateConfig.componentZones[roleKey].fieldConfigs}
+              fieldConfigs={props.templateConfig.properties[roleKey].fieldConfigs}
             />
           </div>
           <div className="section-column">
@@ -95,7 +95,7 @@ const RoleSection = props => {
                 roleMappingObject={roleMappingObject}
                 updateStyle={props.updateEntryStyle}
                 clearStyleField={props.clearEntryStyleKey}
-                title={displaySnakeCaseName(roleKey) + ' Style'}
+                title={displayCamelCaseName(roleKey) + ' Style'}
                 type={roleMappingObject.type}
               />
             )}
@@ -117,7 +117,7 @@ const RoleSection = props => {
                 roleMappingObject={firstAsset}
                 updateStyle={props.updateReferencesStyle}
                 clearStyleField={props.clearReferencesStyle}
-                title={displaySnakeCaseName(roleKey) + ' Asset Style'}
+                title={displayCamelCaseName(roleKey) + ' Asset Style'}
                 type={c.FIELD_TYPE_ASSET}
               />
             )}
@@ -129,7 +129,6 @@ const RoleSection = props => {
       const entry =
         props.hydratedEntries.find(he => he.sys.id === props.entryInternalMapping[roleKey].value) ||
         props.hydratedAssets.find(a => a.sys.id === props.entryInternalMapping[roleKey].value);
-
       return (
         <div className="section-row">
           <EntryField
@@ -141,7 +140,6 @@ const RoleSection = props => {
             roleConfig={roleConfigObject}
             onEditClick={props.onEditClick}
             onDeepCopyClick={props.onDeepCopyClick}
-            onDuplicateClick={props.onDuplicateClick}
             onRemoveClick={props.onRemoveClick}
             onFieldChange={props.onFieldChange}
             roleMappingObject={roleMappingObject}
@@ -164,7 +162,7 @@ const RoleSection = props => {
               roleMappingObject={roleMappingObject}
               updateStyle={props.updateEntryStyle}
               clearStyleField={props.clearEntryStyleKey}
-              title={displaySnakeCaseName(roleKey) + ' Style'}
+              title={displayCamelCaseName(roleKey) + ' Style'}
               type={roleMappingObject.type}
             />
           )}
@@ -176,7 +174,7 @@ const RoleSection = props => {
         <EntryActionRow
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
-          contentTypes={getContentTypes(props.templateConfig.componentZones[roleKey])}
+          contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
           onAddFieldClick={props.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={props.onAddEntryClick}
@@ -184,7 +182,7 @@ const RoleSection = props => {
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyClick}
           onDuplicateClick={props.onDuplicateClick}
-          fieldConfigs={props.templateConfig.componentZones[roleKey].fieldConfigs}
+          fieldConfigs={props.templateConfig.properties[roleKey].fieldConfigs}
         />
       );
     }
@@ -196,7 +194,7 @@ const RoleSection = props => {
           className="role-section__heading"
           htmlFor=""
           required={props.roleConfigObject.required}>
-          <SectionHeading>{displaySnakeCaseName(props.roleKey)}</SectionHeading>
+          <Subheading>{displayCamelCaseName(props.roleKey)}</Subheading>
         </FormLabel>
         {isDirectField(props.roleMappingObject.type) && (
           <IconButton
