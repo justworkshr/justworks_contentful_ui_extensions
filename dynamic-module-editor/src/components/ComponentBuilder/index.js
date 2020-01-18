@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Heading } from '@contentful/forma-36-react-components';
+import { Heading, Subheading } from '@contentful/forma-36-react-components';
+import { displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
 
 class ComponentBuilder extends React.Component {
   constructor(props) {
@@ -12,6 +13,9 @@ class ComponentBuilder extends React.Component {
     return (
       <div className="component-builder">
         <Heading>Component Properties</Heading>
+        {Object.keys(this.props.templateConfig.properties).map(propertyKey => {
+          return <Subheading>{displayCamelCaseName(propertyKey)}</Subheading>;
+        })}
       </div>
     );
   }

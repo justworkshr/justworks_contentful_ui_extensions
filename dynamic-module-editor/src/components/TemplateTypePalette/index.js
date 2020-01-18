@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, DisplayText, EmptyState } from '@contentful/forma-36-react-components';
-
+import { displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
 import TemplateDisplay from './components/TemplateDisplay';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -80,6 +80,7 @@ export default class TemplateTypePalette extends React.Component {
   }
 
   render() {
+    console.log(this.state.displayingTemplates);
     if (!!this.state.value && !this.state.templateConfig)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
 
@@ -110,7 +111,7 @@ export default class TemplateTypePalette extends React.Component {
 
         <EmptyState
           className="palette__meta"
-          headingProps={{ text: this.state.value }}
+          headingProps={{ text: displayCamelCaseName(this.state.value) }}
           descriptionProps={{ text: this.state.templateConfig.meta.description }}
         />
         <hr />

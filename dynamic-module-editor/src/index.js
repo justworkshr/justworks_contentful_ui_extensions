@@ -8,6 +8,7 @@ import {
   Form
 } from '@contentful/forma-36-react-components';
 import InternalMapping from './utils/InternalMapping';
+import ComponentMapping from './classes/ComponentMapping';
 
 import * as c from '../../customModules/constants';
 
@@ -64,11 +65,14 @@ export class App extends React.Component {
       isValid: props.sdk.entry.fields.isValid ? props.sdk.entry.fields.isValid.getValue() : null,
       internalMapping: internalMappingJson,
       style,
-      entryInternalMapping: type ? new InternalMapping(internalMappingJson, templateConfig) : {},
+      entryInternalMapping: type
+        ? this.loadInternalMapping(internalMappingJson, templateConfig)
+        : null,
       loadingEntries,
       hydratedEntries: []
     };
 
+    this.loadInternalMapping = this.loadInternalMapping.bind(this);
     this.setInvalid = this.setInvalid.bind(this);
     this.updateEntry = this.updateEntry.bind(this);
     this.setInternalMappingValue = this.setInternalMappingValue.bind(this);
@@ -88,6 +92,16 @@ export class App extends React.Component {
 
     if (!this.state.internalMapping) {
       this.setInternalMappingValue(JSON.stringify(InternalMapping.blankMapping));
+    }
+  }
+
+  loadInternalMapping(json, templateConfig) {
+    if (this.contentType === c.CONTENT_TYPE_PAGE_MODULE) {
+      return new InternalMapping(json, templateConfig);
+    } else if (this.contentType === c.CONTENT_TYPE_COMPONENT_MODULE) {
+      return new ComponentMapping(json, templateConfig);
+    } else {
+      return {};
     }
   }
 
@@ -119,7 +133,7 @@ export class App extends React.Component {
       type,
       internalMapping: internalMappingJson,
       templateConfig,
-      entryInternalMapping: new InternalMapping(internalMappingJson, templateConfig) || {}
+      entryInternalMapping: this.loadInternalMapping(internalMappingJson, templateConfig)
     });
   };
 
@@ -321,7 +335,7 @@ export class App extends React.Component {
         loadingEntries,
         internalMapping: internalMappingJson,
         templateConfig,
-        entryInternalMapping: new InternalMapping(internalMappingJson, templateConfig) || {}
+        entryInternalMapping: this.loadInternalMapping(internalMappingJson, templateConfig)
       },
       () => {
         if (callback) {
@@ -453,13 +467,18 @@ export class App extends React.Component {
 
 init(sdk => {
   const contentType = sdk.entry.getSys().contentType.sys.id;
+  console.log(cm[contentType]);
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
       <App
         title={'Module Editor'}
         sdk={sdk}
         customTemplates={cm[contentType]}
-        templatePlaceholder={cm.templatePlaceholder}
+        templatePlaceholder={
+          contentType === c.CONTENT_TYPE_PAGE_MODULE
+            ? InternalMapping.blankMapping
+            : ComponentMapping.blankMapping
+        }
       />,
       document.getElementById('root')
     );

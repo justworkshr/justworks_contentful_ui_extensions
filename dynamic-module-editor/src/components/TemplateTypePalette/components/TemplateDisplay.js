@@ -14,14 +14,11 @@ class TemplateDisplay extends React.Component {
         {Object.keys(this.props.templates).map((templateKey, index) => {
           const templateName = displayCamelCaseName(templateKey);
 
-          // .split(' ')
-          // .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          // .join(' ');
-
           const isCurrent = this.props.currentTemplateKey === templateKey;
           const clickFunction = !isCurrent
             ? () => this.props.onTemplateCardClick(templateKey)
             : null;
+
           return (
             <div
               tabIndex={-1}
