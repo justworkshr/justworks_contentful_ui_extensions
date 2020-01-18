@@ -65,7 +65,7 @@ const RoleSection = props => {
             <EntryActionRow
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
-              contentTypes={getContentTypes(props.templateConfig.fieldRoles[roleKey])}
+              contentTypes={getContentTypes(props.templateConfig.componentZones[roleKey])}
               onAddFieldClick={props.onAddFieldClick}
               roleKey={roleKey}
               onAddEntryClick={props.onAddEntryClick}
@@ -73,7 +73,7 @@ const RoleSection = props => {
               onLinkEntryClick={props.onLinkEntryClick}
               onDeepCopyLinkClick={props.onDeepCopyClick}
               onDuplicateClick={props.onDuplicateClick}
-              fieldConfigs={props.templateConfig.fieldRoles[roleKey].fieldConfigs}
+              fieldConfigs={props.templateConfig.componentZones[roleKey].fieldConfigs}
             />
           </div>
           <div className="section-column">
@@ -176,7 +176,7 @@ const RoleSection = props => {
         <EntryActionRow
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
-          contentTypes={getContentTypes(props.templateConfig.fieldRoles[roleKey])}
+          contentTypes={getContentTypes(props.templateConfig.componentZones[roleKey])}
           onAddFieldClick={props.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={props.onAddEntryClick}
@@ -184,7 +184,7 @@ const RoleSection = props => {
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyClick}
           onDuplicateClick={props.onDuplicateClick}
-          fieldConfigs={props.templateConfig.fieldRoles[roleKey].fieldConfigs}
+          fieldConfigs={props.templateConfig.componentZones[roleKey].fieldConfigs}
         />
       );
     }

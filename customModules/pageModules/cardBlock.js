@@ -48,7 +48,7 @@ export const cardBlock = {
         })
       }
     },
-    fieldRoles: {
+    componentZones: {
       left_text: u.constructSubcopyRole({
         defaultStyle: c.defaultStyleMarkdownLeft,
         required: true,

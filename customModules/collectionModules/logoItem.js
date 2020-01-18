@@ -8,7 +8,7 @@ export const logoItem = {
       description: "copy pending",
       imageUrl: ""
     },
-    fieldRoles: {
+    componentZones: {
       title: u.constructTitleRole({
         defaultStyle: c.defaultStyleTitleSectionSmall,
         description: "Title above the logo."

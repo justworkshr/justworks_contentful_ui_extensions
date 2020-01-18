@@ -31,7 +31,7 @@ describe('App', () => {
         entries: undefined,
         assets: [mockLink({ id: 1 }), mockLink({ id: 2 }), mockLink({ id: 3 })],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             image_asset: mockAssetMapping({ value: 1 }),
             formattable_image_asset: mockAssetMapping({ value: 2 }),
             logo_asset: mockAssetMapping({ value: 3 })
@@ -87,7 +87,7 @@ describe('App', () => {
           mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 6 })
         ],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
@@ -142,7 +142,7 @@ describe('App', () => {
         entries: [mockLink({ id: 1 })],
         assets: undefined,
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             entry_field: mockMapping({ type: c.FIELD_TYPE_ENTRY, value: 1 })
           }
         })
@@ -188,7 +188,7 @@ describe('App', () => {
         entries: [mockLink({ id: 1 }), mockLink({ id: 2 })],
         assets: [mockLink({ type: c.SYSTEM_TYPE_ASSET, id: 3 })],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [

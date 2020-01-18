@@ -21,7 +21,7 @@ import { resolveAll, newEntryEntryIds, internalMappingRoleStyle } from '../utils
 import InternalMapping from '../../src/utils/InternalMapping';
 
 const getRoleStyle = (internalMapping, roleKey) => {
-  return internalMapping.fieldRoles[roleKey].style.value;
+  return internalMapping.componentZones[roleKey].style.value;
 };
 
 const openStyleEditor = (wrapper, roleKey, type) => {
@@ -142,7 +142,7 @@ describe('App', () => {
         .simulate('click');
 
       // loads default classes
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+      expect(wrapper.state().entryInternalMapping.componentZones['text_field'].style.value).toEqual({
         textAlignment: 'left',
         textColor: 'black'
       });
@@ -199,7 +199,7 @@ describe('App', () => {
         .simulate('click');
 
       // load default classes
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+      expect(wrapper.state().entryInternalMapping.componentZones['text_field'].style.value).toEqual({
         textColor: 'black',
         textAlignment: 'left'
       });
@@ -235,7 +235,7 @@ describe('App', () => {
         entries: undefined,
         assets: undefined,
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             text_field: {
               type: c.FIELD_TYPE_TITLE,
               style: InternalMapping.styleMapping({ value: { textColor: 'black' } }),
@@ -253,7 +253,7 @@ describe('App', () => {
       const value = 'black';
 
       // Starts with existing value
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+      expect(wrapper.state().entryInternalMapping.componentZones['text_field'].style.value).toEqual({
         textColor: 'black'
       });
 
@@ -289,7 +289,7 @@ describe('App', () => {
         .find('RoleStyleSection TextLink.link-style-section__custom-style-button')
         .simulate('click');
 
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+      expect(wrapper.state().entryInternalMapping.componentZones['text_field'].style.value).toEqual({
         textAlignment: 'left',
         textColor: 'black'
       });
@@ -306,7 +306,7 @@ describe('App', () => {
         .simulate('click');
 
       // removes corresponding class
-      expect(wrapper.state().entryInternalMapping.fieldRoles['text_field'].style.value).toEqual({
+      expect(wrapper.state().entryInternalMapping.componentZones['text_field'].style.value).toEqual({
         textColor: 'black'
       });
 
@@ -324,7 +324,7 @@ describe('App', () => {
         entries: [mockLink({ id: '1' })],
         assets: undefined,
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             text_field: {
               type: c.FIELD_TYPE_TITLE,
               style: InternalMapping.styleMapping({ type: c.STYLE_TYPE_ENTRY, value: '1' }),
@@ -358,7 +358,7 @@ describe('App', () => {
           mockAssetResponse({ id: 3 })
         ],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
@@ -396,7 +396,7 @@ describe('App', () => {
       // loads classes into assets
       await resolveAll();
       expect(
-        JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0]).fieldRoles[roleKey]
+        JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0]).componentZones[roleKey]
           .value[0].style.value
       ).toEqual({ assetStyle: 'assetStyleValue' });
     });
@@ -408,7 +408,7 @@ describe('App', () => {
         entries: undefined,
         assets: undefined,
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
@@ -435,7 +435,7 @@ describe('App', () => {
       const value = 'natural';
 
       // Starts with existing value
-      expect(wrapper.state().entryInternalMapping.fieldRoles[roleKey].style.value).toEqual({
+      expect(wrapper.state().entryInternalMapping.componentZones[roleKey].style.value).toEqual({
         flexRowPreset: value
       });
 
@@ -458,7 +458,7 @@ describe('App', () => {
         entries: [],
         assets: [mockLink({ id: 1 }), mockLink({ id: 2 }), mockLink({ id: 3 })],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
@@ -487,7 +487,7 @@ describe('App', () => {
       // all assets start with original classes (blank)
       expect(
         JSON.parse(sdk.entry.fields.internalMapping.setValue.args[0][0])
-          .fieldRoles[roleKey].value.filter(e => e.type === c.FIELD_TYPE_ASSET)
+          .componentZones[roleKey].value.filter(e => e.type === c.FIELD_TYPE_ASSET)
           .every(e => {
             return e.style.type === c.STYLE_TYPE_CUSTOM;
           })
@@ -504,7 +504,7 @@ describe('App', () => {
       // all assets now have selected class
       expect(
         JSON.parse(sdk.entry.fields.internalMapping.setValue.args[1][0])
-          .fieldRoles[roleKey].value.filter(e => e.type === c.FIELD_TYPE_ASSET)
+          .componentZones[roleKey].value.filter(e => e.type === c.FIELD_TYPE_ASSET)
           .every(e => {
             return e.style.value['paddedContainer'] === value;
           })

@@ -41,15 +41,15 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
       expect(wrapper.find('CreateNewLink.entry-action-button__create-new')).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
+        Object.keys(templateConfig.componentZones).length
       );
 
       wrapper.find('CreateNewLink.entry-action-button__create-new').forEach(node => {
         const roleKey = node.props().roleKey;
-        const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
+        const entryFieldConfigs = templateConfig.componentZones[roleKey].fieldConfigs.filter(
           e => e.type === c.FIELD_TYPE_ENTRY && e.contentType !== c.CONTENT_TYPE_COLLECTION_MODULE
         );
-        const customTemplateFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
+        const customTemplateFieldConfigs = templateConfig.componentZones[roleKey].fieldConfigs.filter(
           e => e.type === c.FIELD_TYPE_ENTRY && e.contentType === c.CONTENT_TYPE_COLLECTION_MODULE
         );
 
@@ -109,12 +109,12 @@ describe('App', () => {
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
       expect(wrapper.find('LinkExisting.entry-action-button__link-existing')).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
+        Object.keys(templateConfig.componentZones).length
       );
 
       wrapper.find('LinkExisting.entry-action-button__link-existing').forEach(node => {
         const roleKey = node.props().roleKey;
-        const entryFieldConfigs = templateConfig.fieldRoles[roleKey].fieldConfigs.filter(
+        const entryFieldConfigs = templateConfig.componentZones[roleKey].fieldConfigs.filter(
           e => e.type === c.FIELD_TYPE_ENTRY
         );
 

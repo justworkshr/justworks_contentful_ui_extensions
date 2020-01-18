@@ -173,18 +173,18 @@ const constructCustomTemplateFields = async (
 
     let newEntries = [];
 
-    if (internalMapping.fieldRoles) {
+    if (internalMapping.componentZones) {
       await Promise.all(
-        await Object.keys(internalMapping.fieldRoles).map(async key => {
+        await Object.keys(internalMapping.componentZones).map(async key => {
           if (
-            internalMapping.fieldRoles[key].type ===
+            internalMapping.componentZones[key].type ===
             c.FIELD_TYPE_MULTI_REFERENCE
           ) {
             let values = new Array(
-              internalMapping.fieldRoles[key].value.length
+              internalMapping.componentZones[key].value.length
             ); // pre-construct blank array so async functions can populate in order by index
             await Promise.all(
-              await internalMapping.fieldRoles[key].value.map(
+              await internalMapping.componentZones[key].value.map(
                 async (mapping, index) => {
                   if (mapping.type === c.FIELD_TYPE_ENTRY) {
                     // clone asset, attached ID to mapping object value
@@ -206,12 +206,12 @@ const constructCustomTemplateFields = async (
               )
             );
 
-            internalMapping.fieldRoles[key].value = values;
+            internalMapping.componentZones[key].value = values;
           } else if (
-            internalMapping.fieldRoles[key].type === c.FIELD_TYPE_ENTRY
+            internalMapping.componentZones[key].type === c.FIELD_TYPE_ENTRY
           ) {
             const entry = entries.find(
-              e => getEntrySys(e).id === internalMapping.fieldRoles[key]
+              e => getEntrySys(e).id === internalMapping.componentZones[key]
             );
 
             if (entry) {
@@ -221,8 +221,8 @@ const constructCustomTemplateFields = async (
                 createName(name, key)
               );
 
-              internalMapping.fieldRoles[key] = {
-                ...internalMapping.fieldRoles[key],
+              internalMapping.componentZones[key] = {
+                ...internalMapping.componentZones[key],
                 value: getEntrySys(clonedEntry).id
               };
               newEntries.push(constructLink(clonedEntry));

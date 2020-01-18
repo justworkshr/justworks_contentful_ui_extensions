@@ -3,7 +3,7 @@ import * as c from '../../../customModules/constants';
 import { removeByIndex } from '../components/EntryBuilder/utils/index';
 
 export default class InternalMapping {
-  constructor(json, templateConfig = { style: {}, fieldRoles: {} }) {
+  constructor(json, templateConfig = { style: {}, componentZones: {} }) {
     /*
       json - string - the raw JSON of the internalMapping field
       templateConfig - object - the corresponding custom template config object from './customModules'
@@ -63,7 +63,7 @@ export default class InternalMapping {
 
   static get blankMapping() {
     return {
-      fieldRoles: {},
+      componentZones: {},
       style: {}
     };
   }
@@ -73,20 +73,20 @@ export default class InternalMapping {
     if (!json || !typeof json === 'string') return InternalMapping.blankMapping;
     // if malformed object
     const parsedJSON = JSON.parse(json);
-    if (!parsedJSON.fieldRoles) return InternalMapping.blankMapping;
+    if (!parsedJSON.componentZones) return InternalMapping.blankMapping;
     return parsedJSON;
   }
 
   assignRolesFromMapping(parsedJSON) {
-    // Prepare the object structure: {fieldRoles: {}, style: {}}
+    // Prepare the object structure: {componentZones: {}, style: {}}
     Object.keys(InternalMapping.blankMapping).forEach(key => {
       this[key] = parsedJSON[key] || InternalMapping.blankMapping[key];
     });
     // Load values from the entry's internalMapping Json
-    Object.keys(parsedJSON.fieldRoles || {}).forEach(key => {
+    Object.keys(parsedJSON.componentZones || {}).forEach(key => {
       if (key === 'style')
         throw new Error('Cannot name an entryRole "style". This is a reserved key.');
-      this.fieldRoles[key] = parsedJSON.fieldRoles[key];
+      this.componentZones[key] = parsedJSON.componentZones[key];
       this.defineGetterSetters(key);
     });
   }
@@ -96,8 +96,8 @@ export default class InternalMapping {
       Object.defineProperty(this, key, {
         get: () => {
           // if its an array, return array of mappings. Else, return direct object mapping.
-          if (Array.isArray(this.fieldRoles[key])) {
-            return this.fieldRoles[key].map(entry => {
+          if (Array.isArray(this.componentZones[key])) {
+            return this.componentZones[key].map(entry => {
               if (entry.type === c.FIELD_TYPE_ASSET) {
                 return InternalMapping.assetMapping({ ...entry });
               } else {
@@ -105,23 +105,23 @@ export default class InternalMapping {
               }
             });
           } else {
-            if (this.fieldRoles[key].type === c.FIELD_TYPE_ASSET) {
-              return InternalMapping.assetMapping({ ...this.fieldRoles[key] });
+            if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
+              return InternalMapping.assetMapping({ ...this.componentZones[key] });
             } else {
-              return InternalMapping.entryMapping({ ...this.fieldRoles[key] });
+              return InternalMapping.entryMapping({ ...this.componentZones[key] });
             }
           }
         },
 
         set: value => {
-          if (this.fieldRoles[key].type === c.FIELD_TYPE_ASSET) {
-            this.fieldRoles[key] = InternalMapping.assetMapping({
-              ...this.fieldRoles[key],
+          if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
+            this.componentZones[key] = InternalMapping.assetMapping({
+              ...this.componentZones[key],
               value
             });
           } else {
-            this.fieldRoles[key] = InternalMapping.entryMapping({
-              ...this.fieldRoles[key],
+            this.componentZones[key] = InternalMapping.entryMapping({
+              ...this.componentZones[key],
               value
             });
           }
@@ -133,7 +133,7 @@ export default class InternalMapping {
 
   addAsset(key, value, assetUrl, assetType, style) {
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.assetMapping({
+    this.componentZones[key] = InternalMapping.assetMapping({
       type: c.FIELD_TYPE_ASSET,
       value,
       assetUrl,
@@ -148,7 +148,7 @@ export default class InternalMapping {
      * value - string - the ID of the contentful entry
      */
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.entryMapping({
+    this.componentZones[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_ENTRY,
       value,
       contentType
@@ -182,20 +182,20 @@ export default class InternalMapping {
       }
     });
 
-    if (Array.isArray((this.fieldRoles[key] || {}).value)) {
-      valueArray = [...this.fieldRoles[key].value, ...valueArray];
+    if (Array.isArray((this.componentZones[key] || {}).value)) {
+      valueArray = [...this.componentZones[key].value, ...valueArray];
     }
 
-    this.fieldRoles[key] = InternalMapping.entryMapping({
+    this.componentZones[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_MULTI_REFERENCE,
       value: valueArray,
-      style: (this.fieldRoles[key] || {}).style
+      style: (this.componentZones[key] || {}).style
     });
   }
 
   addTextField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.entryMapping({
+    this.componentZones[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_TITLE,
       value
     });
@@ -203,7 +203,7 @@ export default class InternalMapping {
 
   addMarkdownField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.entryMapping({
+    this.componentZones[key] = InternalMapping.entryMapping({
       type: c.FIELD_TYPE_MARKDOWN,
       value
     });
@@ -211,11 +211,11 @@ export default class InternalMapping {
 
   addField({ key, type, value = '' } = {}) {
     this.defineGetterSetters(key);
-    this.fieldRoles[key] = InternalMapping.entryMapping({ type: type, value });
+    this.componentZones[key] = InternalMapping.entryMapping({ type: type, value });
   }
 
   addFieldToRole(roleKey, fieldType) {
-    const roleConfigObject = this._templateConfig.fieldRoles[roleKey];
+    const roleConfigObject = this._templateConfig.componentZones[roleKey];
     switch (fieldType) {
       case c.FIELD_TYPE_TITLE:
         this.addTextField({
@@ -233,27 +233,27 @@ export default class InternalMapping {
   }
 
   addStyleCustom(key, fieldConfig = {}) {
-    this.fieldRoles[key].style = InternalMapping.styleMapping({
+    this.componentZones[key].style = InternalMapping.styleMapping({
       type: c.STYLE_TYPE_CUSTOM,
       value: fieldConfig.defaultStyle
     });
   }
 
   clearRoleStyle(key) {
-    this.fieldRoles[key].style = undefined;
+    this.componentZones[key].style = undefined;
   }
 
   setStyleEntry(key, entryId) {
-    this.fieldRoles[key].style = InternalMapping.styleMapping({
+    this.componentZones[key].style = InternalMapping.styleMapping({
       type: c.STYLE_TYPE_ENTRY,
       value: entryId
     });
   }
 
   setStyleValue(key, styleKey, styleValue) {
-    if (!this.fieldRoles[key].style) this.fieldRoles[key].style = {};
-    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
-      this.fieldRoles[key].style.value[styleKey] = styleValue;
+    if (!this.componentZones[key].style) this.componentZones[key].style = {};
+    if (this.componentZones[key].style.type === c.STYLE_TYPE_CUSTOM) {
+      this.componentZones[key].style.value[styleKey] = styleValue;
     }
   }
 
@@ -267,7 +267,7 @@ export default class InternalMapping {
   }
 
   addReferencesStyleCustom(key, fieldConfigObject = {}) {
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+    this.componentZones[key].value = this.componentZones[key].value.map(asset => {
       if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
       if (!asset.style) asset.style = {};
       asset.style = InternalMapping.styleMapping({
@@ -276,11 +276,11 @@ export default class InternalMapping {
       });
       return asset;
     });
-    this.fieldRoles[key];
+    this.componentZones[key];
   }
 
   setReferencesStyleEntry(key, entryId) {
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+    this.componentZones[key].value = this.componentZones[key].value.map(asset => {
       if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
       if (!asset.style) asset.style = {};
       asset.style = InternalMapping.styleMapping({
@@ -292,7 +292,7 @@ export default class InternalMapping {
   }
 
   setReferencesStyle(key, styleKey, styleValue) {
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+    this.componentZones[key].value = this.componentZones[key].value.map(asset => {
       if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
       if (!asset.style) asset.style = {};
       asset.style.value[styleKey] = styleValue;
@@ -301,7 +301,7 @@ export default class InternalMapping {
   }
 
   clearRoleReferencesStyle(key) {
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(asset => {
+    this.componentZones[key].value = this.componentZones[key].value.map(asset => {
       if (asset.type !== c.FIELD_TYPE_ASSET) return; // only update assets
       if (!asset.style) asset.style = {};
       asset.style = undefined;
@@ -310,7 +310,7 @@ export default class InternalMapping {
   }
 
   removeReferencesStyleKey(key, styleKey) {
-    this.fieldRoles[key].value = this.fieldRoles[key].value.map(entry => {
+    this.componentZones[key].value = this.componentZones[key].value.map(entry => {
       if (entry.type === c.FIELD_TYPE_ASSET) {
         delete entry.style.value[styleKey];
       }
@@ -320,26 +320,26 @@ export default class InternalMapping {
   }
 
   removeStyleKey(key, styleKey) {
-    if (!this.fieldRoles[key].style) return;
-    if (this.fieldRoles[key].style.type === c.STYLE_TYPE_CUSTOM) {
-      delete this.fieldRoles[key].style.value[styleKey];
+    if (!this.componentZones[key].style) return;
+    if (this.componentZones[key].style.type === c.STYLE_TYPE_CUSTOM) {
+      delete this.componentZones[key].style.value[styleKey];
     }
   }
 
   removeTemplateStyleKey(templateStyleKey, styleKey) {
-    if (!this.fieldRoles.style) return;
-    if (!this.fieldRoles.style[templateStyleKey]) return;
+    if (!this.componentZones.style) return;
+    if (!this.componentZones.style[templateStyleKey]) return;
     delete this.style[templateStyleKey][styleKey];
   }
 
   setAssetFormatting(key, formattingObject) {
-    const roleObject = this.fieldRoles[key];
+    const roleObject = this.componentZones[key];
 
     if (roleObject.type !== c.FIELD_TYPE_ASSET) {
       throw new Error('Can only format an image asset');
     }
 
-    this.fieldRoles[key].formatting = formattingObject;
+    this.componentZones[key].formatting = formattingObject;
   }
 
   asJSON() {
@@ -357,44 +357,44 @@ export default class InternalMapping {
   }
 
   fieldKeys() {
-    return Object.keys(this.fieldRoles);
+    return Object.keys(this.componentZones);
   }
 
   getType(key) {
-    if (Array.isArray(this.fieldRoles[key])) {
+    if (Array.isArray(this.componentZones[key])) {
       return c.FIELD_TYPE_MULTI_REFERENCE;
     } else {
-      return this.fieldRoles[key].type;
+      return this.componentZones[key].type;
     }
   }
 
   isEntry(key) {
-    return this.fieldRoles[key].type === c.FIELD_TYPE_ENTRY;
+    return this.componentZones[key].type === c.FIELD_TYPE_ENTRY;
   }
 
   removeEntry(key, entryIndex = null) {
     // Only remove the entry with the passed in sysId if it's a multi-reference array
     // Otherwise remove the entire key.
-    if (Array.isArray((this.fieldRoles[key] || {}).value)) {
-      this.fieldRoles[key].value = removeByIndex(this.fieldRoles[key].value, entryIndex);
+    if (Array.isArray((this.componentZones[key] || {}).value)) {
+      this.componentZones[key].value = removeByIndex(this.componentZones[key].value, entryIndex);
 
       // delete key entirely if array is now empty
-      if (!this.fieldRoles[key].value.length) {
-        delete this.fieldRoles[key];
+      if (!this.componentZones[key].value.length) {
+        delete this.componentZones[key];
         delete this[key];
       }
     } else {
-      delete this.fieldRoles[key];
+      delete this.componentZones[key];
       delete this[key];
     }
   }
 
   switchMultiReferenceValues({ roleKey, draggedIndex, draggedOverIndex } = {}) {
-    if (!Array.isArray(this.fieldRoles[roleKey].value)) return;
-    const array = this.fieldRoles[roleKey].value;
+    if (!Array.isArray(this.componentZones[roleKey].value)) return;
+    const array = this.componentZones[roleKey].value;
 
     [array[draggedIndex], array[draggedOverIndex]] = [array[draggedOverIndex], array[draggedIndex]];
 
-    this.fieldRoles[roleKey].value = array;
+    this.componentZones[roleKey].value = array;
   }
 }

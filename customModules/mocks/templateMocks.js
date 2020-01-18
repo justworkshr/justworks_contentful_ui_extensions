@@ -14,7 +14,7 @@ export const mockCustomTemplates = {
   [MOCK_TEMPLATE_NAME]: {
     meta: {},
     style: {},
-    fieldRoles: {
+    componentZones: {
       left_section: {
         fieldConfigs: [
           u.constructFieldConfig({
@@ -40,7 +40,7 @@ export const mockCustomTemplates = {
   [MOCK_FIELDS_TEMPLATE]: {
     meta: {},
     style: {},
-    fieldRoles: {
+    componentZones: {
       text_field: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -74,7 +74,7 @@ export const mockCustomTemplates = {
   [MOCK_ASSETS_TEMPLATE]: {
     meta: {},
     style: {},
-    fieldRoles: {
+    componentZones: {
       image_asset: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -109,7 +109,7 @@ export const mockCustomTemplates = {
   [MOCK_ENTRY_TEMPLATE]: {
     meta: {},
     style: {},
-    fieldRoles: {
+    componentZones: {
       entry_field: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -156,7 +156,7 @@ export const mockCustomTemplates = {
   [MOCK_MULTI_REFERENCE_LOGO_TEMPLATE]: {
     meta: {},
     style: {},
-    fieldRoles: {
+    componentZones: {
       grid_logo_multi_field: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -196,6 +196,6 @@ export const mockCustomTemplates = {
     style: {
       ...u.defaultStyleTypes()
     },
-    fieldRoles: {}
+    componentZones: {}
   }
 };

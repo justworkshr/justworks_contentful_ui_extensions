@@ -11,7 +11,7 @@ export const textMedia = {
     style: {
       ...u.defaultStyleTypes()
     },
-    fieldRoles: {
+    componentZones: {
       title: u.constructTitleRole({ defaultStyle: c.defaultStyleTitleDisplay }),
       left_content: u.constructRoleConfig({
         fieldConfigs: [

@@ -187,9 +187,9 @@ export class App extends React.Component {
     let assetLinks = [];
 
     const parsedJSON = JSON.parse(internalMappingJson);
-    const fieldRoles = parsedJSON.fieldRoles;
-    Object.keys(fieldRoles).forEach(roleKey => {
-      const roleMappingObject = fieldRoles[roleKey];
+    const componentZones = parsedJSON.componentZones;
+    Object.keys(componentZones).forEach(roleKey => {
+      const roleMappingObject = componentZones[roleKey];
       /*
         Add all entries and assets which exist as references 
         inside the internal mapping
@@ -300,7 +300,7 @@ export class App extends React.Component {
 
   validateEntry() {
     const errors = getTemplateErrors(
-      this.state.templateConfig.fieldRoles,
+      this.state.templateConfig.componentZones,
       JSON.parse(this.state.internalMapping),
       this.state.hydratedEntries
     );

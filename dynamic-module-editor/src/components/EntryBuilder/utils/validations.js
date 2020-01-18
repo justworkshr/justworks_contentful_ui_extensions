@@ -4,7 +4,7 @@ import { getCustomTemplateFieldConfig } from '../../../../../shared/utilities/el
 
 export const validateTemplate = async ({ setInvalid, state, setState }) => {
   const errors = await getTemplateErrors(
-    state.templateConfig.fieldRoles,
+    state.templateConfig.componentZones,
     state.entryInternalMapping,
     state.entries
   );
@@ -28,9 +28,9 @@ const addError = (errorArray, message) => {
   return Array.isArray(errorArray) ? errorArray.push({ message: message }) : [{ message: message }];
 };
 
-const missingRequiredRoles = (errors, templateConfigFieldRoles, internalMapping) => {
-  Object.keys(templateConfigFieldRoles).forEach(roleKey => {
-    const templateRole = templateConfigFieldRoles[roleKey] || {};
+const missingRequiredRoles = (errors, templateConfigcomponentZones, internalMapping) => {
+  Object.keys(templateConfigcomponentZones).forEach(roleKey => {
+    const templateRole = templateConfigcomponentZones[roleKey] || {};
     if (!!templateRole.required && !internalMapping[roleKey]) {
       errors[roleKey] = addError(errors[roleKey], 'Entry is required.');
     }
@@ -39,9 +39,9 @@ const missingRequiredRoles = (errors, templateConfigFieldRoles, internalMapping)
   return errors;
 };
 
-const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, hydratedEntries) => {
-  Object.keys(templateConfigFieldRoles).map(roleKey => {
-    const roleConfigObject = templateConfigFieldRoles[roleKey] || {};
+const hasInvalidCustomTemplateType = (errors, templateConfigcomponentZones, hydratedEntries) => {
+  Object.keys(templateConfigcomponentZones).map(roleKey => {
+    const roleConfigObject = templateConfigcomponentZones[roleKey] || {};
     const entry = hydratedEntries.find(he => roleConfigObject.value === he.sys.id);
     const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(roleConfigObject);
 
@@ -68,17 +68,17 @@ const hasInvalidCustomTemplateType = (errors, templateConfigFieldRoles, hydrated
 };
 
 export const getTemplateErrors = (
-  templateConfigFieldRoles,
+  templateConfigcomponentZones,
   updatedInternalMapping,
   hydratedEntries
 ) => {
   let errors = {};
   errors = missingRequiredRoles(
     errors,
-    templateConfigFieldRoles,
-    updatedInternalMapping.fieldRoles
+    templateConfigcomponentZones,
+    updatedInternalMapping.componentZones
   );
-  errors = hasInvalidCustomTemplateType(errors, templateConfigFieldRoles, hydratedEntries);
+  errors = hasInvalidCustomTemplateType(errors, templateConfigcomponentZones, hydratedEntries);
 
   return errors;
 };

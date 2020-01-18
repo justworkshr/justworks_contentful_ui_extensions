@@ -310,11 +310,11 @@ export default class EntryBuilder extends React.Component {
             Fields
           </DisplayText>
 
-          {Object.keys(this.props.templateConfig.fieldRoles)
-            .sort((a, b) => (!this.props.templateConfig.fieldRoles[b] || {}).required)
+          {Object.keys(this.props.templateConfig.componentZones)
+            .sort((a, b) => (!this.props.templateConfig.componentZones[b] || {}).required)
             .map((roleKey, index) => {
-              const roleConfigObject = this.props.templateConfig.fieldRoles[roleKey] || {};
-              const roleMappingObject = this.props.entryInternalMapping.fieldRoles[roleKey] || {};
+              const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
+              const roleMappingObject = this.props.entryInternalMapping.componentZones[roleKey] || {};
               const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
 
               return (

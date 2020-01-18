@@ -8,7 +8,7 @@ export const logoRow = {
       description: "copy pending",
       imageUrl: ""
     },
-    fieldRoles: {
+    componentZones: {
       title: u.constructTitleRole({
         defaultStyle: c.defaultStyleTitleSectionSmall
       }),

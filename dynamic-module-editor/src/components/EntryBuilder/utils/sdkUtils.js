@@ -29,7 +29,7 @@ export const updateEntry = async ({
   if (!updatedInternalMappingJson)
     throw new Error('Cannot update entry without internal mapping JSON.');
   const errors = getTemplateErrors(
-    stateTemplateMapping.fieldRoles,
+    stateTemplateMapping.componentZones,
     JSON.parse(updatedInternalMappingJson),
     stateEntries
   );

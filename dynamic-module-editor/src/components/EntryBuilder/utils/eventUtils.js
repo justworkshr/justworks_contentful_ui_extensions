@@ -27,8 +27,8 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
   const updatedInternalMapping = props.entryInternalMapping;
 
   // attaches existing asset style to new assets
-  const firstAsset = updatedInternalMapping.fieldRoles[roleKey]
-    ? updatedInternalMapping.fieldRoles[roleKey].value.find(
+  const firstAsset = updatedInternalMapping.componentZones[roleKey]
+    ? updatedInternalMapping.componentZones[roleKey].value.find(
         entry => entry.type === c.FIELD_TYPE_ASSET
       )
     : undefined;
@@ -98,7 +98,7 @@ export const handleMultipleAssetsLink = async ({
 } = {}) => {
   let linkedEntryValidation;
   assets.forEach(asset => {
-    linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.fieldRoles[roleKey]);
+    linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.componentZones[roleKey]);
   });
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -112,7 +112,7 @@ export const handleSingleAssetLink = ({ sdk, props, roleKey, asset, updateEntry 
 
   const linkedEntryValidation = validateLinkedAsset(
     asset,
-    props.templateConfig.fieldRoles[roleKey]
+    props.templateConfig.componentZones[roleKey]
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -122,7 +122,7 @@ export const handleSingleAssetLink = ({ sdk, props, roleKey, asset, updateEntry 
 };
 
 export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+  if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
     try {
       const assets = await sdk.dialogs.selectMultipleAssets({
         locale: 'en-US'
@@ -209,7 +209,7 @@ export const handleAddEntry = async ({
       const newEntryName = constructEntryName(sdk.entry.fields.name.getValue(), roleKey);
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
-      if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+      if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
         linkEntriesToTemplate({
           props,
           updateEntry,
@@ -237,7 +237,7 @@ export const handleSingleEntryLink = ({ sdk, props, updateEntry, roleKey, entryR
     entryResponse,
     roleKey,
     sdk.entry.getSys().id,
-    props.templateConfig.fieldRoles
+    props.templateConfig.componentZones
   );
 
   if (linkedEntryValidation) {
@@ -261,7 +261,7 @@ export const handleMultipleEntriesLink = ({ sdk, props, updateEntry, roleKey, en
       entry,
       roleKey,
       sdk.entry.getSys().id,
-      props.templateConfig.fieldRoles
+      props.templateConfig.componentZones
     );
 
     if (linkedEntryValidation) {
@@ -286,7 +286,7 @@ export const handleLinkEntryClick = async ({
   roleKey,
   contentType
 } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+  if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
     const entryResponses = await sdk.dialogs.selectMultipleEntries({
       locale: 'en-US',
       contentTypes: getContentTypeArray(contentType)
@@ -333,7 +333,7 @@ export const handleDeepCopyClick = async ({
     entry,
     roleKey,
     sdk.entry.getSys().id,
-    props.templateConfig.fieldRoles
+    props.templateConfig.componentZones
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -346,7 +346,7 @@ export const handleDeepCopyClick = async ({
       `${sdk.entry.fields.name.getValue()} ${roleKey}`
     );
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+    if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
       linkEntriesToTemplate({
         props,
         updateEntry,
@@ -383,7 +383,7 @@ export const handleDuplicateClick = async ({
     entry,
     roleKey,
     sdk.entry.getSys().id,
-    props.templateConfig.fieldRoles
+    props.templateConfig.componentZones
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -392,7 +392,7 @@ export const handleDuplicateClick = async ({
   if (entry) {
     const duplicatedEntry = await duplicateEntry(sdk.space, entry);
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.fieldRoles[roleKey].fieldConfigs)) {
+    if (roleIsMultiReference(props.templateConfig.componentZones[roleKey].fieldConfigs)) {
       linkEntriesToTemplate({
         props,
         updateEntry,

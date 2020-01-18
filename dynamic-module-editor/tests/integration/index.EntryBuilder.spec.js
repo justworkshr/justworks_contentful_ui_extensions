@@ -59,15 +59,15 @@ describe('App', () => {
 
       expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
 
-      // 1 Role Section per FieldRole
+      // 1 Role Section per componentZone
       expect(wrapper.find('RoleSection')).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
+        Object.keys(templateConfig.componentZones).length
       );
 
       // Tests Role Section render
       wrapper.find('RoleSection').forEach(node => {
         // Tests required label render
-        if (templateConfig.fieldRoles[node.props().roleKey].required) {
+        if (templateConfig.componentZones[node.props().roleKey].required) {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(true);
         } else {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(false);
@@ -95,7 +95,7 @@ describe('App', () => {
       });
 
       // Clears roles from App state
-      expect(Object.keys(wrapper.state().entryInternalMapping.fieldRoles)).toHaveLength(2);
+      expect(Object.keys(wrapper.state().entryInternalMapping.componentZones)).toHaveLength(2);
 
       wrapper.find('RoleSection').forEach(node => {
         // Assumes default field creation
@@ -128,7 +128,7 @@ describe('App', () => {
 
       expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
       expect(wrapper.find('RoleSection')).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
+        Object.keys(templateConfig.componentZones).length
       );
 
       wrapper.find('RoleSection').forEach(node => {
@@ -145,7 +145,7 @@ describe('App', () => {
         entries: undefined,
         assets: [mockLink({ id: '1' }), mockLink({ id: '2' }), mockLink({ id: '3' })],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             image_asset: mockAssetMapping({ value: 1 }),
             formattable_image_asset: mockAssetMapping({ value: 2 }),
             logo_asset: mockAssetMapping({ value: 3 })
@@ -179,7 +179,7 @@ describe('App', () => {
 
       expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
       expect(wrapper.find('RoleSection')).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
+        Object.keys(templateConfig.componentZones).length
       );
 
       wrapper.find('RoleSection').forEach(node => {
@@ -196,7 +196,7 @@ describe('App', () => {
         entries: [mockLink({ id: '1' })],
         assets: undefined,
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             entry_field: mockMapping({
               type: c.FIELD_TYPE_ENTRY,
               value: 1,
@@ -244,7 +244,7 @@ describe('App', () => {
 
       expect(wrapper.find('.custom-template-entry-builder')).toHaveLength(1);
       expect(wrapper.find('RoleSection')).toHaveLength(
-        Object.keys(templateConfig.fieldRoles).length
+        Object.keys(templateConfig.componentZones).length
       );
 
       wrapper.find('RoleSection').forEach(node => {
@@ -266,7 +266,7 @@ describe('App', () => {
         ],
         assets: [mockLink({ id: 3 }), mockLink({ id: 6 })],
         internalMapping: JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             grid_logo_multi_field: {
               type: c.FIELD_TYPE_MULTI_REFERENCE,
               value: [
@@ -298,11 +298,11 @@ describe('App', () => {
         expect(node.find('LinkExisting')).toHaveLength(1);
 
         const multiReferenceStyle =
-          templateConfig.fieldRoles[node.props().roleKey].multiReferenceStyleView;
+          templateConfig.componentZones[node.props().roleKey].multiReferenceStyleView;
         // Only renders this asset reference style if templatre config includes assets
         if (
           multiReferenceStyle &&
-          templateConfig.fieldRoles[node.props().roleKey].fieldConfigs.some(
+          templateConfig.componentZones[node.props().roleKey].fieldConfigs.some(
             entry => entry.type === c.FIELD_TYPE_ASSET
           )
         ) {

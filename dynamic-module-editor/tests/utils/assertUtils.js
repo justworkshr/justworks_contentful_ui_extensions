@@ -5,11 +5,11 @@ export const resolveAll = async () => {
 };
 
 export const newEntryRole = (newEntryArg, roleKey) => {
-  return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).fieldRoles[roleKey];
+  return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).componentZones[roleKey];
 };
 
 export const internalMappingRoleStyle = (internalMappingArg, roleKey) => {
-  return JSON.parse(internalMappingArg).fieldRoles[roleKey].style.value;
+  return JSON.parse(internalMappingArg).componentZones[roleKey].style.value;
 };
 
 export const newEntryAssets = newEntryArg => {

@@ -8,9 +8,9 @@ describe('InternalMapping', () => {
       expect(new InternalMapping(json)).toEqual({
         _templateConfig: {
           style: {},
-          fieldRoles: {}
+          componentZones: {}
         },
-        fieldRoles: {},
+        componentZones: {},
         style: {}
       });
     });
@@ -20,22 +20,22 @@ describe('InternalMapping', () => {
       expect(new InternalMapping(json)).toEqual({
         _templateConfig: {
           style: {},
-          fieldRoles: {}
+          componentZones: {}
         },
-        fieldRoles: {},
+        componentZones: {},
         style: {}
       });
     });
 
     it('does not load fields if internalMapping is blank', () => {
       const json = JSON.stringify({
-        fieldRoles: {},
+        componentZones: {},
         style: {}
       });
 
       const templateConfig = {
         style: {},
-        fieldRoles: {
+        componentZones: {
           text_field: {
             defaultStyle: 'helloClass',
             field: {
@@ -52,7 +52,7 @@ describe('InternalMapping', () => {
 
     it('does not load fields if internalMapping is not blank', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           text_field: {
             type: c.FIELD_TYPE_TITLE,
             value: 'occupied'
@@ -63,7 +63,7 @@ describe('InternalMapping', () => {
 
       const templateConfig = {
         style: {},
-        fieldRoles: {
+        componentZones: {
           text_field: {
             field: {
               type: c.FIELD_TYPE_TITLE,
@@ -79,7 +79,7 @@ describe('InternalMapping', () => {
     });
 
     it('returns class', () => {
-      const object = { fieldRoles: { hi: 'hello' } };
+      const object = { componentZones: { hi: 'hello' } };
       const json = JSON.stringify(object);
       expect(new InternalMapping(json).constructor.name).toEqual('InternalMapping');
     });
@@ -87,7 +87,7 @@ describe('InternalMapping', () => {
     it('loads existing style', () => {
       const templateConfig = {
         style: {},
-        fieldRoles: {}
+        componentZones: {}
       };
 
       const styleSection = {
@@ -99,7 +99,7 @@ describe('InternalMapping', () => {
         style: {
           hiSection: styleSection
         },
-        fieldRoles: {}
+        componentZones: {}
       });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
         hiSection: styleSection
@@ -107,15 +107,15 @@ describe('InternalMapping', () => {
     });
 
     it('does not set default styles if already defined', () => {
-      const templateConfig = { style: { hi: { defaultStyle: 'hiclass' } }, fieldRoles: {} };
-      const json = JSON.stringify({ fieldRoles: {}, style: { hi: { styleClasses: 'byeClass' } } });
+      const templateConfig = { style: { hi: { defaultStyle: 'hiclass' } }, componentZones: {} };
+      const json = JSON.stringify({ componentZones: {}, style: { hi: { styleClasses: 'byeClass' } } });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
         hi: { styleClasses: 'byeClass' }
       });
     });
 
     it('rejects an entryRole named "style"', () => {
-      const object = { fieldRoles: { style: 'hello' } };
+      const object = { componentZones: { style: 'hello' } };
       const json = JSON.stringify(object);
       expect(() => new InternalMapping(json)).toThrow(
         'Cannot name an entryRole "style". This is a reserved key.'
@@ -125,7 +125,7 @@ describe('InternalMapping', () => {
 
   describe('getters', () => {
     it('returns object value', () => {
-      const object = { fieldRoles: { hi: { type: 'entry', value: 'hello' } } };
+      const object = { componentZones: { hi: { type: 'entry', value: 'hello' } } };
       const json = JSON.stringify(object);
       expect(new InternalMapping(json).hi).toEqual({
         style: undefined,
@@ -140,7 +140,7 @@ describe('InternalMapping', () => {
       it('preserves other attributes and sets the value', () => {
         const styleClass = 'hiClass';
         const json = JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             hi: {
               type: 'entry',
               value: 'hello',
@@ -161,7 +161,7 @@ describe('InternalMapping', () => {
     describe('addEntry', () => {
       it('sets the type and sets the value, style, and contentType', () => {
         const json = JSON.stringify({
-          fieldRoles: { hi: { type: c.FIELD_TYPE_TITLE, value: 'hello' } }
+          componentZones: { hi: { type: c.FIELD_TYPE_TITLE, value: 'hello' } }
         });
         const internalMapping = new InternalMapping(json);
 
@@ -184,7 +184,7 @@ describe('InternalMapping', () => {
     describe('addEntriesOrAssets', () => {
       it('sets the type and sets the value and style', () => {
         const json = JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             hi: {
               type: c.FIELD_TYPE_TITLE,
               value: [
@@ -229,7 +229,7 @@ describe('InternalMapping', () => {
 
       it('sets allows entries and assets to mix', () => {
         const json = JSON.stringify({
-          fieldRoles: {
+          componentZones: {
             hi: {
               type: c.FIELD_TYPE_TITLE,
               value: [{ type: 'entry', style: undefined, value: 'hello' }]
@@ -256,7 +256,7 @@ describe('InternalMapping', () => {
     });
 
     describe('addfield', () => {
-      const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
 
       internalMapping.addField({
@@ -273,7 +273,7 @@ describe('InternalMapping', () => {
     });
 
     describe('addTextField', () => {
-      const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
 
       internalMapping.addTextField({ key: 'hi', value: 'bye', styleClasses: 'text-left' });
@@ -286,7 +286,7 @@ describe('InternalMapping', () => {
     });
 
     describe('addMarkdownField', () => {
-      const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
 
       internalMapping.addMarkdownField({ key: 'hi', value: 'bye', styleClasses: 'text-left' });
@@ -300,18 +300,18 @@ describe('InternalMapping', () => {
   });
 
   describe('asJSON', () => {
-    const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+    const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
     const internalMapping = new InternalMapping(json);
 
     it('returns the class and properties as json', () => {
       expect(internalMapping.asJSON()).toEqual(
-        '{"fieldRoles":{"hi":{"type":"entry","value":"hello"}},"style":{}}'
+        '{"componentZones":{"hi":{"type":"entry","value":"hello"}},"style":{}}'
       );
     });
   });
 
   describe('fieldKeys', () => {
-    const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+    const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
     const internalMapping = new InternalMapping(json);
 
     it('returns the class and properties as json', () => {
@@ -321,7 +321,7 @@ describe('InternalMapping', () => {
 
   describe('removeEntry', () => {
     it('removes the role and key', () => {
-      const json = JSON.stringify({ fieldRoles: { hi: { type: 'entry', value: 'hello' } } });
+      const json = JSON.stringify({ componentZones: { hi: { type: 'entry', value: 'hello' } } });
       const internalMapping = new InternalMapping(json);
       internalMapping.removeEntry('hi');
       expect(internalMapping.hi).toBeUndefined();
@@ -330,7 +330,7 @@ describe('InternalMapping', () => {
 
     it('only removes the entry with passed in ID if the entry value is an array', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: c.FIELD_TYPE_TITLE,
             value: [
@@ -347,7 +347,7 @@ describe('InternalMapping', () => {
 
     it('removes the entire key if the array becomes empty from removal', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: c.FIELD_TYPE_TITLE,
             value: [{ type: 'entry', style: {}, value: '2' }]
@@ -365,7 +365,7 @@ describe('InternalMapping', () => {
   describe('addStyleCustom', () => {
     it('adds a blank styleMapping', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: undefined } }
+        componentZones: { hi: { type: 'entry', value: 'hello', style: undefined } }
       });
       const internalMapping = new InternalMapping(json);
       internalMapping.addStyleCustom('hi');
@@ -374,7 +374,7 @@ describe('InternalMapping', () => {
 
     it('adds default classes if templateConfig designates', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: undefined } }
+        componentZones: { hi: { type: 'entry', value: 'hello', style: undefined } }
       });
 
       const defaultStyle = 'defaultStyle';
@@ -383,7 +383,7 @@ describe('InternalMapping', () => {
         defaultStyle: defaultStyle
       };
       const templateConfig = {
-        fieldRoles: {
+        componentZones: {
           hi: {
             fieldConfigs: [fieldType]
           }
@@ -398,7 +398,7 @@ describe('InternalMapping', () => {
   describe('clearRoleStyle', () => {
     it('adds a blank styleMapping', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: 'entry',
             value: 'hello',
@@ -461,7 +461,7 @@ describe('InternalMapping', () => {
   describe('setStyleEntry', () => {
     it('adds a style entry link', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'entry', value: 'hello', style: undefined } }
+        componentZones: { hi: { type: 'entry', value: 'hello', style: undefined } }
       });
       const internalMapping = new InternalMapping(json);
       internalMapping.setStyleEntry('hi', '1');
@@ -473,7 +473,7 @@ describe('InternalMapping', () => {
   describe('setStyleValue', () => {
     it('adds style classes to empty value', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
         }
       });
@@ -488,7 +488,7 @@ describe('InternalMapping', () => {
       const styleKey = 'color';
 
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: 'entry',
             value: 'hello',
@@ -509,7 +509,7 @@ describe('InternalMapping', () => {
     it('does not replace a linked style', () => {
       const styleLink = InternalMapping.styleMapping({ type: 'entry', value: '1' });
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: 'entry',
             value: 'hello',
@@ -527,7 +527,7 @@ describe('InternalMapping', () => {
   describe('setReferencesStyle', () => {
     it('adds style classes to empty value', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             value: [
               { type: 'asset', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } },
@@ -546,7 +546,7 @@ describe('InternalMapping', () => {
   describe('addReferencesStyleCustom', () => {
     it('adds custom style to references', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             value: [
               { type: 'asset', value: 'hello', style: {} },
@@ -563,7 +563,7 @@ describe('InternalMapping', () => {
 
     it('adds assetDefaultStyle to assets', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             value: [
               { type: 'asset', value: 'hello', style: {} },
@@ -578,7 +578,7 @@ describe('InternalMapping', () => {
         assetDefaultStyle: style
       };
       const templateConfig = {
-        fieldRoles: {
+        componentZones: {
           hi: {
             fieldConfigs: [fieldConfigObject]
           }
@@ -594,7 +594,7 @@ describe('InternalMapping', () => {
   describe('clearRoleReferencesStyle', () => {
     it('removes style from references', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             value: [
               { type: 'asset', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } },
@@ -614,7 +614,7 @@ describe('InternalMapping', () => {
     it('removes from empty value', () => {
       const styleKey = 'color';
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: 'entry',
             value: 'hello',
@@ -630,7 +630,7 @@ describe('InternalMapping', () => {
     it('removes style class from existing value', () => {
       const styleKey = 'color';
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             type: 'entry',
             value: 'hello',
@@ -653,7 +653,7 @@ describe('InternalMapping', () => {
   describe('removeReferencesStyleKey', () => {
     it('removes style class from existing value', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: {
             value: [
               {
@@ -678,7 +678,7 @@ describe('InternalMapping', () => {
   describe('setAssetFormatting', () => {
     it('rejects when roleObject isnt an asset', () => {
       const json = JSON.stringify({
-        fieldRoles: { hi: { type: 'field', value: 'hello' } }
+        componentZones: { hi: { type: 'field', value: 'hello' } }
       });
       const internalMapping = new InternalMapping(json);
       const imageObject = { w: 100 };
@@ -690,7 +690,7 @@ describe('InternalMapping', () => {
 
     it('adds formatting object to empty value', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: { type: 'asset', assetType: 'image', value: 'hello', formatting: { w: 50 } }
         }
       });
@@ -704,7 +704,7 @@ describe('InternalMapping', () => {
   describe('switchMultiReferenceValues', () => {
     it('swaps the array position', () => {
       const json = JSON.stringify({
-        fieldRoles: {
+        componentZones: {
           hi: { type: 'multi-reference', value: ['a', 'b', 'c', 'd'] }
         }
       });
