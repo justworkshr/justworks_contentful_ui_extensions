@@ -2,6 +2,7 @@
 import { cardBlock } from "./pageModules/cardBlock";
 import { textMedia } from "./pageModules/textMedia";
 import { logoRow } from "./pageModules/logoRow";
+import { contentHalves } from "./pageModules/contentHalves";
 
 // COLLECTION MODULES
 import { logoItem } from "./collectionModules/logoItem";
@@ -29,7 +30,8 @@ export const componentModule = {
 export const pageModule = {
   ...cardBlock,
   ...textMedia,
-  ...logoRow
+  ...logoRow,
+  ...contentHalves
 };
 
 export const collectionModule = {
