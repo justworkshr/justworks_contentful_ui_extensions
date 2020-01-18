@@ -38,7 +38,7 @@ export class App extends React.Component {
 
   constructor(props) {
     super(props);
-
+    console.log(props);
     this.updateTimeout = undefined;
     const internalMappingJson = props.sdk.entry.fields.internalMapping
       ? props.sdk.entry.fields.internalMapping.getValue()
@@ -51,7 +51,7 @@ export class App extends React.Component {
       props.sdk.entry.fields.entries.getValue() || [],
       []
     );
-
+    console.log(type);
     const style = props.sdk.entry.fields.style ? props.sdk.entry.fields.style.getValue() : null;
 
     this.state = {
@@ -95,7 +95,6 @@ export class App extends React.Component {
   };
 
   onTypeChangeHandler = type => {
-    this.setState({ type });
     if (type) {
       this.props.sdk.entry.fields.type.setValue(type);
     } else {
@@ -103,7 +102,7 @@ export class App extends React.Component {
     }
 
     // clear internalMapping
-    const internalMappingJson = '';
+    const internalMappingJson = JSON.stringify(InternalMapping.blankMapping);
     // clear entries
     this.props.sdk.entry.fields.entries.removeValue();
     // clear assets
@@ -112,7 +111,10 @@ export class App extends React.Component {
     const templateConfig =
       this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder;
 
+    this.props.sdk.entry.fields.internalMapping.setValue(internalMappingJson);
+
     this.setState({
+      type,
       internalMapping: internalMappingJson,
       templateConfig,
       entryInternalMapping: new InternalMapping(internalMappingJson, templateConfig) || {}
@@ -434,6 +436,7 @@ export class App extends React.Component {
 }
 
 init(sdk => {
+  console.log('hi');
   const contentType = sdk.entry.getSys().contentType.sys.id;
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
@@ -447,3 +450,5 @@ init(sdk => {
     );
   }
 });
+
+console.log('haaaa');

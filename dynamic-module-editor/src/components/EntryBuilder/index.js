@@ -284,7 +284,7 @@ export default class EntryBuilder extends React.Component {
   render() {
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
-        {this.props.templateConfig.style && (
+        {/* {this.props.templateConfig.style && (
           <div className="custom-template-entry-builder__section">
             <DisplayText className="style-editor__heading--header" element="h1">
               Styles
@@ -304,7 +304,7 @@ export default class EntryBuilder extends React.Component {
               );
             })}
           </div>
-        )}
+        )} */}
         <div className="custom-template-entry-builder__section">
           <DisplayText className="style-editor__heading--header" element="h1">
             Fields
@@ -314,7 +314,8 @@ export default class EntryBuilder extends React.Component {
             .sort((a, b) => (!this.props.templateConfig.componentZones[b] || {}).required)
             .map((roleKey, index) => {
               const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
-              const roleMappingObject = this.props.entryInternalMapping.componentZones[roleKey] || {};
+              const roleMappingObject =
+                this.props.entryInternalMapping.componentZones[roleKey] || {};
               const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
 
               return (
