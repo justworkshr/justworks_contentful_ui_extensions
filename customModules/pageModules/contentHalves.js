@@ -7,6 +7,7 @@ import { responsiveImage } from "../componentModules/responsiveImage";
 export const contentHalves = {
   [c.CONTENT_HALVES]: {
     meta: {
+      patternName: c.CONTENT_HALVES,
       description: "",
       imageUrl: ""
     },

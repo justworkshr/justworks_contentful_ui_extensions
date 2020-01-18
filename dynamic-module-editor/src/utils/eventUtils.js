@@ -10,7 +10,7 @@ import {
   cleanStyleClasses,
   roleIsMultiReference
 } from '../components/EntryBuilder/utils/index';
-import InternalMapping from './InternalMapping';
+import InternalMapping from '../classes/InternalMapping';
 
 import {
   validateLinkedEntry,
@@ -306,7 +306,6 @@ export const handleLinkEntryClick = async ({
   mappingKey,
   contentType
 } = {}) => {
-  console.log(mappingKey, props.templateConfig.properties[mappingKey]);
   if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
     const entryResponses = await sdk.dialogs.selectMultipleEntries({
       locale: 'en-US',

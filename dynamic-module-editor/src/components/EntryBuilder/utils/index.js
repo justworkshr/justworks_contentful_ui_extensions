@@ -1,4 +1,4 @@
-import InternalMapping from '../../../utils/InternalMapping';
+import InternalMapping from '../../../classes/InternalMapping';
 import * as c from '../../../../../customModules/constants';
 
 import { setEntryLoading } from './stateUtils';

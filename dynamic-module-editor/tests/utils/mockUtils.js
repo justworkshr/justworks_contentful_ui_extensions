@@ -134,6 +134,26 @@ export const mockMapping = ({ type, value = '', contentType = '', style = {} } =
   };
 };
 
+export const mockComponentConfig = ({
+  meta = { componentName: 'MockComponentConfig' },
+  properties = { title: 'hi', body: 'hello there' }
+} = {}) => {
+  return {
+    meta,
+    properties
+  };
+};
+
+export const mockComponentMapping = ({
+  properties = { title: 'hi', body: 'hello there' },
+  componentName = 'MockComponentConfig'
+} = {}) => {
+  return {
+    componentName,
+    properties
+  };
+};
+
 export const mockAssetMapping = ({
   type = c.FIELD_TYPE_ASSET,
   value = '',

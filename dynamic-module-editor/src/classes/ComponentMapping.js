@@ -1,6 +1,6 @@
-import * as c from '../../../../customModules/constants';
+import * as c from '../../../customModules/constants';
 
-import { removeByIndex } from '../../components/EntryBuilder/utils/index';
+import { removeByIndex } from '../components/EntryBuilder/utils/index';
 
 export default class ComponentMapping {
   constructor(

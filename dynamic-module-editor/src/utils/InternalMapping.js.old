@@ -3,7 +3,7 @@ import * as c from '../../../customModules/constants';
 import { removeByIndex } from '../components/EntryBuilder/utils/index';
 
 export default class InternalMapping {
-  constructor(json, templateConfig = { style: {}, componentZones: {} }) {
+  constructor(json, templateConfig = { componentZones: {} }) {
     /*
       json - string - the raw JSON of the internalMapping field
       templateConfig - object - the corresponding custom template config object from './customModules'
@@ -16,15 +16,15 @@ export default class InternalMapping {
     this.assignRolesFromMapping(parsedJSON);
 
     // Load template default style classes if none present
-    if (templateConfig.style) {
-      Object.keys(templateConfig.style).forEach(styleSectionKey => {
-        if (!templateConfig.style[styleSectionKey]) return;
-        if (!this.style[styleSectionKey]) {
-          this.style[styleSectionKey] = {};
-          this.style[styleSectionKey] = parsedJSON.style[styleSectionKey];
-        }
-      });
-    }
+    // if (templateConfig.style) {
+    //   Object.keys(templateConfig.style).forEach(styleSectionKey => {
+    //     if (!templateConfig.style[styleSectionKey]) return;
+    //     if (!this.style[styleSectionKey]) {
+    //       this.style[styleSectionKey] = {};
+    //       this.style[styleSectionKey] = parsedJSON.style[styleSectionKey];
+    //     }
+    //   });
+    // }
   }
 
   static styleMapping({ type = c.STYLE_TYPE_CUSTOM, value = {} } = {}) {
@@ -61,10 +61,10 @@ export default class InternalMapping {
     };
   }
 
-  static blankMapping() {
+  static blankMapping(patternName = '') {
     return {
-      componentZones: {},
-      style: {}
+      patternName,
+      componentZones: {}
     };
   }
 
@@ -80,12 +80,10 @@ export default class InternalMapping {
   assignRolesFromMapping(parsedJSON) {
     // Prepare the object structure: {componentZones: {}, style: {}}
     Object.keys(InternalMapping.blankMapping()).forEach(key => {
-      this[key] = parsedJSON[key] || InternalMapping.blankMapping();
+      this[key] = parsedJSON[key] || InternalMapping.blankMapping()[key];
     });
     // Load values from the entry's internalMapping Json
     Object.keys(parsedJSON.componentZones || {}).forEach(key => {
-      if (key === 'style')
-        throw new Error('Cannot name an entryRole "style". This is a reserved key.');
       this.componentZones[key] = parsedJSON.componentZones[key];
       this.defineGetterSetters(key);
     });
@@ -97,34 +95,20 @@ export default class InternalMapping {
         get: () => {
           // if its an array, return array of mappings. Else, return direct object mapping.
           if (Array.isArray(this.componentZones[key])) {
-            return this.componentZones[key].map(entry => {
-              if (entry.type === c.FIELD_TYPE_ASSET) {
-                return InternalMapping.assetMapping({ ...entry });
-              } else {
-                return InternalMapping.entryMapping({ ...entry });
-              }
-            });
+            // return this.componentZones[key].map(entry => {
+            //   if (entry.type === c.FIELD_TYPE_ASSET) {
+            //     return InternalMapping.assetMapping({ ...entry });
+            //   } else {
+            //     return InternalMapping.entryMapping({ ...entry });
+            //   }
+            // });
           } else {
-            if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
-              return InternalMapping.assetMapping({ ...this.componentZones[key] });
-            } else {
-              return InternalMapping.entryMapping({ ...this.componentZones[key] });
-            }
+            return this.componentZones[key];
           }
         },
 
         set: value => {
-          if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
-            this.componentZones[key] = InternalMapping.assetMapping({
-              ...this.componentZones[key],
-              value
-            });
-          } else {
-            this.componentZones[key] = InternalMapping.entryMapping({
-              ...this.componentZones[key],
-              value
-            });
-          }
+          this.properties[key] = value;
         },
         configurable: true
       });
@@ -405,49 +389,9 @@ export default class InternalMapping {
   // - a collection of linked ENTRIES and ASSETS to component modules
   // -
 
-  defineComponentZoneMethods() {
-    if (!this.hasOwnProperty(key)) {
-      Object.defineProperty(this, key, {
-        get: () => {
-          // if its an array, return array of mappings. Else, return direct object mapping.
-          if (Array.isArray(this.componentZones[key])) {
-            return this.componentZones[key].map(entry => {
-              if (entry.type === c.FIELD_TYPE_ASSET) {
-                return InternalMapping.assetMapping({ ...entry });
-              } else {
-                return InternalMapping.entryMapping({ ...entry });
-              }
-            });
-          } else {
-            if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
-              return InternalMapping.assetMapping({ ...this.componentZones[key] });
-            } else {
-              return InternalMapping.entryMapping({ ...this.componentZones[key] });
-            }
-          }
-        },
-
-        set: value => {
-          if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
-            this.componentZones[key] = InternalMapping.assetMapping({
-              ...this.componentZones[key],
-              value
-            });
-          } else {
-            this.componentZones[key] = InternalMapping.entryMapping({
-              ...this.componentZones[key],
-              value
-            });
-          }
-        },
-        configurable: true
-      });
-    }
-  }
-
-  addComponentZone({ roleKey, componentZoneKey } = {}) {
-    this.defineGetterSetters(roleKey);
-    this.componentZones[roleKey] = {
+  addComponentZone({ mappingKey, componentName } = {}) {
+    this.defineGetterSetters(mappingKey);
+    this.componentZones[mappingKey] = {
       componentZoneKey: {}
     };
   }

@@ -14,7 +14,7 @@ import TemplateStyleEditor from './components/TemplateStyleEditor';
 
 import RoleSection from '../RoleSection';
 
-import InternalMapping from '../../utils/InternalMapping';
+import InternalMapping from '../../classes/InternalMapping';
 
 import { getFieldConfig } from './utils';
 import {
@@ -299,11 +299,13 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  addComponentZone = (roleKey, componentZone) => {
+  addComponentZone = (mappingKey, componentZoneName) => {
+    this.entryInternalMapping.addComponentZone({ mappingKey, componentZoneName });
+
     debugger;
   };
 
-  clearComponentZone = roleKey => {
+  clearComponentZone = mappingKey => {
     debugger;
   };
 
@@ -355,11 +357,12 @@ export default class EntryBuilder extends React.Component {
                   </TextLink>
                 </Subheading>
 
-                {/* <div className="style-editor__radio-section">
+                <div className="style-editor__radio-section">
                   {Object.keys(roleConfigObject.componentOptions).map(componentOption => {
                     return (
                       <RadioButtonField
                         key={`${roleKey}-component-option--${componentOption}`}
+                        id={`${roleKey}-${componentOption}`}
                         name={`${roleKey}-${componentOption}`}
                         labelText={displayCamelCaseName(componentOption)}
                         checked={roleMappingObject ? roleMappingObject[componentOption] : false}
@@ -370,7 +373,7 @@ export default class EntryBuilder extends React.Component {
                       />
                     );
                   })}
-                </div> */}
+                </div>
               </div>
             );
           })}

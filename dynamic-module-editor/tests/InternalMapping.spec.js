@@ -1,30 +1,23 @@
-import InternalMapping from '../src/utils/InternalMapping';
+import InternalMapping from '../src/classes/InternalMapping';
 import * as c from '../../customModules/constants';
+import { mockComponentMapping, mockComponentConfig } from './utils/mockUtils';
+import { constructComponentZone } from '../../customModules/utilities';
 
 describe('InternalMapping', () => {
   describe('constructor', () => {
     it('returns empty object if blank string', () => {
       const json = '';
-      expect(new InternalMapping(json)).toEqual({
-        _templateConfig: {
-          style: {},
-          componentZones: {}
-        },
-        componentZones: {},
-        style: {}
-      });
+      const mapping = new InternalMapping(json);
+      expect(mapping.componentZones).toEqual({});
+      expect(mapping.patternName).toEqual('');
     });
 
     it('returns empty object if invalid', () => {
       const json = undefined;
-      expect(new InternalMapping(json)).toEqual({
-        _templateConfig: {
-          style: {},
-          componentZones: {}
-        },
-        componentZones: {},
-        style: {}
-      });
+      const mapping = new InternalMapping(json);
+
+      expect(mapping.componentZones).toEqual({});
+      expect(mapping.patternName).toEqual('');
     });
 
     it('does not load fields if internalMapping is blank', () => {
@@ -50,79 +43,34 @@ describe('InternalMapping', () => {
       expect(internalMapping.text_field).toBeUndefined(undefined);
     });
 
-    it('does not load fields if internalMapping is not blank', () => {
+    it('sets component zones with correct properties if loaded with json', () => {
       const json = JSON.stringify({
         componentZones: {
-          text_field: {
-            type: c.FIELD_TYPE_TITLE,
-            value: 'occupied'
-          }
-        },
-        style: {}
+          text_field: { ...mockComponentMapping(), type: 'entry' }
+        }
       });
 
       const templateConfig = {
-        style: {},
         componentZones: {
           text_field: {
-            field: {
-              type: c.FIELD_TYPE_TITLE,
-              defaultStyle: 'helloClass',
-              defaultValue: 'TEXT!!!'
-            }
+            ...constructComponentZone({
+              componentOptions: [mockComponentConfig]
+            }),
+            type: 'entry'
           }
         }
       };
 
       const internalMapping = new InternalMapping(json, templateConfig);
-      expect(internalMapping.text_field.value).toEqual('occupied');
+      expect(internalMapping.text_field.componentName).toEqual('MockComponentConfig');
+      expect(internalMapping.text_field.properties.title).toEqual('hi');
+      expect(internalMapping.text_field.type).toEqual('entry');
     });
 
     it('returns class', () => {
       const object = { componentZones: { hi: 'hello' } };
       const json = JSON.stringify(object);
       expect(new InternalMapping(json).constructor.name).toEqual('InternalMapping');
-    });
-
-    it('loads existing style', () => {
-      const templateConfig = {
-        style: {},
-        componentZones: {}
-      };
-
-      const styleSection = {
-        hiProperty: {},
-        hiProperty2: {}
-      };
-
-      const json = JSON.stringify({
-        style: {
-          hiSection: styleSection
-        },
-        componentZones: {}
-      });
-      expect(new InternalMapping(json, templateConfig).style).toEqual({
-        hiSection: styleSection
-      });
-    });
-
-    it('does not set default styles if already defined', () => {
-      const templateConfig = { style: { hi: { defaultStyle: 'hiclass' } }, componentZones: {} };
-      const json = JSON.stringify({
-        componentZones: {},
-        style: { hi: { styleClasses: 'byeClass' } }
-      });
-      expect(new InternalMapping(json, templateConfig).style).toEqual({
-        hi: { styleClasses: 'byeClass' }
-      });
-    });
-
-    it('rejects an entryRole named "style"', () => {
-      const object = { componentZones: { style: 'hello' } };
-      const json = JSON.stringify(object);
-      expect(() => new InternalMapping(json)).toThrow(
-        'Cannot name an entryRole "style". This is a reserved key.'
-      );
     });
   });
 
@@ -144,20 +92,16 @@ describe('InternalMapping', () => {
         const styleClass = 'hiClass';
         const json = JSON.stringify({
           componentZones: {
-            hi: {
-              type: 'entry',
-              value: 'hello',
-              style: InternalMapping.styleMapping({ value: styleClass })
-            }
+            hi: { ...mockComponentMapping(), type: 'entry' }
           }
         });
         const internalMapping = new InternalMapping(json);
 
-        internalMapping.hi = 'bye';
+        internalMapping.hi.properties.title = 'bye';
 
         expect(internalMapping.hi.type).toEqual('entry');
-        expect(internalMapping.hi.value).toEqual('bye');
-        expect(internalMapping.hi.style.value).toEqual(styleClass);
+        expect(internalMapping.hi.properties.title).toEqual('bye');
+        expect(internalMapping.hi.properties.body).toEqual('hello there');
       });
     });
 
@@ -308,7 +252,7 @@ describe('InternalMapping', () => {
 
     it('returns the class and properties as json', () => {
       expect(internalMapping.asJSON()).toEqual(
-        '{"componentZones":{"hi":{"type":"entry","value":"hello"}},"style":{}}'
+        '{"patternName":"","componentZones":{"hi":{"type":"entry","value":"hello"}}}'
       );
     });
   });
@@ -362,345 +306,6 @@ describe('InternalMapping', () => {
       internalMapping.removeEntry('hi', 0);
       expect(internalMapping.hi).toBeUndefined();
       expect(internalMapping.fieldKeys()).not.toContain('hi');
-    });
-  });
-
-  describe('addStyleCustom', () => {
-    it('adds a blank styleMapping', () => {
-      const json = JSON.stringify({
-        componentZones: { hi: { type: 'entry', value: 'hello', style: undefined } }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.addStyleCustom('hi');
-      expect(internalMapping.hi.style).toEqual(InternalMapping.styleMapping());
-    });
-
-    it('adds default classes if templateConfig designates', () => {
-      const json = JSON.stringify({
-        componentZones: { hi: { type: 'entry', value: 'hello', style: undefined } }
-      });
-
-      const defaultStyle = 'defaultStyle';
-      const fieldType = {
-        type: 'field',
-        defaultStyle: defaultStyle
-      };
-      const templateConfig = {
-        componentZones: {
-          hi: {
-            fieldConfigs: [fieldType]
-          }
-        }
-      };
-      const internalMapping = new InternalMapping(json, templateConfig);
-      internalMapping.addStyleCustom('hi', fieldType);
-      expect(internalMapping.hi.style.value).toEqual(defaultStyle);
-    });
-  });
-
-  describe('clearRoleStyle', () => {
-    it('adds a blank styleMapping', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: { type: c.STYLE_TYPE_CUSTOM, value: 'helloClass' }
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      expect(internalMapping.hi.style.value).toEqual('helloClass');
-      internalMapping.clearRoleStyle('hi');
-      expect(internalMapping.hi.style).toEqual(undefined);
-    });
-  });
-
-  describe('setTemplateStyleValue', () => {
-    it('adds a style value to empty templateStyleKey', () => {
-      const templateStyleKey = 'default';
-      const styleKey = 'color';
-      const json = JSON.stringify({
-        style: {}
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.setTemplateStyleValue(templateStyleKey, styleKey, 'hi');
-      expect(internalMapping.style[templateStyleKey][styleKey]).toEqual('hi');
-    });
-
-    it('overwrtes style value in existing templateStyleKey', () => {
-      const templateStyleKey = 'default';
-      const styleKey = 'color';
-      const json = JSON.stringify({
-        style: {
-          [templateStyleKey]: {
-            [styleKey]: 'hello'
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.setTemplateStyleValue(templateStyleKey, styleKey, 'hi');
-      expect(internalMapping.style[templateStyleKey][styleKey]).toEqual('hi');
-    });
-  });
-
-  describe('removeTemplateStyleKey', () => {
-    it('deletes a templateStyleKey', () => {
-      const templateStyleKey = 'default';
-      const styleKey = 'color';
-      const json = JSON.stringify({
-        style: {
-          [templateStyleKey]: {
-            [styleKey]: 'hi'
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeTemplateStyleKey(templateStyleKey, styleKey);
-      expect(internalMapping.style[templateStyleKey]).toBeUndefined();
-    });
-  });
-
-  describe('setStyleEntry', () => {
-    it('adds a style entry link', () => {
-      const json = JSON.stringify({
-        componentZones: { hi: { type: 'entry', value: 'hello', style: undefined } }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.setStyleEntry('hi', '1');
-      expect(internalMapping.hi.style.type).toEqual(c.STYLE_TYPE_ENTRY);
-      expect(internalMapping.hi.style.value).toEqual('1');
-    });
-  });
-
-  describe('setStyleValue', () => {
-    it('adds style classes to empty value', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: { type: 'entry', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleKey = 'color';
-      const styleValue = 'hiValue';
-      internalMapping.setStyleValue('hi', styleKey, styleValue);
-      expect(internalMapping.hi.style.value[styleKey]).toEqual(styleValue);
-    });
-
-    it('overwrites an existing value', () => {
-      const styleKey = 'color';
-
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: InternalMapping.styleMapping({
-              value: {
-                [styleKey]: 'helloValue'
-              }
-            })
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleValue = 'hiValue';
-      internalMapping.setStyleValue('hi', styleKey, styleValue);
-      expect(internalMapping.hi.style.value[styleKey]).toEqual(styleValue);
-    });
-
-    it('does not replace a linked style', () => {
-      const styleLink = InternalMapping.styleMapping({ type: 'entry', value: '1' });
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: styleLink
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const styleClass = 'hiClass';
-      internalMapping.setStyleValue('hi', styleClass);
-      expect(internalMapping.hi.style).toEqual(styleLink);
-    });
-  });
-
-  describe('setReferencesStyle', () => {
-    it('adds style classes to empty value', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            value: [
-              { type: 'asset', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } },
-              { type: 'asset', value: 'bye', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
-            ]
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.setReferencesStyle('hi', 'styleKey', 'styleValue');
-      expect(internalMapping.hi.value[0].style.value['styleKey']).toEqual('styleValue');
-      expect(internalMapping.hi.value[1].style.value['styleKey']).toEqual('styleValue');
-    });
-  });
-
-  describe('addReferencesStyleCustom', () => {
-    it('adds custom style to references', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            value: [
-              { type: 'asset', value: 'hello', style: {} },
-              { type: 'asset', value: 'bye', style: {} }
-            ]
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.addReferencesStyleCustom('hi');
-      expect(internalMapping.hi.value[0].style.type).toEqual(c.STYLE_TYPE_CUSTOM);
-      expect(internalMapping.hi.value[1].style.type).toEqual(c.STYLE_TYPE_CUSTOM);
-    });
-
-    it('adds assetDefaultStyle to assets', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            value: [
-              { type: 'asset', value: 'hello', style: {} },
-              { type: 'asset', value: 'bye', style: {} }
-            ]
-          }
-        }
-      });
-
-      const style = { styleKey: 'styleValue' };
-      const fieldConfigObject = {
-        assetDefaultStyle: style
-      };
-      const templateConfig = {
-        componentZones: {
-          hi: {
-            fieldConfigs: [fieldConfigObject]
-          }
-        }
-      };
-      const internalMapping = new InternalMapping(json, templateConfig);
-      internalMapping.addReferencesStyleCustom('hi', fieldConfigObject);
-      expect(internalMapping.hi.value[0].style.value).toEqual(style);
-      expect(internalMapping.hi.value[1].style.value).toEqual(style);
-    });
-  });
-
-  describe('clearRoleReferencesStyle', () => {
-    it('removes style from references', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            value: [
-              { type: 'asset', value: 'hello', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } },
-              { type: 'asset', value: 'bye', style: { type: c.STYLE_TYPE_CUSTOM, value: {} } }
-            ]
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.clearRoleReferencesStyle('hi');
-      expect(internalMapping.hi.value[0].style).toEqual(undefined);
-      expect(internalMapping.hi.value[1].style).toEqual(undefined);
-    });
-  });
-
-  describe('removeStyleKey', () => {
-    it('removes from empty value', () => {
-      const styleKey = 'color';
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: { type: c.STYLE_TYPE_CUSTOM, value: { [styleKey]: 'helloValue' } }
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleKey('hi', styleKey);
-      expect(internalMapping.hi.style.value[styleKey]).toBeUndefined();
-    });
-
-    it('removes style class from existing value', () => {
-      const styleKey = 'color';
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            type: 'entry',
-            value: 'hello',
-            style: InternalMapping.styleMapping({
-              value: {
-                [styleKey]: 'helloClass',
-                otherKey: 'greetings'
-              }
-            })
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeStyleKey('hi', styleKey);
-      expect(internalMapping.hi.style.value[styleKey]).toBeUndefined();
-      expect(internalMapping.hi.style.value.otherKey).toEqual('greetings');
-    });
-  });
-
-  describe('removeReferencesStyleKey', () => {
-    it('removes style class from existing value', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: {
-            value: [
-              {
-                type: 'asset',
-                style: InternalMapping.styleMapping({
-                  value: {
-                    styleKey: 'styleValue'
-                  }
-                })
-              }
-            ],
-            style: {}
-          }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      internalMapping.removeReferencesStyleKey('hi', 'styleKey');
-      expect(internalMapping.hi.value[0].style.value).toEqual({});
-    });
-  });
-
-  describe('setAssetFormatting', () => {
-    it('rejects when roleObject isnt an asset', () => {
-      const json = JSON.stringify({
-        componentZones: { hi: { type: 'field', value: 'hello' } }
-      });
-      const internalMapping = new InternalMapping(json);
-      const imageObject = { w: 100 };
-
-      expect(() => internalMapping.setAssetFormatting('hi', imageObject)).toThrow(
-        'Can only format an image asset'
-      );
-    });
-
-    it('adds formatting object to empty value', () => {
-      const json = JSON.stringify({
-        componentZones: {
-          hi: { type: 'asset', assetType: 'image', value: 'hello', formatting: { w: 50 } }
-        }
-      });
-      const internalMapping = new InternalMapping(json);
-      const imageObject = { w: 100 };
-      internalMapping.setAssetFormatting('hi', imageObject);
-      expect(internalMapping.hi.formatting).toEqual(imageObject);
     });
   });
 

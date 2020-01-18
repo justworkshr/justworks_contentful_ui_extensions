@@ -80,7 +80,6 @@ export default class TemplateTypePalette extends React.Component {
   }
 
   render() {
-    console.log(this.state.displayingTemplates);
     if (!!this.state.value && !this.state.templateConfig)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
 

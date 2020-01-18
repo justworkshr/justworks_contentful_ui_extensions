@@ -29,8 +29,6 @@ const addError = (errorArray, message) => {
 };
 
 const missingRequiredRoles = (errors, componentProperties, internalMapping) => {
-  console.log(componentProperties);
-
   Object.keys(componentProperties).forEach(roleKey => {
     const templateRole = componentProperties[roleKey] || {};
     if (!!templateRole.required && !internalMapping[roleKey]) {
@@ -69,7 +67,6 @@ const hasInvalidCustomTemplateType = (errors, componentProperties, hydratedEntri
 
 export const getTemplateErrors = (componentProperties, updatedInternalMapping, hydratedEntries) => {
   let errors = {};
-  console.log(componentProperties);
   errors = missingRequiredRoles(errors, componentProperties, updatedInternalMapping.componentZones);
   errors = hasInvalidCustomTemplateType(errors, componentProperties, hydratedEntries);
 
@@ -110,7 +107,6 @@ export const validateLinkedAsset = (entry, roleObject) => {
 
 export const validateLinkedEntry = (entry, mappingKey, parentEntryId, internalMapping) => {
   if (!entry) return;
-  console.log(mappingKey, internalMapping);
   let message = '';
   const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(internalMapping[mappingKey]);
 

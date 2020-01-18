@@ -52,7 +52,6 @@ export const getAssetType = contentType => {
 };
 
 export const getCustomTemplateFieldConfig = roleConfig => {
-  console.log(roleConfig);
   return roleConfig.fieldConfigs.find(
     fc =>
       fc.contentType === c.CONTENT_TYPE_COLLECTION_MODULE ||
