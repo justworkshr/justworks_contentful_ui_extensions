@@ -22,9 +22,11 @@ export default class TemplateTypePalette extends React.Component {
     super(props);
     this.state = {
       value: props.value,
-      templateConfig: props.customTemplates[props.value.toLowerCase()] || props.templatePlaceholder,
-      displayingTemplates: !props.customTemplates[props.value.toLowerCase()]
+      templateConfig: props.customTemplates[props.value] || props.templatePlaceholder,
+      displayingTemplates: !props.customTemplates[props.value]
     };
+
+    console.log(props.customTemplates, props.value);
 
     this.handleChange = this.handleChange.bind(this);
     this.onSwitchButtonClick = this.onSwitchButtonClick.bind(this);
@@ -32,7 +34,7 @@ export default class TemplateTypePalette extends React.Component {
 
   onSwitchButtonClick = async () => {
     if (this.state.displayingTemplates) return this.toggleDisplay();
-    if (this.props.customTemplates[this.state.value.toLowerCase()]) {
+    if (this.props.customTemplates[this.state.value]) {
       const confirm = await this.props.sdk.dialogs.openConfirm({
         title: 'Warning',
         message: 'Switching templates will clear the entry.',
@@ -52,8 +54,7 @@ export default class TemplateTypePalette extends React.Component {
   toggleDisplay = () => {
     this.setState(prevState => ({
       templateConfig:
-        this.props.customTemplates[this.props.value.toLowerCase()] ||
-        this.props.templatePlaceholder,
+        this.props.customTemplates[this.props.value] || this.props.templatePlaceholder,
       displayingTemplates: !prevState.displayingTemplates
     }));
   };
@@ -81,13 +82,14 @@ export default class TemplateTypePalette extends React.Component {
   }
 
   render() {
+    console.log(this.state.displayingTemplates);
     if (!!this.state.value && !this.state.templateConfig)
       return <DisplayText>No "{this.state.value}" template found.</DisplayText>;
 
     return this.state.displayingTemplates ? (
       <div>
         <TemplateDisplay
-          currentTemplateKey={this.state.value.toLowerCase()}
+          currentTemplateKey={this.state.value}
           onTemplateCardClick={this.onTemplateCardClick}
           templates={this.props.customTemplates}
         />

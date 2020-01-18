@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AssetCard, SectionHeading } from '@contentful/forma-36-react-components';
+import { displayCamelCaseName } from '../../../../../shared/utilities/elementUtils';
 
 class TemplateDisplay extends React.Component {
   constructor(props) {
@@ -11,14 +12,15 @@ class TemplateDisplay extends React.Component {
     return (
       <div className="template-display max-width-600">
         {Object.keys(this.props.templates).map((templateKey, index) => {
-          const templateName = templateKey
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
+          const templateName = displayCamelCaseName(templateKey);
+
+          // .split(' ')
+          // .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          // .join(' ');
 
           const isCurrent = this.props.currentTemplateKey === templateKey;
           const clickFunction = !isCurrent
-            ? () => this.props.onTemplateCardClick(templateName)
+            ? () => this.props.onTemplateCardClick(templateKey)
             : null;
           return (
             <div

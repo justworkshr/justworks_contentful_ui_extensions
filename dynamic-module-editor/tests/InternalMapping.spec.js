@@ -108,7 +108,10 @@ describe('InternalMapping', () => {
 
     it('does not set default styles if already defined', () => {
       const templateConfig = { style: { hi: { defaultStyle: 'hiclass' } }, componentZones: {} };
-      const json = JSON.stringify({ componentZones: {}, style: { hi: { styleClasses: 'byeClass' } } });
+      const json = JSON.stringify({
+        componentZones: {},
+        style: { hi: { styleClasses: 'byeClass' } }
+      });
       expect(new InternalMapping(json, templateConfig).style).toEqual({
         hi: { styleClasses: 'byeClass' }
       });
@@ -717,6 +720,20 @@ describe('InternalMapping', () => {
       });
       expect(internalMapping.hi.value[0]).toEqual('b');
       expect(internalMapping.hi.value[1]).toEqual('a');
+    });
+  });
+
+  describe('addComponentZone', () => {
+    it('adds an empty component zone key', () => {
+      const json = JSON.stringify({});
+      const internalMapping = new InternalMapping(json);
+
+      internalMapping.addComponentZone({
+        roleKey: 'hi',
+        componentZoneKey: 'zone1'
+      });
+      expect(internalMapping.hi).toEqual('b');
+      expect(internalMapping.hi).toEqual('a');
     });
   });
 });

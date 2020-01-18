@@ -13,6 +13,8 @@ import * as c from '../../customModules/constants';
 
 import TemplateTypePalette from './components/TemplateTypePalette';
 import EntryBuilder from './components/EntryBuilder';
+import ComponentBuilder from './components/ComponentBuilder';
+
 import ShortTextField from './components/ShortTextField';
 import LongTextField from './components/LongTextField';
 import SingleReferenceField from './components/SingleReferenceField';
@@ -38,22 +40,23 @@ export class App extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
+
+    this.contentType = props.sdk.entry.getSys().contentType.sys.id;
+
     this.updateTimeout = undefined;
     const internalMappingJson = props.sdk.entry.fields.internalMapping
       ? props.sdk.entry.fields.internalMapping.getValue()
       : null;
 
     const type = props.sdk.entry.fields.type ? props.sdk.entry.fields.type.getValue() : null;
-    const templateConfig =
-      props.customTemplates[type && type.toLowerCase()] || props.templatePlaceholder;
+    const templateConfig = props.customTemplates[type] || props.templatePlaceholder;
     const loadingEntries = this.getLoadingEntries(
       props.sdk.entry.fields.entries.getValue() || [],
       []
     );
-    console.log(type);
-    const style = props.sdk.entry.fields.style ? props.sdk.entry.fields.style.getValue() : null;
 
+    const style = props.sdk.entry.fields.style ? props.sdk.entry.fields.style.getValue() : null;
+    console.log(type);
     this.state = {
       name: props.sdk.entry.fields.name ? props.sdk.entry.fields.name.getValue() : null,
       type,
@@ -95,6 +98,7 @@ export class App extends React.Component {
   };
 
   onTypeChangeHandler = type => {
+    console.log(type);
     if (type) {
       this.props.sdk.entry.fields.type.setValue(type);
     } else {
@@ -108,8 +112,7 @@ export class App extends React.Component {
     // clear assets
     this.props.sdk.entry.fields.assets.removeValue();
 
-    const templateConfig =
-      this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder;
+    const templateConfig = this.props.customTemplates[type] || this.props.templatePlaceholder;
 
     this.props.sdk.entry.fields.internalMapping.setValue(internalMappingJson);
 
@@ -312,8 +315,7 @@ export class App extends React.Component {
 
   setStateFromJson = (internalMappingJson, loadingEntries = [], callback = null) => {
     const type = this.state.type;
-    const templateConfig =
-      this.props.customTemplates[type && type.toLowerCase()] || this.props.templatePlaceholder;
+    const templateConfig = this.props.customTemplates[type] || this.props.templatePlaceholder;
 
     this.setState(
       {
@@ -397,13 +399,11 @@ export class App extends React.Component {
           />
         )}
 
-        {this.state.internalMapping !== null && this.state.templateConfig !== null && (
-          <div>
-            <SectionHeading>Type</SectionHeading>
+        {this.contentType === c.CONTENT_TYPE_PAGE_MODULE &&
+          this.state.internalMapping !== null &&
+          this.state.templateConfig !== null && (
             <EntryBuilder
               sdk={this.props.sdk}
-              customTemplates={this.props.customTemplates}
-              templatePlaceholder={this.props.templatePlaceholder}
               type={this.state.type}
               templateConfig={this.state.templateConfig}
               entryInternalMapping={this.state.entryInternalMapping}
@@ -415,8 +415,25 @@ export class App extends React.Component {
               hydratedEntries={this.state.hydratedEntries}
               loadingEntries={this.state.loadingEntries}
             />
-          </div>
-        )}
+          )}
+
+        {this.contentType === c.CONTENT_TYPE_COMPONENT_MODULE &&
+          this.state.internalMapping !== null &&
+          this.state.templateConfig !== null && (
+            <ComponentBuilder
+              sdk={this.props.sdk}
+              type={this.state.type}
+              templateConfig={this.state.templateConfig}
+              entryInternalMapping={this.state.entryInternalMapping}
+              internalMappingJson={this.state.internalMapping}
+              setInvalid={this.setInvalid}
+              updateEntry={this.updateEntry}
+              setInternalMappingValue={this.setInternalMappingValue}
+              hydratedAssets={this.state.hydratedAssets}
+              hydratedEntries={this.state.hydratedEntries}
+              loadingEntries={this.state.loadingEntries}
+            />
+          )}
 
         <LongTextField
           heading="Internal Mapping"
@@ -436,7 +453,6 @@ export class App extends React.Component {
 }
 
 init(sdk => {
-  console.log('hi');
   const contentType = sdk.entry.getSys().contentType.sys.id;
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
@@ -450,5 +466,3 @@ init(sdk => {
     );
   }
 });
-
-console.log('haaaa');

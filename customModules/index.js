@@ -28,10 +28,8 @@ export const componentModule = {
 };
 
 export const pageModule = {
-  ...cardBlock,
-  ...textMedia,
-  ...logoRow,
-  ...contentHalves
+  ...contentHalves,
+  ...responsiveImage
 };
 
 export const collectionModule = {

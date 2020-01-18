@@ -1,6 +1,9 @@
 import * as u from "../utilities";
 import * as c from "../constants";
 
+import { titledList } from "../componentModules/titledList";
+import { responsiveImage } from "../componentModules/responsiveImage";
+
 export const contentHalves = {
   [c.CONTENT_HALVES]: {
     meta: {
@@ -9,16 +12,10 @@ export const contentHalves = {
     },
     componentZones: {
       left_content: u.constructComponentZone({
-        componentOptions: [
-          c.COMPONENT_TITLED_LIST,
-          c.COMPONENT_RESPONSIVE_IMAGE
-        ]
+        componentOptions: { titledList, responsiveImage }
       }),
       right_content: u.constructComponentZone({
-        componentOptions: [
-          c.COMPONENT_TITLED_LIST,
-          c.COMPONENT_RESPONSIVE_IMAGE
-        ]
+        componentOptions: { titledList, responsiveImage }
       })
     }
   }

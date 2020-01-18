@@ -26,6 +26,8 @@ export const CONTENT_TYPE_GENERIC_MARKDOWN = "genericMarkdown";
 export const CONTENT_TYPE_COLLECTION_MODULE = "collectionModule";
 export const CONTENT_TYPE_STYLE = "style";
 export const CONTENT_TYPE_LINK = "link";
+export const CONTENT_TYPE_PAGE_MODULE = "pageModule";
+export const CONTENT_TYPE_COMPONENT_MODULE = "componentModule";
 
 /*
   System types

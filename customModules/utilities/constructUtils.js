@@ -2,13 +2,11 @@ import * as c from "../constants";
 
 export const constructComponentZone = ({
   description = "",
-  componentOptions = [],
+  componentOptions = {},
   required = true
 } = {}) => {
-  if (!Array.isArray(componentOptions) || !componentOptions.length) {
-    throw new Error(
-      "Must include an array of field configs in constructComponentZone"
-    );
+  if (!Object.keys(componentOptions).length) {
+    throw new Error("Must include an a component option");
   }
 
   return {

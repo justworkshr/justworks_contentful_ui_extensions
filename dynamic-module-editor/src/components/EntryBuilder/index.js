@@ -3,14 +3,28 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../../customModules/constants';
 
-import { DisplayText } from '@contentful/forma-36-react-components';
+import {
+  FieldGroup,
+  RadioButtonField,
+  Subheading,
+  DisplayText,
+  Select,
+  Option,
+  TextLink
+} from '@contentful/forma-36-react-components';
 
 import TemplateStyleEditor from './components/TemplateStyleEditor';
+import ComponentZone from './components/ComponentZone';
+
 import RoleSection from './components/RoleSection';
 
 import InternalMapping from '../../utils/InternalMapping';
 
-import { displaySnakeCaseName, getFieldConfig } from './utils';
+import { getFieldConfig } from './utils';
+import {
+  displayCamelCaseName,
+  displaySnakeCaseName
+} from '../../../../shared/utilities/elementUtils';
 
 import {
   handleRemoveEntry,
@@ -65,6 +79,8 @@ export default class EntryBuilder extends React.Component {
     this.addRoleReferencesEntryStyle = this.addRoleReferencesEntryStyle.bind(this);
     this.clearRoleStyle = this.clearRoleStyle.bind(this);
     this.clearRoleReferencesStyle = this.clearRoleReferencesStyle.bind(this);
+    this.addComponentZone = this.addComponentZone.bind(this);
+    this.clearComponentZone = this.clearComponentZone.bind(this);
   }
 
   onAddFieldClick = (roleKey, fieldType) => {
@@ -281,6 +297,14 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
+  addComponentZone = (roleKey, componentZone) => {
+    debugger;
+  };
+
+  clearComponentZone = roleKey => {
+    debugger;
+  };
+
   render() {
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
@@ -307,53 +331,97 @@ export default class EntryBuilder extends React.Component {
         )} */}
         <div className="custom-template-entry-builder__section">
           <DisplayText className="style-editor__heading--header" element="h1">
-            Fields
+            Component Zones
           </DisplayText>
 
-          {Object.keys(this.props.templateConfig.componentZones)
-            .sort((a, b) => (!this.props.templateConfig.componentZones[b] || {}).required)
-            .map((roleKey, index) => {
-              const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
-              const roleMappingObject =
-                this.props.entryInternalMapping.componentZones[roleKey] || {};
-              const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
+          {Object.keys(this.props.templateConfig.componentZones).map((roleKey, index) => {
+            const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
+            const roleMappingObject =
+              this.props.entryInternalMapping.componentZones[roleKey] || null;
 
+            return (
+              <div key={`component-zone-menu--${roleKey}`}>
+                <Subheading className="sub-section__heading--header" element="h2">
+                  {displaySnakeCaseName(roleKey)}
+                  <TextLink
+                    className="style-editor__clear-link"
+                    icon="Close"
+                    onClick={() => {
+                      this.clearComponentZone(roleKey);
+                    }}>
+                    Clear
+                  </TextLink>
+                </Subheading>
+
+                <div className="style-editor__radio-section">
+                  {Object.keys(roleConfigObject.componentOptions).map(componentOption => {
+                    return (
+                      <RadioButtonField
+                        key={`${roleKey}-component-option--${componentOption}`}
+                        name={`${roleKey}-${componentOption}`}
+                        labelText={displayCamelCaseName(componentOption)}
+                        checked={roleMappingObject ? roleMappingObject[componentOption] : false}
+                        value={componentOption}
+                        onChange={e => {
+                          this.addComponentZone(roleKey, componentOption);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+
+          {Object.keys(this.props.templateConfig.componentZones).map((roleKey, index) => {
+            const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
+            const roleMappingObject =
+              this.props.entryInternalMapping.componentZones[roleKey] || null;
+
+            if (roleMappingObject) {
+              const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
               return (
-                <RoleSection
-                  key={index}
-                  roleKey={roleKey}
-                  fieldConfigObject={fieldConfigObject}
-                  roleConfigObject={roleConfigObject}
-                  roleMappingObject={roleMappingObject}
-                  stateErrors={this.state.errors}
-                  loadingEntries={this.props.loadingEntries}
-                  entryInternalMapping={this.props.entryInternalMapping}
-                  templateConfig={this.props.templateConfig}
-                  hydratedEntries={this.props.hydratedEntries}
-                  hydratedAssets={this.props.hydratedAssets}
-                  onEditClick={this.onEditClick}
-                  onDeepCopyClick={this.onDeepCopyClick}
-                  onDuplicateClick={this.onDuplicateClick}
-                  onRemoveClick={this.onRemoveClick}
-                  onFieldChange={this.onFieldChange}
-                  onAddFieldClick={this.onAddFieldClick}
-                  onAddEntryClick={this.onAddEntryClick}
-                  onLinkAssetClick={this.onLinkAssetClick}
-                  onLinkEntryClick={this.onLinkEntryClick}
-                  addRoleCustomStyle={this.addRoleCustomStyle}
-                  addRoleEntryStyle={this.addRoleEntryStyle}
-                  clearRoleStyle={this.clearRoleStyle}
-                  updateEntryStyle={this.updateEntryStyle}
-                  clearEntryStyleKey={this.clearEntryStyleKey}
-                  addRoleReferencesCustomStyle={this.addRoleReferencesCustomStyle}
-                  addRoleReferencesEntryStyle={this.addRoleReferencesEntryStyle}
-                  clearRoleReferencesStyle={this.clearRoleReferencesStyle}
-                  updateReferencesStyle={this.updateReferencesStyle}
-                  clearReferencesStyle={this.clearReferencesStyle}
-                  onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
-                />
+                <div>
+                  <Subheading className="sub-section__heading--header" element="h2">
+                    {displaySnakeCaseName(roleKey)}
+                  </Subheading>
+                  <RoleSection
+                    key={index}
+                    roleKey={roleKey}
+                    fieldConfigObject={fieldConfigObject}
+                    roleConfigObject={roleConfigObject}
+                    roleMappingObject={roleMappingObject}
+                    stateErrors={this.state.errors}
+                    loadingEntries={this.props.loadingEntries}
+                    entryInternalMapping={this.props.entryInternalMapping}
+                    templateConfig={this.props.templateConfig}
+                    hydratedEntries={this.props.hydratedEntries}
+                    hydratedAssets={this.props.hydratedAssets}
+                    onEditClick={this.onEditClick}
+                    onDeepCopyClick={this.onDeepCopyClick}
+                    onDuplicateClick={this.onDuplicateClick}
+                    onRemoveClick={this.onRemoveClick}
+                    onFieldChange={this.onFieldChange}
+                    onAddFieldClick={this.onAddFieldClick}
+                    onAddEntryClick={this.onAddEntryClick}
+                    onLinkAssetClick={this.onLinkAssetClick}
+                    onLinkEntryClick={this.onLinkEntryClick}
+                    addRoleCustomStyle={this.addRoleCustomStyle}
+                    addRoleEntryStyle={this.addRoleEntryStyle}
+                    clearRoleStyle={this.clearRoleStyle}
+                    updateEntryStyle={this.updateEntryStyle}
+                    clearEntryStyleKey={this.clearEntryStyleKey}
+                    addRoleReferencesCustomStyle={this.addRoleReferencesCustomStyle}
+                    addRoleReferencesEntryStyle={this.addRoleReferencesEntryStyle}
+                    clearRoleReferencesStyle={this.clearRoleReferencesStyle}
+                    updateReferencesStyle={this.updateReferencesStyle}
+                    clearReferencesStyle={this.clearReferencesStyle}
+                    onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
+                  />
+                </div>
               );
-            })}
+            }
+          })}
         </div>
       </div>
     );

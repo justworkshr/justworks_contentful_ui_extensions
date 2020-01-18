@@ -5,6 +5,7 @@ import { setEntryLoading } from './stateUtils';
 import { handleRemoveEntry } from './eventUtils';
 
 export const getFieldConfig = (roleConfigObject, roleMappingObject) => {
+  debugger;
   if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
     return roleConfigObject.fieldConfigs.find(fc => {
       return fc.type === c.FIELD_TYPE_ENTRY && fc.contentType === roleMappingObject.contentType;

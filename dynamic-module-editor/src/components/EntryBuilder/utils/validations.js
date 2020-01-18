@@ -49,9 +49,7 @@ const hasInvalidCustomTemplateType = (errors, templateConfigcomponentZones, hydr
       entry &&
       !!customTemplateFieldConfigObject.allowedCollectionModules &&
       getEntryContentTypeId(entry) == c.CONTENT_TYPE_COLLECTION_MODULE &&
-      !customTemplateFieldConfigObject.allowedCollectionModules.includes(
-        entry.fields.type['en-US'].toLowerCase()
-      )
+      !customTemplateFieldConfigObject.allowedCollectionModules.includes(entry.fields.type['en-US'])
     ) {
       errors[roleKey] = addError(
         errors[roleKey],
@@ -157,8 +155,6 @@ export const linkHasInvalidCustomTemplateType = (fieldConfigObject, linkedEntry)
   const template = linkedEntry.fields.type['en-US'];
   return (
     !!fieldConfigObject.allowedCollectionModules.length &&
-    !fieldConfigObject.allowedCollectionModules.includes(
-      template ? template.toLowerCase() : undefined
-    )
+    !fieldConfigObject.allowedCollectionModules.includes(template ? template : undefined)
   );
 };

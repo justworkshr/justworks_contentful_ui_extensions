@@ -397,4 +397,58 @@ export default class InternalMapping {
 
     this.componentZones[roleKey].value = array;
   }
+
+  // Can be:
+  // - a linked ENTRY to a component module
+  // - a linked ASSET as a component module
+  // - a mapped set of FIELDS which are LINKED GENERIC ENTRIES or raw input
+  // - a collection of linked ENTRIES and ASSETS to component modules
+  // -
+
+  defineComponentZoneMethods() {
+    if (!this.hasOwnProperty(key)) {
+      Object.defineProperty(this, key, {
+        get: () => {
+          // if its an array, return array of mappings. Else, return direct object mapping.
+          if (Array.isArray(this.componentZones[key])) {
+            return this.componentZones[key].map(entry => {
+              if (entry.type === c.FIELD_TYPE_ASSET) {
+                return InternalMapping.assetMapping({ ...entry });
+              } else {
+                return InternalMapping.entryMapping({ ...entry });
+              }
+            });
+          } else {
+            if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
+              return InternalMapping.assetMapping({ ...this.componentZones[key] });
+            } else {
+              return InternalMapping.entryMapping({ ...this.componentZones[key] });
+            }
+          }
+        },
+
+        set: value => {
+          if (this.componentZones[key].type === c.FIELD_TYPE_ASSET) {
+            this.componentZones[key] = InternalMapping.assetMapping({
+              ...this.componentZones[key],
+              value
+            });
+          } else {
+            this.componentZones[key] = InternalMapping.entryMapping({
+              ...this.componentZones[key],
+              value
+            });
+          }
+        },
+        configurable: true
+      });
+    }
+  }
+
+  addComponentZone({ roleKey, componentZoneKey } = {}) {
+    this.defineGetterSetters(roleKey);
+    this.componentZones[roleKey] = {
+      componentZoneKey: {}
+    };
+  }
 }
