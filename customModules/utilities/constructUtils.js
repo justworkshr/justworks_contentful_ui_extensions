@@ -1,5 +1,45 @@
 import * as c from "../constants";
 
+export const constructComponentZone = ({
+  description = "",
+  componentOptions = [],
+  required = true
+} = {}) => {
+  if (!Array.isArray(componentOptions) || !componentOptions.length) {
+    throw new Error(
+      "Must include an array of field configs in constructComponentZone"
+    );
+  }
+
+  return {
+    description,
+    componentOptions,
+    required
+  };
+};
+
+export const constructComponentConfig = ({
+  moduleType = "component",
+  moduleName = "",
+  properties = {}
+} = {}) => {
+  return {
+    moduleType,
+    moduleName,
+    properties: getComponentProps(moduleName)
+  };
+};
+
+export const constructComponentProperty = ({
+  description = {},
+  fieldConfigs = []
+} = {}) => {
+  return {
+    description,
+    fieldConfigs
+  };
+};
+
 export const constructRoleConfig = ({
   description = "",
   fieldConfigs = [],
@@ -28,11 +68,11 @@ export const constructRoleConfig = ({
 
 export const constructFieldConfig = ({
   type, // *string - use FIELD_TYPE constants to designate
-  styleView = undefined, // *string - style editor type - use STYLE_VIEW constants to designate
-  assetStyleView = undefined, // *string - only for multi-reference asset editing - use STYLE_VIEW constants
   contentType = undefined, // *string or array - use single string for single-reference entry to designate the link. use Array for multi-reference if multiple types allowed.
   assetType = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_TYPE constants
   assetSubType = undefined, // *string - only if FIELD_TYPE is ASSET. use ASSET_SUBTYPE constants
+  styleView = undefined, // *string - style editor type - use STYLE_VIEW constants to designate
+  assetStyleView = undefined, // *string - only for multi-reference asset editing - use STYLE_VIEW constants
   defaultStyle, // *object - passes this style object when a custom editor is applied to the field
   assetDefaultStyle, // *object - only in multi-reference fields, passes this object to all assets when custom field is applied
   allowedCollectionModules // *array - use CUSTOM_TEMPLATE constants to specific which are allowed

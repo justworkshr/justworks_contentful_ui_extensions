@@ -1,5 +1,5 @@
 /*
-  Custom templates
+  Patterns
   - Should match the "allowed values" validation in Contentful content type CustomTemplate's "template" field.
   - Exact name is used inside template renderer too.
 */
@@ -8,6 +8,13 @@ export const TEXT_MEDIA_MODULE = "text media module";
 export const LOGO_ITEM = "logo item";
 export const LOGO_ROW = "logo row";
 export const CONTENT_HALVES = "contentHalves";
+
+/*
+  Components
+*/
+
+export const COMPONENT_TITLED_LIST = "titledList";
+export const COMPONENT_RESPONSIVE_IMAGE = "responsiveImage";
 
 /*
   Content types

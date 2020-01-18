@@ -1,10 +1,15 @@
-// PAGE MODULES
+// PAGE PATTERNS
 import { cardBlock } from "./pageModules/cardBlock";
 import { textMedia } from "./pageModules/textMedia";
 import { logoRow } from "./pageModules/logoRow";
 
 // COLLECTION MODULES
 import { logoItem } from "./collectionModules/logoItem";
+
+// COMPONENT MODULES
+
+import { titledList } from "./componentModules/titledList";
+import { responsiveImage } from "./componentModules/responsiveImage";
 
 /////////////////
 // Instructions
@@ -15,6 +20,11 @@ import { logoItem } from "./collectionModules/logoItem";
 // Warning 1) NEVER change a role name without changing the corresponding mapping in the template.
 // Warning 2) NEVER change a content type name without changing the name here too.
 ////////////////
+
+export const componentModule = {
+  ...titledList,
+  ...responsiveImage
+};
 
 export const pageModule = {
   ...cardBlock,

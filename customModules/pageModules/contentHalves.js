@@ -8,8 +8,18 @@ export const contentHalves = {
       imageUrl: ""
     },
     componentZones: {
-      left_content: {},
-      right_content: {}
+      left_content: u.constructComponentZone({
+        componentOptions: [
+          c.COMPONENT_TITLED_LIST,
+          c.COMPONENT_RESPONSIVE_IMAGE
+        ]
+      }),
+      right_content: u.constructComponentZone({
+        componentOptions: [
+          c.COMPONENT_TITLED_LIST,
+          c.COMPONENT_RESPONSIVE_IMAGE
+        ]
+      })
     }
   }
 };
