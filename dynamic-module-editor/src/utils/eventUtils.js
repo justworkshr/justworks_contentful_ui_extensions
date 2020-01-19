@@ -31,11 +31,11 @@ export const handleRemoveMappingKey = ({
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-const linkAssetsToTemplate = ({ entryInternalMapping, assets, roleKey, updateEntry }) => {
+const linkAssetsToTemplate = ({ entryInternalMapping, assets, mappingKey, updateEntry }) => {
   const updatedInternalMapping = entryInternalMapping;
 
   updatedInternalMapping.addEntriesOrAssets({
-    key: roleKey,
+    key: mappingKey,
     value: assets.map(asset => {
       return InternalMapping.assetMapping({
         type: c.FIELD_TYPE_ASSET,
@@ -49,11 +49,11 @@ const linkAssetsToTemplate = ({ entryInternalMapping, assets, roleKey, updateEnt
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-const linkAssetToTemplate = ({ entryInternalMapping, asset, roleKey, updateEntry }) => {
+const linkAssetToTemplate = ({ entryInternalMapping, asset, mappingKey, updateEntry }) => {
   const updatedInternalMapping = entryInternalMapping;
 
   updatedInternalMapping.addAsset(
-    roleKey,
+    mappingKey,
     asset.sys.id,
     asset.fields.file['en-US'].url,
     getAssetType(asset.fields.file['en-US'].contentType)
@@ -90,24 +90,24 @@ export const handleMultipleAssetsLink = async ({
   sdk,
   mappingObject,
   entryInternalMapping,
-  roleKey,
+  mappingKey,
   assets,
   updateEntry
 } = {}) => {
   let linkedEntryValidation;
   assets.forEach(asset => {
-    linkedEntryValidation = validateLinkedAsset(asset, mappingObject[roleKey]);
+    linkedEntryValidation = validateLinkedAsset(asset, mappingObject[mappingKey]);
   });
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   } else {
-    linkAssetsToTemplate({ entryInternalMapping, assets, roleKey, updateEntry });
+    linkAssetsToTemplate({ entryInternalMapping, assets, mappingKey, updateEntry });
   }
 };
 
 export const handleSingleAssetLink = ({
   sdk,
-  roleKey,
+  mappingKey,
   asset,
   updateEntry,
   mappingObject,
@@ -115,13 +115,13 @@ export const handleSingleAssetLink = ({
   assetType
 } = {}) => {
   if (!asset) return;
-
+  console.log('!!!', assetType);
   const linkedEntryValidation = validateLinkedAsset(asset, assetType);
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   }
 
-  linkAssetToTemplate({ entryInternalMapping, asset, roleKey, updateEntry });
+  linkAssetToTemplate({ entryInternalMapping, asset, mappingKey, updateEntry });
 };
 
 export const handleLinkAssetClick = async ({
@@ -129,7 +129,7 @@ export const handleLinkAssetClick = async ({
   mappingObject,
   entryInternalMapping,
   updateEntry,
-  roleKey,
+  mappingKey,
   assetType,
   multiple
 } = {}) => {
@@ -142,7 +142,7 @@ export const handleLinkAssetClick = async ({
         sdk,
         mappingObject,
         entryInternalMapping,
-        roleKey,
+        mappingKey,
         assets,
         updateEntry,
         assetType
@@ -160,7 +160,7 @@ export const handleLinkAssetClick = async ({
         sdk,
         mappingObject,
         entryInternalMapping,
-        roleKey,
+        mappingKey,
         asset,
         updateEntry,
         assetType

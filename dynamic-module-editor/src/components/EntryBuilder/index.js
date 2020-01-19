@@ -121,14 +121,16 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onLinkAssetClick = async (roleKey, assetType) => {
+  onLinkAssetClick = async mappingKey => {
     await handleLinkAssetClick({
       sdk: this.props.sdk,
       mappingObject: this.props.templateConfig.componentZones,
       entryInternalMapping: this.props.entryInternalMapping,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey,
-      assetType
+      mappingKey,
+      assetType: this.props.templateConfig.componentZones[mappingKey].componentOptions[
+        this.props.entryInternalMapping.componentZones[mappingKey].componentName
+      ].meta.assetType
     });
   };
 

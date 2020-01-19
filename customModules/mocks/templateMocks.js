@@ -16,11 +16,10 @@ export const MOCK_PAGE_MODULE_NAME = "pageModule1";
 export const mockComponentModuleTemplates = {
   [MOCK_TEMPLATE_NAME]: {
     meta: {
-      componentType: c.FIELD_TYPE_ENTRY,
+      componentTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_FIELD],
       componentName: MOCK_TEMPLATE_NAME,
       contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
     },
-    style: {},
     properties: {
       left_section: {
         fieldConfigs: [
@@ -46,7 +45,7 @@ export const mockComponentModuleTemplates = {
   },
   [MOCK_FIELDS_TEMPLATE]: {
     meta: {
-      componentType: c.FIELD_TYPE_ENTRY
+      componentTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_FIELD]
     },
     style: {},
     properties: {
@@ -117,7 +116,7 @@ export const mockComponentModuleTemplates = {
   },
   [MOCK_ENTRY_TEMPLATE]: {
     meta: {
-      componentType: c.FIELD_TYPE_ENTRY
+      componentTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_FIELD]
     },
     style: {},
     properties: {

@@ -17,7 +17,7 @@ const ComponentZone = props => {
     const componentConfigObject =
       zoneConfigObject.componentOptions[zoneMappingObject.componentName];
     // Render entry/asset card
-    if (zoneMappingObject.type === c.FIELD_TYPE_ENTRY) {
+    if (zoneMappingObject.type === c.FIELD_TYPE_ENTRY && !!zoneMappingObject.value) {
       const entry =
         props.hydratedEntries.find(
           he => he.sys.id === props.entryInternalMapping[componentZoneKey].value
@@ -42,34 +42,7 @@ const ComponentZone = props => {
           />
         </div>
       );
-    } else if (
-      // Render entry select options
-      componentConfigObject &&
-      componentConfigObject.meta.componentType === c.FIELD_TYPE_ENTRY
-    ) {
-      // Render empty action row
-      return (
-        <EntryActionRow
-          allowAssets={false}
-          allowEntries={true}
-          allowFields={false}
-          allowLinks={true}
-          className="max-width-600"
-          contentTypes={componentConfigObject.meta.contentTypes}
-          assetType={componentConfigObject.meta.assetType}
-          roleKey={componentZoneKey}
-          // onAddFieldClick={props.onAddFieldClick}
-          onAddEntryClick={props.onAddEntryClick}
-          // onLinkAssetClick={props.onLinkAssetClick}
-          onLinkEntryClick={props.onLinkEntryClick}
-          onDeepCopyLinkClick={props.onDeepCopyClick}
-          // onDuplicateClick={props.onDuplicateClick}
-        />
-      );
-    } else if (
-      componentConfigObject &&
-      componentConfigObject.meta.componentType === c.FIELD_TYPE_ASSET
-    ) {
+    } else if (zoneMappingObject && zoneMappingObject.type === c.FIELD_TYPE_ASSET) {
       // Render asset select options
       return (
         <EntryActionRow
@@ -83,6 +56,28 @@ const ComponentZone = props => {
           // onAddFieldClick={props.onAddFieldClick}
           onAddEntryClick={props.onAddEntryClick}
           onLinkAssetClick={props.onLinkAssetClick}
+          onLinkEntryClick={props.onLinkEntryClick}
+          onDeepCopyLinkClick={props.onDeepCopyClick}
+          // onDuplicateClick={props.onDuplicateClick}
+        />
+      );
+    } else if (
+      // Render entry select options
+      zoneMappingObject &&
+      !zoneMappingObject.type
+    ) {
+      // Render empty action row
+      return (
+        <EntryActionRow
+          allowAssets={componentConfigObject.meta.componentTypes.includes(c.FIELD_TYPE_ASSET)}
+          allowEntries={componentConfigObject.meta.componentTypes.includes(c.FIELD_TYPE_ENTRY)}
+          allowFields={componentConfigObject.meta.componentTypes.includes(c.FIELD_TYPE_FIELD)}
+          className="max-width-600"
+          contentTypes={componentConfigObject.meta.contentTypes}
+          roleKey={componentZoneKey}
+          // onAddFieldClick={props.onAddFieldClick}
+          onAddEntryClick={props.onAddEntryClick}
+          // onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyClick}
           // onDuplicateClick={props.onDuplicateClick}
@@ -119,6 +114,7 @@ ComponentZone.propTypes = {
   clearComponentZone: PropTypes.func,
   onLinkEntryClick: PropTypes.func,
   onLinkAssetClick: PropTypes.func,
+  onDeepCopyClick: PropTypes.func,
   onAddEntryClick: PropTypes.func,
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func

@@ -112,7 +112,7 @@ export const defaultStyleTypes = () => {
       styleView: c.constructStyleView({
         styleSections: [
           c.constructStyleSection({
-            componentType: c.STYLE_VIEW_COMPONENT_COLOR,
+            componentTypes: c.STYLE_VIEW_COMPONENT_COLOR,
             styleProperty: c.STYLE_PROPERTY_BACKGROUND_COLOR,
             helpText: "The background color for this module."
           })

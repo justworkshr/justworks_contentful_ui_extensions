@@ -92,13 +92,16 @@ class ComponentBuilder extends React.Component {
     });
   };
 
-  onLinkAssetClick = async roleKey => {
+  onLinkAssetClick = async mappingKey => {
     await handleLinkAssetClick({
       sdk: this.props.sdk,
       mappingObject: this.props.templateConfig.properties,
       entryInternalMapping: this.props.entryInternalMapping,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey
+      mappingKey,
+      assetType: this.props.templateConfig.properties[mappingKey].componentOptions[
+        this.props.entryInternalMapping.properties[mappingKey].componentName
+      ].meta.assetType
     });
   };
 

@@ -38,13 +38,14 @@ import {
 import MultiRow from '../EntryBuilder/components/MultiRow';
 
 const RoleSection = props => {
-  const renderEntryFields = (roleKey, roleConfigObject, roleMappingObject, fieldConfigObject) => {
+  const renderEntryFields = (roleKey, propertyConfigObject, roleMappingObject) => {
+    console.log(propertyConfigObject);
     // Multi References and with entries
 
-    const customTemplateFieldConfig = getCustomTemplateFieldConfig(roleConfigObject) || {};
+    const customTemplateFieldConfig = getCustomTemplateFieldConfig(propertyConfigObject) || {};
 
     if (
-      roleIsMultiReference(roleConfigObject.fieldConfigs) &&
+      roleIsMultiReference(propertyConfigObject.fieldConfigs) &&
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {
@@ -59,7 +60,7 @@ const RoleSection = props => {
               hydratedEntries={props.hydratedEntries}
               hydratedAssets={props.hydratedAssets}
               loadingEntries={props.loadingEntries}
-              roleConfigObject={roleConfigObject}
+              roleConfigObject={propertyConfigObject}
               roleMappingObject={props.roleMappingObject}
               onEditClick={props.onEditClick}
               onDeepCopyClick={props.onDeepCopyClick}
@@ -69,10 +70,9 @@ const RoleSection = props => {
               onMultiReferenceDragEnd={props.onMultiReferenceDragEnd}
             />
             <EntryActionRow
-              allowAssets={roleAllowsAssets(fieldConfigs)}
-              allowEntries={!!getContentTypes(props.templateConfig.properties[roleKey]).length}
-              allowFields={roleAllowsFields(fieldConfigs)}
-              allowLinks={roleAllowsLinks(fieldConfigs)}
+              allowAssets={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ASSET)}
+              allowEntries={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ENTRY)}
+              allowFields={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_FIELD)}
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
               contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
@@ -115,10 +115,9 @@ const RoleSection = props => {
       // Render empty action row
       return (
         <EntryActionRow
-          allowAssets={roleAllowsAssets(fieldConfigs)}
-          allowEntries={!!getContentTypes(props.templateConfig.properties[roleKey]).length}
-          allowFields={roleAllowsFields(fieldConfigs)}
-          allowLinks={roleAllowsLinks(fieldConfigs)}
+          allowAssets={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ASSET)}
+          allowEntries={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ENTRY)}
+          allowFields={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_FIELD)}
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
           contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}

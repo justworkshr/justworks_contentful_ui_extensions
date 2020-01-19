@@ -39,7 +39,7 @@ export const cardBlock = {
           styleView: constructStyleView({
             styleSections: [
               constructStyleSection({
-                componentType: c.STYLE_VIEW_COMPONENT_COLOR,
+                componentTypes: c.STYLE_VIEW_COMPONENT_COLOR,
                 styleProperty: c.STYLE_PROPERTY_BACKGROUND_COLOR,
                 helpText: "The color for the top-right tag on this template."
               })

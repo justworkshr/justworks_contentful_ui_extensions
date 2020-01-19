@@ -27,7 +27,7 @@ const StyleView = props => {
     const getValue = styleKey => {
       return props.styleObject[styleKey];
     };
-    switch (styleSection.componentType) {
+    switch (styleSection.componentTypes) {
       case c.STYLE_VIEW_COMPONENT_COLOR:
         return (
           <ColorStyle

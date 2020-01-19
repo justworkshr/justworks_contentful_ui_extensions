@@ -19,30 +19,31 @@ const EntryActionRow = props => {
           Add field
         </TextLink>
       )}
-      {props.allowLinks && (
-        <CreateNewLink
-          allowAssets={props.allowAssets}
-          allowEntries={props.allowEntries}
-          className="entry-action-button__create-new link-entries-row__button"
-          onAddEntryClick={props.onAddEntryClick}
-          roleKey={props.roleKey}
-          allowedCollectionModules={props.allowedCollectionModules}
-          contentTypes={props.contentTypes}
-        />
-      )}
-      {props.allowLinks && (
-        <LinkExisting
-          allowAssets={props.allowAssets}
-          allowEntries={props.allowEntries}
-          className="entry-action-button__link-existing link-entries-row__button"
-          onLinkAssetClick={props.onLinkAssetClick}
-          onLinkEntryClick={props.onLinkEntryClick}
-          onDeepCopyLinkClick={props.onDeepCopyLinkClick}
-          assetType={props.assetType}
-          contentTypes={props.contentTypes}
-          roleKey={props.roleKey}
-        />
-      )}
+      {props.allowAssets ||
+        (props.allowEntries && (
+          <CreateNewLink
+            allowAssets={props.allowAssets}
+            allowEntries={props.allowEntries}
+            className="entry-action-button__create-new link-entries-row__button"
+            onAddEntryClick={props.onAddEntryClick}
+            roleKey={props.roleKey}
+            allowedCollectionModules={props.allowedCollectionModules}
+            contentTypes={props.contentTypes}
+          />
+        ))}
+      {props.allowAssets ||
+        (props.allowEntries && (
+          <LinkExisting
+            allowAssets={props.allowAssets}
+            allowEntries={props.allowEntries}
+            className="entry-action-button__link-existing link-entries-row__button"
+            onLinkAssetClick={props.onLinkAssetClick}
+            onLinkEntryClick={props.onLinkEntryClick}
+            onDeepCopyLinkClick={props.onDeepCopyLinkClick}
+            contentTypes={props.contentTypes}
+            roleKey={props.roleKey}
+          />
+        ))}
     </div>
   );
 };
@@ -50,11 +51,9 @@ const EntryActionRow = props => {
 EntryActionRow.propTypes = {
   allowAssets: PropTypes.bool,
   allowEntries: PropTypes.bool,
-  allowLinks: PropTypes.bool,
   allowFields: PropTypes.bool,
   allowedCollectionModules: PropTypes.array,
   contentTypes: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  assetType: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   fieldType: PropTypes.string,
   onAddFieldClick: PropTypes.func,
   roleKey: PropTypes.string,
@@ -69,7 +68,6 @@ EntryActionRow.defaultProps = {
   allowLinks: true,
   allowAssets: false,
   allowFields: false,
-  assetType: null,
   contentTypes: []
 };
 
