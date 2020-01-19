@@ -5,9 +5,11 @@ export const responsiveImage = {
   [c.COMPONENT_RESPONSIVE_IMAGE]: {
     meta: {
       componentName: c.COMPONENT_RESPONSIVE_IMAGE,
-      componentType: c.FIELD_TYPE_PSEUDO_ASSET,
+      componentType: c.FIELD_TYPE_ASSET,
+      assetType: c.ASSET_TYPE_IMAGE,
       description: "",
-      imageUrl: ""
+      imageUrl: "",
+      hidden: true
     },
     properties: {
       asset: u.constructComponentProperty({

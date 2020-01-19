@@ -92,6 +92,16 @@ class ComponentBuilder extends React.Component {
     });
   };
 
+  onLinkAssetClick = async roleKey => {
+    await handleLinkAssetClick({
+      sdk: this.props.sdk,
+      mappingObject: this.props.templateConfig.properties,
+      entryInternalMapping: this.props.entryInternalMapping,
+      updateEntry: this.props.updateEntry.bind(this),
+      roleKey
+    });
+  };
+
   onDeepCopyClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
@@ -153,7 +163,7 @@ class ComponentBuilder extends React.Component {
               onFieldChange={this.onFieldChange}
               onAddFieldClick={this.onAddFieldClick}
               onAddEntryClick={this.onAddEntryClick}
-              // onLinkAssetClick={this.onLinkAssetClick}
+              onLinkAssetClick={this.onLinkAssetClick}
               onLinkEntryClick={this.onLinkEntryClick}
               // addRoleCustomStyle={this.addRoleCustomStyle}
               // addRoleEntryStyle={this.addRoleEntryStyle}

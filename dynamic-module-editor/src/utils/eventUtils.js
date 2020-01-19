@@ -31,19 +31,9 @@ export const handleRemoveMappingKey = ({
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
-  const updatedInternalMapping = props.entryInternalMapping;
+const linkAssetsToTemplate = ({ entryInternalMapping, assets, roleKey, updateEntry }) => {
+  const updatedInternalMapping = entryInternalMapping;
 
-  // attaches existing asset style to new assets
-  const firstAsset = updatedInternalMapping.properties[roleKey]
-    ? updatedInternalMapping.properties[roleKey].value.find(
-        entry => entry.type === c.FIELD_TYPE_ASSET
-      )
-    : undefined;
-  let assetStyle;
-  if (firstAsset) {
-    assetStyle = firstAsset.style;
-  }
   updatedInternalMapping.addEntriesOrAssets({
     key: roleKey,
     value: assets.map(asset => {
@@ -51,8 +41,7 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
         type: c.FIELD_TYPE_ASSET,
         value: asset.sys.id,
         assetUrl: asset.fields.file['en-US'].url,
-        assetType: getAssetType(asset.fields.file['en-US'].contentType),
-        style: assetStyle
+        assetType: getAssetType(asset.fields.file['en-US'].contentType)
       });
     })
   });
@@ -60,8 +49,8 @@ const linkAssetsToTemplate = ({ props, assets, roleKey, updateEntry }) => {
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-const linkAssetToTemplate = ({ props, asset, roleKey, updateEntry }) => {
-  const updatedInternalMapping = props.entryInternalMapping;
+const linkAssetToTemplate = ({ entryInternalMapping, asset, roleKey, updateEntry }) => {
+  const updatedInternalMapping = entryInternalMapping;
 
   updatedInternalMapping.addAsset(
     roleKey,
@@ -99,48 +88,64 @@ export const handleAddRoleReferencesEntryStyle = async ({ sdk, props, roleKey } 
 
 export const handleMultipleAssetsLink = async ({
   sdk,
-  props,
+  mappingObject,
+  entryInternalMapping,
   roleKey,
   assets,
   updateEntry
 } = {}) => {
   let linkedEntryValidation;
   assets.forEach(asset => {
-    linkedEntryValidation = validateLinkedAsset(asset, props.templateConfig.properties[roleKey]);
+    linkedEntryValidation = validateLinkedAsset(asset, mappingObject[roleKey]);
   });
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   } else {
-    linkAssetsToTemplate({ props, assets, roleKey, updateEntry });
+    linkAssetsToTemplate({ entryInternalMapping, assets, roleKey, updateEntry });
   }
 };
 
-export const handleSingleAssetLink = ({ sdk, props, roleKey, asset, updateEntry } = {}) => {
+export const handleSingleAssetLink = ({
+  sdk,
+  roleKey,
+  asset,
+  updateEntry,
+  mappingObject,
+  entryInternalMapping,
+  assetType
+} = {}) => {
   if (!asset) return;
 
-  const linkedEntryValidation = validateLinkedAsset(
-    asset,
-    props.templateConfig.properties[roleKey]
-  );
+  const linkedEntryValidation = validateLinkedAsset(asset, assetType);
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   }
 
-  linkAssetToTemplate({ props, asset, roleKey, updateEntry });
+  linkAssetToTemplate({ entryInternalMapping, asset, roleKey, updateEntry });
 };
 
-export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } = {}) => {
-  if (roleIsMultiReference(props.templateConfig.properties[roleKey].fieldConfigs)) {
+export const handleLinkAssetClick = async ({
+  sdk,
+  mappingObject,
+  entryInternalMapping,
+  updateEntry,
+  roleKey,
+  assetType,
+  multiple
+} = {}) => {
+  if (multiple) {
     try {
       const assets = await sdk.dialogs.selectMultipleAssets({
         locale: 'en-US'
       });
       handleMultipleAssetsLink({
         sdk,
-        props,
+        mappingObject,
+        entryInternalMapping,
         roleKey,
         assets,
-        updateEntry
+        updateEntry,
+        assetType
       });
     } catch (e) {
       throw new Error(e);
@@ -153,10 +158,12 @@ export const handleLinkAssetClick = async ({ sdk, props, updateEntry, roleKey } 
 
       handleSingleAssetLink({
         sdk,
-        props,
+        mappingObject,
+        entryInternalMapping,
         roleKey,
         asset,
-        updateEntry
+        updateEntry,
+        assetType
       });
     } catch (e) {
       throw new Error(e);

@@ -134,7 +134,7 @@ class CreateNewLink extends React.Component {
       return this.renderMultipleContentTypes();
     } else if (!!this.props.contentTypes && this.props.allowAssets) {
       return this.renderSingleContentTypeAndAsset();
-    } else if (this.props.contentTypes) {
+    } else if (this.props.contentTypes && this.props.allowEntries) {
       return (
         <TextLink
           icon="Plus"
@@ -172,11 +172,14 @@ class CreateNewLink extends React.Component {
 }
 
 CreateNewLink.defaultProps = {
-  allowedCollectionModules: []
+  allowedCollectionModules: [],
+  allowEntries: true,
+  allowAssets: false
 };
 
 CreateNewLink.propTypes = {
   allowAssets: PropTypes.bool,
+  allowEntries: PropTypes.bool,
   onAddEntryClick: PropTypes.func,
   className: PropTypes.string,
   contentTypes: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),

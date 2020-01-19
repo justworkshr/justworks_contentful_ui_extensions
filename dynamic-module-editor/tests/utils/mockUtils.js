@@ -146,7 +146,7 @@ export const mockZoneMapping = ({ componentName = '', type = '', value } = {}) =
 };
 
 export const mockComponentConfig = ({
-  meta = { componentName: 'MockComponentConfig' },
+  meta = { componentName: 'MockComponentConfig', contentTypes: [] },
   properties = { title: 'hi', body: 'hello there' }
 } = {}) => {
   return {

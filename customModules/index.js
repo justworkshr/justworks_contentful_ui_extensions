@@ -28,8 +28,7 @@ export const componentModule = {
 };
 
 export const pageModule = {
-  ...contentHalves,
-  ...responsiveImage
+  ...contentHalves
 };
 
 export const collectionModule = {

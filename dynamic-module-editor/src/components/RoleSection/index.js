@@ -49,6 +49,7 @@ const RoleSection = props => {
       roleMappingObject.value.length
     ) {
       const fieldConfigs = props.templateConfig.properties[roleKey].fieldConfigs;
+
       // render multi field
       return (
         <div className="section-row">
@@ -69,6 +70,7 @@ const RoleSection = props => {
             />
             <EntryActionRow
               allowAssets={roleAllowsAssets(fieldConfigs)}
+              allowEntries={!!getContentTypes(props.templateConfig.properties[roleKey]).length}
               allowFields={roleAllowsFields(fieldConfigs)}
               allowLinks={roleAllowsLinks(fieldConfigs)}
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
@@ -114,6 +116,7 @@ const RoleSection = props => {
       return (
         <EntryActionRow
           allowAssets={roleAllowsAssets(fieldConfigs)}
+          allowEntries={!!getContentTypes(props.templateConfig.properties[roleKey]).length}
           allowFields={roleAllowsFields(fieldConfigs)}
           allowLinks={roleAllowsLinks(fieldConfigs)}
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}

@@ -88,15 +88,9 @@ const validateAssetType = (entry, assetType) => {
   return entry.fields.file['en-US'].contentType.includes(assetType);
 };
 
-export const validateLinkedAsset = (entry, roleObject) => {
+export const validateLinkedAsset = (entry, assetType) => {
   if (!entry) return;
-  const fieldConfigObject = roleObject.fieldConfigs.find(
-    fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE
-  )
-    ? roleObject.fieldConfigs.find(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE)
-    : roleObject.fieldConfigs.find(fc => fc.type === c.FIELD_TYPE_ASSET);
 
-  const assetType = fieldConfigObject.assetType;
   let message = '';
   if (!validateAssetType(entry, assetType)) {
     message = `Only ${assetType} assets are allowed.`;

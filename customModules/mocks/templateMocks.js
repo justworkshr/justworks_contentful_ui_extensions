@@ -17,7 +17,8 @@ export const mockComponentModuleTemplates = {
   [MOCK_TEMPLATE_NAME]: {
     meta: {
       componentType: c.FIELD_TYPE_ENTRY,
-      componentName: MOCK_TEMPLATE_NAME
+      componentName: MOCK_TEMPLATE_NAME,
+      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
     },
     style: {},
     properties: {
@@ -212,7 +213,9 @@ export const mockComponentModuleTemplates = {
 
 export const mockPageModuleTemplates = {
   [MOCK_PAGE_MODULE_NAME]: {
-    meta: {},
+    meta: {
+      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
+    },
     componentZones: {
       left_section: u.constructComponentZone({
         componentOptions: {

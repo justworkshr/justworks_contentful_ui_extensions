@@ -6,6 +6,7 @@ export const titledList = {
     meta: {
       componentName: c.COMPONENT_TITLED_LIST,
       componentType: c.FIELD_TYPE_ENTRY,
+      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE],
       description: "",
       imageUrl: ""
     },
