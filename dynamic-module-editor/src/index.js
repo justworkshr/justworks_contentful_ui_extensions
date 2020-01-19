@@ -205,9 +205,12 @@ export class App extends React.Component {
     let assetLinks = [];
 
     const parsedJSON = JSON.parse(internalMappingJson);
-    const componentProperties = parsedJSON.properties; // may need to expand this when parsing a pattern object
-    Object.keys(componentProperties).forEach(roleKey => {
-      const roleMappingObject = componentProperties[roleKey];
+    const componentBranches =
+      this.contentType === c.CONTENT_TYPE_COMPONENT_MODULE
+        ? parsedJSON.properties
+        : parsedJSON.componentZones;
+    Object.keys(componentBranches).forEach(roleKey => {
+      const roleMappingObject = componentBranches[roleKey];
       /*
         Add all entries and assets which exist as references 
         inside the internal mapping

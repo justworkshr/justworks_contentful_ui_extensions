@@ -84,10 +84,11 @@ class ComponentBuilder extends React.Component {
   onLinkEntryClick = async (mappingKey, contentType) => {
     await handleLinkEntryClick({
       sdk: this.props.sdk,
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
-      contentType
+      contentType,
+      mappingObject: this.props.templateConfig.properties,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 

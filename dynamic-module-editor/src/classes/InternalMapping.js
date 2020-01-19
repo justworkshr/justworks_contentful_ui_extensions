@@ -156,6 +156,24 @@ export default class InternalMapping {
   // - a collection of linked ENTRIES and ASSETS to component modules
   // -
 
+  /*
+    Adds a component entry link to the component zone
+
+    componentZones: {
+      leftContent: {
+        componentName: "foo",
+        type: "entry",
+        value: "id"
+      }
+    }
+  */
+  addEntry(mappingKey, id) {
+    if (!this.componentZones[mappingKey].componentName)
+      throw 'No componentName found on entry. Cannot add entry.';
+    this.componentZones[mappingKey].type = c.FIELD_TYPE_ENTRY;
+    this.componentZones[mappingKey].value = id;
+  }
+
   addComponentZone({ mappingKey, componentConfig } = {}) {
     this.defineGetterSetters(mappingKey);
 

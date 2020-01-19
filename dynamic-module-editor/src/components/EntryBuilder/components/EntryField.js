@@ -165,7 +165,6 @@ EntryField.propTypes = {
   entry: PropTypes.object,
   entryIndex: PropTypes.number,
   roleKey: PropTypes.string,
-  roleConfig: PropTypes.object,
   roleMappingObject: PropTypes.object,
   fieldType: PropTypes.string,
   isDragActive: PropTypes.bool,
@@ -187,7 +186,6 @@ EntryField.defaultProps = {
     sys: {}
   },
   roleKey: '',
-  roleConfig: {},
   isLoading: false,
   isDragActive: false,
   roleMappingObject: {},

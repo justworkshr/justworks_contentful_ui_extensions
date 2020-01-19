@@ -153,7 +153,9 @@ describe('InternalMapping', () => {
     it('clears the component zone', () => {
       const object = {
         componentZones: {
-          hi: {}
+          hi: {
+            componentName: 'hello'
+          }
         }
       };
       const json = JSON.stringify(object);
@@ -162,5 +164,22 @@ describe('InternalMapping', () => {
 
       expect(mapping.componentZones.hi).toEqual(undefined);
     });
+  });
+
+  describe('addEntry', () => {
+    const object = {
+      componentZones: {
+        hi: {
+          componentName: 'hello'
+        }
+      }
+    };
+    const json = JSON.stringify(object);
+    const mapping = new InternalMapping(json);
+
+    mapping.addEntry('hi', 1);
+    expect(mapping.componentZones.hi.componentName).toEqual('hello');
+    expect(mapping.componentZones.hi.type).toEqual('entry');
+    expect(mapping.componentZones.hi.value).toEqual(1);
   });
 });

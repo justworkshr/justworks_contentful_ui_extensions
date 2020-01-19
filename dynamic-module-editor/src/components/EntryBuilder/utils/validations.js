@@ -108,15 +108,16 @@ export const validateLinkedAsset = (entry, roleObject) => {
 export const validateLinkedEntry = (entry, mappingKey, parentEntryId, internalMapping) => {
   if (!entry) return;
   let message = '';
-  const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(internalMapping[mappingKey]);
+  // const customTemplateFieldConfigObject = getCustomTemplateFieldConfig(internalMapping[mappingKey]);
 
   if (linkHasCircularReference(parentEntryId, entry)) {
     message = 'Linked entry has a circular reference to this entry.';
-  } else if (linkHasInvalidCustomTemplateType(customTemplateFieldConfigObject, entry)) {
-    message = `Only the following Custom Template types are allowed: ${customTemplateFieldConfigObject.allowedCollectionModules.join(
-      ', '
-    )}`;
   }
+  // else if (linkHasInvalidCustomTemplateType(customTemplateFieldConfigObject, entry)) {
+  //   message = `Only the following Custom Template types are allowed: ${customTemplateFieldConfigObject.allowedCollectionModules.join(
+  //     ', '
+  //   )}`;
+  // }
 
   return message;
 };

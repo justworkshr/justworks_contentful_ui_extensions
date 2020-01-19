@@ -99,7 +99,6 @@ const RoleSection = props => {
             fieldType={roleMappingObject.type}
             isLoading={entry ? !!props.loadingEntries.includes(entry.sys.id) : false}
             roleKey={roleKey}
-            roleConfig={roleConfigObject}
             onEditClick={props.onEditClick}
             onDeepCopyClick={props.onDeepCopyClick}
             onRemoveClick={props.onRemoveClick}

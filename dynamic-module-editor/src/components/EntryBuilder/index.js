@@ -133,10 +133,11 @@ export default class EntryBuilder extends React.Component {
   onLinkEntryClick = async (mappingKey, contentType) => {
     await handleLinkEntryClick({
       sdk: this.props.sdk,
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
-      contentType
+      contentType,
+      mappingObject: this.props.templateConfig.componentZones,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
@@ -346,8 +347,12 @@ export default class EntryBuilder extends React.Component {
                 componentZoneKey={componentZoneKey}
                 zoneMappingObject={zoneMappingObject}
                 zoneConfigObject={zoneConfigObject}
+                entryInternalMapping={this.props.entryInternalMapping}
+                hydratedAssets={this.props.hydratedAssets}
+                hydratedEntries={this.props.hydratedEntries}
                 addComponentZone={this.addComponentZone}
                 clearComponentZone={this.clearComponentZone}
+                onLinkEntryClick={this.onLinkEntryClick}
               />
             );
           })}
