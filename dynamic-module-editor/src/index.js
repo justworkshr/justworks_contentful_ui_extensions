@@ -50,6 +50,7 @@ export class App extends React.Component {
       : null;
 
     const type = props.sdk.entry.fields.type ? props.sdk.entry.fields.type.getValue() : null;
+
     const templateConfig = props.customTemplates[type] || props.templatePlaceholder;
     const loadingEntries = this.getLoadingEntries(
       props.sdk.entry.fields.entries.getValue() || [],

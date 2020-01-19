@@ -522,12 +522,12 @@ export const handleMultiReferenceDragEnd = ({
 
 export const handleAddComponentZone = ({
   mappingKey,
-  componentConfig,
+  componentZoneName,
   entryInternalMapping,
   setInternalMappingValue
 } = {}) => {
   const updatedInternalMapping = entryInternalMapping;
-  updatedInternalMapping.addComponentZone({ mappingKey, componentConfig });
+  updatedInternalMapping.addComponentZone({ mappingKey, componentZoneName });
   setInternalMappingValue(updatedInternalMapping.asJSON());
 };
 

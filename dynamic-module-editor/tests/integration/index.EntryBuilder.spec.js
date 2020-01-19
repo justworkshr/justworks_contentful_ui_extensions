@@ -50,7 +50,7 @@ describe('App', () => {
       internalMapping: ''
     });
 
-    const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+    const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
     const sdk = mockSdk(mockEntry);
 
@@ -112,7 +112,7 @@ describe('App', () => {
   });
 
   describe('a template w/ asset fields', () => {
-    const templateConfig = tm.mockCustomTemplates[tm.MOCK_ASSETS_TEMPLATE];
+    const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_ASSETS_TEMPLATE];
 
     it('should render the default editor state', () => {
       const mockEntry = mockPrimaryEntry({
@@ -163,7 +163,7 @@ describe('App', () => {
   });
 
   describe('a template w/ entry fields', () => {
-    const templateConfig = tm.mockCustomTemplates[tm.MOCK_ENTRY_TEMPLATE];
+    const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_ENTRY_TEMPLATE];
 
     it('should render the default editor state', () => {
       const mockEntry = mockPrimaryEntry({
@@ -228,7 +228,7 @@ describe('App', () => {
   });
 
   describe('a template w/ multi-reference fields', () => {
-    const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
+    const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
     it('should render the default editor state', () => {
       const mockEntry = mockPrimaryEntry({

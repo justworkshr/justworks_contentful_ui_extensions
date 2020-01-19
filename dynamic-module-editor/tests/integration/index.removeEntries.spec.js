@@ -39,7 +39,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -148,7 +148,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_ENTRY_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_ENTRY_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 

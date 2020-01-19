@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import * as c from '../../../customModules/constants';
 import * as tm from '../../../customModules/mocks/templateMocks';
 import { templatePlaceholder } from '../../../customModules';
-import { displayCamelCaseName } from '../../../shared/utilities/elementUtils';
 import { constructComponentZone } from '../../../customModules/utilities/constructUtils';
 import { mount } from 'enzyme';
 
@@ -28,11 +27,16 @@ export const mockPrimaryEntry = ({
   };
 };
 
-export const mockComponent = ({ Component, sdk = mockSdk(mockPrimaryEntry()) } = {}) => {
+export const mockComponent = ({
+  Component,
+  sdk = mockSdk(mockPrimaryEntry()),
+  customTemplates = tm.mockComponentModuleTemplates,
+  mocktemplatePlaceholder = templatePlaceholder
+} = {}) => {
   return mount(
     <Component
-      customTemplates={tm.mockCustomTemplates}
-      templatePlaceholder={templatePlaceholder}
+      customTemplates={customTemplates}
+      templatePlaceholder={mocktemplatePlaceholder}
       sdk={sdk}
     />
   );
@@ -287,18 +291,24 @@ export const mockSdk = (
   };
 };
 
-export const openCreateDropdown = (wrapper, roleKey) => {
-  wrapper
-    .find('RoleSection')
-    .find({ roleKey })
-    .find('CreateNewLink')
-    .simulate('click');
+export const selectComponentZone = (wrapper, radioId, value) => {
+  wrapper.find(`#${radioId} input`).simulate('change', { target: value });
 };
 
-export const hoverLinkExistingDropdown = (wrapper, roleKey) => {
-  wrapper
-    .find('RoleSection')
-    .find({ roleKey })
+export const openCreateDropdown = (wrapper, mappingKey) => {
+  const parent = wrapper.find('RoleSection').exists()
+    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+    : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
+
+  parent.find('CreateNewLink').simulate('click');
+};
+
+export const hoverLinkExistingDropdown = (wrapper, mappingKey) => {
+  const parent = wrapper.find('RoleSection').exists()
+    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+    : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
+
+  parent
     .find('LinkExisting')
     .find('DropdownListItem')
     .find({ testId: 'link-entries-row__dropdown--link-entry-dropdown' })
@@ -306,12 +316,12 @@ export const hoverLinkExistingDropdown = (wrapper, roleKey) => {
     .simulate('mouseenter');
 };
 
-export const openLinkExistingDropdown = (wrapper, roleKey) => {
-  wrapper
-    .find('RoleSection')
-    .find({ roleKey })
-    .find('LinkExisting')
-    .simulate('click');
+export const openLinkExistingDropdown = (wrapper, mappingKey) => {
+  const parent = wrapper.find('RoleSection').exists()
+    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+    : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
+
+  parent.find('LinkExisting').simulate('click');
 };
 
 export const hoverDeepCopyDropdown = (wrapper, roleKey) => {

@@ -308,13 +308,9 @@ export default class EntryBuilder extends React.Component {
   };
 
   addComponentZone = (mappingKey, componentZoneName) => {
-    const componentConfig = componentModule[componentZoneName];
-
-    if (!componentConfig) throw `No component configuration found for ${componentZoneName}`;
-
     handleAddComponentZone({
       mappingKey,
-      componentConfig,
+      componentZoneName,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       entryInternalMapping: this.props.entryInternalMapping
     });

@@ -1,20 +1,25 @@
 import * as c from "../constants";
 
 import * as u from "../utilities";
+
 export const MOCK_CONTENT_TYPE_1 = "ct1";
 
-export const MOCK_TEMPLATE_NAME = "mock 1";
-export const MOCK_FIELDS_TEMPLATE = "fields mock";
-export const MOCK_ASSETS_TEMPLATE = "assets mock";
-export const MOCK_ENTRY_TEMPLATE = "entry mock";
-export const MOCK_MULTI_REFERENCE_LOGO_TEMPLATE = "multi-reference mock";
-export const MOCK_TEMPLATE_STYLE_ENTRY = "template style mock";
+export const MOCK_TEMPLATE_NAME = "mock1";
+export const MOCK_FIELDS_TEMPLATE = "fieldsMock";
+export const MOCK_ASSETS_TEMPLATE = "assetsMock";
+export const MOCK_ENTRY_TEMPLATE = "entryMock";
+export const MOCK_MULTI_REFERENCE_LOGO_TEMPLATE = "multiReferenceMock";
+export const MOCK_TEMPLATE_STYLE_ENTRY = "templateStyleMock";
 
-export const mockCustomTemplates = {
+export const MOCK_PAGE_MODULE_NAME = "pageModule1";
+
+export const mockComponentModuleTemplates = {
   [MOCK_TEMPLATE_NAME]: {
-    meta: {},
+    meta: {
+      componentType: c.FIELD_TYPE_ENTRY
+    },
     style: {},
-    componentZones: {
+    properties: {
       left_section: {
         fieldConfigs: [
           u.constructFieldConfig({
@@ -38,9 +43,11 @@ export const mockCustomTemplates = {
     }
   },
   [MOCK_FIELDS_TEMPLATE]: {
-    meta: {},
+    meta: {
+      componentType: c.FIELD_TYPE_ENTRY
+    },
     style: {},
-    componentZones: {
+    properties: {
       text_field: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -74,7 +81,7 @@ export const mockCustomTemplates = {
   [MOCK_ASSETS_TEMPLATE]: {
     meta: {},
     style: {},
-    componentZones: {
+    properties: {
       image_asset: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -107,9 +114,11 @@ export const mockCustomTemplates = {
     }
   },
   [MOCK_ENTRY_TEMPLATE]: {
-    meta: {},
+    meta: {
+      componentType: c.FIELD_TYPE_ENTRY
+    },
     style: {},
-    componentZones: {
+    properties: {
       entry_field: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -156,7 +165,7 @@ export const mockCustomTemplates = {
   [MOCK_MULTI_REFERENCE_LOGO_TEMPLATE]: {
     meta: {},
     style: {},
-    componentZones: {
+    properties: {
       grid_logo_multi_field: u.constructRoleConfig({
         fieldConfigs: [
           u.constructFieldConfig({
@@ -196,6 +205,24 @@ export const mockCustomTemplates = {
     style: {
       ...u.defaultStyleTypes()
     },
-    componentZones: {}
+    properties: {}
+  }
+};
+
+export const mockPageModuleTemplates = {
+  [MOCK_PAGE_MODULE_NAME]: {
+    meta: {},
+    componentZones: {
+      left_section: u.constructComponentZone({
+        componentOptions: {
+          [MOCK_TEMPLATE_NAME]: mockComponentModuleTemplates[MOCK_TEMPLATE_NAME]
+        }
+      }),
+      right_section: u.constructComponentZone({
+        componentOptions: {
+          [MOCK_TEMPLATE_NAME]: mockComponentModuleTemplates[MOCK_TEMPLATE_NAME]
+        }
+      })
+    }
   }
 };

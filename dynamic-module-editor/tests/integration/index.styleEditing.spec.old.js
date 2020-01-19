@@ -121,7 +121,7 @@ describe('App', () => {
     it('should add a custom style editor', () => {
       const mockEntry = blankEntry;
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -151,7 +151,7 @@ describe('App', () => {
     it('should add a linked style entry', async () => {
       const mockEntry = blankEntry;
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -181,7 +181,7 @@ describe('App', () => {
     it('should update style value', async () => {
       const mockEntry = blankEntry;
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -245,7 +245,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -272,7 +272,7 @@ describe('App', () => {
     it('should clear a custom style value', async () => {
       const mockEntry = blankEntry;
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -334,7 +334,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -377,7 +377,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -427,7 +427,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });
@@ -471,7 +471,7 @@ describe('App', () => {
         })
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
       const wrapper = mockComponent({ Component: App, sdk });

@@ -35,7 +35,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -73,7 +73,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -116,7 +116,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -154,7 +154,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -197,7 +197,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -235,7 +235,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 
@@ -274,7 +274,7 @@ describe('App', () => {
         internalMapping: ''
       });
 
-      const templateConfig = tm.mockCustomTemplates[tm.MOCK_FIELDS_TEMPLATE];
+      const templateConfig = tm.mockComponentModuleTemplates[tm.MOCK_FIELDS_TEMPLATE];
 
       const sdk = mockSdk(mockEntry);
 

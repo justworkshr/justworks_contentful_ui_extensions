@@ -42,3 +42,8 @@ export const templatePlaceholder = {
   },
   componentZones: {}
 };
+
+export const componentTemplatePlaceholder = {
+  meta: {},
+  properties: {}
+};

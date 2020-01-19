@@ -15,6 +15,7 @@ const ComponentZone = props => {
     if (zoneMappingObject) {
       const componentConfigObject =
         zoneConfigObject.componentOptions[zoneMappingObject.componentName];
+
       if (zoneMappingObject.type === c.FIELD_TYPE_ENTRY) {
         const entry =
           props.hydratedEntries.find(
@@ -44,7 +45,6 @@ const ComponentZone = props => {
         componentConfigObject.meta.componentType === c.FIELD_TYPE_ENTRY
       ) {
         // Render empty action row
-
         return (
           <EntryActionRow
             allowAssets={false}

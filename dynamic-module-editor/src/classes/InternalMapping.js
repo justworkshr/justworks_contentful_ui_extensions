@@ -158,7 +158,6 @@ export default class InternalMapping {
   }
 
   removeEntry(key, entryIndex = null) {
-    console.log('remove!');
     // Only remove the entry with the passed in sysId if it's a multi-reference array
     // Otherwise remove the entire key.
     if (Array.isArray((this.componentZones[key] || {}).value)) {
@@ -173,12 +172,12 @@ export default class InternalMapping {
     }
   }
 
-  addComponentZone({ mappingKey, componentConfig } = {}) {
+  addComponentZone({ mappingKey, componentZoneName } = {}) {
     this.defineGetterSetters(mappingKey);
 
     // grabs existing componentConfig name
     this.componentZones[mappingKey] = {
-      componentName: componentConfig.meta.componentName
+      componentName: componentZoneName
     };
   }
 

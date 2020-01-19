@@ -17,7 +17,6 @@ export default class ComponentMapping {
 
     */
     this._templateConfig = templateConfig;
-    console.log(this._templateConfig);
     this._type = type;
     const parsedJSON = this.loadComponentMapping(json);
     this.assignRolesFromMapping(parsedJSON);

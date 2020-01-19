@@ -143,7 +143,7 @@ describe('InternalMapping', () => {
       };
       const json = JSON.stringify(object);
       const mapping = new InternalMapping(json);
-      mapping.addComponentZone({ mappingKey: 'hi', componentConfig: mockComponentConfig() });
+      mapping.addComponentZone({ mappingKey: 'hi', componentZoneName: 'MockComponentConfig' });
 
       expect(mapping.componentZones.hi.componentName).toEqual('MockComponentConfig');
     });
