@@ -9,7 +9,7 @@ describe('InternalMapping', () => {
       const json = '';
       const mapping = new InternalMapping(json);
       expect(mapping.componentZones).toEqual({});
-      expect(mapping.patternName).toEqual('');
+      expect(mapping.patternName).toEqual(undefined);
     });
 
     it('returns empty object if invalid', () => {
@@ -17,7 +17,7 @@ describe('InternalMapping', () => {
       const mapping = new InternalMapping(json);
 
       expect(mapping.componentZones).toEqual({});
-      expect(mapping.patternName).toEqual('');
+      expect(mapping.patternName).toEqual(undefined);
     });
 
     it('does not load fields if internalMapping is blank', () => {
@@ -51,12 +51,16 @@ describe('InternalMapping', () => {
       });
 
       const templateConfig = {
+        meta: {
+          patternName: 'patternName'
+        },
         componentZones: {
           text_field: mockComponentEntry()
         }
       };
 
       const internalMapping = new InternalMapping(json, templateConfig);
+      expect(internalMapping.patternName).toEqual('patternName');
       expect(internalMapping.text_field.componentName).toEqual('MockComponentConfig');
       expect(internalMapping.text_field.properties.title).toEqual('hi');
       expect(internalMapping.text_field.type).toEqual('entry');
@@ -105,6 +109,7 @@ describe('InternalMapping', () => {
 
   describe('asJSON', () => {
     const json = JSON.stringify({
+      patternName: 'patternName',
       componentZones: {
         hi: {
           ...constructComponentZone({
@@ -118,20 +123,19 @@ describe('InternalMapping', () => {
 
     it('returns the class and properties as json', () => {
       expect(internalMapping.asJSON()).toEqual(
-        '{"patternName":"","componentZones":{"hi":{"description":"","componentOptions":[null],"required":true,"type":"entry"}}}'
+        '{"patternName":"patternName","componentZones":{"hi":{"description":"","componentOptions":[null],"required":true,"type":"entry"}}}'
       );
     });
   });
 
   describe('fieldKeys', () => {
-    const json = JSON.stringify({
-      componentZones: {
-        hi: mockComponentEntry()
-      }
-    });
-    const internalMapping = new InternalMapping(json);
-
     it('returns the class and properties as json', () => {
+      const json = JSON.stringify({
+        componentZones: {
+          hi: mockComponentEntry()
+        }
+      });
+      const internalMapping = new InternalMapping(json);
       expect(internalMapping.fieldKeys()).toEqual(['hi']);
     });
   });
@@ -167,20 +171,22 @@ describe('InternalMapping', () => {
   });
 
   describe('addEntry', () => {
-    const object = {
-      componentZones: {
-        hi: {
-          componentName: 'hello'
+    it('adds the component and link properties', () => {
+      const object = {
+        componentZones: {
+          hi: {
+            componentName: 'hello'
+          }
         }
-      }
-    };
-    const json = JSON.stringify(object);
-    const mapping = new InternalMapping(json);
+      };
+      const json = JSON.stringify(object);
+      const mapping = new InternalMapping(json);
 
-    mapping.addEntry('hi', 1);
-    expect(mapping.componentZones.hi.componentName).toEqual('hello');
-    expect(mapping.componentZones.hi.type).toEqual('entry');
-    expect(mapping.componentZones.hi.value).toEqual(1);
+      mapping.addEntry('hi', 1);
+      expect(mapping.componentZones.hi.componentName).toEqual('hello');
+      expect(mapping.componentZones.hi.type).toEqual('entry');
+      expect(mapping.componentZones.hi.value).toEqual(1);
+    });
   });
 
   describe('removeEntry', () => {

@@ -120,7 +120,7 @@ export class App extends React.Component {
     }
 
     // clear internalMapping
-    const internalMappingJson = JSON.stringify(InternalMapping.blankMapping());
+    const internalMappingJson = JSON.stringify(InternalMapping.blankMapping(type));
     // clear entries
     this.props.sdk.entry.fields.entries.removeValue();
     // clear assets

@@ -21,7 +21,8 @@ import {
   selectComponentZone,
   hoverLinkExistingDropdown,
   openLinkExistingDropdown,
-  hoverCreateCustomTemplateDropdown
+  hoverCreateCustomTemplateDropdown,
+  setupComponentZones
 } from '../utils/mockUtils';
 
 describe('ComponentModule', () => {
@@ -162,13 +163,7 @@ describe('PageModule', () => {
       });
 
       // select an entry component
-      wrapper.find('ComponentZone').forEach((node, index) => {
-        const zoneKey = node.props().componentZoneKey;
-        const firstComponentName = Object.keys(
-          templateConfig.componentZones[zoneKey].componentOptions
-        )[0];
-        selectComponentZone(wrapper, `${zoneKey}-${firstComponentName}`, firstComponentName);
-      });
+      setupComponentZones(wrapper, templateConfig, 0);
 
       expect(wrapper.find('CreateNewLink.entry-action-button__create-new')).toHaveLength(
         Object.keys(templateConfig.componentZones).length
@@ -209,14 +204,7 @@ describe('PageModule', () => {
         mocktemplatePlaceholder: componentTemplatePlaceholder
       });
 
-      // select an entry component
-      wrapper.find('ComponentZone').forEach((node, index) => {
-        const zoneKey = node.props().componentZoneKey;
-        const firstComponentName = Object.keys(
-          templateConfig.componentZones[zoneKey].componentOptions
-        )[0];
-        selectComponentZone(wrapper, `${zoneKey}-${firstComponentName}`, firstComponentName);
-      });
+      setupComponentZones(wrapper, templateConfig, 0);
 
       expect(wrapper.find('LinkExisting.entry-action-button__link-existing')).toHaveLength(
         Object.keys(templateConfig.componentZones).length

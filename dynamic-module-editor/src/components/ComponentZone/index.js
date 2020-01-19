@@ -57,7 +57,7 @@ const ComponentZone = props => {
             onAddEntryClick={props.onAddEntryClick}
             // onLinkAssetClick={props.onLinkAssetClick}
             onLinkEntryClick={props.onLinkEntryClick}
-            // onDeepCopyLinkClick={props.onDeepCopyClick}
+            onDeepCopyLinkClick={props.onDeepCopyClick}
             // onDuplicateClick={props.onDuplicateClick}
           />
         );

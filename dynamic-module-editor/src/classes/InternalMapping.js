@@ -1,8 +1,7 @@
 import * as c from '../../../customModules/constants';
 
 import { removeByIndex } from '../components/EntryBuilder/utils/index';
-import ComponentMapping from './ComponentMapping';
-import { componentModule } from '../../../customModules';
+
 export default class InternalMapping {
   constructor(json, templateConfig = { componentZones: {} }) {
     /*
@@ -69,18 +68,25 @@ export default class InternalMapping {
 
   loadInternalMapping(json) {
     // if blank
-    if (!json || !typeof json === 'string') return InternalMapping.blankMapping();
+    if (!json || !typeof json === 'string')
+      return InternalMapping.blankMapping((this._templateConfig.meta || {}).patternName);
     // if malformed object
     const parsedJSON = JSON.parse(json);
-    if (!parsedJSON.componentZones) return InternalMapping.blankMapping();
+    if (!parsedJSON.componentZones)
+      return InternalMapping.blankMapping((this._templateConfig.meta || {}).patternName);
     return parsedJSON;
   }
 
   assignRolesFromMapping(parsedJSON) {
-    // Prepare the object structure: {componentZones: {}, style: {}}
-    Object.keys(InternalMapping.blankMapping()).forEach(key => {
-      this[key] = parsedJSON[key] || InternalMapping.blankMapping()[key];
+    // Prepare the object structure: {componentZones: {}, patternName: ''}
+    Object.keys(
+      InternalMapping.blankMapping((this._templateConfig.meta || {}).patternName)
+    ).forEach(key => {
+      this[key] =
+        parsedJSON[key] ||
+        InternalMapping.blankMapping((this._templateConfig.meta || {}).patternName)[key];
     });
+
     // Load values from the entry's internalMapping Json
     Object.keys(parsedJSON.componentZones || {}).forEach(key => {
       this.componentZones[key] = parsedJSON.componentZones[key];

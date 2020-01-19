@@ -351,6 +351,7 @@ export default class EntryBuilder extends React.Component {
                 addComponentZone={this.addComponentZone}
                 clearComponentZone={this.clearComponentZone}
                 onLinkEntryClick={this.onLinkEntryClick}
+                onDeepCopyClick={this.onDeepCopyClick}
                 onAddEntryClick={this.onAddEntryClick}
                 onEditClick={this.onEditClick}
                 onRemoveClick={this.onRemoveClick}

@@ -8,6 +8,14 @@ export const newEntryRole = (newEntryArg, roleKey) => {
   return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).componentZones[roleKey];
 };
 
+export const newEntryZone = (newEntryArg, roleKey) => {
+  return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).componentZones[roleKey];
+};
+
+export const newEntryProperty = (newEntryArg, roleKey) => {
+  return JSON.parse(newEntryArg['fields']['internalMapping']['en-US']).properties[roleKey];
+};
+
 export const internalMappingRoleStyle = (internalMappingArg, roleKey) => {
   return JSON.parse(internalMappingArg).componentZones[roleKey].style.value;
 };

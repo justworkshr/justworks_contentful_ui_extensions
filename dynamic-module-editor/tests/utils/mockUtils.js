@@ -324,10 +324,11 @@ export const openLinkExistingDropdown = (wrapper, mappingKey) => {
   parent.find('LinkExisting').simulate('click');
 };
 
-export const hoverDeepCopyDropdown = (wrapper, roleKey) => {
-  wrapper
-    .find('RoleSection')
-    .find({ roleKey })
+export const hoverDeepCopyDropdown = (wrapper, mappingKey) => {
+  const parent = wrapper.find('RoleSection').exists()
+    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+    : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
+  parent
     .find('LinkExisting')
     .find('DropdownListItem')
     .find({ testId: 'link-entries-row__dropdown--deep-copy-dropdown' })
@@ -343,4 +344,16 @@ export const hoverCreateCustomTemplateDropdown = (wrapper, roleKey) => {
     .find({ testId: 'create-new-link__dropdown-custom-type' })
     .find('button')
     .simulate('mouseenter');
+};
+
+export const setupComponentZones = (wrapper, templateConfig, componentOptionIndex) => {
+  // setup zones
+  wrapper.find('ComponentZone').forEach((node, index) => {
+    const zoneKey = node.props().componentZoneKey;
+    const firstComponentName = Object.keys(templateConfig.componentZones[zoneKey].componentOptions)[
+      componentOptionIndex
+    ];
+
+    selectComponentZone(wrapper, `${zoneKey}-${firstComponentName}`, firstComponentName);
+  });
 };
