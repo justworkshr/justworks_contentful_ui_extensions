@@ -333,108 +333,23 @@ export default class EntryBuilder extends React.Component {
             Component Zones
           </DisplayText>
 
-          {Object.keys(this.props.templateConfig.componentZones).map((roleKey, index) => {
-            const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
-            const roleMappingObject =
-              this.props.entryInternalMapping.componentZones[roleKey] || null;
-
-            return (
-              <div key={`component-zone-menu--${roleKey}`}>
-                <Subheading className="sub-section__heading--header" element="h2">
-                  {displaySnakeCaseName(roleKey)}
-                  {roleMappingObject && (
-                    <TextLink
-                      className="style-editor__clear-link"
-                      icon="Close"
-                      onClick={() => {
-                        this.clearComponentZone(roleKey);
-                      }}>
-                      Clear
-                    </TextLink>
-                  )}
-                </Subheading>
-
-                <div className="style-editor__radio-section">
-                  {Object.keys(roleConfigObject.componentOptions).map(componentOption => {
-                    return (
-                      <RadioButtonField
-                        key={`${roleKey}-component-option--${componentOption}`}
-                        id={`${roleKey}-${componentOption}`}
-                        name={`${roleKey}-${componentOption}`}
-                        labelText={displayCamelCaseName(componentOption)}
-                        checked={
-                          roleMappingObject
-                            ? roleMappingObject.componentName === componentOption
-                            : false
-                        }
-                        value={componentOption}
-                        onChange={e => {
-                          this.addComponentZone(roleKey, componentOption);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-
           {Object.keys(this.props.templateConfig.componentZones).map((componentZoneKey, index) => {
+            const zoneConfigObject =
+              this.props.templateConfig.componentZones[componentZoneKey] || {};
             const zoneMappingObject =
               this.props.entryInternalMapping.componentZones[componentZoneKey] || null;
-            // const componentConfigObject = componentModule[zoneMappingObject.componentName] || null;
-            if (zoneMappingObject) {
-              const componentConfigObject = this.props.templateConfig.componentZones[
-                componentZoneKey
-              ].componentOptions[zoneMappingObject.componentName];
-              // const fieldConfigObject = getFieldConfig(
-              //   componentConfigObject.properties,
-              //   roleMappingObject
-              // );
-              {
-                /* <RoleSection
-                key={index}
-                roleKey={roleKey}
-                fieldConfigObject={fieldConfigObject}
-                roleConfigObject={roleConfigObject}
-                roleMappingObject={roleMappingObject}
-                stateErrors={this.state.errors}
-                loadingEntries={this.props.loadingEntries}
-                entryInternalMapping={this.props.entryInternalMapping}
-                templateConfig={this.props.templateConfig}
-                hydratedEntries={this.props.hydratedEntries}
-                hydratedAssets={this.props.hydratedAssets}
-                onEditClick={this.onEditClick}
-                onDeepCopyClick={this.onDeepCopyClick}
-                onDuplicateClick={this.onDuplicateClick}
-                onRemoveClick={this.onRemoveClick}
-                onFieldChange={this.onFieldChange}
-                onAddFieldClick={this.onAddFieldClick}
-                onAddEntryClick={this.onAddEntryClick}
-                onLinkAssetClick={this.onLinkAssetClick}
-                onLinkEntryClick={this.onLinkEntryClick}
-                addRoleCustomStyle={this.addRoleCustomStyle}
-                addRoleEntryStyle={this.addRoleEntryStyle}
-                clearRoleStyle={this.clearRoleStyle}
-                updateEntryStyle={this.updateEntryStyle}
-                clearEntryStyleKey={this.clearEntryStyleKey}
-                addRoleReferencesCustomStyle={this.addRoleReferencesCustomStyle}
-                addRoleReferencesEntryStyle={this.addRoleReferencesEntryStyle}
-                clearRoleReferencesStyle={this.clearRoleReferencesStyle}
-                updateReferencesStyle={this.updateReferencesStyle}
-                clearReferencesStyle={this.clearReferencesStyle}
-                onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
-              /> */
-              }
-              return (
-                <ComponentZone
-                  componentZoneKey={componentZoneKey}
-                  zoneMappingObject={zoneMappingObject}
-                  componentConfigObject={componentConfigObject}
-                  index={index}
-                />
-              );
-            }
+
+            return (
+              <ComponentZone
+                key={`cz-${componentZoneKey}`}
+                index={index}
+                componentZoneKey={componentZoneKey}
+                zoneMappingObject={zoneMappingObject}
+                zoneConfigObject={zoneConfigObject}
+                addComponentZone={this.addComponentZone}
+                clearComponentZone={this.clearComponentZone}
+              />
+            );
           })}
         </div>
       </div>

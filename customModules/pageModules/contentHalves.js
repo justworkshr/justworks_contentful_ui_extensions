@@ -12,10 +12,10 @@ export const contentHalves = {
       imageUrl: ""
     },
     componentZones: {
-      left_content: u.constructComponentZone({
+      leftContent: u.constructComponentZone({
         componentOptions: { ...titledList, ...responsiveImage }
       }),
-      right_content: u.constructComponentZone({
+      rightContent: u.constructComponentZone({
         componentOptions: { ...titledList, ...responsiveImage }
       })
     }
