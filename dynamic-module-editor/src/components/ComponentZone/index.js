@@ -32,9 +32,9 @@ const ComponentZone = props => {
               isLoading={entry ? !!props.loadingEntries.includes(entry.sys.id) : false}
               roleKey={componentZoneKey}
               roleMappingObject={zoneMappingObject}
-              // onEditClick={props.onEditClick}
+              onEditClick={props.onEditClick}
               // onDeepCopyClick={props.onDeepCopyClick}
-              // onRemoveClick={props.onRemoveClick}
+              onRemoveClick={props.onRemoveClick}
               // onFieldChange={props.onFieldChange}
             />
           </div>
@@ -91,7 +91,9 @@ ComponentZone.propTypes = {
   loadingEntries: PropTypes.array,
   addComponentZone: PropTypes.func,
   clearComponentZone: PropTypes.func,
-  onLinkEntryClick: PropTypes.func
+  onLinkEntryClick: PropTypes.func,
+  onEditClick: PropTypes.func,
+  onRemoveClick: PropTypes.func
 };
 ComponentZone.defaultProps = {
   loadingEntries: []

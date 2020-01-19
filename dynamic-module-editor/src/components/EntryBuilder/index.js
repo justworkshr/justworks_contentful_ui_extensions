@@ -171,12 +171,12 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onRemoveClick = (roleKey, entryIndex = null) => {
+  onRemoveClick = (mappingKey, entryIndex = null) => {
     handleRemoveMappingKey({
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
-      roleKey,
-      entryIndex
+      mappingKey,
+      entryIndex,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
@@ -353,6 +353,8 @@ export default class EntryBuilder extends React.Component {
                 addComponentZone={this.addComponentZone}
                 clearComponentZone={this.clearComponentZone}
                 onLinkEntryClick={this.onLinkEntryClick}
+                onEditClick={this.onEditClick}
+                onRemoveClick={this.onRemoveClick}
               />
             );
           })}

@@ -107,7 +107,7 @@ export default class InternalMapping {
         },
 
         set: value => {
-          this.properties[key] = value;
+          this.componentZones[key] = value;
         },
         configurable: true
       });
@@ -132,23 +132,6 @@ export default class InternalMapping {
     return Object.keys(this.componentZones);
   }
 
-  // removeEntry(key, entryIndex = null) {
-  //   // Only remove the entry with the passed in sysId if it's a multi-reference array
-  //   // Otherwise remove the entire key.
-  //   if (Array.isArray((this.componentZones[key] || {}).value)) {
-  //     this.componentZones[key].value = removeByIndex(this.componentZones[key].value, entryIndex);
-
-  //     // delete key entirely if array is now empty
-  //     if (!this.componentZones[key].value.length) {
-  //       delete this.componentZones[key];
-  //       delete this[key];
-  //     }
-  //   } else {
-  //     delete this.componentZones[key];
-  //     delete this[key];
-  //   }
-  // }
-
   // Can be:
   // - a linked ENTRY to a component module
   // - a linked ASSET as a component module
@@ -172,6 +155,22 @@ export default class InternalMapping {
       throw 'No componentName found on entry. Cannot add entry.';
     this.componentZones[mappingKey].type = c.FIELD_TYPE_ENTRY;
     this.componentZones[mappingKey].value = id;
+  }
+
+  removeEntry(key, entryIndex = null) {
+    console.log('remove!');
+    // Only remove the entry with the passed in sysId if it's a multi-reference array
+    // Otherwise remove the entire key.
+    if (Array.isArray((this.componentZones[key] || {}).value)) {
+      this.componentZones[key].value = removeByIndex(this.componentZones[key].value, entryIndex);
+
+      // delete key entirely if array is now empty
+      if (!this.componentZones[key].value.length) {
+        delete this.componentZones[key];
+      }
+    } else {
+      delete this.componentZones[key];
+    }
   }
 
   addComponentZone({ mappingKey, componentConfig } = {}) {

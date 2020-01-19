@@ -20,13 +20,13 @@ import {
 import { getAssetType } from '../../../shared/utilities/elementUtils';
 
 export const handleRemoveMappingKey = ({
-  props,
   updateEntry,
   mappingKey,
-  entryIndex = null
+  entryIndex = null,
+  entryInternalMapping
 } = {}) => {
   if (!mappingKey) return null;
-  const updatedInternalMapping = props.entryInternalMapping;
+  const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.removeEntry(mappingKey, entryIndex);
   updateEntry(updatedInternalMapping.asJSON());
 };

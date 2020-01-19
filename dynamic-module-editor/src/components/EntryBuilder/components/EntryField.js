@@ -58,15 +58,18 @@ export const EntryField = props => {
         contentType={contentType}
         status={getStatus(props.entry)}
         withDragHandle={true}
-        onClick={() => props.onEditClick(props.entry)}
+        onClick={() => (props.onEditClick ? props.onEditClick(props.entry) : {})}
         dropdownListElements={
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
-            <DropdownListItem
-              className="entry-card__action--edit"
-              onClick={() => props.onEditClick(props.entry)}>
-              Edit
-            </DropdownListItem>
+            {props.onEditClick && (
+              <DropdownListItem
+                className="entry-card__action--edit"
+                onClick={() => props.onEditClick(props.entry)}>
+                Edit
+              </DropdownListItem>
+            )}
+
             {props.onDeepCopyClick && (
               <DropdownListItem
                 className="entry-card__action--edit"
@@ -81,11 +84,13 @@ export const EntryField = props => {
                 Duplicate
               </DropdownListItem>
             )}
-            <DropdownListItem
-              className="entry-card__action--remove"
-              onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
-              Remove
-            </DropdownListItem>
+            {props.onRemoveClick && (
+              <DropdownListItem
+                className="entry-card__action--remove"
+                onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
+                Remove
+              </DropdownListItem>
+            )}
           </DropdownList>
         }
       />
@@ -111,16 +116,18 @@ export const EntryField = props => {
         }
         status={getStatus(props.entry)}
         withDragHandle={true}
-        onClick={() => props.onEditClick(props.entry, 'asset')}
+        onClick={() => (props.onEditClick ? props.onEditClick(props.entry, 'asset') : {})}
         isDragActive={props.isDragActive}
         dropdownListElements={
           <DropdownList>
             <DropdownListItem isTitle>Actions</DropdownListItem>
-            <DropdownListItem
-              className="asset-card__action--remove"
-              onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
-              Remove
-            </DropdownListItem>
+            {props.onRemoveClick && (
+              <DropdownListItem
+                className="asset-card__action--remove"
+                onClick={() => props.onRemoveClick(props.roleKey, props.entryIndex)}>
+                Remove
+              </DropdownListItem>
+            )}
           </DropdownList>
         }
       />
@@ -188,9 +195,7 @@ EntryField.defaultProps = {
   roleKey: '',
   isLoading: false,
   isDragActive: false,
-  roleMappingObject: {},
-  onEditClick: () => {},
-  onRemoveClick: () => {}
+  roleMappingObject: {}
 };
 
 export default EntryField;

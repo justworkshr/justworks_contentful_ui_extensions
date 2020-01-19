@@ -182,4 +182,23 @@ describe('InternalMapping', () => {
     expect(mapping.componentZones.hi.type).toEqual('entry');
     expect(mapping.componentZones.hi.value).toEqual(1);
   });
+
+  describe('removeEntry', () => {
+    it('removes the role and key', () => {
+      const object = {
+        componentZones: {
+          hi: {
+            componentName: 'hello'
+          }
+        }
+      };
+      const json = JSON.stringify(object);
+      const mapping = new InternalMapping(json);
+
+      expect(mapping.hi).toBeDefined();
+      mapping.removeEntry('hi');
+      expect(mapping.hi).toBeUndefined();
+      expect(mapping.fieldKeys()).not.toContain('hi');
+    });
+  });
 });

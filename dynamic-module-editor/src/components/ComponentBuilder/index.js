@@ -57,10 +57,10 @@ class ComponentBuilder extends React.Component {
 
   onRemoveClick = (mappingKey, entryIndex = null) => {
     handleRemoveMappingKey({
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
-      entryIndex
+      entryIndex,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
