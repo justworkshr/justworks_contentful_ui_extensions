@@ -39,7 +39,7 @@ class ComponentBuilder extends React.Component {
 
   onAddFieldClick = (mappingKey, fieldType) => {
     handleAddField({
-      props: this.props,
+      entryInternalMapping: this.props.entryInternalMapping,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       mappingKey,
       fieldType
@@ -48,7 +48,7 @@ class ComponentBuilder extends React.Component {
 
   onFieldChange = (e, mappingKey) => {
     handleFieldChange({
-      props: this.props,
+      entryInternalMapping: this.props.entryInternalMapping,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       e,
       mappingKey
@@ -72,7 +72,7 @@ class ComponentBuilder extends React.Component {
   } = {}) => {
     await handleAddEntry({
       sdk: this.props.sdk,
-      props: this.props,
+      entryInternalMapping: this.props.entryInternalMapping,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
       contentType,
@@ -95,22 +95,24 @@ class ComponentBuilder extends React.Component {
   onDeepCopyClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
       contentType,
-      entry
+      entry,
+      mappingObject: this.props.templateConfig.properties,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
   onDuplicateClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDuplicateClick({
-      sdk: this.props.sdk,
       props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
       contentType,
-      entry
+      entry,
+      mappingObject: this.props.templateConfig.properties,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 

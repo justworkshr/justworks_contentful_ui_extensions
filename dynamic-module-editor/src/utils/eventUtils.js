@@ -192,8 +192,13 @@ export const linkEntriesToTemplate = ({
   updateEntry(updatedInternalMapping.asJSON());
 };
 
-export const handleAddField = ({ props, setInternalMappingValue, mappingKey, fieldType }) => {
-  const updatedInternalMapping = props.entryInternalMapping;
+export const handleAddField = ({
+  setInternalMappingValue,
+  mappingKey,
+  fieldType,
+  entryInternalMapping
+}) => {
+  const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.addField({
     key: mappingKey,
     type: fieldType
@@ -209,7 +214,6 @@ export const handleAddEntry = async ({
   contentType,
   template = undefined,
   type = 'entry',
-  mappingObject,
   entryInternalMapping,
   multiple = false
 }) => {
@@ -352,7 +356,6 @@ export const handleLinkEntryClick = async ({
 
 export const handleDeepCopyClick = async ({
   sdk,
-  props,
   updateEntry,
   mappingKey,
   contentType,
@@ -370,7 +373,7 @@ export const handleDeepCopyClick = async ({
     entry,
     mappingKey,
     sdk.entry.getSys().id,
-    props.templateConfig.properties
+    mappingObject
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -383,7 +386,7 @@ export const handleDeepCopyClick = async ({
       `${sdk.entry.fields.name.getValue()} ${mappingKey}`
     );
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
+    if (roleIsMultiReference(mappingObject[mappingKey].fieldConfigs)) {
       linkEntriesToTemplate({
         updateEntry,
         entryResponses: [clonedEntry],
@@ -404,7 +407,6 @@ export const handleDeepCopyClick = async ({
 
 export const handleDuplicateClick = async ({
   sdk,
-  props,
   updateEntry,
   mappingKey,
   contentType,
@@ -422,7 +424,7 @@ export const handleDuplicateClick = async ({
     entry,
     mappingKey,
     sdk.entry.getSys().id,
-    props.templateConfig.properties
+    mappingObject
   );
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
@@ -431,7 +433,7 @@ export const handleDuplicateClick = async ({
   if (entry) {
     const duplicatedEntry = await duplicateEntry(sdk.space, entry);
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(props.templateConfig.properties[mappingKey].fieldConfigs)) {
+    if (roleIsMultiReference(mappingObject[mappingKey].fieldConfigs)) {
       linkEntriesToTemplate({
         updateEntry,
         entryResponses: [duplicatedEntry],
@@ -482,10 +484,15 @@ export const handleEntryEditClick = async ({ sdk, entry, type } = {}) => {
   }
 };
 
-export const handleFieldChange = ({ props, setInternalMappingValue, e, mappingKey } = {}) => {
+export const handleFieldChange = ({
+  entryInternalMapping,
+  setInternalMappingValue,
+  e,
+  mappingKey
+} = {}) => {
   const value = e.currentTarget.value;
   if (typeof value === 'string') {
-    let updatedInternalMapping = props.entryInternalMapping;
+    let updatedInternalMapping = entryInternalMapping;
     updatedInternalMapping[mappingKey].value = value;
 
     // if ((updatedInternalMapping[mappingKey].style || {}).type === c.STYLE_TYPE_CUSTOM) {

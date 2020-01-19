@@ -17,6 +17,7 @@ export default class ComponentMapping {
 
     */
     this._templateConfig = templateConfig;
+    console.log(this._templateConfig);
     this._type = type;
     const parsedJSON = this.loadComponentMapping(json);
     this.assignRolesFromMapping(parsedJSON);
@@ -62,23 +63,23 @@ export default class ComponentMapping {
   loadComponentMapping(json) {
     // if blank
     if (!json || !typeof json === 'string')
-      return ComponentMapping.blankMapping(this._templateConfig.meta.componentName);
+      return ComponentMapping.blankMapping((this._templateConfig.meta || {}).componentName);
     // if malformed object
     const parsedJSON = JSON.parse(json);
     if (!parsedJSON.properties)
-      return ComponentMapping.blankMapping(this._templateConfig.meta.componentName);
+      return ComponentMapping.blankMapping((this._templateConfig.meta || {}).componentName);
     return parsedJSON;
   }
 
   assignRolesFromMapping(parsedJSON) {
     // Prepare the object structure: {componentName: {}, properties: {}}
-    Object.keys(ComponentMapping.blankMapping(this._templateConfig.meta.componentName)).forEach(
-      key => {
-        this[key] =
-          parsedJSON[key] ||
-          ComponentMapping.blankMapping(this._templateConfig.meta.componentName)[key];
-      }
-    );
+    Object.keys(
+      ComponentMapping.blankMapping((this._templateConfig.meta || {}).componentName)
+    ).forEach(key => {
+      this[key] =
+        parsedJSON[key] ||
+        ComponentMapping.blankMapping((this._templateConfig.meta || {}).componentName)[key];
+    });
     // Load values from the entry's ComponentMapping Json
     Object.keys(parsedJSON.properties || {}).forEach(key => {
       this.properties[key] = parsedJSON.properties[key];

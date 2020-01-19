@@ -54,7 +54,7 @@ const ComponentZone = props => {
             contentTypes={[c.CONTENT_TYPE_COMPONENT_MODULE]}
             roleKey={componentZoneKey}
             // onAddFieldClick={props.onAddFieldClick}
-            // onAddEntryClick={props.onAddEntryClick}
+            onAddEntryClick={props.onAddEntryClick}
             // onLinkAssetClick={props.onLinkAssetClick}
             onLinkEntryClick={props.onLinkEntryClick}
             // onDeepCopyLinkClick={props.onDeepCopyClick}
@@ -92,6 +92,7 @@ ComponentZone.propTypes = {
   addComponentZone: PropTypes.func,
   clearComponentZone: PropTypes.func,
   onLinkEntryClick: PropTypes.func,
+  onAddEntryClick: PropTypes.func,
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func
 };

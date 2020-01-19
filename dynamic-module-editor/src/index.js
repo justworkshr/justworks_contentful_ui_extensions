@@ -91,7 +91,7 @@ export class App extends React.Component {
     });
 
     if (!this.state.internalMapping) {
-      this.setInternalMappingValue(JSON.stringify(InternalMapping.blankMapping()));
+      this.setInternalMappingValue();
     }
   }
 

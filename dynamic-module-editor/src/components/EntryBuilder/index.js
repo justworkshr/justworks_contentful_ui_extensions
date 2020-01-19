@@ -87,10 +87,10 @@ export default class EntryBuilder extends React.Component {
 
   onAddFieldClick = (roleKey, fieldType) => {
     handleAddField({
-      props: this.props,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       roleKey,
-      fieldType
+      fieldType,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
@@ -112,7 +112,7 @@ export default class EntryBuilder extends React.Component {
   } = {}) => {
     await handleAddEntry({
       sdk: this.props.sdk,
-      props: this.props,
+      entryInternalMapping: this.props.entryInternalMapping,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
       contentType,
@@ -144,22 +144,24 @@ export default class EntryBuilder extends React.Component {
   onDeepCopyClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDeepCopyClick({
       sdk: this.props.sdk,
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
       contentType,
-      entry
+      entry,
+      mappingObject: this.props.templateConfig.componentZones,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
   onDuplicateClick = async (mappingKey, contentType, entry = undefined) => {
     await handleDuplicateClick({
       sdk: this.props.sdk,
-      props: this.props,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
       contentType,
-      entry
+      entry,
+      mappingObject: this.props.templateConfig.componentZones,
+      entryInternalMapping: this.props.entryInternalMapping
     });
   };
 
@@ -189,7 +191,7 @@ export default class EntryBuilder extends React.Component {
 
   onFieldChange = (e, roleKey) => {
     handleFieldChange({
-      props: this.props,
+      entryInternalMapping: this.props.entryInternalMapping,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       e,
       roleKey
@@ -353,6 +355,7 @@ export default class EntryBuilder extends React.Component {
                 addComponentZone={this.addComponentZone}
                 clearComponentZone={this.clearComponentZone}
                 onLinkEntryClick={this.onLinkEntryClick}
+                onAddEntryClick={this.onAddEntryClick}
                 onEditClick={this.onEditClick}
                 onRemoveClick={this.onRemoveClick}
               />
