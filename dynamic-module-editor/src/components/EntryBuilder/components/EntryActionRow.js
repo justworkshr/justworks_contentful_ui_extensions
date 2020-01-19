@@ -10,34 +10,34 @@ import { roleAllowsFields, roleAllowsLinks, pluckFieldType } from '../utils';
 const EntryActionRow = props => {
   return (
     <div className="entry-action-row">
-      {!!roleAllowsFields(props.fieldConfigs) && (
+      {props.allowFields && (
         <TextLink
           icon="Quote"
           linkType="primary"
           className="entry-action-button__add-field link-entries-row__button"
-          onClick={() => props.onAddFieldClick(props.roleKey, pluckFieldType(props.fieldConfigs))}>
+          onClick={() => props.onAddFieldClick(props.roleKey, props.fieldType)}>
           Add field
         </TextLink>
       )}
-      {!!roleAllowsLinks(props.fieldConfigs) && (
+      {props.allowLinks && (
         <CreateNewLink
+          allowAssets={props.allowAssets}
           className="entry-action-button__create-new link-entries-row__button"
           onAddEntryClick={props.onAddEntryClick}
           roleKey={props.roleKey}
           allowedCollectionModules={props.allowedCollectionModules}
           contentTypes={props.contentTypes}
-          fieldConfigs={props.fieldConfigs}
         />
       )}
-      {!!roleAllowsLinks(props.fieldConfigs) && (
+      {props.allowLinks && (
         <LinkExisting
+          allowAssets={props.allowAssets}
           className="entry-action-button__link-existing link-entries-row__button"
           onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyLinkClick}
           contentTypes={props.contentTypes}
           roleKey={props.roleKey}
-          fieldConfigs={props.fieldConfigs}
         />
       )}
     </div>
@@ -45,9 +45,12 @@ const EntryActionRow = props => {
 };
 
 EntryActionRow.propTypes = {
+  allowAssets: PropTypes.bool,
+  allowLinks: PropTypes.bool,
+  allowFields: PropTypes.bool,
   allowedCollectionModules: PropTypes.array,
   contentTypes: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  fieldConfigs: PropTypes.array,
+  fieldType: PropTypes.string,
   onAddFieldClick: PropTypes.func,
   roleKey: PropTypes.string,
   onAddEntryClick: PropTypes.func,

@@ -15,6 +15,7 @@ import {
 import TemplateStyleEditor from './components/TemplateStyleEditor';
 
 import RoleSection from '../RoleSection';
+import ComponentZone from '../ComponentZone';
 
 import InternalMapping from '../../classes/InternalMapping';
 
@@ -327,27 +328,6 @@ export default class EntryBuilder extends React.Component {
   render() {
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
-        {/* {this.props.templateConfig.style && (
-          <div className="custom-template-entry-builder__section">
-            <DisplayText className="style-editor__heading--header" element="h1">
-              Styles
-            </DisplayText>
-            {Object.keys(this.props.templateConfig.style).map(styleSectionKey => {
-              return (
-                <TemplateStyleEditor
-                  className="max-width-600"
-                  key={`style-section-${styleSectionKey}`}
-                  updateStyle={this.updateTemplateStyle}
-                  clearStyle={this.clearTemplateStyle}
-                  templateStyleObject={this.props.templateConfig.style[styleSectionKey]}
-                  mappingStyleObject={this.props.entryInternalMapping.style[styleSectionKey]}
-                  styleSectionKey={styleSectionKey}
-                  title={displaySnakeCaseName(styleSectionKey)}
-                />
-              );
-            })}
-          </div>
-        )} */}
         <div className="custom-template-entry-builder__section">
           <DisplayText className="style-editor__heading--header" element="h1">
             Component Zones
@@ -399,52 +379,60 @@ export default class EntryBuilder extends React.Component {
             );
           })}
 
-          {Object.keys(this.props.templateConfig.componentZones).map((roleKey, index) => {
-            const roleConfigObject = this.props.templateConfig.componentZones[roleKey] || {};
-            const roleMappingObject =
-              this.props.entryInternalMapping.componentZones[roleKey] || null;
-
-            if (roleMappingObject) {
-              // const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
+          {Object.keys(this.props.templateConfig.componentZones).map((componentZoneKey, index) => {
+            const zoneMappingObject =
+              this.props.entryInternalMapping.componentZones[componentZoneKey] || null;
+            // const componentConfigObject = componentModule[zoneMappingObject.componentName] || null;
+            if (zoneMappingObject) {
+              const componentConfigObject = this.props.templateConfig.componentZones[
+                componentZoneKey
+              ].componentOptions[zoneMappingObject.componentName];
+              // const fieldConfigObject = getFieldConfig(
+              //   componentConfigObject.properties,
+              //   roleMappingObject
+              // );
+              {
+                /* <RoleSection
+                key={index}
+                roleKey={roleKey}
+                fieldConfigObject={fieldConfigObject}
+                roleConfigObject={roleConfigObject}
+                roleMappingObject={roleMappingObject}
+                stateErrors={this.state.errors}
+                loadingEntries={this.props.loadingEntries}
+                entryInternalMapping={this.props.entryInternalMapping}
+                templateConfig={this.props.templateConfig}
+                hydratedEntries={this.props.hydratedEntries}
+                hydratedAssets={this.props.hydratedAssets}
+                onEditClick={this.onEditClick}
+                onDeepCopyClick={this.onDeepCopyClick}
+                onDuplicateClick={this.onDuplicateClick}
+                onRemoveClick={this.onRemoveClick}
+                onFieldChange={this.onFieldChange}
+                onAddFieldClick={this.onAddFieldClick}
+                onAddEntryClick={this.onAddEntryClick}
+                onLinkAssetClick={this.onLinkAssetClick}
+                onLinkEntryClick={this.onLinkEntryClick}
+                addRoleCustomStyle={this.addRoleCustomStyle}
+                addRoleEntryStyle={this.addRoleEntryStyle}
+                clearRoleStyle={this.clearRoleStyle}
+                updateEntryStyle={this.updateEntryStyle}
+                clearEntryStyleKey={this.clearEntryStyleKey}
+                addRoleReferencesCustomStyle={this.addRoleReferencesCustomStyle}
+                addRoleReferencesEntryStyle={this.addRoleReferencesEntryStyle}
+                clearRoleReferencesStyle={this.clearRoleReferencesStyle}
+                updateReferencesStyle={this.updateReferencesStyle}
+                clearReferencesStyle={this.clearReferencesStyle}
+                onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
+              /> */
+              }
               return (
-                <div>
-                  <Subheading className="sub-section__heading--header" element="h2">
-                    {displaySnakeCaseName(roleKey)}
-                  </Subheading>
-                  {/* <RoleSection
-                    key={index}
-                    roleKey={roleKey}
-                    fieldConfigObject={fieldConfigObject}
-                    roleConfigObject={roleConfigObject}
-                    roleMappingObject={roleMappingObject}
-                    stateErrors={this.state.errors}
-                    loadingEntries={this.props.loadingEntries}
-                    entryInternalMapping={this.props.entryInternalMapping}
-                    templateConfig={this.props.templateConfig}
-                    hydratedEntries={this.props.hydratedEntries}
-                    hydratedAssets={this.props.hydratedAssets}
-                    onEditClick={this.onEditClick}
-                    onDeepCopyClick={this.onDeepCopyClick}
-                    onDuplicateClick={this.onDuplicateClick}
-                    onRemoveClick={this.onRemoveClick}
-                    onFieldChange={this.onFieldChange}
-                    onAddFieldClick={this.onAddFieldClick}
-                    onAddEntryClick={this.onAddEntryClick}
-                    onLinkAssetClick={this.onLinkAssetClick}
-                    onLinkEntryClick={this.onLinkEntryClick}
-                    addRoleCustomStyle={this.addRoleCustomStyle}
-                    addRoleEntryStyle={this.addRoleEntryStyle}
-                    clearRoleStyle={this.clearRoleStyle}
-                    updateEntryStyle={this.updateEntryStyle}
-                    clearEntryStyleKey={this.clearEntryStyleKey}
-                    addRoleReferencesCustomStyle={this.addRoleReferencesCustomStyle}
-                    addRoleReferencesEntryStyle={this.addRoleReferencesEntryStyle}
-                    clearRoleReferencesStyle={this.clearRoleReferencesStyle}
-                    updateReferencesStyle={this.updateReferencesStyle}
-                    clearReferencesStyle={this.clearReferencesStyle}
-                    onMultiReferenceDragEnd={this.onMultiReferenceDragEnd}
-                  /> */}
-                </div>
+                <ComponentZone
+                  componentZoneKey={componentZoneKey}
+                  zoneMappingObject={zoneMappingObject}
+                  componentConfigObject={componentConfigObject}
+                  index={index}
+                />
               );
             }
           })}

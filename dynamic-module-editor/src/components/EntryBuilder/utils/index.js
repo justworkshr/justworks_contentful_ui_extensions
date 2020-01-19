@@ -4,13 +4,13 @@ import * as c from '../../../../../customModules/constants';
 import { setEntryLoading } from './stateUtils';
 import { handleRemoveMappingKey } from '../../../utils/eventUtils';
 
-export const getFieldConfig = (roleConfigObject, roleMappingObject) => {
+export const getFieldConfig = (configObject, roleMappingObject) => {
   if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
-    return roleConfigObject.fieldConfigs.find(fc => {
+    return configObject.fieldConfigs.find(fc => {
       return fc.type === c.FIELD_TYPE_ENTRY && fc.contentType === roleMappingObject.contentType;
     });
   } else {
-    return roleConfigObject.fieldConfigs.find(fc => fc.type === roleMappingObject.type);
+    return configObject.fieldConfigs.find(fc => fc.type === roleMappingObject.type);
   }
 };
 

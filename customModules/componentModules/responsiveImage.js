@@ -5,6 +5,7 @@ export const responsiveImage = {
   [c.COMPONENT_RESPONSIVE_IMAGE]: {
     meta: {
       componentName: c.COMPONENT_RESPONSIVE_IMAGE,
+      componentType: c.FIELD_TYPE_PSEUDO_ASSET,
       description: "",
       imageUrl: ""
     },

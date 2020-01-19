@@ -19,15 +19,7 @@ import {
   displayCamelCaseName
 } from '../../../../shared/utilities/elementUtils';
 
-import {
-  isDirectField,
-  roleIsMultiReference,
-  getContentTypes,
-  pluckFieldType,
-  roleAllowsFields,
-  roleAllowsAssets,
-  roleAllowsLinks
-} from '../EntryBuilder/utils';
+import { isDirectField, roleIsMultiReference, getContentTypes } from '../EntryBuilder/utils';
 
 import {
   renderSingleEntryStyle,
@@ -48,7 +40,10 @@ const RoleSection = props => {
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {
-      const fieldConfigs = props.templateConfig.properties[roleKey].fieldConfigs;
+      const firstAsset =
+        roleMappingObject.value && roleMappingObject.value.length
+          ? roleMappingObject.value.find(e => e.type === c.FIELD_TYPE_ASSET)
+          : undefined;
       // render multi field
       return (
         <div className="section-row">
@@ -68,13 +63,9 @@ const RoleSection = props => {
               onMultiReferenceDragEnd={props.onMultiReferenceDragEnd}
             />
             <EntryActionRow
-              allowAssets={roleAllowsAssets(fieldConfigs)}
-              allowFields={roleAllowsFields(fieldConfigs)}
-              allowLinks={roleAllowsLinks(fieldConfigs)}
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
               contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
-              fieldType={pluckFieldType(fieldConfigs)}
               onAddFieldClick={props.onAddFieldClick}
               roleKey={roleKey}
               onAddEntryClick={props.onAddEntryClick}
@@ -82,7 +73,54 @@ const RoleSection = props => {
               onLinkEntryClick={props.onLinkEntryClick}
               onDeepCopyLinkClick={props.onDeepCopyClick}
               onDuplicateClick={props.onDuplicateClick}
+              fieldConfigs={props.templateConfig.properties[roleKey].fieldConfigs}
             />
+          </div>
+          <div className="section-column">
+            {renderMultiReferenceStyle(fieldConfigObject) && (
+              <RoleStyleSection
+                className="max-width-600"
+                addCustomStyle={props.addRoleCustomStyle}
+                addEntryStyle={props.addRoleEntryStyle}
+                clearRoleStyle={props.clearRoleStyle}
+                fieldConfigObject={fieldConfigObject}
+                styleView={fieldConfigObject.styleView}
+                styleEntry={
+                  roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
+                    ? props.hydratedEntries.find(e => e.sys.id === roleMappingObject.style.value)
+                    : undefined
+                }
+                roleKey={roleKey}
+                roleConfigObject={roleConfigObject}
+                roleMappingObject={roleMappingObject}
+                updateStyle={props.updateEntryStyle}
+                clearStyleField={props.clearEntryStyleKey}
+                title={displayCamelCaseName(roleKey) + ' Style'}
+                type={roleMappingObject.type}
+              />
+            )}
+            {renderMultiReferenceAssetStyle(roleMappingObject, fieldConfigObject) && (
+              <RoleStyleSection
+                className="max-width-600"
+                addCustomStyle={props.addRoleReferencesCustomStyle}
+                addEntryStyle={props.addRoleReferencesEntryStyle}
+                clearRoleStyle={props.clearRoleReferencesStyle}
+                fieldConfigObject={fieldConfigObject}
+                styleView={fieldConfigObject.assetStyleView}
+                styleEntry={
+                  firstAsset.style && firstAsset.style.type === c.STYLE_TYPE_ENTRY
+                    ? props.hydratedEntries.find(e => e.sys.id === firstAsset.style.value)
+                    : undefined
+                }
+                roleKey={roleKey}
+                roleConfigObject={roleConfigObject}
+                roleMappingObject={firstAsset}
+                updateStyle={props.updateReferencesStyle}
+                clearStyleField={props.clearReferencesStyle}
+                title={displayCamelCaseName(roleKey) + ' Asset Style'}
+                type={c.FIELD_TYPE_ASSET}
+              />
+            )}
           </div>
         </div>
       );
@@ -106,21 +144,37 @@ const RoleSection = props => {
             onFieldChange={props.onFieldChange}
             roleMappingObject={roleMappingObject}
           />
+          {renderSingleEntryStyle(fieldConfigObject) && (
+            <RoleStyleSection
+              className="max-width-600"
+              addCustomStyle={props.addRoleCustomStyle}
+              addEntryStyle={props.addRoleEntryStyle}
+              clearRoleStyle={props.clearRoleStyle}
+              fieldConfigObject={fieldConfigObject}
+              styleView={fieldConfigObject.styleView}
+              styleEntry={
+                roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY
+                  ? props.hydratedEntries.find(e => e.sys.id === roleMappingObject.style.value)
+                  : undefined
+              }
+              roleKey={roleKey}
+              roleConfigObject={roleConfigObject}
+              roleMappingObject={roleMappingObject}
+              updateStyle={props.updateEntryStyle}
+              clearStyleField={props.clearEntryStyleKey}
+              title={displayCamelCaseName(roleKey) + ' Style'}
+              type={roleMappingObject.type}
+            />
+          )}
         </div>
       );
     } else {
-      const fieldConfigs = props.templateConfig.properties[roleKey].fieldConfigs;
-
       // Render empty action row
       return (
         <EntryActionRow
-          allowAssets={roleAllowsAssets(fieldConfigs)}
-          allowFields={roleAllowsFields(fieldConfigs)}
-          allowLinks={roleAllowsLinks(fieldConfigs)}
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
           contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
-          fieldType={pluckFieldType(fieldConfigs)}
           onAddFieldClick={props.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={props.onAddEntryClick}
@@ -128,7 +182,7 @@ const RoleSection = props => {
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyClick}
           onDuplicateClick={props.onDuplicateClick}
-          fieldConfigs={fieldConfigs}
+          fieldConfigs={props.templateConfig.properties[roleKey].fieldConfigs}
         />
       );
     }

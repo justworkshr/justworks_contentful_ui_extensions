@@ -13,10 +13,10 @@ export const contentHalves = {
     },
     componentZones: {
       left_content: u.constructComponentZone({
-        componentOptions: { titledList, responsiveImage }
+        componentOptions: { ...titledList, ...responsiveImage }
       }),
       right_content: u.constructComponentZone({
-        componentOptions: { titledList, responsiveImage }
+        componentOptions: { ...titledList, ...responsiveImage }
       })
     }
   }
