@@ -9,7 +9,7 @@ describe('InternalMapping', () => {
       const json = '';
       const mapping = new InternalMapping(json);
       expect(mapping.componentZones).toEqual({});
-      expect(mapping.patternName).toEqual(undefined);
+      expect(mapping.patternName).toEqual('');
     });
 
     it('returns empty object if invalid', () => {
@@ -17,7 +17,7 @@ describe('InternalMapping', () => {
       const mapping = new InternalMapping(json);
 
       expect(mapping.componentZones).toEqual({});
-      expect(mapping.patternName).toEqual(undefined);
+      expect(mapping.patternName).toEqual('');
     });
 
     it('does not load fields if internalMapping is blank', () => {

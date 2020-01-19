@@ -148,7 +148,6 @@ describe('ComponentModule', () => {
 
       // updates sdk
       await resolveAll();
-      console.log(sdk.space.updateEntry.args[0][0]);
       expect(newEntryEntryIds(sdk.space.updateEntry.args[0][0])).toContain('newLinkedEntry1b');
       expect(newEntryProperty(sdk.space.updateEntry.args[0][0], 'entry_field').value).toEqual(
         'newLinkedEntry1b'
@@ -341,8 +340,6 @@ describe('PageModule', () => {
       const mappingKey = Object.keys(templateConfig.componentZones)[0];
 
       setupComponentZones(wrapper, templateConfig, 0);
-
-      // console.log(wrapper.debug());
 
       openLinkExistingDropdown(wrapper, mappingKey);
       hoverLinkExistingDropdown(wrapper, mappingKey);

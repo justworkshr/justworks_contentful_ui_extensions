@@ -16,7 +16,8 @@ export const MOCK_PAGE_MODULE_NAME = "pageModule1";
 export const mockComponentModuleTemplates = {
   [MOCK_TEMPLATE_NAME]: {
     meta: {
-      componentType: c.FIELD_TYPE_ENTRY
+      componentType: c.FIELD_TYPE_ENTRY,
+      componentName: MOCK_TEMPLATE_NAME
     },
     style: {},
     properties: {

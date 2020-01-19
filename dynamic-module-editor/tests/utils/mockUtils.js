@@ -129,12 +129,19 @@ export const mockEntryResponse = ({ id = 0, contentType = 'text' } = {}) => {
   };
 };
 
-export const mockMapping = ({ type, value = '', contentType = '', style = {} } = {}) => {
+export const mockMapping = ({ type, value = '', contentType = '' } = {}) => {
   return {
     type,
     value,
-    contentType,
-    style
+    contentType
+  };
+};
+
+export const mockZoneMapping = ({ componentName = '', type = '', value } = {}) => {
+  return {
+    componentName,
+    type,
+    value
   };
 };
 
@@ -201,9 +208,11 @@ export const mockSdk = (
       },
       getEntries: query => {
         const ids = query['sys.id[in]'].split(',');
-        return ids.map(id => {
-          return mockEntryResponse({ id });
-        });
+        return {
+          items: ids.map(id => {
+            return mockEntryResponse({ id });
+          })
+        };
       },
       getAssets: query => {
         const ids = query['sys.id[in]'].split(',');

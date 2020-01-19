@@ -15,7 +15,6 @@ const ComponentZone = props => {
     if (zoneMappingObject) {
       const componentConfigObject =
         zoneConfigObject.componentOptions[zoneMappingObject.componentName];
-
       if (zoneMappingObject.type === c.FIELD_TYPE_ENTRY) {
         const entry =
           props.hydratedEntries.find(
@@ -24,6 +23,7 @@ const ComponentZone = props => {
           props.hydratedAssets.find(
             a => a.sys.id === props.entryInternalMapping[componentZoneKey].value
           );
+
         return (
           <div className="section-row">
             <EntryField

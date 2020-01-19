@@ -5,6 +5,7 @@ import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import * as c from '../../../customModules/constants';
+import { componentTemplatePlaceholder } from '../../../customModules';
 
 import * as tm from '../../../customModules/mocks/templateMocks';
 
@@ -14,14 +15,17 @@ import {
   mockPrimaryEntry,
   mockLink,
   mockAssetMapping,
-  mockMapping
+  mockMapping,
+  mockZoneMapping,
+  setupComponentZones
 } from '../utils/mockUtils';
 
 import {
   resolveAll,
   newEntryAssetIds,
   newEntryEntryIds,
-  newEntryProperty
+  newEntryProperty,
+  newEntryZone
 } from '../utils/assertUtils';
 
 configure({ adapter: new Adapter() });
@@ -244,6 +248,75 @@ describe('ComponentModule', () => {
           .value.map(asset => asset.value)
           .filter(e => e)
       ).toEqual([2, 3]);
+    });
+  });
+});
+
+describe('PageModule', () => {
+  describe('removing entries', () => {
+    it('should remove from a single entry', async () => {
+      const templateConfig = tm.mockPageModuleTemplates[tm.MOCK_PAGE_MODULE_NAME];
+      const mappingKey = Object.keys(templateConfig.componentZones)[0];
+
+      const mockEntry = mockPrimaryEntry({
+        name: 'Mock Custom Template Entry',
+        type: tm.MOCK_PAGE_MODULE_NAME,
+        entries: [mockLink({ id: '1' })],
+        assets: undefined,
+        internalMapping: JSON.stringify({
+          componentZones: {
+            [mappingKey]: mockZoneMapping({
+              componentName: 'MockComponent',
+              type: c.FIELD_TYPE_ENTRY,
+              value: '1'
+            })
+          }
+        })
+      });
+
+      const sdk = mockSdk(mockEntry, c.CONTENT_TYPE_PAGE_MODULE);
+      const wrapper = mockComponent({
+        Component: App,
+        sdk,
+        customTemplates: tm.mockPageModuleTemplates,
+        mocktemplatePlaceholder: componentTemplatePlaceholder
+      });
+
+      await resolveAll();
+      wrapper.update();
+      // console.log()
+      // setupComponentZones(wrapper, templateConfig, 0);
+
+      await resolveAll();
+      wrapper.update();
+      // console.log(
+      //   wrapper
+      //     .find('ComponentZone')
+      //     .find({ componentZoneKey: mappingKey })
+      //     .debug()
+      // );
+      // open dropdown
+      wrapper
+        .find('ComponentZone')
+        .find({ componentZoneKey: mappingKey })
+        .find('EntryCard')
+        .at(0)
+        .find('CardActions button')
+        .simulate('click');
+
+      // click remove button
+      wrapper
+        .find('ComponentZone')
+        .find({ componentZoneKey: mappingKey })
+        .find('EntryCard')
+        .at(0)
+        .find('CardActions')
+        .find('.entry-card__action--remove button')
+        .simulate('click');
+
+      // updates sdk
+      await resolveAll();
+      expect(newEntryZone(sdk.space.updateEntry.args[0][0], mappingKey)).toBeUndefined();
     });
   });
 });

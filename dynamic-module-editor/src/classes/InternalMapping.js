@@ -179,6 +179,7 @@ export default class InternalMapping {
   }
 
   addComponentZone({ mappingKey, componentZoneName } = {}) {
+    if (this.componentZones[mappingKey]) return;
     this.defineGetterSetters(mappingKey);
 
     // grabs existing componentConfig name

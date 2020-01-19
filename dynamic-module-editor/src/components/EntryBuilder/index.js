@@ -337,7 +337,6 @@ export default class EntryBuilder extends React.Component {
               this.props.templateConfig.componentZones[componentZoneKey] || {};
             const zoneMappingObject =
               this.props.entryInternalMapping.componentZones[componentZoneKey] || null;
-
             return (
               <ComponentZone
                 key={`cz-${componentZoneKey}`}
