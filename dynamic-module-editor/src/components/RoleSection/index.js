@@ -19,15 +19,7 @@ import {
   displayCamelCaseName
 } from '../../../../shared/utilities/elementUtils';
 
-import {
-  isDirectField,
-  roleIsMultiReference,
-  getContentTypes,
-  pluckFieldType,
-  roleAllowsFields,
-  roleAllowsAssets,
-  roleAllowsLinks
-} from '../EntryBuilder/utils';
+import { isDirectField, roleIsMultiReference, getContentTypes } from '../EntryBuilder/utils';
 
 import {
   renderSingleEntryStyle,
@@ -39,18 +31,14 @@ import MultiRow from '../EntryBuilder/components/MultiRow';
 
 const RoleSection = props => {
   const renderEntryFields = (roleKey, propertyConfigObject, roleMappingObject) => {
-    console.log(propertyConfigObject);
     // Multi References and with entries
-
     const customTemplateFieldConfig = getCustomTemplateFieldConfig(propertyConfigObject) || {};
 
     if (
-      roleIsMultiReference(propertyConfigObject.fieldConfigs) &&
+      propertyConfigObject.propertyType === c.FIELD_TYPE_MULTI_REFERENCE &&
       roleMappingObject.value &&
       roleMappingObject.value.length
     ) {
-      const fieldConfigs = props.templateConfig.properties[roleKey].fieldConfigs;
-
       // render multi field
       return (
         <div className="section-row">
@@ -76,7 +64,7 @@ const RoleSection = props => {
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
               contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
-              fieldType={pluckFieldType(fieldConfigs)}
+              fieldType={propertyConfigObject.propertyType}
               onAddFieldClick={props.onAddFieldClick}
               roleKey={roleKey}
               onAddEntryClick={props.onAddEntryClick}
@@ -98,7 +86,7 @@ const RoleSection = props => {
           <EntryField
             className="max-width-600"
             entry={entry}
-            fieldType={roleMappingObject.type}
+            fieldType={propertyConfigObject.propertyType}
             isLoading={entry ? !!props.loadingEntries.includes(entry.sys.id) : false}
             roleKey={roleKey}
             onEditClick={props.onEditClick}
@@ -110,8 +98,6 @@ const RoleSection = props => {
         </div>
       );
     } else {
-      const fieldConfigs = props.templateConfig.properties[roleKey].fieldConfigs;
-
       // Render empty action row
       return (
         <EntryActionRow
@@ -121,7 +107,7 @@ const RoleSection = props => {
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
           contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
-          fieldType={pluckFieldType(fieldConfigs)}
+          fieldType={propertyConfigObject.propertyType}
           onAddFieldClick={props.onAddFieldClick}
           roleKey={roleKey}
           onAddEntryClick={props.onAddEntryClick}
@@ -129,7 +115,6 @@ const RoleSection = props => {
           onLinkEntryClick={props.onLinkEntryClick}
           onDeepCopyLinkClick={props.onDeepCopyClick}
           onDuplicateClick={props.onDuplicateClick}
-          fieldConfigs={fieldConfigs}
         />
       );
     }
@@ -154,12 +139,7 @@ const RoleSection = props => {
         )}
       </div>
       <HelpText>{props.roleConfigObject.description}</HelpText>
-      {renderEntryFields(
-        props.roleKey,
-        props.roleConfigObject,
-        props.roleMappingObject,
-        props.fieldConfigObject
-      )}
+      {renderEntryFields(props.roleKey, props.roleConfigObject, props.roleMappingObject)}
 
       {!!(props.stateErrors[props.roleKey] || {}).length &&
         props.stateErrors[props.roleKey].map((error, index) => {
@@ -175,7 +155,6 @@ const RoleSection = props => {
 
 RoleSection.propTypes = {
   entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  fieldConfigObject: PropTypes.object,
   roleMappingObject: PropTypes.object,
   roleKey: PropTypes.string,
   roleConfigObject: PropTypes.object,

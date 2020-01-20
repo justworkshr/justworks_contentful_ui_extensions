@@ -157,11 +157,13 @@ export const EntryField = props => {
           {capitalize(props.fieldType)}
         </Subheading>
       </div>
-      {props.fieldType === c.FIELD_TYPE_ASSET && renderAssetCard()}
-      {props.fieldType === c.FIELD_TYPE_ENTRY && renderEntryCard()}
-      {props.fieldType === c.FIELD_TYPE_TEXT && renderTextField(props.roleMappingObject.value)}
-      {props.fieldType === c.FIELD_TYPE_TITLE && renderTextField(props.roleMappingObject.value)}
-      {props.fieldType === c.FIELD_TYPE_MARKDOWN &&
+      {props.entry && props.roleMappingObject.type === c.FIELD_TYPE_ASSET && renderAssetCard()}
+      {props.entry && props.roleMappingObject.type === c.FIELD_TYPE_ENTRY && renderEntryCard()}
+      {props.roleMappingObject.type === c.FIELD_TYPE_TEXT &&
+        renderTextField(props.roleMappingObject.value)}
+      {props.roleMappingObject.type === c.FIELD_TYPE_TITLE &&
+        renderTextField(props.roleMappingObject.value)}
+      {props.roleMappingObject.type === c.FIELD_TYPE_MARKDOWN &&
         renderMarkdownField(props.roleMappingObject.value)}
     </div>
   );

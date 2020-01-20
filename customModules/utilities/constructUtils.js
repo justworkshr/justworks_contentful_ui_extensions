@@ -30,10 +30,12 @@ export const constructComponentConfig = ({
 
 export const constructComponentProperty = ({
   description = {},
+  propertyType,
   fieldConfigs = []
 } = {}) => {
   return {
     description,
+    propertyType,
     fieldConfigs
   };
 };

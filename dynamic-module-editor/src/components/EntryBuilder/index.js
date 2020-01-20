@@ -19,7 +19,6 @@ import ComponentZone from '../ComponentZone';
 
 import InternalMapping from '../../classes/InternalMapping';
 
-import { getFieldConfig } from './utils';
 import {
   displayCamelCaseName,
   displaySnakeCaseName

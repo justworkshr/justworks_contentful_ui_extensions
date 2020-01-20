@@ -5,8 +5,6 @@ import CreateNewLink from './CreateNewLink';
 import LinkExisting from './LinkExisting';
 import { TextLink } from '@contentful/forma-36-react-components';
 
-import { roleAllowsFields, roleAllowsLinks, pluckFieldType } from '../utils';
-
 const EntryActionRow = props => {
   return (
     <div className="entry-action-row">
@@ -65,7 +63,6 @@ EntryActionRow.propTypes = {
 
 EntryActionRow.defaultProps = {
   allowEntries: true,
-  allowLinks: true,
   allowAssets: false,
   allowFields: false,
   contentTypes: []

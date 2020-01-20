@@ -5,7 +5,6 @@ import RoleSection from '../RoleSection';
 import { Heading, Subheading } from '@contentful/forma-36-react-components';
 
 import { displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
-import { getFieldConfig } from '../EntryBuilder/utils';
 
 import {
   handleRemoveMappingKey,
@@ -144,13 +143,11 @@ class ComponentBuilder extends React.Component {
         {Object.keys(this.props.templateConfig.properties).map((propertyKey, index) => {
           const roleConfigObject = this.props.templateConfig.properties[propertyKey] || {};
           const roleMappingObject = this.props.entryInternalMapping.properties[propertyKey] || {};
-          const fieldConfigObject = getFieldConfig(roleConfigObject, roleMappingObject);
 
           return (
             <RoleSection
               key={index}
               roleKey={propertyKey}
-              fieldConfigObject={fieldConfigObject}
               roleConfigObject={roleConfigObject}
               roleMappingObject={roleMappingObject}
               stateErrors={this.state.errors}

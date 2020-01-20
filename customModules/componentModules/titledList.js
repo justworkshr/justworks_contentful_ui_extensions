@@ -13,27 +13,11 @@ export const titledList = {
     properties: {
       titleText: u.constructComponentProperty({
         description: "Text for the title.",
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_TEXT
-          }),
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ENTRY,
-            contentType: c.CONTENT_TYPE_GENERIC_TEXT
-          })
-        ]
+        propertyType: c.FIELD_TYPE_TEXT
       }),
       listMarkdown: u.constructComponentProperty({
         description: "Markdown formatted list.",
-        fieldConfigs: [
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_MARKDOWN
-          }),
-          u.constructFieldConfig({
-            type: c.FIELD_TYPE_ENTRY,
-            contentType: c.CONTENT_TYPE_GENERIC_MARKDOWN
-          })
-        ]
+        propertyType: c.FIELD_TYPE_MARKDOWN
       })
     }
   }

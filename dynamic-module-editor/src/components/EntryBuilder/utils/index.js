@@ -3,26 +3,18 @@ import * as c from '../../../../../customModules/constants';
 
 import { setEntryLoading } from './stateUtils';
 import { handleRemoveMappingKey } from '../../../utils/eventUtils';
+import {
+  CONTENT_TYPE_GENERIC_TEXT,
+  CONTENT_TYPE_GENERIC_MARKDOWN
+} from '../../../../../customModules/constants';
 
-export const getFieldConfig = (configObject, roleMappingObject) => {
-  if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
-    return configObject.fieldConfigs.find(fc => {
-      return fc.type === c.FIELD_TYPE_ENTRY && fc.contentType === roleMappingObject.contentType;
-    });
-  } else {
-    return configObject.fieldConfigs.find(fc => fc.type === roleMappingObject.type);
+export const getContentTypes = propertyConfigObject => {
+  switch (propertyConfigObject.propertyType) {
+    case c.FIELD_TYPE_TEXT:
+      return [CONTENT_TYPE_GENERIC_TEXT];
+    case c.FIELD_TYPE_MARKDOWN:
+      return [CONTENT_TYPE_GENERIC_MARKDOWN];
   }
-};
-
-export const getContentTypes = roleConfigObject => {
-  return roleConfigObject.fieldConfigs.reduce((accumulator, fc) => {
-    if (fc.type === c.FIELD_TYPE_ENTRY) {
-      accumulator.push(fc.contentType);
-    } else if (fc.type === c.FIELD_TYPE_MULTI_REFERENCE) {
-      accumulator = [...accumulator, ...fc.contentType];
-    }
-    return accumulator;
-  }, []);
 };
 
 export const isEditableEntry = contentType => {

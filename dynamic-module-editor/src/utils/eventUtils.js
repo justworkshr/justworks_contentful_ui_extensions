@@ -368,7 +368,8 @@ export const handleDeepCopyClick = async ({
   contentType,
   entry = undefined,
   mappingObject,
-  entryInternalMapping
+  entryInternalMapping,
+  multiple
 } = {}) => {
   entry =
     entry ||
@@ -393,7 +394,7 @@ export const handleDeepCopyClick = async ({
       `${sdk.entry.fields.name.getValue()} ${mappingKey}`
     );
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(mappingObject[mappingKey].fieldConfigs)) {
+    if (multiple) {
       linkEntriesToTemplate({
         updateEntry,
         entryResponses: [clonedEntry],
@@ -419,7 +420,8 @@ export const handleDuplicateClick = async ({
   contentType,
   entry = undefined,
   mappingObject,
-  entryInternalMapping
+  entryInternalMapping,
+  multiple
 } = {}) => {
   entry =
     entry ||
@@ -440,7 +442,7 @@ export const handleDuplicateClick = async ({
   if (entry) {
     const duplicatedEntry = await duplicateEntry(sdk.space, entry);
     // Only links 1 entry at a time, even in multi-reference fields
-    if (roleIsMultiReference(mappingObject[mappingKey].fieldConfigs)) {
+    if (multiple) {
       linkEntriesToTemplate({
         updateEntry,
         entryResponses: [duplicatedEntry],
