@@ -31,11 +31,13 @@ export const constructComponentConfig = ({
 export const constructComponentProperty = ({
   description = {},
   propertyType,
+  fieldTypes,
   assetType
 } = {}) => {
   return {
     description,
     propertyType,
+    fieldTypes,
     assetType
   };
 };

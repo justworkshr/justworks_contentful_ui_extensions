@@ -50,12 +50,7 @@ describe('ComponentModule', () => {
 
       wrapper.find('CreateNewLink.entry-action-button__create-new').forEach(node => {
         const roleKey = node.props().roleKey;
-        const entryFieldConfigs = templateConfig.properties[roleKey].fieldConfigs.filter(
-          e => e.type === c.FIELD_TYPE_ENTRY && e.contentType !== c.CONTENT_TYPE_COLLECTION_MODULE
-        );
-        const customTemplateFieldConfigs = templateConfig.properties[roleKey].fieldConfigs.filter(
-          e => e.type === c.FIELD_TYPE_ENTRY && e.contentType === c.CONTENT_TYPE_COLLECTION_MODULE
-        );
+        const contentTypes = templateConfig.meta.contentTypes;
 
         openCreateDropdown(wrapper, roleKey);
 
@@ -68,30 +63,19 @@ describe('ComponentModule', () => {
             .find('DropdownListItem')
             .find({ testId: 'create-new-link__dropdown-content-type' })
             .find('button')
-        ).toHaveLength(entryFieldConfigs.length);
-
-        // customTemplate dropdowns
-        expect(
-          wrapper
-            .find('RoleSection')
-            .find({ roleKey })
-            .find('CreateNewLink')
-            .find('DropdownListItem')
-            .find({ testId: 'create-new-link__dropdown-custom-type' })
-            .find('button')
-        ).toHaveLength(customTemplateFieldConfigs.length);
+        ).toHaveLength(contentTypes.length);
       });
 
       // Hover customTemplate button
 
-      hoverCreateCustomTemplateDropdown(wrapper, 'entry_field');
-      expect(
-        wrapper
-          .find({ roleKey: 'entry_field' })
-          .find('CreateNewLink')
-          .find({ testId: 'create-new-link__custom-type' })
-          .find('button')
-      ).toHaveLength(1);
+      // hoverCreateCustomTemplateDropdown(wrapper, 'entry_field');
+      // expect(
+      //   wrapper
+      //     .find({ roleKey: 'entry_field' })
+      //     .find('CreateNewLink')
+      //     .find({ testId: 'create-new-link__custom-type' })
+      //     .find('button')
+      // ).toHaveLength(1);
     });
 
     it('should render the link existing button', () => {
@@ -111,9 +95,7 @@ describe('ComponentModule', () => {
 
       wrapper.find('LinkExisting.entry-action-button__link-existing').forEach(node => {
         const roleKey = node.props().roleKey;
-        const entryFieldConfigs = templateConfig.properties[roleKey].fieldConfigs.filter(
-          e => e.type === c.FIELD_TYPE_ENTRY
-        );
+        const contentTypes = templateConfig.meta.contentTypes;
 
         // click open link
         openLinkExistingDropdown(wrapper, roleKey);
@@ -131,7 +113,7 @@ describe('ComponentModule', () => {
             .find('DropdownListItem')
             .find({ testId: 'link-entries-row__dropdown--link-entry' })
             .find('button')
-        ).toHaveLength(entryFieldConfigs.length);
+        ).toHaveLength(contentTypes.length);
       });
     });
   });

@@ -236,7 +236,7 @@ describe('InternalMapping', () => {
       mapping.addField({ key: 'hi', type: 'singleton' });
       expect(mapping.hi.componentName).toEqual('hello');
       expect(mapping.hi.type).toEqual('singleton');
-      expect(mapping.hi.value).toEqual('');
+      expect(mapping.hi.value).toEqual({});
     });
   });
 });

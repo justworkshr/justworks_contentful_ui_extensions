@@ -472,40 +472,42 @@ export default class EntryBuilder extends React.Component {
 
           <TextLink
             href={`https://justworks-sandbox.herokuapp.com/styleguide/patterns%2F${camelToSnakeCase(
-              this.props.entryInternalMapping.patternName
+              (this.props.entryInternalMapping || {}).patternName
             )}`}
             target="_blank">
-            View Styleguide for {displayCamelCaseName(this.props.entryInternalMapping.patternName)}
+            View Styleguide for{' '}
+            {displayCamelCaseName((this.props.entryInternalMapping || {}).patternName)}
           </TextLink>
 
-          {Object.keys(this.props.templateConfig.componentZones).map((componentZoneKey, index) => {
-            const zoneConfigObject =
-              this.props.templateConfig.componentZones[componentZoneKey] || {};
-            const zoneMappingObject =
-              this.props.entryInternalMapping.componentZones[componentZoneKey] || null;
-            return (
-              <ComponentZone
-                key={`cz-${componentZoneKey}`}
-                index={index}
-                componentZoneKey={componentZoneKey}
-                zoneMappingObject={zoneMappingObject}
-                zoneConfigObject={zoneConfigObject}
-                entryInternalMapping={this.props.entryInternalMapping}
-                hydratedAssets={this.props.hydratedAssets}
-                hydratedEntries={this.props.hydratedEntries}
-                addComponentZone={this.addComponentZone}
-                clearComponentZone={this.clearComponentZone}
-                onLinkEntryClick={this.onLinkEntryClick}
-                onLinkAssetClick={this.onLinkAssetClick}
-                onDeepCopyClick={this.onDeepCopyClick}
-                onAddEntryClick={this.onAddEntryClick}
-                onEditClick={this.onEditClick}
-                onRemoveClick={this.onRemoveClick}
-                onAddFieldClick={this.onAddFieldClick}
-                onFieldChange={this.onFieldChange}
-              />
-            );
-          })}
+          {this.props.templateConfig.componentZones &&
+            Object.keys(this.props.templateConfig.componentZones).map((componentZoneKey, index) => {
+              const zoneConfigObject =
+                this.props.templateConfig.componentZones[componentZoneKey] || {};
+              const zoneMappingObject =
+                this.props.entryInternalMapping.componentZones[componentZoneKey] || null;
+              return (
+                <ComponentZone
+                  key={`cz-${componentZoneKey}`}
+                  index={index}
+                  componentZoneKey={componentZoneKey}
+                  zoneMappingObject={zoneMappingObject}
+                  zoneConfigObject={zoneConfigObject}
+                  entryInternalMapping={this.props.entryInternalMapping}
+                  hydratedAssets={this.props.hydratedAssets}
+                  hydratedEntries={this.props.hydratedEntries}
+                  addComponentZone={this.addComponentZone}
+                  clearComponentZone={this.clearComponentZone}
+                  onLinkEntryClick={this.onLinkEntryClick}
+                  onLinkAssetClick={this.onLinkAssetClick}
+                  onDeepCopyClick={this.onDeepCopyClick}
+                  onAddEntryClick={this.onAddEntryClick}
+                  onEditClick={this.onEditClick}
+                  onRemoveClick={this.onRemoveClick}
+                  onAddFieldClick={this.onAddFieldClick}
+                  onFieldChange={this.onFieldChange}
+                />
+              );
+            })}
         </div>
       </div>
     );

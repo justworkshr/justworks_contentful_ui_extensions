@@ -73,7 +73,7 @@ describe('ComponentModule', () => {
       );
     });
 
-    it('should link multiple assets', async () => {
+    xit('should link multiple assets', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
@@ -154,7 +154,7 @@ describe('ComponentModule', () => {
       );
     });
 
-    it('should link multiple entries', async () => {
+    xit('should link multiple entries', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,
@@ -274,7 +274,7 @@ describe('ComponentModule', () => {
       );
     });
 
-    it('should copy and link multiple entries', async () => {
+    xit('should copy and link multiple entries', async () => {
       const mockEntry = mockPrimaryEntry({
         name: 'Mock Custom Template Entry',
         type: tm.MOCK_MULTI_REFERENCE_LOGO_TEMPLATE,

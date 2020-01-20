@@ -14,6 +14,7 @@ export const responsiveImage = {
       asset: u.constructComponentProperty({
         description: "Image asset.",
         propertyType: c.PROPERTY_TYPE_ASSET,
+        fieldTypes: [c.FIELD_TYPE_ASSET],
         assetType: c.ASSET_TYPE_IMAGE
       })
     }

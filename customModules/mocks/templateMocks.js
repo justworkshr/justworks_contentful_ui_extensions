@@ -16,34 +16,40 @@ export const MOCK_PAGE_MODULE_NAME = "pageModule1";
 export const mockComponentModuleTemplates = {
   [MOCK_TEMPLATE_NAME]: {
     meta: {
-      componentTypes: [c.FIELD_TYPE_ENTRY, c.FIELD_TYPE_FIELD],
+      componentTypes: [c.FIELD_TYPE_ENTRY],
       componentName: MOCK_TEMPLATE_NAME,
       contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
     },
     properties: {
       left_section: {
-        propertyType: c.PROPERTY_TYPE_TEXT
+        propertyType: c.PROPERTY_TYPE_TEXT,
+        fieldTypes: [c.FIELD_TYPE_FIELD, c.FIELD_TYPE_ENTRY]
       },
       right_section: {
-        propertyType: c.PROPERTY_TYPE_MARKDOWN
+        propertyType: c.PROPERTY_TYPE_MARKDOWN,
+        fieldTypes: [c.FIELD_TYPE_FIELD, c.FIELD_TYPE_ENTRY]
       }
     }
   },
   [MOCK_FIELDS_TEMPLATE]: {
     meta: {
-      componentTypes: [c.FIELD_TYPE_FIELD]
+      componentTypes: [c.FIELD_TYPE_FIELD],
+      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
     },
     properties: {
-      text_field: u.constructRoleConfig({
+      text_field: {
         propertyType: c.PROPERTY_TYPE_TEXT,
+        fieldTypes: [c.FIELD_TYPE_FIELD, c.FIELD_TYPE_ENTRY],
+
         description: `Text Field.`,
         required: true
-      }),
-      markdown_field: u.constructRoleConfig({
+      },
+      markdown_field: {
         propertyType: c.PROPERTY_TYPE_MARKDOWN,
+        fieldTypes: [c.FIELD_TYPE_FIELD, c.FIELD_TYPE_ENTRY],
         description: `Markdown Field.`,
         required: false
-      })
+      }
     }
   },
   [MOCK_ASSETS_TEMPLATE]: {
@@ -51,26 +57,30 @@ export const mockComponentModuleTemplates = {
       componentTypes: [c.FIELD_TYPE_ASSET]
     },
     properties: {
-      image_asset: u.constructRoleConfig({
+      image_asset: {
         propertyType: c.FIELD_TYPE_ASSET,
+        fieldTypes: [c.FIELD_TYPE_ASSET],
         description: `Image asset field`,
         assetType: c.ASSET_TYPE_IMAGE
-      })
+      }
     }
   },
   [MOCK_ENTRY_TEMPLATE]: {
     meta: {
-      componentTypes: [c.FIELD_TYPE_ENTRY]
+      componentTypes: [c.FIELD_TYPE_ENTRY],
+      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
     },
     properties: {
-      entry_field: u.constructRoleConfig({
+      entry_field: {
         propertyType: c.PROPERTY_TYPE_TEXT,
+        fieldTypes: [c.FIELD_TYPE_FIELD, c.FIELD_TYPE_ENTRY],
         description: `Entry field`
-      }),
-      entry_field_with_style: u.constructRoleConfig({
+      },
+      entry_field_with_style: {
         propertyType: c.PROPERTY_TYPE_MARKDOWN,
+        fieldTypes: [c.FIELD_TYPE_FIELD, c.FIELD_TYPE_ENTRY],
         description: `Entry field`
-      })
+      }
     }
   },
   [MOCK_MULTI_REFERENCE_LOGO_TEMPLATE]: {
@@ -122,7 +132,8 @@ export const mockComponentModuleTemplates = {
 export const mockPageModuleTemplates = {
   [MOCK_PAGE_MODULE_NAME]: {
     meta: {
-      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE]
+      contentTypes: [c.CONTENT_TYPE_COMPONENT_MODULE],
+      patternName: MOCK_PAGE_MODULE_NAME
     },
     componentZones: {
       left_section: u.constructComponentZone({
