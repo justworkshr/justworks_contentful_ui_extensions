@@ -30,6 +30,24 @@ const ComponentZone = props => {
     return props.onRemoveClick(propertyKey, componentZoneKey, componentMappingObject, index);
   };
 
+  const onSingletonAddEntry = (
+    mappingKey,
+    contentType,
+    template = undefined,
+    type = 'entry',
+    componentZoneKey,
+    componentMappingObject
+  ) => {
+    return props.onAddEntryClick({
+      mappingKey,
+      contentType,
+      template,
+      type,
+      zoneKey: componentZoneKey,
+      internalMappingObject: componentMappingObject
+    });
+  };
+
   const onSingletonLinkEntry = (
     propertyKey,
     contentType,
@@ -146,6 +164,16 @@ const ComponentZone = props => {
             }
             onRemoveClick={(propertyKey, index) =>
               onSingletonRemove(propertyKey, props.componentZoneKey, componentMapping, index)
+            }
+            onAddEntryClick={({ mappingKey, contentType, template, type }) =>
+              onSingletonAddEntry(
+                mappingKey,
+                contentType,
+                template,
+                type,
+                props.componentZoneKey,
+                componentMapping
+              )
             }
             onLinkEntryClick={(propertyKey, contentType) =>
               onSingletonLinkEntry(

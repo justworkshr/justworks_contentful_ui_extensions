@@ -187,7 +187,6 @@ export const linkEntryToTemplate = ({
   entryInternalMapping
 }) => {
   if (!entryResponse) return;
-
   const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.addEntry(mappingKey, entryResponse.sys.id);
   if (updateEntry) {
@@ -257,7 +256,6 @@ export const handleAddEntry = async ({
 
       if (multiple) {
         sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
-
         return linkEntriesToTemplate({
           updateEntry,
           entryResponses: [newEntry],

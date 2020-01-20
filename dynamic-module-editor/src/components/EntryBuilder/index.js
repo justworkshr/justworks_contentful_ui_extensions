@@ -154,17 +154,36 @@ export default class EntryBuilder extends React.Component {
     mappingKey,
     contentType,
     template = undefined,
-    type = 'entry'
+    type = 'entry',
+    zoneKey,
+    internalMappingObject = this.props.entryInternalMapping
   } = {}) => {
-    await handleAddEntry({
-      sdk: this.props.sdk,
-      entryInternalMapping: this.props.entryInternalMapping,
-      updateEntry: this.props.updateEntry.bind(this),
-      mappingKey,
-      contentType,
-      template,
-      type
-    });
+    if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
+
+      internalMappingObject = await handleAddEntry({
+        sdk: this.props.sdk,
+        entryInternalMapping: internalMappingObject,
+        mappingKey,
+        contentType,
+        template,
+        type
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.updateEntry(transformedMapping.asJSON());
+    } else {
+      await handleAddEntry({
+        sdk: this.props.sdk,
+        entryInternalMapping: this.props.entryInternalMapping,
+        updateEntry: this.props.updateEntry.bind(this),
+        mappingKey,
+        contentType,
+        template,
+        type
+      });
+    }
   };
 
   onLinkAssetClick = async (mappingKey, zoneKey, internalMappingObject) => {
