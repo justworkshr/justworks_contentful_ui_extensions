@@ -175,15 +175,30 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onLinkEntryClick = async (mappingKey, contentType) => {
-    await handleLinkEntryClick({
-      sdk: this.props.sdk,
-      updateEntry: this.props.updateEntry.bind(this),
-      mappingKey,
-      contentType,
-      mappingObject: this.props.templateConfig.componentZones,
-      entryInternalMapping: this.props.entryInternalMapping
-    });
+  onLinkEntryClick = async (mappingKey, contentType, zoneKey, internalMappingObject) => {
+    if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
+      internalMappingObject = await handleLinkEntryClick({
+        sdk: this.props.sdk,
+        mappingKey,
+        contentType,
+        mappingObject: internalMappingObject.properties,
+        entryInternalMapping: internalMappingObject
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.updateEntry(transformedMapping.asJSON());
+    } else {
+      await handleLinkEntryClick({
+        sdk: this.props.sdk,
+        updateEntry: this.props.updateEntry.bind(this),
+        mappingKey,
+        contentType,
+        mappingObject: this.props.templateConfig.componentZones,
+        entryInternalMapping: this.props.entryInternalMapping
+      });
+    }
   };
 
   onDeepCopyClick = async (mappingKey, contentType, entry = undefined) => {

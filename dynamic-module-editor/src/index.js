@@ -202,59 +202,87 @@ export class App extends React.Component {
 
     const entryEntries = this.props.sdk.entry.fields.entries.getValue() || [];
     const entryAssets = this.props.sdk.entry.fields.assets.getValue() || [];
-    let entryLinks = [];
-    let assetLinks = [];
 
     const parsedJSON = JSON.parse(internalMappingJson);
-    const componentBranches =
+    const linkedBranch =
       this.contentType === c.CONTENT_TYPE_COMPONENT_MODULE
         ? parsedJSON.properties
         : parsedJSON.componentZones;
-    Object.keys(componentBranches).forEach(roleKey => {
-      const roleMappingObject = componentBranches[roleKey];
-      /*
-        Add all entries and assets which exist as references 
-        inside the internal mapping
-      */
-      if (roleMappingObject.type === c.FIELD_TYPE_ENTRY) {
-        entryLinks.push(linkFromMapping(roleMappingObject));
-      } else if (roleMappingObject.type === c.FIELD_TYPE_ASSET) {
-        assetLinks.push(linkFromMapping(roleMappingObject));
-      } else if (roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE) {
-        roleMappingObject.value.forEach(mapping => {
-          if (mapping.type === c.FIELD_TYPE_ENTRY) {
-            entryLinks.push(linkFromMapping(mapping));
-          } else if (mapping.type === c.FIELD_TYPE_ASSET) {
-            assetLinks.push(linkFromMapping(mapping));
-          }
-        });
-      }
 
-      // link role style entry
-      if (roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY) {
-        entryLinks.push(linkFromMapping(roleMappingObject.style));
-      }
-
-      // link role assets style entry
-      if (
-        roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE &&
-        !!roleMappingObject.value.length
-      ) {
-        let nonDuplicateEntry;
-        roleMappingObject.value.forEach(entry => {
-          if (entry.type === c.FIELD_TYPE_ASSET) {
-            if (entry.style && entry.style.type === c.FIELD_TYPE_ENTRY) {
-              nonDuplicateEntry = linkFromMapping(entry.style);
+    const fetchEntryLinks = (branch, entryLinks = []) => {
+      Object.keys(branch).map(mappingKey => {
+        const roleMappingObject = branch[mappingKey];
+        console.log(roleMappingObject);
+        /*
+          Add all entries and assets which exist as references 
+          inside the internal mapping
+        */
+        if (roleMappingObject.type === c.LINK_TYPE_ENTRY) {
+          entryLinks.push(linkFromMapping(roleMappingObject));
+        } else if (roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE) {
+          roleMappingObject.value.forEach(mapping => {
+            if (mapping.type === c.LINK_TYPE_ENTRY) {
+              entryLinks.push(linkFromMapping(mapping));
             }
-          }
-        });
+          });
+        } else if (roleMappingObject.type === c.LINK_TYPE_SINGLETON) {
+          entryLinks = fetchEntryLinks(roleMappingObject.value, entryLinks);
+        }
 
-        entryLinks.push(nonDuplicateEntry);
-      }
+        return entryLinks.filter(e => e);
+      });
 
-      entryLinks = entryLinks.filter(e => e);
-      assetLinks = assetLinks.filter(e => e);
-    });
+      return entryLinks;
+    };
+
+    const fetchAssetLinks = (branch, assetLinks = []) => {
+      Object.keys(branch).forEach(mappingKey => {
+        const roleMappingObject = branch[mappingKey];
+        /*
+          Add all entries and assets which exist as references 
+          inside the internal mapping
+        */
+        if (roleMappingObject.type === c.LINK_TYPE_ASSET) {
+          assetLinks.push(linkFromMapping(roleMappingObject));
+        } else if (roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE) {
+          roleMappingObject.value.forEach(mapping => {
+            if (mapping.type === c.LINK_TYPE_ASSET) {
+              assetLinks.push(linkFromMapping(mapping));
+            }
+          });
+        } else if (roleMappingObject.type === c.LINK_TYPE_SINGLETON) {
+          assetLinks = fetchAssetLinks(roleMappingObject.value, assetLinks);
+        }
+
+        return assetLinks.filter(e => e);
+      });
+
+      return assetLinks;
+    };
+
+    const entryLinks = fetchEntryLinks(linkedBranch);
+    const assetLinks = fetchAssetLinks(linkedBranch);
+    // // link role style entry
+    // if (roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY) {
+    //   entryLinks.push(linkFromMapping(roleMappingObject.style));
+    // }
+
+    // // link role assets style entry
+    // if (
+    //   roleMappingObject.type === c.FIELD_TYPE_MULTI_REFERENCE &&
+    //   !!roleMappingObject.value.length
+    // ) {
+    //   let nonDuplicateEntry;
+    //   roleMappingObject.value.forEach(entry => {
+    //     if (entry.type === c.FIELD_TYPE_ASSET) {
+    //       if (entry.style && entry.style.type === c.FIELD_TYPE_ENTRY) {
+    //         nonDuplicateEntry = linkFromMapping(entry.style);
+    //       }
+    //     }
+    //   });
+
+    //   entryLinks.push(nonDuplicateEntry);
+    // }
     // If new entries or assets need to be added
     if (entryLinks.length !== entryEntries.length || assetLinks.length !== entryAssets.length) {
       const entries = (entryLinks = []) => {

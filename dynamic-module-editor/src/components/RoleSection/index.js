@@ -79,6 +79,7 @@ const RoleSection = props => {
       );
     } else if (props.entryInternalMapping && !!props.entryInternalMapping[mappingKey]) {
       // Render single field
+      console.log(props.hydratedEntries);
       const entry =
         props.hydratedEntries.find(
           he => he.sys.id === props.entryInternalMapping[mappingKey].value

@@ -22,6 +22,7 @@ export const isEditableEntry = contentType => {
 };
 
 export const isDirectField = propertyType => {
+  if (!propertyType) return;
   return propertyType !== c.PROPERTY_TYPE_ENTRY && propertyType !== c.PROPERTY_TYPE_ASSET;
 };
 

@@ -193,6 +193,7 @@ export const linkEntryToTemplate = ({
   if (updateEntry) {
     updateEntry(updatedInternalMapping.asJSON());
   }
+
   return updatedInternalMapping;
 };
 
@@ -255,14 +256,14 @@ export const handleAddEntry = async ({
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
       if (multiple) {
-        linkEntriesToTemplate({
+        return linkEntriesToTemplate({
           updateEntry,
           entryResponses: [newEntry],
           mappingKey,
           entryInternalMapping
         });
       } else {
-        linkEntryToTemplate({
+        return linkEntryToTemplate({
           updateEntry,
           entryResponse: newEntry,
           mappingKey,
@@ -297,7 +298,7 @@ export const handleSingleEntryLink = ({
     return sdk.notifier.error(linkedEntryValidation);
   }
 
-  linkEntryToTemplate({
+  return linkEntryToTemplate({
     updateEntry,
     entryResponse,
     mappingKey,
@@ -354,7 +355,7 @@ export const handleLinkEntryClick = async ({
       contentTypes: getContentTypeArray(contentType)
     });
 
-    handleMultipleEntriesLink({
+    return handleMultipleEntriesLink({
       sdk,
       updateEntry,
       mappingKey,
@@ -368,7 +369,7 @@ export const handleLinkEntryClick = async ({
       contentTypes: getContentTypeArray(contentType)
     });
 
-    handleSingleEntryLink({
+    return handleSingleEntryLink({
       sdk,
       updateEntry,
       mappingKey,
@@ -413,21 +414,22 @@ export const handleDeepCopyClick = async ({
     );
     // Only links 1 entry at a time, even in multi-reference fields
     if (multiple) {
-      linkEntriesToTemplate({
+      sdk.notifier.success('Deep copy completed.');
+      return linkEntriesToTemplate({
         updateEntry,
         entryResponses: [clonedEntry],
         mappingKey,
         entryInternalMapping
       });
     } else {
-      linkEntryToTemplate({
+      sdk.notifier.success('Deep copy completed.');
+      return linkEntryToTemplate({
         updateEntry,
         entryResponse: clonedEntry,
         mappingKey,
         entryInternalMapping
       });
     }
-    sdk.notifier.success('Deep copy completed. New entry is now linked.');
   }
 };
 
@@ -461,14 +463,14 @@ export const handleDuplicateClick = async ({
     const duplicatedEntry = await duplicateEntry(sdk.space, entry);
     // Only links 1 entry at a time, even in multi-reference fields
     if (multiple) {
-      linkEntriesToTemplate({
+      return linkEntriesToTemplate({
         updateEntry,
         entryResponses: [duplicatedEntry],
         mappingKey,
         entryInternalMapping
       });
     } else {
-      linkEntryToTemplate({
+      return linkEntryToTemplate({
         updateEntry,
         entryResponse: duplicatedEntry,
         mappingKey,
