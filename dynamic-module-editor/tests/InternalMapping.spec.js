@@ -190,7 +190,7 @@ describe('InternalMapping', () => {
   });
 
   describe('removeEntry', () => {
-    it('removes the role and key', () => {
+    it('removes only the value and linkType', () => {
       const object = {
         componentZones: {
           hi: {
@@ -203,8 +203,9 @@ describe('InternalMapping', () => {
 
       expect(mapping.hi).toBeDefined();
       mapping.removeEntry('hi');
-      expect(mapping.hi).toBeUndefined();
-      expect(mapping.fieldKeys()).not.toContain('hi');
+      expect(mapping.hi.componentName).toEqual('hello');
+      expect(mapping.hi.type).toBeUndefined();
+      expect(mapping.hi.value).toBeUndefined();
     });
   });
 });

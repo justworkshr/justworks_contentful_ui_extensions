@@ -171,10 +171,11 @@ export default class InternalMapping {
 
       // delete key entirely if array is now empty
       if (!this.componentZones[key].value.length) {
-        delete this.componentZones[key];
+        // delete this.componentZones[key];
       }
     } else {
-      delete this.componentZones[key];
+      this.componentZones[key].value = undefined;
+      this.componentZones[key].type = undefined;
     }
   }
 
