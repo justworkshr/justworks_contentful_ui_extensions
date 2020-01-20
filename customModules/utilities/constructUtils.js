@@ -42,26 +42,12 @@ export const constructComponentProperty = ({
 
 export const constructRoleConfig = ({
   description = "",
-  fieldConfigs = [],
+  propertyType,
   required = true
 } = {}) => {
-  if (!Array.isArray(fieldConfigs) || !fieldConfigs.length) {
-    throw new Error(
-      "Must include an array of field configs in constructRoleConfig"
-    );
-  }
-
-  if (
-    fieldConfigs.some(fc => fc.type === c.FIELD_TYPE_MULTI_REFERENCE) &&
-    fieldConfigs.length > 1
-  ) {
-    throw new Error(
-      `A role with fieldConfig of type '${c.FIELD_TYPE_MULTI_REFERENCE}' cannot include any other field configs`
-    );
-  }
   return {
     description,
-    fieldConfigs,
+    propertyType,
     required
   };
 };

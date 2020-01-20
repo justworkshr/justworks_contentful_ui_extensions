@@ -1,6 +1,4 @@
 // PAGE PATTERNS
-import { cardBlock } from "./pageModules/cardBlock";
-import { textMedia } from "./pageModules/textMedia";
 import { logoRow } from "./pageModules/logoRow";
 import { contentHalves } from "./pageModules/contentHalves";
 

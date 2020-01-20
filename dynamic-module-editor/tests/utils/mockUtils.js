@@ -3,7 +3,7 @@ import React from 'react';
 import sinon from 'sinon';
 import * as c from '../../../customModules/constants';
 import * as tm from '../../../customModules/mocks/templateMocks';
-import { templatePlaceholder } from '../../../customModules';
+import { componentTemplatePlaceholder } from '../../../customModules';
 import { constructComponentZone } from '../../../customModules/utilities/constructUtils';
 import { mount } from 'enzyme';
 
@@ -31,7 +31,7 @@ export const mockComponent = ({
   Component,
   sdk = mockSdk(mockPrimaryEntry()),
   customTemplates = tm.mockComponentModuleTemplates,
-  mocktemplatePlaceholder = templatePlaceholder
+  mocktemplatePlaceholder = componentTemplatePlaceholder
 } = {}) => {
   return mount(
     <Component
