@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { displayCamelCaseName } from '../../../../../shared/utilities/elementUtils';
+import {
+  displayCamelCaseName,
+  camelToSnakeCase
+} from '../../../../../shared/utilities/elementUtils';
 import {
   RadioButtonField,
   Subheading,
@@ -25,7 +28,6 @@ const ComponentZoneMenu = props => {
           </TextLink>
         )}
       </Heading>
-
       <div className="style-editor__radio-section">
         {Object.keys(props.zoneConfigObject.componentOptions).map(componentOption => {
           return (

@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import * as c from '../../../../customModules/constants';
 
 import RoleSection from '../RoleSection';
-import { Heading, Subheading } from '@contentful/forma-36-react-components';
+import { Heading, TextLink, HelpText, Subheading } from '@contentful/forma-36-react-components';
 
-import { displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
+import { displayCamelCaseName, camelToSnakeCase } from '../../../../shared/utilities/elementUtils';
 
 import {
   handleRemoveMappingKey,
@@ -140,6 +140,13 @@ class ComponentBuilder extends React.Component {
     return (
       <div className="component-builder">
         <Heading>Component Properties</Heading>
+        <TextLink
+          href={`https://justworks-sandbox.herokuapp.com/styleguide/components%2F${camelToSnakeCase(
+            this.props.templateConfig.meta.componentName
+          )}`}
+          target="_blank">
+          View Styleguide for {displayCamelCaseName(this.props.templateConfig.meta.componentName)}
+        </TextLink>
         {Object.keys(this.props.templateConfig.properties).map((propertyKey, index) => {
           const propertyConfigObject = this.props.templateConfig.properties[propertyKey] || {};
           const propertyMappingObject =

@@ -5,8 +5,8 @@ import * as c from '../../../../customModules/constants';
 
 import EntryActionRow from '../EntryBuilder/components/EntryActionRow';
 
-import { Subheading } from '@contentful/forma-36-react-components';
-import { displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
+import { TextLink } from '@contentful/forma-36-react-components';
+import { camelToSnakeCase, displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
 import ComponentZoneMenu from './ComponentZoneMenu';
 import EntryField from '../EntryBuilder/components/EntryField';
 import RoleSection from '../RoleSection';
@@ -129,6 +129,16 @@ const ComponentZone = props => {
         clearComponentZone={props.clearComponentZone}
         onAddFieldClick={props.onAddFieldClick}
       />
+      {props.zoneMappingObject && (
+        <TextLink
+          href={`https://justworks-sandbox.herokuapp.com/styleguide/components%2F${camelToSnakeCase(
+            props.zoneMappingObject.componentName
+          )}`}
+          target="_blank">
+          View Styleguide for {displayCamelCaseName(props.zoneMappingObject.componentName)}
+        </TextLink>
+      )}
+
       {renderComponentZone(props.componentZoneKey, props.zoneMappingObject, props.zoneConfigObject)}
     </div>
   );

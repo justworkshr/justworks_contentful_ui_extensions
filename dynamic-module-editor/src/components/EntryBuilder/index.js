@@ -21,6 +21,7 @@ import InternalMapping from '../../classes/InternalMapping';
 
 import {
   displayCamelCaseName,
+  camelToSnakeCase,
   displaySnakeCaseName
 } from '../../../../shared/utilities/elementUtils';
 
@@ -379,6 +380,14 @@ export default class EntryBuilder extends React.Component {
           {/* <DisplayText className="style-editor__heading--header" element="h1">
             Component Zones
           </DisplayText> */}
+
+          <TextLink
+            href={`https://justworks-sandbox.herokuapp.com/styleguide/patterns%2F${camelToSnakeCase(
+              this.props.entryInternalMapping.patternName
+            )}`}
+            target="_blank">
+            View Styleguide for {displayCamelCaseName(this.props.entryInternalMapping.patternName)}
+          </TextLink>
 
           {Object.keys(this.props.templateConfig.componentZones).map((componentZoneKey, index) => {
             const zoneConfigObject =
