@@ -2,12 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { displayCamelCaseName } from '../../../../../shared/utilities/elementUtils';
-import { RadioButtonField, Subheading, TextLink } from '@contentful/forma-36-react-components';
+import {
+  RadioButtonField,
+  Subheading,
+  Heading,
+  TextLink
+} from '@contentful/forma-36-react-components';
 
 const ComponentZoneMenu = props => {
   return (
     <div key={`component-zone-menu--${props.componentZoneKey}`}>
-      <Subheading className="sub-section__heading--header" element="h2">
+      <Heading className="sub-section__heading--header" element="h2">
         {displayCamelCaseName(props.componentZoneKey)}
         {props.zoneMappingObject && (
           <TextLink
@@ -19,7 +24,7 @@ const ComponentZoneMenu = props => {
             Clear
           </TextLink>
         )}
-      </Subheading>
+      </Heading>
 
       <div className="style-editor__radio-section">
         {Object.keys(props.zoneConfigObject.componentOptions).map(componentOption => {

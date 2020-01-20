@@ -21,8 +21,8 @@ export const isEditableEntry = contentType => {
   return contentType !== c.CONTENT_TYPE_COLLECTION_MODULE;
 };
 
-export const isDirectField = roleType => {
-  return c.DIRECT_FIELD_TYPES.includes(roleType);
+export const isDirectField = propertyType => {
+  return propertyType !== c.PROPERTY_TYPE_ENTRY && propertyType !== c.PROPERTY_TYPE_ASSET;
 };
 
 export const pluckFieldType = fieldTypes => {

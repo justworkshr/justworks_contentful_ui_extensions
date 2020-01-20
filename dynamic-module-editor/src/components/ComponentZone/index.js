@@ -13,8 +13,21 @@ import RoleSection from '../RoleSection';
 import ComponentMapping from '../../classes/ComponentMapping';
 
 const ComponentZone = props => {
-  const onSingletonAddField = (propertyKey, componentMappingObject) => {
-    return props.onAddFieldClick(propertyKey, props.componentZoneKey, componentMappingObject);
+  const onSingletonAddField = (propertyKey, componentZoneKey, componentMappingObject) => {
+    return props.onAddFieldClick(propertyKey, componentZoneKey, componentMappingObject);
+  };
+
+  const onSingletonFieldChange = (e, propertyKey, componentZoneKey, componentMappingObject) => {
+    return props.onFieldChange(e, propertyKey, componentZoneKey, componentMappingObject);
+  };
+
+  const onSingletonRemove = (
+    propertyKey,
+    componentZoneKey,
+    componentMappingObject,
+    index = null
+  ) => {
+    return props.onRemoveClick(propertyKey, componentZoneKey, componentMappingObject, index);
   };
 
   const renderComponentZone = (componentZoneKey, zoneMappingObject, zoneConfigObject) => {
@@ -89,7 +102,15 @@ const ComponentZone = props => {
             propertyConfigObject={propertyConfigObject}
             entryInternalMapping={componentMapping}
             templateConfig={componentConfigObject}
-            onAddFieldClick={propertyKey => onSingletonAddField(propertyKey, componentMapping)}
+            onAddFieldClick={propertyKey =>
+              onSingletonAddField(propertyKey, props.componentZoneKey, componentMapping)
+            }
+            onFieldChange={(e, propertyKey) =>
+              onSingletonFieldChange(e, propertyKey, props.componentZoneKey, componentMapping)
+            }
+            onRemoveClick={(propertyKey, index) =>
+              onSingletonRemove(propertyKey, props.componentZoneKey, componentMapping, index)
+            }
           />
         );
       });
@@ -129,7 +150,8 @@ ComponentZone.propTypes = {
   onAddEntryClick: PropTypes.func,
   onEditClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
-  onAddFieldClick: PropTypes.func
+  onAddFieldClick: PropTypes.func,
+  onFieldChange: PropTypes.func
 };
 ComponentZone.defaultProps = {
   loadingEntries: []

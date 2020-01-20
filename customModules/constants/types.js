@@ -67,6 +67,7 @@ export const LINK_TYPE_SINGLETON = "singleton";
 export const PROPERTY_TYPE_TEXT = "text";
 export const PROPERTY_TYPE_MARKDOWN = "markdown";
 export const PROPERTY_TYPE_ASSET = "asset";
+export const PROPERTY_TYPE_ENTRY = "entry";
 
 /*
   Direct field types

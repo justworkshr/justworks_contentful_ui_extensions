@@ -91,8 +91,8 @@ export default class EntryBuilder extends React.Component {
     zoneKey,
     internalMappingObject = this.props.entryInternalMapping
   ) => {
-    let transformedMapping = this.state.entryInternalMapping;
     if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
       internalMappingObject = handleAddField({
         mappingKey,
         fieldType: c.LINK_TYPE_FIELD,
@@ -103,12 +103,33 @@ export default class EntryBuilder extends React.Component {
       transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
       this.props.setInternalMappingValue(transformedMapping.asJSON());
     } else {
-      transformedMapping = internalMappingObject;
       handleAddField({
         setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
         mappingKey,
         fieldType: c.LINK_TYPE_SINGLETON,
-        entryInternalMapping: transformedMapping
+        entryInternalMapping: this.props.entryInternalMapping
+      });
+    }
+  };
+
+  onFieldChange = (e, mappingKey, zoneKey, internalMappingObject) => {
+    if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
+      internalMappingObject = handleFieldChange({
+        entryInternalMapping: internalMappingObject,
+        e,
+        mappingKey
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.setInternalMappingValue(transformedMapping.asJSON());
+    } else {
+      handleFieldChange({
+        entryInternalMapping: this.props.entryInternalMapping,
+        setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
+        e,
+        mappingKey
       });
     }
   };
@@ -196,28 +217,32 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onRemoveClick = (mappingKey, entryIndex = null) => {
-    handleRemoveMappingKey({
-      updateEntry: this.props.updateEntry.bind(this),
-      mappingKey,
-      entryIndex,
-      entryInternalMapping: this.props.entryInternalMapping
-    });
+  onRemoveClick = (mappingKey, zoneKey, internalMappingObject, entryIndex = null) => {
+    if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
+      internalMappingObject = handleRemoveMappingKey({
+        entryInternalMapping: internalMappingObject,
+        mappingKey,
+        entryIndex
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.setInternalMappingValue(transformedMapping.asJSON());
+    } else {
+      handleRemoveMappingKey({
+        updateEntry: this.props.updateEntry.bind(this),
+        mappingKey,
+        entryIndex,
+        entryInternalMapping: this.props.entryInternalMapping
+      });
+    }
   };
 
   fetchNavigatedTo = () => {
     if (this.state.rolesNavigatedTo && !this.state.rolesNavigatedTo.length) return;
     this.setState({
       rolesNavigatedTo: []
-    });
-  };
-
-  onFieldChange = (e, roleKey) => {
-    handleFieldChange({
-      entryInternalMapping: this.props.entryInternalMapping,
-      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
-      e,
-      roleKey
     });
   };
 
@@ -351,9 +376,9 @@ export default class EntryBuilder extends React.Component {
     return (
       <div className="custom-template-entry-builder" onClick={this.fetchNavigatedTo}>
         <div className="custom-template-entry-builder__section">
-          <DisplayText className="style-editor__heading--header" element="h1">
+          {/* <DisplayText className="style-editor__heading--header" element="h1">
             Component Zones
-          </DisplayText>
+          </DisplayText> */}
 
           {Object.keys(this.props.templateConfig.componentZones).map((componentZoneKey, index) => {
             const zoneConfigObject =
@@ -378,6 +403,7 @@ export default class EntryBuilder extends React.Component {
                 onEditClick={this.onEditClick}
                 onRemoveClick={this.onRemoveClick}
                 onAddFieldClick={this.onAddFieldClick}
+                onFieldChange={this.onFieldChange}
               />
             );
           })}

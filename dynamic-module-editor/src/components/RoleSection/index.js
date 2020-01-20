@@ -31,7 +31,6 @@ import MultiRow from '../EntryBuilder/components/MultiRow';
 
 const RoleSection = props => {
   const renderEntryFields = (mappingKey, propertyConfigObject, propertyMappingObject) => {
-    console.log(propertyConfigObject, propertyMappingObject);
     // Multi References and with entries
     const customTemplateFieldConfig = getCustomTemplateFieldConfig(propertyConfigObject) || {};
 

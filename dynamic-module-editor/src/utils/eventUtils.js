@@ -28,7 +28,11 @@ export const handleRemoveMappingKey = ({
   if (!mappingKey) return null;
   const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.removeEntry(mappingKey, entryIndex);
-  updateEntry(updatedInternalMapping.asJSON());
+
+  if (updateEntry) {
+    updateEntry(updatedInternalMapping.asJSON());
+  }
+  return updatedInternalMapping;
 };
 
 const linkAssetsToTemplate = ({ entryInternalMapping, assets, mappingKey, updateEntry }) => {
@@ -46,7 +50,10 @@ const linkAssetsToTemplate = ({ entryInternalMapping, assets, mappingKey, update
     })
   });
 
-  updateEntry(updatedInternalMapping.asJSON());
+  if (updateEntry) {
+    updateEntry(updatedInternalMapping.asJSON());
+  }
+  return updatedInternalMapping;
 };
 
 const linkAssetToTemplate = ({ entryInternalMapping, asset, mappingKey, updateEntry }) => {
@@ -59,7 +66,10 @@ const linkAssetToTemplate = ({ entryInternalMapping, asset, mappingKey, updateEn
     getAssetType(asset.fields.file['en-US'].contentType)
   );
 
-  updateEntry(updatedInternalMapping.asJSON());
+  if (updateEntry) {
+    updateEntry(updatedInternalMapping.asJSON());
+  }
+  return updatedInternalMapping;
 };
 
 export const handleAddRoleEntryStyle = async ({ sdk, props, roleKey } = {}) => {
@@ -180,7 +190,10 @@ export const linkEntryToTemplate = ({
 
   const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.addEntry(mappingKey, entryResponse.sys.id);
-  updateEntry(updatedInternalMapping.asJSON());
+  if (updateEntry) {
+    updateEntry(updatedInternalMapping.asJSON());
+  }
+  return updatedInternalMapping;
 };
 
 export const linkEntriesToTemplate = ({
@@ -195,7 +208,10 @@ export const linkEntriesToTemplate = ({
     value: entryResponses.map(entry => entry.sys.id)
   });
 
-  updateEntry(updatedInternalMapping.asJSON());
+  if (updateEntry) {
+    updateEntry(updatedInternalMapping.asJSON());
+  }
+  return updatedInternalMapping;
 };
 
 export const handleAddField = ({
@@ -213,7 +229,6 @@ export const handleAddField = ({
   if (setInternalMappingValue) {
     setInternalMappingValue(updatedInternalMapping.asJSON());
   }
-
   return updatedInternalMapping;
 };
 
@@ -472,7 +487,10 @@ export const handleUpdateEntryStyle = ({
 } = {}) => {
   internalMappingObject.setStyleValue(roleKey, styleKey, styleValue);
 
-  setInternalMappingValue(internalMappingObject);
+  if (setInternalMappingValue) {
+    setInternalMappingValue(internalMappingObject.asJSON());
+  }
+  return internalMappingObject;
 };
 
 export const handleUpdateReferencesStyle = ({
@@ -484,7 +502,10 @@ export const handleUpdateReferencesStyle = ({
 } = {}) => {
   internalMappingObject.setReferencesStyle(roleKey, styleKey, styleValue);
 
-  setInternalMappingValue(internalMappingObject);
+  if (setInternalMappingValue) {
+    setInternalMappingValue(internalMappingObject.asJSON());
+  }
+  return internalMappingObject;
 };
 
 export const handleEntryEditClick = async ({ sdk, entry, type } = {}) => {
@@ -507,16 +528,11 @@ export const handleFieldChange = ({
     let updatedInternalMapping = entryInternalMapping;
     updatedInternalMapping[mappingKey].value = value;
 
-    // if ((updatedInternalMapping[mappingKey].style || {}).type === c.STYLE_TYPE_CUSTOM) {
-    //   const styleClasses = cleanStyleClasses(
-    //     updatedInternalMapping[mappingKey].styleClasses,
-    //     updatedInternalMapping[mappingKey].value
-    //   );
+    if (setInternalMappingValue) {
+      setInternalMappingValue(updatedInternalMapping.asJSON());
+    }
 
-    //   updatedInternalMapping.setStyleValue(mappingKey, styleClasses);
-    // }
-
-    setInternalMappingValue(updatedInternalMapping.asJSON());
+    return updatedInternalMapping;
   }
 };
 
@@ -540,7 +556,11 @@ export const handleAddComponentZone = ({
 } = {}) => {
   const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.addComponentZone({ mappingKey, componentZoneName });
-  setInternalMappingValue(updatedInternalMapping.asJSON());
+  if (setInternalMappingValue) {
+    setInternalMappingValue(updatedInternalMapping.asJSON());
+  }
+
+  return updatedInternalMapping;
 };
 
 export const handleClearComponentZone = ({
@@ -550,5 +570,9 @@ export const handleClearComponentZone = ({
 } = {}) => {
   const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.clearComponentZone({ mappingKey });
-  setInternalMappingValue(updatedInternalMapping.asJSON());
+  if (setInternalMappingValue) {
+    setInternalMappingValue(updatedInternalMapping.asJSON());
+  }
+
+  return updatedInternalMapping;
 };
