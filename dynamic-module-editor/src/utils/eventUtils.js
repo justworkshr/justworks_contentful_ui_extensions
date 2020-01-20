@@ -210,7 +210,11 @@ export const handleAddField = ({
     type: fieldType
   });
 
-  setInternalMappingValue(updatedInternalMapping.asJSON());
+  if (setInternalMappingValue) {
+    setInternalMappingValue(updatedInternalMapping.asJSON());
+  }
+
+  return updatedInternalMapping;
 };
 
 export const handleAddEntry = async ({
@@ -468,7 +472,7 @@ export const handleUpdateEntryStyle = ({
 } = {}) => {
   internalMappingObject.setStyleValue(roleKey, styleKey, styleValue);
 
-  setInternalMappingValue(internalMappingObject.asJSON());
+  setInternalMappingValue(internalMappingObject);
 };
 
 export const handleUpdateReferencesStyle = ({
@@ -480,7 +484,7 @@ export const handleUpdateReferencesStyle = ({
 } = {}) => {
   internalMappingObject.setReferencesStyle(roleKey, styleKey, styleValue);
 
-  setInternalMappingValue(internalMappingObject.asJSON());
+  setInternalMappingValue(internalMappingObject);
 };
 
 export const handleEntryEditClick = async ({ sdk, entry, type } = {}) => {

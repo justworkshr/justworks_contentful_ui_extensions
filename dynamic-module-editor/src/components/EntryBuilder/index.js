@@ -45,6 +45,7 @@ import {
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
+import ComponentMapping from '../../classes/ComponentMapping';
 
 export default class EntryBuilder extends React.Component {
   constructor(props) {
@@ -85,13 +86,31 @@ export default class EntryBuilder extends React.Component {
     this.clearComponentZone = this.clearComponentZone.bind(this);
   }
 
-  onAddFieldClick = mappingKey => {
-    handleAddField({
-      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
-      mappingKey,
-      fieldType: c.LINK_TYPE_SINGLETON,
-      entryInternalMapping: this.props.entryInternalMapping
-    });
+  onAddFieldClick = (
+    mappingKey,
+    zoneKey,
+    internalMappingObject = this.props.entryInternalMapping
+  ) => {
+    let transformedMapping = this.state.entryInternalMapping;
+    if (internalMappingObject.class === ComponentMapping.name) {
+      internalMappingObject = handleAddField({
+        mappingKey,
+        fieldType: c.LINK_TYPE_FIELD,
+        entryInternalMapping: internalMappingObject
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.setInternalMappingValue(transformedMapping.asJSON());
+    } else {
+      transformedMapping = internalMappingObject;
+      handleAddField({
+        setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
+        mappingKey,
+        fieldType: c.LINK_TYPE_SINGLETON,
+        entryInternalMapping: transformedMapping
+      });
+    }
   };
 
   onMultiReferenceDragEnd(roleKey, draggedIndex, draggedOverIndex) {

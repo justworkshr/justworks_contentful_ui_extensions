@@ -148,7 +148,7 @@ export const EntryField = props => {
       />
     );
   };
-  console.log(props.propertyType, props.roleMappingObject.type);
+  console.log(props.propertyType, props.roleMappingObject);
   return (
     <div className={classnames('entry-field', props.className)}>
       <div className="sub-section__heading">

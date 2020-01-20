@@ -59,12 +59,17 @@ export default class ComponentMapping {
     };
   }
 
+  get class() {
+    return this.constructor.name;
+  }
+
   loadComponentMapping(json) {
     // if blank
-    if (!json || !typeof json === 'string')
+    if (!json || (typeof json !== 'string' && typeof json !== 'object'))
       return ComponentMapping.blankMapping((this._templateConfig.meta || {}).componentName);
     // if malformed object
-    const parsedJSON = JSON.parse(json);
+    const parsedJSON = typeof json === 'string' ? JSON.parse(json) : json; // either string or object
+
     if (!parsedJSON.properties)
       return ComponentMapping.blankMapping((this._templateConfig.meta || {}).componentName);
     return parsedJSON;

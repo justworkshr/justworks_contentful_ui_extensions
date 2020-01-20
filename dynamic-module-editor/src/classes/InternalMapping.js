@@ -3,7 +3,7 @@ import * as c from '../../../customModules/constants';
 import { removeByIndex } from '../components/EntryBuilder/utils/index';
 
 export default class InternalMapping {
-  constructor(json, templateConfig = { componentZones: {} }) {
+  constructor(json, templateConfig = { meta: {}, componentZones: {} }) {
     /*
       json - string - the raw JSON of the internalMapping field
       templateConfig - object - the corresponding custom template config object from './customModules'
@@ -66,9 +66,13 @@ export default class InternalMapping {
     };
   }
 
+  get class() {
+    return this.constructor.name;
+  }
+
   loadInternalMapping(json) {
     // if blank
-    if (!json || !typeof json === 'string')
+    if (!json || (typeof json !== 'string' && typeof json !== 'object'))
       return InternalMapping.blankMapping((this._templateConfig.meta || {}).patternName);
     // if malformed object
     const parsedJSON = JSON.parse(json);
@@ -100,13 +104,6 @@ export default class InternalMapping {
         get: () => {
           // if its an array, return array of mappings. Else, return direct object mapping.
           if (Array.isArray(this.componentZones[key])) {
-            // return this.componentZones[key].map(entry => {
-            //   if (entry.type === c.FIELD_TYPE_ASSET) {
-            //     return InternalMapping.assetMapping({ ...entry });
-            //   } else {
-            //     return InternalMapping.entryMapping({ ...entry });
-            //   }
-            // });
           } else {
             return this.componentZones[key];
           }
@@ -179,8 +176,8 @@ export default class InternalMapping {
     }
   }
 
-  addField({ key, type, value = '' } = {}) {
-    console.log(key, type);
+  addField({ key, type, value = {} } = {}) {
+    // singletons
     if (!this.componentZones[key].componentName)
       throw `Can't add field without a component name to ${key}`;
 

@@ -9,8 +9,14 @@ import { Subheading } from '@contentful/forma-36-react-components';
 import { displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
 import ComponentZoneMenu from './ComponentZoneMenu';
 import EntryField from '../EntryBuilder/components/EntryField';
+import RoleSection from '../RoleSection';
+import ComponentMapping from '../../classes/ComponentMapping';
 
 const ComponentZone = props => {
+  const onSingletonAddField = (propertyKey, componentMappingObject) => {
+    return props.onAddFieldClick(propertyKey, props.componentZoneKey, componentMappingObject);
+  };
+
   const renderComponentZone = (componentZoneKey, zoneMappingObject, zoneConfigObject) => {
     if (!zoneMappingObject) return null;
 
@@ -65,6 +71,28 @@ const ComponentZone = props => {
           // onDuplicateClick={props.onDuplicateClick}
         />
       );
+    } else if (props.zoneMappingObject.type === c.LINK_TYPE_SINGLETON) {
+      // Render Singleton
+      return Object.keys(componentConfigObject.properties).map((propertyKey, index) => {
+        const propertyConfigObject = componentConfigObject.properties[propertyKey] || {};
+        const propertyMappingObject = zoneMappingObject.value[propertyKey] || {};
+        const componentMapping = new ComponentMapping(
+          { properties: zoneMappingObject.value },
+          componentConfigObject
+        );
+
+        return (
+          <RoleSection
+            key={`cz-rs--${index}`}
+            mappingKey={propertyKey}
+            propertyMappingObject={propertyMappingObject}
+            propertyConfigObject={propertyConfigObject}
+            entryInternalMapping={componentMapping}
+            templateConfig={componentConfigObject}
+            onAddFieldClick={propertyKey => onSingletonAddField(propertyKey, componentMapping)}
+          />
+        );
+      });
     } else {
       return null;
     }
@@ -78,6 +106,7 @@ const ComponentZone = props => {
         zoneMappingObject={props.zoneMappingObject}
         addComponentZone={props.addComponentZone}
         clearComponentZone={props.clearComponentZone}
+        onAddFieldClick={props.onAddFieldClick}
       />
       {renderComponentZone(props.componentZoneKey, props.zoneMappingObject, props.zoneConfigObject)}
     </div>

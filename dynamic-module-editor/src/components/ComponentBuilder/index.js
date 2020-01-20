@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as c from '../../../../customModules/constants';
+
 import RoleSection from '../RoleSection';
 import { Heading, Subheading } from '@contentful/forma-36-react-components';
 
@@ -139,15 +141,15 @@ class ComponentBuilder extends React.Component {
       <div className="component-builder">
         <Heading>Component Properties</Heading>
         {Object.keys(this.props.templateConfig.properties).map((propertyKey, index) => {
-          const roleConfigObject = this.props.templateConfig.properties[propertyKey] || {};
-          const roleMappingObject = this.props.entryInternalMapping.properties[propertyKey] || {};
-
+          const propertyConfigObject = this.props.templateConfig.properties[propertyKey] || {};
+          const propertyMappingObject =
+            this.props.entryInternalMapping.properties[propertyKey] || {};
           return (
             <RoleSection
-              key={index}
-              roleKey={propertyKey}
-              roleConfigObject={roleConfigObject}
-              roleMappingObject={roleMappingObject}
+              key={`cb-rs--${index}`}
+              mappingKey={propertyKey}
+              propertyConfigObject={propertyConfigObject}
+              propertyMappingObject={propertyMappingObject}
               stateErrors={this.state.errors}
               loadingEntries={this.props.loadingEntries}
               entryInternalMapping={this.props.entryInternalMapping}

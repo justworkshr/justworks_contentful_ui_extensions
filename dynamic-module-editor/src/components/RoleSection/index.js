@@ -30,26 +30,27 @@ import {
 import MultiRow from '../EntryBuilder/components/MultiRow';
 
 const RoleSection = props => {
-  const renderEntryFields = (roleKey, propertyConfigObject, roleMappingObject) => {
+  const renderEntryFields = (mappingKey, propertyConfigObject, propertyMappingObject) => {
+    console.log(propertyConfigObject, propertyMappingObject);
     // Multi References and with entries
     const customTemplateFieldConfig = getCustomTemplateFieldConfig(propertyConfigObject) || {};
 
     if (
       propertyConfigObject.propertyType === c.FIELD_TYPE_MULTI_REFERENCE &&
-      roleMappingObject.value &&
-      roleMappingObject.value.length
+      propertyMappingObject.value &&
+      propertyMappingObject.value.length
     ) {
       // render multi field
       return (
         <div className="section-row">
           <div className="section-column max-width-600">
             <MultiRow
-              roleKey={roleKey}
+              roleKey={mappingKey}
               hydratedEntries={props.hydratedEntries}
               hydratedAssets={props.hydratedAssets}
               loadingEntries={props.loadingEntries}
               roleConfigObject={propertyConfigObject}
-              roleMappingObject={props.roleMappingObject}
+              roleMappingObject={props.propertyMappingObject}
               onEditClick={props.onEditClick}
               onDeepCopyClick={props.onDeepCopyClick}
               onDuplicateClick={props.onDuplicateClick}
@@ -63,10 +64,10 @@ const RoleSection = props => {
               allowFields={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_FIELD)}
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
-              contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
+              contentTypes={getContentTypes(props.templateConfig.properties[mappingKey])}
               fieldType={propertyConfigObject.propertyType}
               onAddFieldClick={props.onAddFieldClick}
-              roleKey={roleKey}
+              roleKey={mappingKey}
               onAddEntryClick={props.onAddEntryClick}
               onLinkAssetClick={props.onLinkAssetClick}
               onLinkEntryClick={props.onLinkEntryClick}
@@ -76,11 +77,13 @@ const RoleSection = props => {
           </div>
         </div>
       );
-    } else if (props.entryInternalMapping && !!props.entryInternalMapping[roleKey]) {
+    } else if (props.entryInternalMapping && !!props.entryInternalMapping[mappingKey]) {
       // Render single field
       const entry =
-        props.hydratedEntries.find(he => he.sys.id === props.entryInternalMapping[roleKey].value) ||
-        props.hydratedAssets.find(a => a.sys.id === props.entryInternalMapping[roleKey].value);
+        props.hydratedEntries.find(
+          he => he.sys.id === props.entryInternalMapping[mappingKey].value
+        ) ||
+        props.hydratedAssets.find(a => a.sys.id === props.entryInternalMapping[mappingKey].value);
       return (
         <div className="section-row">
           <EntryField
@@ -88,12 +91,12 @@ const RoleSection = props => {
             entry={entry}
             propertyType={propertyConfigObject.propertyType}
             isLoading={entry ? !!props.loadingEntries.includes(entry.sys.id) : false}
-            roleKey={roleKey}
+            roleKey={mappingKey}
             onEditClick={props.onEditClick}
             onDeepCopyClick={props.onDeepCopyClick}
             onRemoveClick={props.onRemoveClick}
             onFieldChange={props.onFieldChange}
-            roleMappingObject={roleMappingObject}
+            roleMappingObject={propertyMappingObject}
           />
         </div>
       );
@@ -106,10 +109,10 @@ const RoleSection = props => {
           allowFields={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_FIELD)}
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
-          contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
+          contentTypes={getContentTypes(props.templateConfig.properties[mappingKey])}
           fieldType={propertyConfigObject.propertyType}
           onAddFieldClick={props.onAddFieldClick}
-          roleKey={roleKey}
+          roleKey={mappingKey}
           onAddEntryClick={props.onAddEntryClick}
           onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
@@ -125,26 +128,26 @@ const RoleSection = props => {
         <FormLabel
           className="role-section__heading"
           htmlFor=""
-          required={props.roleConfigObject.required}>
-          <Subheading>{displayCamelCaseName(props.roleKey)}</Subheading>
+          required={props.propertyConfigObject.required}>
+          <Subheading>{displayCamelCaseName(props.mappingKey)}</Subheading>
         </FormLabel>
-        {isDirectField(props.roleMappingObject.type) && (
+        {isDirectField(props.propertyMappingObject.type) && (
           <IconButton
             className="role-section__remove-field"
             iconProps={{ icon: 'Close', size: 'large' }}
             buttonType="negative"
             label="Remove Field"
-            onClick={() => props.onRemoveClick(props.roleKey)}
+            onClick={() => props.onRemoveClick(props.mappingKey)}
           />
         )}
       </div>
-      <HelpText>{props.roleConfigObject.description}</HelpText>
-      {renderEntryFields(props.roleKey, props.roleConfigObject, props.roleMappingObject)}
+      <HelpText>{props.propertyConfigObject.description}</HelpText>
+      {renderEntryFields(props.mappingKey, props.propertyConfigObject, props.propertyMappingObject)}
 
-      {!!(props.stateErrors[props.roleKey] || {}).length &&
-        props.stateErrors[props.roleKey].map((error, index) => {
+      {!!(props.stateErrors[props.mappingKey] || {}).length &&
+        props.stateErrors[props.mappingKey].map((error, index) => {
           return (
-            <ValidationMessage key={`error-${props.roleKey}-${index}`}>
+            <ValidationMessage key={`error-${props.mappingKey}-${index}`}>
               {error.message}
             </ValidationMessage>
           );
@@ -155,9 +158,9 @@ const RoleSection = props => {
 
 RoleSection.propTypes = {
   entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  roleMappingObject: PropTypes.object,
-  roleKey: PropTypes.string,
-  roleConfigObject: PropTypes.object,
+  propertyMappingObject: PropTypes.object,
+  mappingKey: PropTypes.string,
+  propertyConfigObject: PropTypes.object,
   stateErrors: PropTypes.object,
   loadingEntries: PropTypes.array,
   entryInternalMapping: PropTypes.object,
@@ -188,7 +191,7 @@ RoleSection.propTypes = {
 
 RoleSection.defaultProps = {
   entry: undefined,
-  roleConfigObject: {},
+  propertyConfigObject: {},
   roleMappingObject: {},
   stateErrors: {},
   loadingEntries: [],
