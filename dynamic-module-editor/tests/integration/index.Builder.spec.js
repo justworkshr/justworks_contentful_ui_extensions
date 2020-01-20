@@ -63,12 +63,12 @@ describe('ComponentModule', () => {
       expect(wrapper.find('.component-builder')).toHaveLength(1);
 
       // 1 Role Section per property
-      expect(wrapper.find('RoleSection')).toHaveLength(
+      expect(wrapper.find('PropertySection')).toHaveLength(
         Object.keys(templateConfig.properties).length
       );
 
       // Tests Role Section render
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         // Tests required label render
         if (templateConfig.properties[node.props().mappingKey].required) {
           expect(node.find('FormLabel.role-section__heading').props().required).toEqual(true);
@@ -86,11 +86,11 @@ describe('ComponentModule', () => {
       const wrapper = mockComponent({ Component: App, sdk });
 
       // adds them back
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         node.find('TextLink.entry-action-button__add-field').simulate('click');
       });
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(0);
         expect(node.find('EntryField')).toHaveLength(1);
       });
@@ -98,13 +98,13 @@ describe('ComponentModule', () => {
       // Clears roles from App state
       expect(Object.keys(wrapper.state().entryInternalMapping.properties)).toHaveLength(2);
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         // Assumes default field creation
         expect(node.find('EntryField')).toHaveLength(1);
         node.find('IconButton.role-section__remove-field').simulate('click');
       });
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('TextLink.entry-action-button__add-field')).toHaveLength(1);
         expect(node.find('EntryField')).toHaveLength(0);
       });
@@ -128,11 +128,11 @@ describe('ComponentModule', () => {
       const wrapper = mockComponent({ Component: App, sdk });
 
       expect(wrapper.find('.component-builder')).toHaveLength(1);
-      expect(wrapper.find('RoleSection')).toHaveLength(
+      expect(wrapper.find('PropertySection')).toHaveLength(
         Object.keys(templateConfig.properties).length
       );
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('CreateNewLink')).toHaveLength(1);
         expect(node.find('LinkExisting')).toHaveLength(1);
         expect(node.find('AssetCard')).toHaveLength(0);
@@ -158,7 +158,7 @@ describe('ComponentModule', () => {
 
       const wrapper = mockComponent({ Component: App, sdk });
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('AssetCard')).toHaveLength(1);
       });
     });
@@ -181,11 +181,11 @@ describe('ComponentModule', () => {
       const wrapper = mockComponent({ Component: App, sdk });
 
       expect(wrapper.find('.component-builder')).toHaveLength(1);
-      expect(wrapper.find('RoleSection')).toHaveLength(
+      expect(wrapper.find('PropertySection')).toHaveLength(
         Object.keys(templateConfig.properties).length
       );
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('CreateNewLink')).toHaveLength(1);
         expect(node.find('LinkExisting')).toHaveLength(1);
         expect(node.find('EntryCard')).toHaveLength(0);
@@ -213,7 +213,7 @@ describe('ComponentModule', () => {
 
       const wrapper = mockComponent({ Component: App, sdk });
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         // only render EntryCard if internalMapping object has a value for role
         if (node.props().propertyMappingObject.value) {
           expect(node.find('EntryCard')).toHaveLength(1);
@@ -246,11 +246,11 @@ describe('ComponentModule', () => {
       const wrapper = mockComponent({ Component: App, sdk });
 
       expect(wrapper.find('.component-builder')).toHaveLength(1);
-      expect(wrapper.find('RoleSection')).toHaveLength(
+      expect(wrapper.find('PropertySection')).toHaveLength(
         Object.keys(templateConfig.properties).length
       );
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('CreateNewLink')).toHaveLength(1);
         expect(node.find('LinkExisting')).toHaveLength(1);
         expect(node.find('EntryCard')).toHaveLength(0);
@@ -294,7 +294,7 @@ describe('ComponentModule', () => {
 
       const wrapper = mockComponent({ Component: App, sdk });
 
-      wrapper.find('RoleSection').forEach(node => {
+      wrapper.find('PropertySection').forEach(node => {
         expect(node.find('EntryCard')).toHaveLength(2);
         expect(node.find('AssetCard')).toHaveLength(1);
         // Action bar remains

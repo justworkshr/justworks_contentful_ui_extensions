@@ -305,16 +305,16 @@ export const selectComponentZone = (wrapper, radioId, value) => {
 };
 
 export const openCreateDropdown = (wrapper, mappingKey) => {
-  const parent = wrapper.find('RoleSection').exists()
-    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+  const parent = wrapper.find('PropertySection').exists()
+    ? wrapper.find('PropertySection').find({ roleKey: mappingKey })
     : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
 
   parent.find('CreateNewLink').simulate('click');
 };
 
 export const hoverLinkExistingDropdown = (wrapper, mappingKey) => {
-  const parent = wrapper.find('RoleSection').exists()
-    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+  const parent = wrapper.find('PropertySection').exists()
+    ? wrapper.find('PropertySection').find({ roleKey: mappingKey })
     : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
 
   parent
@@ -326,16 +326,16 @@ export const hoverLinkExistingDropdown = (wrapper, mappingKey) => {
 };
 
 export const openLinkExistingDropdown = (wrapper, mappingKey) => {
-  const parent = wrapper.find('RoleSection').exists()
-    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+  const parent = wrapper.find('PropertySection').exists()
+    ? wrapper.find('PropertySection').find({ roleKey: mappingKey })
     : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
 
   parent.find('LinkExisting').simulate('click');
 };
 
 export const hoverDeepCopyDropdown = (wrapper, mappingKey) => {
-  const parent = wrapper.find('RoleSection').exists()
-    ? wrapper.find('RoleSection').find({ roleKey: mappingKey })
+  const parent = wrapper.find('PropertySection').exists()
+    ? wrapper.find('PropertySection').find({ roleKey: mappingKey })
     : wrapper.find('ComponentZone').find({ componentZoneKey: mappingKey });
   parent
     .find('LinkExisting')
@@ -347,7 +347,7 @@ export const hoverDeepCopyDropdown = (wrapper, mappingKey) => {
 
 export const hoverCreateCustomTemplateDropdown = (wrapper, roleKey) => {
   wrapper
-    .find('RoleSection')
+    .find('PropertySection')
     .find({ roleKey })
     .find('CreateNewLink')
     .find({ testId: 'create-new-link__dropdown-custom-type' })

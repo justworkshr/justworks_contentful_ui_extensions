@@ -14,7 +14,7 @@ import {
 
 import TemplateStyleEditor from './components/TemplateStyleEditor';
 
-import RoleSection from '../RoleSection';
+import PropertySection from '../PropertySection';
 import ComponentZone from '../ComponentZone';
 
 import InternalMapping from '../../classes/InternalMapping';

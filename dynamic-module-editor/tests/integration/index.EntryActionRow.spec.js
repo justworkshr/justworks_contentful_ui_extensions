@@ -57,7 +57,7 @@ describe('ComponentModule', () => {
         // renders content types list when clicked
         expect(
           wrapper
-            .find('RoleSection')
+            .find('PropertySection')
             .find({ roleKey })
             .find('CreateNewLink')
             .find('DropdownListItem')
@@ -107,7 +107,7 @@ describe('ComponentModule', () => {
 
         expect(
           wrapper
-            .find('RoleSection')
+            .find('PropertySection')
             .find({ roleKey: roleKey })
             .find('LinkExisting')
             .find('DropdownListItem')

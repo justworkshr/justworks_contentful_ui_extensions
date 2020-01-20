@@ -56,7 +56,7 @@ describe('ComponentModule', () => {
 
       // open dropdown
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'image_asset' })
         .find('AssetCard')
         .at(0)
@@ -65,7 +65,7 @@ describe('ComponentModule', () => {
 
       // click remove button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'image_asset' })
         .find('AssetCard')
         .at(0)
@@ -115,7 +115,7 @@ describe('ComponentModule', () => {
 
       // open dropdown
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('AssetCard')
         .at(0)
@@ -124,7 +124,7 @@ describe('ComponentModule', () => {
 
       // click remove button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('AssetCard')
         .at(0)
@@ -168,7 +168,7 @@ describe('ComponentModule', () => {
 
       // open dropdown
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'entry_field' })
         .find('EntryCard')
         .at(0)
@@ -177,7 +177,7 @@ describe('ComponentModule', () => {
 
       // click remove button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'entry_field' })
         .find('EntryCard')
         .at(0)
@@ -221,7 +221,7 @@ describe('ComponentModule', () => {
       // open dropdown
 
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('EntryCard')
         .at(0)
@@ -230,7 +230,7 @@ describe('ComponentModule', () => {
 
       // click remove button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('EntryCard')
         .at(0)

@@ -52,14 +52,14 @@ describe('ComponentModule', () => {
 
       // open dropdown
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'image_asset' })
         .find('LinkExisting')
         .simulate('click');
 
       // click link asset button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'image_asset' })
         .find('LinkExisting')
         .find('DropdownListItem.link-entries-row__dropdown--link-asset button')
@@ -90,14 +90,14 @@ describe('ComponentModule', () => {
 
       // open dropdown
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('LinkExisting')
         .simulate('click');
 
       // click link asset button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey: 'grid_logo_multi_field' })
         .find('LinkExisting')
         .find('DropdownListItem.link-entries-row__dropdown--link-asset button')
@@ -137,7 +137,7 @@ describe('ComponentModule', () => {
 
       // click link entry button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey })
         .find('LinkExisting')
         .find('DropdownListItem')
@@ -175,7 +175,7 @@ describe('ComponentModule', () => {
 
       // click link entry button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey })
         .find('LinkExisting')
         .find('DropdownListItem')
@@ -217,7 +217,7 @@ describe('ComponentModule', () => {
 
       // click create entry button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey })
         .find('CreateNewLink')
         .find({ testId: 'create-new-link__dropdown-content-type' })
@@ -256,7 +256,7 @@ describe('ComponentModule', () => {
 
       // click link entry button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey })
         .find('LinkExisting')
         .find('DropdownListItem')
@@ -295,7 +295,7 @@ describe('ComponentModule', () => {
 
       // click link entry button
       wrapper
-        .find('RoleSection')
+        .find('PropertySection')
         .find({ roleKey })
         .find('LinkExisting')
         .find('DropdownListItem')

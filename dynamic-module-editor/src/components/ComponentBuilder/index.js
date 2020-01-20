@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../../customModules/constants';
 
-import RoleSection from '../RoleSection';
+import PropertySection from '../PropertySection';
 import { Heading, TextLink, HelpText, Subheading } from '@contentful/forma-36-react-components';
 
 import { displayCamelCaseName, camelToSnakeCase } from '../../../../shared/utilities/elementUtils';
@@ -152,7 +152,7 @@ class ComponentBuilder extends React.Component {
           const propertyMappingObject =
             this.props.entryInternalMapping.properties[propertyKey] || {};
           return (
-            <RoleSection
+            <PropertySection
               key={`cb-rs--${index}`}
               mappingKey={propertyKey}
               propertyConfigObject={propertyConfigObject}

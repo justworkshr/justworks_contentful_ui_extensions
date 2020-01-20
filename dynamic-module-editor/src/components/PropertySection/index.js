@@ -30,7 +30,7 @@ import {
 
 import MultiRow from '../EntryBuilder/components/MultiRow';
 
-const RoleSection = props => {
+const PropertySection = props => {
   const renderEntryFields = (mappingKey, propertyConfigObject, propertyMappingObject) => {
     // Multi References and with entries
     const customTemplateFieldConfig = getCustomTemplateFieldConfig(propertyConfigObject) || {};
@@ -168,7 +168,7 @@ const RoleSection = props => {
   );
 };
 
-RoleSection.propTypes = {
+PropertySection.propTypes = {
   entry: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   propertyMappingObject: PropTypes.object,
   mappingKey: PropTypes.string,
@@ -201,7 +201,7 @@ RoleSection.propTypes = {
   onMultiReferenceDragEnd: PropTypes.func
 };
 
-RoleSection.defaultProps = {
+PropertySection.defaultProps = {
   entry: undefined,
   propertyConfigObject: {},
   roleMappingObject: {},
@@ -213,4 +213,4 @@ RoleSection.defaultProps = {
   hydratedEntries: []
 };
 
-export default RoleSection;
+export default PropertySection;

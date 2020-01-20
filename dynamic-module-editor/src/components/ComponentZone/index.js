@@ -9,7 +9,7 @@ import { TextLink } from '@contentful/forma-36-react-components';
 import { camelToSnakeCase, displayCamelCaseName } from '../../../../shared/utilities/elementUtils';
 import ComponentZoneMenu from './ComponentZoneMenu';
 import EntryField from '../EntryBuilder/components/EntryField';
-import RoleSection from '../RoleSection';
+import PropertySection from '../PropertySection';
 import ComponentMapping from '../../classes/ComponentMapping';
 
 const ComponentZone = props => {
@@ -147,7 +147,7 @@ const ComponentZone = props => {
         );
 
         return (
-          <RoleSection
+          <PropertySection
             key={`cz-rs--${index}`}
             mappingKey={propertyKey}
             propertyMappingObject={propertyMappingObject}
