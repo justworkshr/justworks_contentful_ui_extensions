@@ -111,7 +111,7 @@ export const handleMultipleAssetsLink = async ({
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);
   } else {
-    linkAssetsToTemplate({ entryInternalMapping, assets, mappingKey, updateEntry });
+    return linkAssetsToTemplate({ entryInternalMapping, assets, mappingKey, updateEntry });
   }
 };
 
@@ -130,7 +130,7 @@ export const handleSingleAssetLink = ({
     return sdk.notifier.error(linkedEntryValidation);
   }
 
-  linkAssetToTemplate({ entryInternalMapping, asset, mappingKey, updateEntry });
+  return linkAssetToTemplate({ entryInternalMapping, asset, mappingKey, updateEntry });
 };
 
 export const handleLinkAssetClick = async ({
@@ -147,7 +147,7 @@ export const handleLinkAssetClick = async ({
       const assets = await sdk.dialogs.selectMultipleAssets({
         locale: 'en-US'
       });
-      handleMultipleAssetsLink({
+      return handleMultipleAssetsLink({
         sdk,
         mappingObject,
         entryInternalMapping,
@@ -165,7 +165,7 @@ export const handleLinkAssetClick = async ({
         locale: 'en-US'
       });
 
-      handleSingleAssetLink({
+      return handleSingleAssetLink({
         sdk,
         mappingObject,
         entryInternalMapping,
@@ -256,6 +256,8 @@ export const handleAddEntry = async ({
       const newEntry = await createEntry(sdk.space, contentType, newEntryName, template);
 
       if (multiple) {
+        sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
+
         return linkEntriesToTemplate({
           updateEntry,
           entryResponses: [newEntry],
@@ -263,6 +265,7 @@ export const handleAddEntry = async ({
           entryInternalMapping
         });
       } else {
+        sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
         return linkEntryToTemplate({
           updateEntry,
           entryResponse: newEntry,
@@ -270,7 +273,6 @@ export const handleAddEntry = async ({
           entryInternalMapping
         });
       }
-      sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
     } catch (e) {
       throw new Error(e.message);
     }
@@ -568,12 +570,12 @@ export const handleAddComponentZone = ({
 export const handleClearComponentZone = ({
   mappingKey,
   entryInternalMapping,
-  setInternalMappingValue
+  updateEntry
 } = {}) => {
   const updatedInternalMapping = entryInternalMapping;
   updatedInternalMapping.clearComponentZone({ mappingKey });
-  if (setInternalMappingValue) {
-    setInternalMappingValue(updatedInternalMapping.asJSON());
+  if (updateEntry) {
+    updateEntry(updatedInternalMapping.asJSON());
   }
 
   return updatedInternalMapping;

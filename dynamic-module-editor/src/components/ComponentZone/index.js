@@ -30,10 +30,35 @@ const ComponentZone = props => {
     return props.onRemoveClick(propertyKey, componentZoneKey, componentMappingObject, index);
   };
 
-  const onSingletonLink = (propertyKey, contentType, componentZoneKey, componentMappingObject) => {
+  const onSingletonLinkEntry = (
+    propertyKey,
+    contentType,
+    componentZoneKey,
+    componentMappingObject
+  ) => {
     return props.onLinkEntryClick(
       propertyKey,
       contentType,
+      componentZoneKey,
+      componentMappingObject
+    );
+  };
+
+  const onSingletonLinkAsset = (propertyKey, componentZoneKey, componentMappingObject) => {
+    return props.onLinkAssetClick(propertyKey, componentZoneKey, componentMappingObject);
+  };
+
+  const onSingletonDeepCopy = (
+    propertyKey,
+    contentType,
+    entry,
+    componentZoneKey,
+    componentMappingObject
+  ) => {
+    return props.onDeepCopyClick(
+      propertyKey,
+      contentType,
+      entry,
       componentZoneKey,
       componentMappingObject
     );
@@ -123,7 +148,24 @@ const ComponentZone = props => {
               onSingletonRemove(propertyKey, props.componentZoneKey, componentMapping, index)
             }
             onLinkEntryClick={(propertyKey, contentType) =>
-              onSingletonLink(propertyKey, contentType, props.componentZoneKey, componentMapping)
+              onSingletonLinkEntry(
+                propertyKey,
+                contentType,
+                props.componentZoneKey,
+                componentMapping
+              )
+            }
+            onLinkAssetClick={propertyKey =>
+              onSingletonLinkAsset(propertyKey, props.componentZoneKey, componentMapping)
+            }
+            onDeepCopyClick={(propertyKey, contentType, entry) =>
+              onSingletonDeepCopy(
+                propertyKey,
+                contentType,
+                entry,
+                props.componentZoneKey,
+                componentMapping
+              )
             }
           />
         );

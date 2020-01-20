@@ -212,7 +212,6 @@ export class App extends React.Component {
     const fetchEntryLinks = (branch, entryLinks = []) => {
       Object.keys(branch).map(mappingKey => {
         const roleMappingObject = branch[mappingKey];
-        console.log(roleMappingObject);
         /*
           Add all entries and assets which exist as references 
           inside the internal mapping
@@ -262,6 +261,7 @@ export class App extends React.Component {
 
     const entryLinks = fetchEntryLinks(linkedBranch);
     const assetLinks = fetchAssetLinks(linkedBranch);
+
     // // link role style entry
     // if (roleMappingObject.style && roleMappingObject.style.type === c.STYLE_TYPE_ENTRY) {
     //   entryLinks.push(linkFromMapping(roleMappingObject.style));

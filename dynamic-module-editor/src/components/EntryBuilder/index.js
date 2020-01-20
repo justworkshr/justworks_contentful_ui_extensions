@@ -113,7 +113,12 @@ export default class EntryBuilder extends React.Component {
     }
   };
 
-  onFieldChange = (e, mappingKey, zoneKey, internalMappingObject) => {
+  onFieldChange = (
+    e,
+    mappingKey,
+    zoneKey,
+    internalMappingObject = this.props.entryInternalMapping
+  ) => {
     if (internalMappingObject.class === ComponentMapping.name) {
       let transformedMapping = this.props.entryInternalMapping;
       internalMappingObject = handleFieldChange({
@@ -162,20 +167,43 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onLinkAssetClick = async mappingKey => {
-    await handleLinkAssetClick({
-      sdk: this.props.sdk,
-      mappingObject: this.props.templateConfig.componentZones,
-      entryInternalMapping: this.props.entryInternalMapping,
-      updateEntry: this.props.updateEntry.bind(this),
-      mappingKey,
-      assetType: this.props.templateConfig.componentZones[mappingKey].componentOptions[
-        this.props.entryInternalMapping.componentZones[mappingKey].componentName
-      ].meta.assetType
-    });
+  onLinkAssetClick = async (mappingKey, zoneKey, internalMappingObject) => {
+    if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
+
+      internalMappingObject = await handleLinkAssetClick({
+        sdk: this.props.sdk,
+        mappingObject: internalMappingObject.properties,
+        entryInternalMapping: internalMappingObject,
+        mappingKey,
+        assetType: this.props.templateConfig.componentZones[zoneKey].componentOptions[
+          internalMappingObject.componentName
+        ].properties[mappingKey].assetType
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.updateEntry(transformedMapping.asJSON());
+    } else {
+      await handleLinkAssetClick({
+        sdk: this.props.sdk,
+        mappingObject: this.props.templateConfig.componentZones,
+        entryInternalMapping: this.props.entryInternalMapping,
+        updateEntry: this.props.updateEntry.bind(this),
+        mappingKey,
+        assetType: this.props.templateConfig.componentZones[mappingKey].componentOptions[
+          this.props.entryInternalMapping.componentZones[mappingKey].componentName
+        ].properties[mappingKey].assetType
+      });
+    }
   };
 
-  onLinkEntryClick = async (mappingKey, contentType, zoneKey, internalMappingObject) => {
+  onLinkEntryClick = async (
+    mappingKey,
+    contentType,
+    zoneKey,
+    internalMappingObject = this.props.entryInternalMapping
+  ) => {
     if (internalMappingObject.class === ComponentMapping.name) {
       let transformedMapping = this.props.entryInternalMapping;
       internalMappingObject = await handleLinkEntryClick({
@@ -201,16 +229,38 @@ export default class EntryBuilder extends React.Component {
     }
   };
 
-  onDeepCopyClick = async (mappingKey, contentType, entry = undefined) => {
-    await handleDeepCopyClick({
-      sdk: this.props.sdk,
-      updateEntry: this.props.updateEntry.bind(this),
-      mappingKey,
-      contentType,
-      entry,
-      mappingObject: this.props.templateConfig.componentZones,
-      entryInternalMapping: this.props.entryInternalMapping
-    });
+  onDeepCopyClick = async (
+    mappingKey,
+    contentType,
+    entry = undefined,
+    zoneKey,
+    internalMappingObject = this.props.entryInternalMapping
+  ) => {
+    if (internalMappingObject.class === ComponentMapping.name) {
+      let transformedMapping = this.props.entryInternalMapping;
+      internalMappingObject = await handleDeepCopyClick({
+        sdk: this.props.sdk,
+        mappingKey,
+        contentType,
+        entry,
+        mappingObject: internalMappingObject.properties,
+        entryInternalMapping: internalMappingObject
+      });
+
+      // attach to value
+      transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
+      this.props.updateEntry(transformedMapping.asJSON());
+    } else {
+      await handleDeepCopyClick({
+        sdk: this.props.sdk,
+        updateEntry: this.props.updateEntry.bind(this),
+        mappingKey,
+        contentType,
+        entry,
+        mappingObject: this.props.templateConfig.componentZones,
+        entryInternalMapping: this.props.entryInternalMapping
+      });
+    }
   };
 
   onDuplicateClick = async (mappingKey, contentType, entry = undefined) => {
@@ -233,7 +283,12 @@ export default class EntryBuilder extends React.Component {
     });
   };
 
-  onRemoveClick = (mappingKey, zoneKey, internalMappingObject, entryIndex = null) => {
+  onRemoveClick = (
+    mappingKey,
+    zoneKey,
+    internalMappingObject = this.props.entryInternalMapping,
+    entryIndex = null
+  ) => {
     if (internalMappingObject.class === ComponentMapping.name) {
       let transformedMapping = this.props.entryInternalMapping;
       internalMappingObject = handleRemoveMappingKey({
@@ -244,7 +299,7 @@ export default class EntryBuilder extends React.Component {
 
       // attach to value
       transformedMapping.componentZones[zoneKey].value = internalMappingObject.properties;
-      this.props.setInternalMappingValue(transformedMapping.asJSON());
+      this.props.updateEntry(transformedMapping.asJSON());
     } else {
       handleRemoveMappingKey({
         updateEntry: this.props.updateEntry.bind(this),
@@ -383,7 +438,7 @@ export default class EntryBuilder extends React.Component {
   clearComponentZone = mappingKey => {
     handleClearComponentZone({
       mappingKey,
-      setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
+      updateEntry: this.props.updateEntry.bind(this),
       entryInternalMapping: this.props.entryInternalMapping
     });
   };
@@ -422,6 +477,7 @@ export default class EntryBuilder extends React.Component {
                 addComponentZone={this.addComponentZone}
                 clearComponentZone={this.clearComponentZone}
                 onLinkEntryClick={this.onLinkEntryClick}
+                onLinkAssetClick={this.onLinkAssetClick}
                 onDeepCopyClick={this.onDeepCopyClick}
                 onAddEntryClick={this.onAddEntryClick}
                 onEditClick={this.onEditClick}

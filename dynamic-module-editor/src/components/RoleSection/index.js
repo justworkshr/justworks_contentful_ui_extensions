@@ -79,7 +79,6 @@ const RoleSection = props => {
       );
     } else if (props.entryInternalMapping && !!props.entryInternalMapping[mappingKey]) {
       // Render single field
-      console.log(props.hydratedEntries);
       const entry =
         props.hydratedEntries.find(
           he => he.sys.id === props.entryInternalMapping[mappingKey].value
@@ -105,7 +104,9 @@ const RoleSection = props => {
       // Render empty action row
       return (
         <EntryActionRow
-          allowAssets={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_ASSET)}
+          allowAssets={
+            props.templateConfig.properties[mappingKey].propertyType === c.PROPERTY_TYPE_ASSET
+          }
           allowEntries={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_ENTRY)}
           allowFields={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_FIELD)}
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
