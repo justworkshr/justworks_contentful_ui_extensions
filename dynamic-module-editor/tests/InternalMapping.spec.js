@@ -208,4 +208,35 @@ describe('InternalMapping', () => {
       expect(mapping.hi.value).toBeUndefined();
     });
   });
+
+  describe('addField', () => {
+    it('throws error without componentName', () => {
+      const object = {
+        componentZones: {
+          hi: {}
+        }
+      };
+      const json = JSON.stringify(object);
+      const mapping = new InternalMapping(json);
+
+      expect(() => mapping.addField({ key: 'hi', type: 'singleton' })).toThrow();
+    });
+
+    it('adds the type', () => {
+      const object = {
+        componentZones: {
+          hi: {
+            componentName: 'hello'
+          }
+        }
+      };
+      const json = JSON.stringify(object);
+      const mapping = new InternalMapping(json);
+
+      mapping.addField({ key: 'hi', type: 'singleton' });
+      expect(mapping.hi.componentName).toEqual('hello');
+      expect(mapping.hi.type).toEqual('singleton');
+      expect(mapping.hi.value).toEqual('');
+    });
+  });
 });

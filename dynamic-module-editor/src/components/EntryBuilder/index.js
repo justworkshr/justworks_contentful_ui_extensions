@@ -73,6 +73,7 @@ export default class EntryBuilder extends React.Component {
     this.clearEntryStyleKey = this.clearEntryStyleKey.bind(this);
     this.clearReferencesStyle = this.clearReferencesStyle.bind(this);
     this.onLinkAssetClick = this.onLinkAssetClick.bind(this);
+    this.onAddFieldClick = this.onAddFieldClick.bind(this);
     this.onMultiReferenceDragEnd = this.onMultiReferenceDragEnd.bind(this);
     this.addRoleCustomStyle = this.addRoleCustomStyle.bind(this);
     this.addRoleReferencesCustomStyle = this.addRoleReferencesCustomStyle.bind(this);
@@ -84,11 +85,11 @@ export default class EntryBuilder extends React.Component {
     this.clearComponentZone = this.clearComponentZone.bind(this);
   }
 
-  onAddFieldClick = (roleKey, fieldType) => {
+  onAddFieldClick = mappingKey => {
     handleAddField({
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
-      roleKey,
-      fieldType,
+      mappingKey,
+      fieldType: c.LINK_TYPE_SINGLETON,
       entryInternalMapping: this.props.entryInternalMapping
     });
   };
@@ -353,11 +354,11 @@ export default class EntryBuilder extends React.Component {
                 addComponentZone={this.addComponentZone}
                 clearComponentZone={this.clearComponentZone}
                 onLinkEntryClick={this.onLinkEntryClick}
-                onLinkAssetClick={this.onLinkAssetClick}
                 onDeepCopyClick={this.onDeepCopyClick}
                 onAddEntryClick={this.onAddEntryClick}
                 onEditClick={this.onEditClick}
                 onRemoveClick={this.onRemoveClick}
+                onAddFieldClick={this.onAddFieldClick}
               />
             );
           })}

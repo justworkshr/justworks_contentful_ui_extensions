@@ -50,18 +50,35 @@ export const FIELD_TYPE_PSEUDO_ASSET = "pseudo-asset";
 export const FIELD_TYPE_MULTI_REFERENCE = "multi-reference";
 
 /*
+  Link Types
+  - Used to specify a mapping's data source
+*/
+
+export const LINK_TYPE_FIELD = "field";
+export const LINK_TYPE_ENTRY = "entry";
+export const LINK_TYPE_ASSET = "asset";
+export const LINK_TYPE_SINGLETON = "singleton";
+
+/*
+  Component Property Types
+  - Used to specify the data type a component property receives
+  - Used to render correct editor
+*/
+export const PROPERTY_TYPE_TEXT = "text";
+export const PROPERTY_TYPE_MARKDOWN = "markdown";
+export const PROPERTY_TYPE_ASSET = "asset";
+
+/*
   Direct field types
   - Directly editable fields whose values are saved in the InternalMapping JSON
 */
-export const FIELD_TYPE_TEXT = "text";
-export const FIELD_TYPE_TITLE = "title";
-export const FIELD_TYPE_MARKDOWN = "markdown";
 
+export const FIELD_TYPE_TITLE = "title";
 // Please keep updated!!
 export const DIRECT_FIELD_TYPES = [
-  FIELD_TYPE_TEXT,
+  PROPERTY_TYPE_TEXT,
   FIELD_TYPE_TITLE,
-  FIELD_TYPE_MARKDOWN
+  PROPERTY_TYPE_MARKDOWN
 ];
 
 /* 

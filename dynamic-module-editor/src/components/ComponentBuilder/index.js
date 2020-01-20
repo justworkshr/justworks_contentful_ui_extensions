@@ -41,7 +41,7 @@ class ComponentBuilder extends React.Component {
       entryInternalMapping: this.props.entryInternalMapping,
       setInternalMappingValue: this.props.setInternalMappingValue.bind(this),
       mappingKey,
-      fieldType
+      fieldType: c.LINK_TYPE_FIELD
     });
   };
 
@@ -98,9 +98,7 @@ class ComponentBuilder extends React.Component {
       entryInternalMapping: this.props.entryInternalMapping,
       updateEntry: this.props.updateEntry.bind(this),
       mappingKey,
-      assetType: this.props.templateConfig.properties[mappingKey].componentOptions[
-        this.props.entryInternalMapping.properties[mappingKey].componentName
-      ].meta.assetType
+      assetType: this.props.templateConfig.properties[mappingKey].assetType
     });
   };
 

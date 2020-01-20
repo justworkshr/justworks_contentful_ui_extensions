@@ -34,7 +34,7 @@ export const constructGenericTextRole = ({
   return cu.constructRoleConfig({
     fieldConfigs: [
       cu.constructFieldConfig({
-        type: c.FIELD_TYPE_TEXT,
+        type: c.PROPERTY_TYPE_TEXT,
         defaultStyle
       }),
       cu.constructFieldConfig({
@@ -62,7 +62,7 @@ export const constructSubcopyRole = ({
         defaultStyle
       }),
       cu.constructFieldConfig({
-        type: c.FIELD_TYPE_MARKDOWN,
+        type: c.PROPERTY_TYPE_MARKDOWN,
         styleView: c.STYLE_VIEW_MARKDOWN,
         defaultStyle
       })

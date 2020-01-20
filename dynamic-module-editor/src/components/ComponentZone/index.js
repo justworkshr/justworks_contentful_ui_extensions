@@ -31,7 +31,7 @@ const ComponentZone = props => {
           <EntryField
             className="max-width-600"
             entry={entry}
-            fieldType={zoneMappingObject.type}
+            propertyType={zoneMappingObject.type}
             isLoading={entry ? !!props.loadingEntries.includes(entry.sys.id) : false}
             roleKey={componentZoneKey}
             roleMappingObject={zoneMappingObject}
@@ -42,25 +42,6 @@ const ComponentZone = props => {
           />
         </div>
       );
-    } else if (zoneMappingObject && zoneMappingObject.type === c.FIELD_TYPE_ASSET) {
-      // Render asset select options
-      return (
-        <EntryActionRow
-          allowAssets={true}
-          allowEntries={false}
-          allowFields={false}
-          allowLinks={true}
-          className="max-width-600"
-          roleKey={componentZoneKey}
-          contentTypes={componentConfigObject.meta.contentTypes}
-          // onAddFieldClick={props.onAddFieldClick}
-          onAddEntryClick={props.onAddEntryClick}
-          onLinkAssetClick={props.onLinkAssetClick}
-          onLinkEntryClick={props.onLinkEntryClick}
-          onDeepCopyLinkClick={props.onDeepCopyClick}
-          // onDuplicateClick={props.onDuplicateClick}
-        />
-      );
     } else if (
       // Render entry select options
       zoneMappingObject &&
@@ -69,13 +50,14 @@ const ComponentZone = props => {
       // Render empty action row
       return (
         <EntryActionRow
-          allowAssets={componentConfigObject.meta.componentTypes.includes(c.FIELD_TYPE_ASSET)}
-          allowEntries={componentConfigObject.meta.componentTypes.includes(c.FIELD_TYPE_ENTRY)}
-          allowFields={componentConfigObject.meta.componentTypes.includes(c.FIELD_TYPE_FIELD)}
+          allowAssets={false}
+          allowEntries={componentConfigObject.meta.componentTypes.includes(c.LINK_TYPE_ENTRY)}
+          allowFields={componentConfigObject.meta.componentTypes.includes(c.LINK_TYPE_SINGLETON)}
+          addFieldLabel="Add singleton"
           className="max-width-600"
           contentTypes={componentConfigObject.meta.contentTypes}
           roleKey={componentZoneKey}
-          // onAddFieldClick={props.onAddFieldClick}
+          onAddFieldClick={props.onAddFieldClick}
           onAddEntryClick={props.onAddEntryClick}
           // onLinkAssetClick={props.onLinkAssetClick}
           onLinkEntryClick={props.onLinkEntryClick}
@@ -117,7 +99,8 @@ ComponentZone.propTypes = {
   onDeepCopyClick: PropTypes.func,
   onAddEntryClick: PropTypes.func,
   onEditClick: PropTypes.func,
-  onRemoveClick: PropTypes.func
+  onRemoveClick: PropTypes.func,
+  onAddFieldClick: PropTypes.func
 };
 ComponentZone.defaultProps = {
   loadingEntries: []

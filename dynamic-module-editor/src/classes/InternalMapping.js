@@ -179,6 +179,16 @@ export default class InternalMapping {
     }
   }
 
+  addField({ key, type, value = '' } = {}) {
+    console.log(key, type);
+    if (!this.componentZones[key].componentName)
+      throw `Can't add field without a component name to ${key}`;
+
+    this.defineGetterSetters(key);
+    this.componentZones[key].type = type;
+    this.componentZones[key].value = value;
+  }
+
   addComponentZone({ mappingKey, componentZoneName } = {}) {
     if (this.componentZones[mappingKey]) return;
     this.defineGetterSetters(mappingKey);

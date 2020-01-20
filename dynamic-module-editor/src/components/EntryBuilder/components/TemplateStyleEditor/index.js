@@ -28,7 +28,7 @@ const TemplateStyleEditor = props => {
           styleView={styleView}
           onChange={onChange}
           onClear={onClearStyleSection}
-          styleType={c.FIELD_TYPE_MARKDOWN}
+          styleType={c.PROPERTY_TYPE_MARKDOWN}
           styleObject={props.mappingStyleObject}
           styleKey={styleKey}
           helpText={props.templateStyleObject[styleKey].helpText}

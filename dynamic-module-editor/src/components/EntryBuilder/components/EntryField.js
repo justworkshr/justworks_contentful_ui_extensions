@@ -23,16 +23,16 @@ import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
   const getFieldIcon = () => {
-    switch (props.fieldType) {
+    switch (props.propertyType) {
       case c.FIELD_TYPE_ENTRY:
         return 'Entry';
-      case c.FIELD_TYPE_ASSET:
+      case c.PROPERTY_TYPE_ASSET:
         return 'Asset';
-      case c.FIELD_TYPE_TEXT:
+      case c.PROPERTY_TYPE_TEXT:
         return 'Text';
       case c.FIELD_TYPE_TITLE:
         return 'Text';
-      case c.FIELD_TYPE_MARKDOWN:
+      case c.PROPERTY_TYPE_MARKDOWN:
         return 'Text';
       case c.FIELD_TYPE_MULTI_REFERENCE:
         return 'ListBulleted';
@@ -148,22 +148,23 @@ export const EntryField = props => {
       />
     );
   };
-
+  console.log(props.propertyType, props.roleMappingObject.type);
   return (
     <div className={classnames('entry-field', props.className)}>
       <div className="sub-section__heading">
         <Icon className="sub-section__heading--icon" icon={getFieldIcon()} size="large" />
         <Subheading className="sub-section__heading--header" element="h1">
-          {capitalize(props.fieldType)}
+          {capitalize(props.propertyType)}
         </Subheading>
       </div>
-      {props.entry && props.roleMappingObject.type === c.FIELD_TYPE_ASSET && renderAssetCard()}
-      {props.entry && props.roleMappingObject.type === c.FIELD_TYPE_ENTRY && renderEntryCard()}
-      {props.roleMappingObject.type === c.FIELD_TYPE_TEXT &&
+      {props.entry && props.roleMappingObject.type === c.LINK_TYPE_ASSET && renderAssetCard()}
+      {props.entry && props.roleMappingObject.type === c.LINK_TYPE_ENTRY && renderEntryCard()}
+      {props.roleMappingObject.type === c.LINK_TYPE_FIELD &&
+        props.propertyType === c.PROPERTY_TYPE_TEXT &&
         renderTextField(props.roleMappingObject.value)}
-      {props.roleMappingObject.type === c.FIELD_TYPE_TITLE &&
-        renderTextField(props.roleMappingObject.value)}
-      {props.roleMappingObject.type === c.FIELD_TYPE_MARKDOWN &&
+
+      {props.roleMappingObject.type === c.LINK_TYPE_FIELD &&
+        props.propertyType === c.PROPERTY_TYPE_MARKDOWN &&
         renderMarkdownField(props.roleMappingObject.value)}
     </div>
   );
@@ -175,7 +176,7 @@ EntryField.propTypes = {
   entryIndex: PropTypes.number,
   roleKey: PropTypes.string,
   roleMappingObject: PropTypes.object,
-  fieldType: PropTypes.string,
+  propertyType: PropTypes.string,
   isDragActive: PropTypes.bool,
   isLoading: PropTypes.bool,
   onEditClick: PropTypes.func,

@@ -193,7 +193,7 @@ export default class ComponentMapping {
   addMarkdownField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
     this.properties[key] = ComponentMapping.entryMapping({
-      type: c.FIELD_TYPE_MARKDOWN,
+      type: c.PROPERTY_TYPE_MARKDOWN,
       value
     });
   }
@@ -211,7 +211,7 @@ export default class ComponentMapping {
           key: roleKey
         });
         break;
-      case c.FIELD_TYPE_MARKDOWN:
+      case c.PROPERTY_TYPE_MARKDOWN:
         this.addMarkdownField({
           key: roleKey
         });

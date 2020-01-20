@@ -36,7 +36,7 @@ const MultiRow = props => {
             className="max-width-600"
             entry={e}
             entryIndex={index}
-            fieldType={entry.type}
+            propertyType={entry.type}
             isLoading={e && !!props.loadingEntries.includes((e.sys || {}).id)}
             roleKey={props.roleKey}
             roleConfig={props.roleConfigObject}

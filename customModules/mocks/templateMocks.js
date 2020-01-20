@@ -22,10 +22,10 @@ export const mockComponentModuleTemplates = {
     },
     properties: {
       left_section: {
-        propertyType: c.FIELD_TYPE_TEXT
+        propertyType: c.PROPERTY_TYPE_TEXT
       },
       right_section: {
-        propertyType: c.FIELD_TYPE_MARKDOWN
+        propertyType: c.PROPERTY_TYPE_MARKDOWN
       }
     }
   },
@@ -35,12 +35,12 @@ export const mockComponentModuleTemplates = {
     },
     properties: {
       text_field: u.constructRoleConfig({
-        propertyType: c.FIELD_TYPE_TEXT,
+        propertyType: c.PROPERTY_TYPE_TEXT,
         description: `Text Field.`,
         required: true
       }),
       markdown_field: u.constructRoleConfig({
-        propertyType: c.FIELD_TYPE_MARKDOWN,
+        propertyType: c.PROPERTY_TYPE_MARKDOWN,
         description: `Markdown Field.`,
         required: false
       })
@@ -53,7 +53,8 @@ export const mockComponentModuleTemplates = {
     properties: {
       image_asset: u.constructRoleConfig({
         propertyType: c.FIELD_TYPE_ASSET,
-        description: `Image asset field`
+        description: `Image asset field`,
+        assetType: c.ASSET_TYPE_IMAGE
       })
     }
   },
@@ -63,11 +64,11 @@ export const mockComponentModuleTemplates = {
     },
     properties: {
       entry_field: u.constructRoleConfig({
-        propertyType: c.FIELD_TYPE_TEXT,
+        propertyType: c.PROPERTY_TYPE_TEXT,
         description: `Entry field`
       }),
       entry_field_with_style: u.constructRoleConfig({
-        propertyType: c.FIELD_TYPE_MARKDOWN,
+        propertyType: c.PROPERTY_TYPE_MARKDOWN,
         description: `Entry field`
       })
     }

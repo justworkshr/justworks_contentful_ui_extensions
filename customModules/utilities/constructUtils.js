@@ -19,24 +19,24 @@ export const constructComponentZone = ({
 export const constructComponentConfig = ({
   moduleType = "component",
   moduleName = "",
-  properties = {}
+  properties = undefined
 } = {}) => {
   return {
     moduleType,
     moduleName,
-    properties: getComponentProps(moduleName)
+    properties: properties || getComponentProps(moduleName)
   };
 };
 
 export const constructComponentProperty = ({
   description = {},
   propertyType,
-  fieldConfigs = []
+  assetType
 } = {}) => {
   return {
     description,
     propertyType,
-    fieldConfigs
+    assetType
   };
 };
 

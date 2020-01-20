@@ -11,7 +11,7 @@ describe("utils", () => {
         expect(() =>
           u.constructRoleConfig({
             fieldConfigs: [
-              u.constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
+              u.constructFieldConfig({ type: c.PROPERTY_TYPE_MARKDOWN })
             ]
           })
         ).not.toThrowError();
@@ -22,7 +22,7 @@ describe("utils", () => {
           u.constructRoleConfig({
             fieldConfigs: [
               u.constructFieldConfig({ type: c.FIELD_TYPE_MULTI_REFERENCE }),
-              u.constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
+              u.constructFieldConfig({ type: c.PROPERTY_TYPE_MARKDOWN })
             ]
           })
         ).toThrowError();
@@ -44,7 +44,7 @@ describe("utils", () => {
           u.constructFieldConfig({ type: undefined })
         ).toThrowError();
         expect(() =>
-          u.constructFieldConfig({ type: c.FIELD_TYPE_MARKDOWN })
+          u.constructFieldConfig({ type: c.PROPERTY_TYPE_MARKDOWN })
         ).not.toThrowError();
       });
 

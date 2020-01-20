@@ -188,7 +188,7 @@ export default class InternalMapping {
   addMarkdownField({ key, value = '' } = {}) {
     this.defineGetterSetters(key);
     this.componentZones[key] = InternalMapping.entryMapping({
-      type: c.FIELD_TYPE_MARKDOWN,
+      type: c.PROPERTY_TYPE_MARKDOWN,
       value
     });
   }
@@ -206,7 +206,7 @@ export default class InternalMapping {
           key: roleKey
         });
         break;
-      case c.FIELD_TYPE_MARKDOWN:
+      case c.PROPERTY_TYPE_MARKDOWN:
         this.addMarkdownField({
           key: roleKey
         });

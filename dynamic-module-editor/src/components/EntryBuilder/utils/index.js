@@ -10,9 +10,9 @@ import {
 
 export const getContentTypes = propertyConfigObject => {
   switch (propertyConfigObject.propertyType) {
-    case c.FIELD_TYPE_TEXT:
+    case c.PROPERTY_TYPE_TEXT:
       return [CONTENT_TYPE_GENERIC_TEXT];
-    case c.FIELD_TYPE_MARKDOWN:
+    case c.PROPERTY_TYPE_MARKDOWN:
       return [CONTENT_TYPE_GENERIC_MARKDOWN];
   }
 };

@@ -115,7 +115,6 @@ export const handleSingleAssetLink = ({
   assetType
 } = {}) => {
   if (!asset) return;
-  console.log('!!!', assetType);
   const linkedEntryValidation = validateLinkedAsset(asset, assetType);
   if (linkedEntryValidation) {
     return sdk.notifier.error(linkedEntryValidation);

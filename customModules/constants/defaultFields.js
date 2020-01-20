@@ -11,7 +11,7 @@ export const defaultFieldConfigMarkdownEntry = u.constructFieldConfig({
 });
 
 export const defaultFieldConfigMarkdownField = u.constructFieldConfig({
-  type: c.FIELD_TYPE_MARKDOWN,
+  type: c.PROPERTY_TYPE_MARKDOWN,
   styleView: c.STYLE_VIEW_MARKDOWN,
   defaultStyle: c.defaultStyleMarkdownLeft
 });

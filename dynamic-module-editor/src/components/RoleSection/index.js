@@ -58,9 +58,9 @@ const RoleSection = props => {
               onMultiReferenceDragEnd={props.onMultiReferenceDragEnd}
             />
             <EntryActionRow
-              allowAssets={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ASSET)}
-              allowEntries={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ENTRY)}
-              allowFields={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_FIELD)}
+              allowAssets={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_ASSET)}
+              allowEntries={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_ENTRY)}
+              allowFields={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_FIELD)}
               allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
               className="max-width-600"
               contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
@@ -86,7 +86,7 @@ const RoleSection = props => {
           <EntryField
             className="max-width-600"
             entry={entry}
-            fieldType={propertyConfigObject.propertyType}
+            propertyType={propertyConfigObject.propertyType}
             isLoading={entry ? !!props.loadingEntries.includes(entry.sys.id) : false}
             roleKey={roleKey}
             onEditClick={props.onEditClick}
@@ -101,9 +101,9 @@ const RoleSection = props => {
       // Render empty action row
       return (
         <EntryActionRow
-          allowAssets={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ASSET)}
-          allowEntries={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_ENTRY)}
-          allowFields={props.templateConfig.meta.componentTypes.includes(c.FIELD_TYPE_FIELD)}
+          allowAssets={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_ASSET)}
+          allowEntries={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_ENTRY)}
+          allowFields={props.templateConfig.meta.componentTypes.includes(c.LINK_TYPE_FIELD)}
           allowedCollectionModules={customTemplateFieldConfig.allowedCollectionModules}
           className="max-width-600"
           contentTypes={getContentTypes(props.templateConfig.properties[roleKey])}
