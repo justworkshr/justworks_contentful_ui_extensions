@@ -7,13 +7,13 @@ export const CARD_BLOCK = "card block";
 export const TEXT_MEDIA_MODULE = "text media module";
 export const LOGO_ITEM = "logo item";
 export const LOGO_ROW = "logo row";
-export const CONTENT_HALVES = "contentHalves";
+export const CONTENT_SPLIT = "contentSplit";
 
 /*
   Components
 */
 
-export const COMPONENT_TITLED_LIST = "titledList";
+export const COMPONENT_HEADED_LIST = "headedList";
 export const COMPONENT_RESPONSIVE_IMAGE = "responsiveImage";
 
 /*

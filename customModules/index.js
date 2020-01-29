@@ -1,13 +1,13 @@
 // PAGE PATTERNS
 import { logoRow } from "./pageModules/logoRow";
-import { contentHalves } from "./pageModules/contentHalves";
+import { contentSplit } from "./pageModules/contentSplit";
 
 // COLLECTION MODULES
 import { logoItem } from "./collectionModules/logoItem";
 
 // COMPONENT MODULES
 
-import { titledList } from "./componentModules/titledList";
+import { headedList } from "./componentModules/headedList";
 import { responsiveImage } from "./componentModules/responsiveImage";
 
 /////////////////
@@ -21,12 +21,12 @@ import { responsiveImage } from "./componentModules/responsiveImage";
 ////////////////
 
 export const componentModule = {
-  ...titledList,
+  ...headedList,
   ...responsiveImage
 };
 
 export const pageModule = {
-  ...contentHalves
+  ...contentSplit
 };
 
 export const collectionModule = {

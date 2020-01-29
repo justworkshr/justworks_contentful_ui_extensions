@@ -1,22 +1,22 @@
 import * as u from "../utilities";
 import * as c from "../constants";
 
-import { titledList } from "../componentModules/titledList";
+import { headedList } from "../componentModules/headedList";
 import { responsiveImage } from "../componentModules/responsiveImage";
 
-export const contentHalves = {
-  [c.CONTENT_HALVES]: {
+export const contentSplit = {
+  [c.CONTENT_SPLIT]: {
     meta: {
-      patternName: c.CONTENT_HALVES,
+      patternName: c.CONTENT_SPLIT,
       description: "",
       imageUrl: ""
     },
     componentZones: {
       leftContent: u.constructComponentZone({
-        componentOptions: { ...titledList, ...responsiveImage }
+        componentOptions: { ...headedList, ...responsiveImage }
       }),
       rightContent: u.constructComponentZone({
-        componentOptions: { ...titledList, ...responsiveImage }
+        componentOptions: { ...headedList, ...responsiveImage }
       })
     }
   }

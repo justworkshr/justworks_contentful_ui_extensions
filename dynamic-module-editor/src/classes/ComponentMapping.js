@@ -93,9 +93,9 @@ export default class ComponentMapping {
 
   // {
   //   type: 'entry',
-  //   componentName: "titledList",
+  //   componentName: "headedList",
   //   properties: {
-  //     titleText: {
+  //     headingText: {
   //       type: "entry",
   //       value: "1234"
   //     },
