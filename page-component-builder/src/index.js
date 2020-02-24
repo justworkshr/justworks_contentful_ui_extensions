@@ -68,7 +68,9 @@ export class PageComponentBuilder extends React.Component {
       internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
       isValid: props.sdk.entry.fields.isValid.getValue(),
       hydratedEntries: [],
-      hydratedAssets: []
+      hydratedAssets: [],
+      updatingAssets: false,
+      updatingEntries: false
     };
 
     props.sdk.entry.fields.internalMapping.onValueChanged(this.onInternalMappingChange);
@@ -101,19 +103,27 @@ export class PageComponentBuilder extends React.Component {
     this.onInternalMappingChange(internalMapping);
   };
 
-  onEntriesChangeHandler = value => {
+  onEntriesChangeHandler = async value => {
     if (Array.isArray(value)) {
-      this.setState({ entries: value });
-      this.props.sdk.entry.fields.entries.setValue(value);
+      if (!this.state.updatingEntries) {
+        this.setState({ updatingEntries: true });
+        this.setState({ entries: value });
+        this.setState({ updatingEntries: false });
+      }
+      await this.props.sdk.entry.fields.entries.setValue(value);
     } else {
       console.warn('onEntriesChangeHandler called with non-array value');
     }
   };
 
-  onAssetsChangeHandler = value => {
+  onAssetsChangeHandler = async value => {
     if (Array.isArray(value)) {
-      this.setState({ assets: value });
-      this.props.sdk.entry.fields.assets.setValue(value);
+      if (!this.state.updatingAssets) {
+        this.setState({ assets: value });
+        this.setState({ updatingAssets: true });
+        await this.props.sdk.entry.fields.assets.setValue(value);
+        this.setState({ updatingAssets: false });
+      }
     } else {
       console.warn('onAssetsChangeHandler called with non-array value');
     }
@@ -121,14 +131,14 @@ export class PageComponentBuilder extends React.Component {
 
   onInternalMappingChange = async value => {
     let internalMappingObject = this.parseInternalMapping(value);
-    const newEntries = extractEntries(internalMappingObject.properties, c.ENTRY_LINK_TYPE) || [];
-    const newAssets = extractEntries(internalMappingObject.properties, c.ASSET_LINK_TYPE) || [];
+    const newEntries = extractEntries(internalMappingObject, c.ENTRY_LINK_TYPE) || [];
+    const newAssets = extractEntries(internalMappingObject, c.ASSET_LINK_TYPE) || [];
 
-    this.onEntriesChangeHandler(newEntries);
-    this.onAssetsChangeHandler(newAssets);
+    await this.onEntriesChangeHandler(newEntries);
+    await this.onAssetsChangeHandler(newAssets);
 
-    const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries);
-    const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets);
+    const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries) || [];
+    const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets) || [];
 
     const fetchedEntries = !!entriesToFetch.length
       ? await this.props.sdk.space.getEntries({
@@ -152,7 +162,7 @@ export class PageComponentBuilder extends React.Component {
     });
   };
 
-  updateInternalMapping = value => {
+  updateInternalMapping = (value, timeout = true) => {
     this.setState({ internalMapping: value });
 
     clearTimeout(this.updateTimeout);
@@ -225,6 +235,7 @@ export class PageComponentBuilder extends React.Component {
           value={this.state.isValid}
         />
         <ComponentEditor
+          sdk={this.props.sdk}
           updateInternalMapping={this.updateInternalMapping}
           hydratedAssets={this.state.hydratedAssets}
           hydratedEntries={this.state.hydratedEntries}

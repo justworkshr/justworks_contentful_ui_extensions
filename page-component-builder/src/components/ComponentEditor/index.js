@@ -18,6 +18,7 @@ import {
 
 import ShortTextField from '../fields/ShortTextField';
 import RadioGroup from '../fields/RadioGroup';
+import AssetField from '../fields/AssetField';
 
 const ComponentEditor = props => {
   const isShortTextField = (type, options = []) => {
@@ -28,9 +29,13 @@ const ComponentEditor = props => {
     return type === c.TEXT_PROPERTY && options && options.length;
   };
 
-  const updatePropertyValue = (propKey, value) => {
+  const isAssetLink = (type, assetTypes) => {
+    return type === c.LINK_PROPERTY && assetTypes && assetTypes.length;
+  };
+
+  const updatePropertyValue = (propKey, value, timeout = true) => {
     props.internalMappingInstance.updateValue(propKey, value);
-    props.updateInternalMapping(props.internalMappingInstance.asJSON());
+    props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout);
   };
   return (
     <div className="component-editor">
@@ -51,18 +56,23 @@ const ComponentEditor = props => {
                 </div>
                 {isShortTextField(property.type, property.options) && (
                   <ShortTextField
-                    className="f36-margin-bottom--l"
-                    onChange={value => updatePropertyValue(propKey, value)}
+                    onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
                   />
                 )}
                 {isOptionTextField(property.type, property.options) && (
                   <RadioGroup
-                    className="f36-margin-bottom--l"
                     propKey={propKey}
                     options={property.options}
-                    onChange={value => updatePropertyValue(propKey, value)}
+                    onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
+                  />
+                )}
+                {isAssetLink(property.type, property.asset_types) && (
+                  <AssetField
+                    sdk={props.sdk}
+                    asset={props.hydratedAssets.find(a => a.sys.id === value.sys.id)}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
                   />
                 )}
               </div>
@@ -74,6 +84,7 @@ const ComponentEditor = props => {
 };
 
 ComponentEditor.propTypes = {
+  sdk: PropTypes.object,
   hydratedAssets: PropTypes.array,
   hydratedEntries: PropTypes.array,
   internalMappingInstance: PropTypes.object,

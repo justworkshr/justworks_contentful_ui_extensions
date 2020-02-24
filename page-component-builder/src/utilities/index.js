@@ -38,10 +38,13 @@ export const extractEntries = (mappingObject, linkType = 'Entry') => {
         if (isLinkOfType(linkType, link)) entries.push(link);
       });
     } else if (mappingObject.properties[key].type === c.COMPONENT_PROPERTY) {
-      entries = [...entries, ...extractEntries(mappingObject.properties[key].value, linkType)];
+      entries = [
+        ...entries,
+        ...(extractEntries(mappingObject.properties[key].value, linkType) || [])
+      ];
     } else if (mappingObject.properties[key].type === c.MULTI_COMPONENT_PROPERTY) {
       mappingObject.properties[key].value.forEach(component => {
-        entries = [...entries, ...extractEntries(component, linkType)];
+        entries = [...entries, ...(extractEntries(component, linkType) || [])];
       });
     }
   });

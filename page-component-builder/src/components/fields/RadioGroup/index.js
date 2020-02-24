@@ -7,9 +7,11 @@ const RadioGroup = props => {
   return (
     <FieldGroup className="radio-group">
       {props.options.map(option => {
+        const id = `${props.propKey}-radio--${option}`;
         return (
           <RadioButtonField
-            id={`${props.propKey}-radio--${option}`}
+            key={id}
+            id={id}
             labelText={option}
             labelIsLight={true}
             name={option}
