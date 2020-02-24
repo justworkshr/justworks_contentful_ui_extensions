@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as c from '../../constants';
+
 import {
   DisplayText,
   Paragraph,
@@ -13,17 +15,41 @@ import {
   Form
 } from '@contentful/forma-36-react-components';
 
+import ShortTextField from '../fields/ShortTextField';
+
 const ComponentEditor = props => {
-  console.log(props.schema.properties);
+  const isShortTextField = (type, options = []) => {
+    return type === c.TEXT_PROPERTY && !(options && options.length);
+  };
+
+  const isSelectTextField = (type, options = []) => {
+    return type === c.TEXT_PROPERTY && options && options.length;
+  };
+
+  const updatePropertyValue = (propKey, value) => {
+    props.internalMappingInstance.updateValue(propKey, value);
+    props.updateInternalMapping(props.internalMappingInstance.asJSON());
+  };
   return (
     <div className="component-editor">
       <div className="component-editor__fields">
         {Object.keys(props.schema.properties)
           .filter(propKey => !props.schema.properties[propKey].hidden)
           .map(propKey => {
+            const property = props.schema.properties[propKey];
+            const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
             return (
-              <div testId="editor-field" className="component-editor__field">
+              <div
+                key={`component-editor-field--#{propKey}`}
+                testId="editor-field"
+                className="component-editor__field">
                 <SectionHeading className="f36-margin-bottom--l">{propKey}</SectionHeading>
+                {isShortTextField(property.type, property.options) && (
+                  <ShortTextField
+                    onChange={value => updatePropertyValue(propKey, value)}
+                    value={value}
+                  />
+                )}
               </div>
             );
           })}

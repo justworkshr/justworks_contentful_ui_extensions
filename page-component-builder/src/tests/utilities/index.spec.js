@@ -1,5 +1,37 @@
-import { extractEntries, linksToFetch } from '../../utilities/index';
+import { extractEntries, linksToFetch, newInternalMappingFromSchema } from '../../utilities/index';
 import { mockLink } from '../mockUtils';
+
+const mockSchema = () => {
+  return {
+    meta: {
+      id: 'components/mock',
+      styleguide_path: '',
+      description: '',
+      editor_role: '',
+      tags: []
+    },
+    properties: {
+      classname: {
+        type: 'text',
+        required: false,
+        default: null,
+        options: null,
+        description: '',
+        related_to: null,
+        hidden: true
+      },
+      prop1: {
+        type: 'text',
+        required: false,
+        default: 'prop1Value',
+        options: null,
+        description: '',
+        related_to: null,
+        hidden: true
+      }
+    }
+  };
+};
 
 const mockObject = (linkType = 'Entry') => {
   return {
@@ -97,5 +129,18 @@ describe('linksToFetch', () => {
 
     expect(linksToFetch(hydratedEntries, newLinks).length).toEqual(1);
     expect(linksToFetch(hydratedEntries, newLinks)[0].sys.id).toEqual('4');
+  });
+});
+
+describe('newInternalMappingFromSchema', () => {
+  it('creates a new internalMapping object with types and default values', () => {
+    const schema = mockSchema();
+    const internalMapping = newInternalMappingFromSchema(schema);
+
+    expect(internalMapping.componentId).toEqual(schema.meta.id);
+    expect(internalMapping.properties.classname.type).toEqual(schema.properties.classname.type);
+    expect(internalMapping.properties.classname.value).toEqual(schema.properties.classname.default);
+    expect(internalMapping.properties.prop1.type).toEqual(schema.properties.prop1.type);
+    expect(internalMapping.properties.prop1.value).toEqual(schema.properties.prop1.default);
   });
 });

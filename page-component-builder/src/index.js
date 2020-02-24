@@ -25,7 +25,12 @@ import { init, locations } from 'contentful-ui-extensions-sdk';
 import * as c from './constants';
 
 import InternalMapping from './classes/InternalMapping';
-import { constructLink, extractEntries, linksToFetch } from './utilities';
+import {
+  constructLink,
+  extractEntries,
+  linksToFetch,
+  newInternalMappingFromSchema
+} from './utilities';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
@@ -49,6 +54,8 @@ export class PageComponentBuilder extends React.Component {
   constructor(props) {
     super(props);
 
+    this.updateTimeout = null;
+
     this.state = {
       schemaData: {
         components: [],
@@ -69,6 +76,7 @@ export class PageComponentBuilder extends React.Component {
 
   componentDidMount() {
     this.fetchSchemas();
+    this.onInternalMappingChange(this.state.internalMapping);
   }
 
   fetchSchemas = async () => {
@@ -88,10 +96,14 @@ export class PageComponentBuilder extends React.Component {
   onComponentIdChangeHandler = value => {
     this.setState({ componentId: value });
     this.props.sdk.entry.fields.componentId.setValue(value);
+    const schema = this.state.schemaData.components.find(s => s.meta.id === value);
+    const internalMapping = newInternalMappingFromSchema(schema).asJSON();
+    this.onInternalMappingChange(internalMapping);
   };
 
   onEntriesChangeHandler = value => {
     if (Array.isArray(value)) {
+      this.setState({ entries: value });
       this.props.sdk.entry.fields.entries.setValue(value);
     } else {
       console.warn('onEntriesChangeHandler called with non-array value');
@@ -100,6 +112,7 @@ export class PageComponentBuilder extends React.Component {
 
   onAssetsChangeHandler = value => {
     if (Array.isArray(value)) {
+      this.setState({ assets: value });
       this.props.sdk.entry.fields.assets.setValue(value);
     } else {
       console.warn('onAssetsChangeHandler called with non-array value');
@@ -107,15 +120,9 @@ export class PageComponentBuilder extends React.Component {
   };
 
   onInternalMappingChange = async value => {
-    let object;
-    try {
-      object = JSON.parse(value);
-    } catch (err) {
-      return console.warn('Invalid JSON: '.value);
-    }
-
-    const newEntries = extractEntries(object, c.ENTRY_LINK_TYPE);
-    const newAssets = extractEntries(object, c.ASSET_LINK_TYPE);
+    let internalMappingObject = this.parseInternalMapping(value);
+    const newEntries = extractEntries(internalMappingObject.properties, c.ENTRY_LINK_TYPE) || [];
+    const newAssets = extractEntries(internalMappingObject.properties, c.ASSET_LINK_TYPE) || [];
 
     this.onEntriesChangeHandler(newEntries);
     this.onAssetsChangeHandler(newAssets);
@@ -138,6 +145,7 @@ export class PageComponentBuilder extends React.Component {
     this.setState(oldState => {
       return {
         ...oldState,
+        internalMapping: value,
         hydratedEntries: [...oldState.hydratedEntries, ...fetchedEntries.items],
         hydratedAssets: [...oldState.hydratedAssets, ...fetchedAssets.items]
       };
@@ -146,13 +154,31 @@ export class PageComponentBuilder extends React.Component {
 
   updateInternalMapping = value => {
     this.setState({ internalMapping: value });
-    this.props.sdk.entry.fields.internalMapping.setValue(value);
+
+    clearTimeout(this.updateTimeout);
+
+    this.updateTimeout = setTimeout(
+      () => this.props.sdk.entry.fields.internalMapping.setValue(value),
+      500
+    );
   };
 
   onIsValidChangeHandler = event => {
     const value = event.target.value;
     this.setState({ isValid: value });
+
     this.props.sdk.entry.fields.isValid.setValue(value);
+  };
+
+  parseInternalMapping = json => {
+    let internalMappingObject = {};
+    try {
+      internalMappingObject = JSON.parse(this.state.internalMapping);
+    } catch {
+      console.warn('Invalid JSON: ', this.state.internalMapping);
+    }
+
+    return internalMappingObject;
   };
 
   render() {
@@ -199,9 +225,15 @@ export class PageComponentBuilder extends React.Component {
           value={this.state.isValid}
         />
         <ComponentEditor
+          updateInternalMapping={this.updateInternalMapping}
           hydratedAssets={this.state.hydratedAssets}
           hydratedEntries={this.state.hydratedEntries}
-          internalMappingInstance={new InternalMapping(JSON.parse(this.state.internalMapping))}
+          internalMappingInstance={
+            new InternalMapping(
+              this.state.componentId,
+              this.parseInternalMapping(this.state.internalMapping).properties
+            )
+          }
           schema={this.state.schemaData.components.find(
             schema => schema.meta.id === this.state.componentId
           )}

@@ -1,4 +1,5 @@
 import * as c from '../constants';
+import InternalMapping from '../classes/InternalMapping';
 
 export const constructLink = entry => {
   return {
@@ -58,4 +59,13 @@ export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
   });
 
   return linksToFetch;
+};
+
+export const newInternalMappingFromSchema = schema => {
+  const internalMapping = new InternalMapping(schema.meta.id);
+  Object.keys(schema.properties).forEach(propKey => {
+    const property = schema.properties[propKey];
+    internalMapping.addProperty(propKey, property.type, property.default);
+  });
+  return internalMapping;
 };
