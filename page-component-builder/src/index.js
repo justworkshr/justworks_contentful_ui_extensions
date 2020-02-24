@@ -49,7 +49,7 @@ export class PageComponentBuilder extends React.Component {
     super(props);
 
     this.state = {
-      schemas: [],
+      schemaData: {},
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
       entries: props.sdk.entry.fields.entries.getValue() || [],
@@ -71,7 +71,7 @@ export class PageComponentBuilder extends React.Component {
     // const response = await Axios.get('https://justworks.com/components.json');
 
     this.setState({
-      schemas: mockSchemas.data
+      schemaData: mockSchemas.data
     });
   };
 
@@ -171,7 +171,10 @@ export class PageComponentBuilder extends React.Component {
           onChange={this.onComponentIdChangeHandler}
           value={this.state.componentId}
         />
-        <ComponentPalette schemas={this.state.schemas} />
+        <ComponentPalette
+          schemas={this.state.schemaData.components}
+          tags={this.state.schemaData.tags}
+        />
         <SectionHeading>Entries</SectionHeading>
         <Textarea testId="field-entries" value={this.state.entries.map(e => e.sys.id).join(', ')} />
 
