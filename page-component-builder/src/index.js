@@ -7,6 +7,7 @@ import { mockSchemas } from './tests/mockData';
 
 import EntryField from './components/fields/EntryField';
 import ComponentPalette from './components/ComponentPalette';
+import ComponentEditor from './components/ComponentEditor';
 
 import {
   DisplayText,
@@ -49,7 +50,10 @@ export class PageComponentBuilder extends React.Component {
     super(props);
 
     this.state = {
-      schemaData: {},
+      schemaData: {
+        components: [],
+        tags: {}
+      },
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
       entries: props.sdk.entry.fields.entries.getValue() || [],
@@ -81,8 +85,7 @@ export class PageComponentBuilder extends React.Component {
     this.props.sdk.entry.fields.name.setValue(value);
   };
 
-  onComponentIdChangeHandler = event => {
-    const value = event.target.value;
+  onComponentIdChangeHandler = value => {
     this.setState({ componentId: value });
     this.props.sdk.entry.fields.componentId.setValue(value);
   };
@@ -168,10 +171,12 @@ export class PageComponentBuilder extends React.Component {
         <SectionHeading>Component ID</SectionHeading>
         <TextInput
           testId="field-componentId"
-          onChange={this.onComponentIdChangeHandler}
+          onChange={e => this.onComponentIdChangeHandler(e.target.value)}
           value={this.state.componentId}
         />
         <ComponentPalette
+          componentId={this.state.componentId}
+          onChange={this.onComponentIdChangeHandler}
           schemas={this.state.schemaData.components}
           tags={this.state.schemaData.tags}
         />
@@ -186,11 +191,20 @@ export class PageComponentBuilder extends React.Component {
           onChange={e => this.updateInternalMapping(e.target.value)}
           value={this.state.internalMapping}
         />
+
         <SectionHeading>Is Valid?</SectionHeading>
         <TextInput
           testId="field-isValid"
           onChange={this.onIsValidChangeHandler}
           value={this.state.isValid}
+        />
+        <ComponentEditor
+          hydratedAssets={this.state.hydratedAssets}
+          hydratedEntries={this.state.hydratedEntries}
+          internalMappingInstance={new InternalMapping(JSON.parse(this.state.internalMapping))}
+          schema={this.state.schemaData.components.find(
+            schema => schema.meta.id === this.state.componentId
+          )}
         />
       </Form>
     );
