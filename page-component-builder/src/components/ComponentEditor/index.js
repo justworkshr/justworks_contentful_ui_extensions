@@ -5,6 +5,7 @@ import * as c from '../../constants';
 import {
   DisplayText,
   Paragraph,
+  HelpText,
   SectionHeading,
   TextInput,
   Textarea,
@@ -16,13 +17,14 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
+import RadioGroup from '../fields/RadioGroup';
 
 const ComponentEditor = props => {
   const isShortTextField = (type, options = []) => {
     return type === c.TEXT_PROPERTY && !(options && options.length);
   };
 
-  const isSelectTextField = (type, options = []) => {
+  const isOptionTextField = (type, options = []) => {
     return type === c.TEXT_PROPERTY && options && options.length;
   };
 
@@ -40,12 +42,25 @@ const ComponentEditor = props => {
             const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
             return (
               <div
-                key={`component-editor-field--#{propKey}`}
+                key={`component-editor-field--${propKey}`}
                 testId="editor-field"
-                className="component-editor__field">
-                <SectionHeading className="f36-margin-bottom--l">{propKey}</SectionHeading>
+                className="component-editor__field f36-margin-bottom--l">
+                <div className="component-editor__field-heading f36-margin-bottom--s">
+                  <SectionHeading>{propKey}</SectionHeading>
+                  <HelpText>{property.description || 'help text'}</HelpText>
+                </div>
                 {isShortTextField(property.type, property.options) && (
                   <ShortTextField
+                    className="f36-margin-bottom--l"
+                    onChange={value => updatePropertyValue(propKey, value)}
+                    value={value}
+                  />
+                )}
+                {isOptionTextField(property.type, property.options) && (
+                  <RadioGroup
+                    className="f36-margin-bottom--l"
+                    propKey={propKey}
+                    options={property.options}
                     onChange={value => updatePropertyValue(propKey, value)}
                     value={value}
                   />
