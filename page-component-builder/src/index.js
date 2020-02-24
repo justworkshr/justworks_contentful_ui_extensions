@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from 'react-dom';
+import Axios from 'axios';
+
+import { mockSchemas } from './tests/mockData';
+
 import EntryField from './components/fields/EntryField';
+import ComponentPalette from './components/ComponentPalette';
+
 import {
   DisplayText,
   Paragraph,
   SectionHeading,
   TextInput,
   Textarea,
+  Button,
+  Modal,
   FieldGroup,
   RadioButtonField,
   Form
@@ -16,13 +24,7 @@ import { init, locations } from 'contentful-ui-extensions-sdk';
 import * as c from './constants';
 
 import InternalMapping from './classes/InternalMapping';
-import {
-  constructLink,
-  isEntryLink,
-  isAssetLink,
-  extractEntries,
-  extractAssets
-} from './utilities';
+import { constructLink, extractEntries, linksToFetch } from './utilities';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
@@ -47,6 +49,7 @@ export class PageComponentBuilder extends React.Component {
     super(props);
 
     this.state = {
+      schemas: [],
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
       entries: props.sdk.entry.fields.entries.getValue() || [],
@@ -54,23 +57,22 @@ export class PageComponentBuilder extends React.Component {
       internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
       isValid: props.sdk.entry.fields.isValid.getValue(),
       hydratedEntries: [],
-      hydratedAsets: []
+      hydratedAssets: []
     };
 
-    // this.test();
-    // console.log(this.state);
     props.sdk.entry.fields.internalMapping.onValueChanged(this.onInternalMappingChange);
   }
 
-  test = async () => {
-    const internalMapping = new InternalMapping(JSON.parse(this.state.internalMapping));
-    let entry = await this.props.sdk.dialogs.selectSingleEntry({
-      contentTypes: ['viewComponent']
-    });
+  componentDidMount() {
+    this.fetchSchemas();
+  }
 
-    const link = constructLink(entry);
-    internalMapping.addLink('test', link);
-    this.updateInternalMapping(internalMapping.asJSON());
+  fetchSchemas = async () => {
+    // const response = await Axios.get('https://justworks.com/components.json');
+
+    this.setState({
+      schemas: mockSchemas.data
+    });
   };
 
   onNameChangeHandler = event => {
@@ -85,34 +87,58 @@ export class PageComponentBuilder extends React.Component {
     this.props.sdk.entry.fields.componentId.setValue(value);
   };
 
-  addEntry = link => {
-    // if (this.state.entries.some(e => e.sys.id === link.sys.id)) {
-    //   // Don't add entry if it's already inside
-    //   return;
-    // }
-    const entries = [...this.state.entries, link];
-    this.setState({ entries });
-    this.props.sdk.entry.fields.entries.setValue(entries);
+  onEntriesChangeHandler = value => {
+    if (Array.isArray(value)) {
+      this.props.sdk.entry.fields.entries.setValue(value);
+    } else {
+      console.warn('onEntriesChangeHandler called with non-array value');
+    }
   };
 
-  addAsset = link => {
-    const assets = [...this.state.assets, link];
-    this.setState({ assets });
-    this.props.sdk.entry.fields.assets.setValue(assets);
+  onAssetsChangeHandler = value => {
+    if (Array.isArray(value)) {
+      this.props.sdk.entry.fields.assets.setValue(value);
+    } else {
+      console.warn('onAssetsChangeHandler called with non-array value');
+    }
   };
 
-  onInternalMappingChange = value => {
+  onInternalMappingChange = async value => {
     let object;
     try {
       object = JSON.parse(value);
     } catch (err) {
       return console.warn('Invalid JSON: '.value);
     }
-    const newEntries = extractEntries(object);
-    const newAssets = [];
-    console.log(object);
 
-    console.log(newEntries);
+    const newEntries = extractEntries(object, c.ENTRY_LINK_TYPE);
+    const newAssets = extractEntries(object, c.ASSET_LINK_TYPE);
+
+    this.onEntriesChangeHandler(newEntries);
+    this.onAssetsChangeHandler(newAssets);
+
+    const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries);
+    const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets);
+
+    const fetchedEntries = !!entriesToFetch.length
+      ? await this.props.sdk.space.getEntries({
+          'sys.id[in]': entriesToFetch.map(l => l.sys.id).join(',')
+        })
+      : { items: [] };
+
+    const fetchedAssets = !!assetsToFetch.length
+      ? await this.props.sdk.space.getAssets({
+          'sys.id[in]': assetsToFetch.map(l => l.sys.id).join(',')
+        })
+      : { items: [] };
+
+    this.setState(oldState => {
+      return {
+        ...oldState,
+        hydratedEntries: [...oldState.hydratedEntries, ...fetchedEntries.items],
+        hydratedAssets: [...oldState.hydratedAssets, ...fetchedAssets.items]
+      };
+    });
   };
 
   updateInternalMapping = value => {
@@ -141,26 +167,21 @@ export class PageComponentBuilder extends React.Component {
         />
         <SectionHeading>Component ID</SectionHeading>
         <TextInput
-          testId="field-component-id"
+          testId="field-componentId"
           onChange={this.onComponentIdChangeHandler}
           value={this.state.componentId}
         />
+        <ComponentPalette schemas={this.state.schemas} />
         <SectionHeading>Entries</SectionHeading>
-        {this.state.entries.map((entry, index) => {
-          <EntryField entry={entry} entryIndex={index} />;
-        })}
-        <FieldGroup row={false}></FieldGroup>
+        <Textarea testId="field-entries" value={this.state.entries.map(e => e.sys.id).join(', ')} />
+
         <SectionHeading>Assets</SectionHeading>
+        <Textarea testId="field-assets" value={this.state.assets.map(a => a.sys.id).join(', ')} />
         <SectionHeading>Internal Mapping</SectionHeading>
         <Textarea
-          testId="field-internal-mapping"
+          testId="field-internalMapping"
           onChange={e => this.updateInternalMapping(e.target.value)}
           value={this.state.internalMapping}
-        />
-        <TextInput
-          testId="field-isValid"
-          onChange={this.onIsValidChangeHandler}
-          value={this.state.isValid}
         />
         <SectionHeading>Is Valid?</SectionHeading>
         <TextInput

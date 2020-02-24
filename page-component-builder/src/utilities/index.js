@@ -47,3 +47,15 @@ export const extractEntries = (mappingObject, linkType = 'Entry') => {
 
   return entries;
 };
+
+export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
+  const linksToFetch = [];
+
+  allLinks.forEach(link => {
+    if (!hydratedEntries.some(e => e.sys.id === link.sys.id)) {
+      linksToFetch.push(link);
+    }
+  });
+
+  return linksToFetch;
+};

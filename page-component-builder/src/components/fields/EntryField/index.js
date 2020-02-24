@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMde from 'react-mde';
 
-import * as c from '../../../../../customModules/constants';
+import * as c from '../../../constants';
 
 import { DropdownList, DropdownListItem, EntryCard } from '@contentful/forma-36-react-components';
 
 // import { getEntryContentTypeId } from '../utils';
-import { getStatus } from '../../../../../shared/utilities/elementUtils';
+// import { getStatus } from '../../../../../shared/utilities/elementUtils';
 
 import classnames from 'classnames';
 

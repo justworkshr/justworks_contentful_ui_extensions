@@ -1,11 +1,12 @@
-import { extractEntries } from '../index';
+import { extractEntries, linksToFetch } from '../../utilities/index';
+import { mockLink } from '../mockUtils';
 
 const mockObject = (linkType = 'Entry') => {
   return {
     properties: {
       test: {
         type: 'link',
-        value: { sys: { type: 'Link', linkType: linkType, id: '1' } }
+        value: mockLink({ id: '1', type: linkType })
       },
       testComponent: {
         type: 'component',
@@ -14,13 +15,13 @@ const mockObject = (linkType = 'Entry') => {
           properties: {
             testComponentEntry: {
               type: 'link',
-              value: { sys: { type: 'Link', linkType: linkType, id: '2' } }
+              value: mockLink({ id: '2', type: linkType })
             },
             multiLink: {
               type: 'multi-link',
               value: [
-                { sys: { type: 'Link', linkType: linkType, id: '3a' } },
-                { sys: { type: 'Link', linkType: linkType, id: '3b' } }
+                mockLink({ id: '3a', type: linkType }),
+                mockLink({ id: '3b', type: linkType })
               ]
             },
             testComponentEntry2: {
@@ -30,7 +31,7 @@ const mockObject = (linkType = 'Entry') => {
                 properties: {
                   testComponentEntry3: {
                     type: 'link',
-                    value: { sys: { type: 'Link', linkType: linkType, id: '4' } }
+                    value: mockLink({ id: '4', type: linkType })
                   },
                   'multi-component': {
                     type: 'multi-component',
@@ -40,9 +41,7 @@ const mockObject = (linkType = 'Entry') => {
                         properties: {
                           prop1: {
                             type: 'link',
-                            value: {
-                              sys: { type: 'Link', linkType: linkType, id: '5' }
-                            }
+                            value: mockLink({ id: '5', type: linkType })
                           }
                         }
                       },
@@ -51,9 +50,7 @@ const mockObject = (linkType = 'Entry') => {
                         properties: {
                           prop1: {
                             type: 'link',
-                            value: {
-                              sys: { type: 'Link', linkType: linkType, id: '6' }
-                            }
+                            value: mockLink({ id: '6', type: linkType })
                           }
                         }
                       }
@@ -81,5 +78,24 @@ describe('extractEntries', () => {
     const assets = extractEntries(mockObject('Asset'), 'Asset');
     expect(assets.length).toEqual(7);
     expect(assets.every(e => e.sys.linkType === 'Asset')).toEqual(true);
+  });
+});
+
+describe('linksToFetch', () => {
+  it('returns the new links', () => {
+    const hydratedEntries = [
+      mockLink({ id: '1', type: 'Entry' }),
+      mockLink({ id: '2', type: 'Entry' }),
+      mockLink({ id: '3', type: 'Entry' })
+    ];
+    const newLinks = [
+      mockLink({ id: '1', type: 'Entry' }),
+      mockLink({ id: '2', type: 'Entry' }),
+      mockLink({ id: '3', type: 'Entry' }),
+      mockLink({ id: '4', type: 'Entry' })
+    ];
+
+    expect(linksToFetch(hydratedEntries, newLinks).length).toEqual(1);
+    expect(linksToFetch(hydratedEntries, newLinks)[0].sys.id).toEqual('4');
   });
 });
