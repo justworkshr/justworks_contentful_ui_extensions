@@ -1,39 +1,37 @@
-.component-palette {
-  &__modal {
-    overflow: hidden;
-  }
+.component-palette__modal {
+  overflow: hidden;
+}
 
-  &__wrapper {
-    display: flex;
-    flex-direction: row;
-  }
+.component-palette__wrapper {
+  display: flex;
+  flex-direction: row;
+}
 
-  &__sidebar {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 30px;
-    margin-top: -30px;
-    margin-left: -30px;
-    flex: 0 0 40%;
-    margin-right: 30px;
-  }
+.component-palette__sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 30px;
+  margin-top: -30px;
+  margin-left: -30px;
+  flex: 0 0 40%;
+  margin-right: 30px;
+}
 
-  &__pill {
-    margin-bottom: 8px;
-  }
+.component-palette__pill {
+  margin-bottom: 8px;
+}
 
-  &__collection {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
+.component-palette__collection {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
 
-  &__schema {
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
+.component-palette__schema {
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
