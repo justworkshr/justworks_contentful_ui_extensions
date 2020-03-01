@@ -95,12 +95,27 @@ export class PageComponentBuilder extends React.Component {
     this.props.sdk.entry.fields.name.setValue(value);
   };
 
-  onComponentIdChangeHandler = value => {
-    this.setState({ componentId: value });
-    this.props.sdk.entry.fields.componentId.setValue(value);
-    const schema = this.state.schemaData.components.find(s => s.meta.id === value);
-    const internalMapping = newInternalMappingFromSchema(schema).asJSON();
-    this.onInternalMappingChange(internalMapping);
+  onComponentIdChangeHandler = async value => {
+    // Completely resets internal mapping w/ new schema and clears all linked entries and assets
+    await this.setState(
+      oldState => {
+        return {
+          componentId: value,
+          hydratedAssets: [],
+          hydratedEntries: [],
+          assets: [],
+          entries: []
+        };
+      },
+      async () => {
+        await this.props.sdk.entry.fields.componentId.setValue(value);
+        await this.props.sdk.entry.fields.entries.setValue([]); // clear entries
+        await this.props.sdk.entry.fields.assets.setValue([]); // clear assets
+        const schema = this.state.schemaData.components.find(s => s.meta.id === value);
+        const internalMapping = newInternalMappingFromSchema(schema).asJSON();
+        this.updateInternalMapping(internalMapping, false);
+      }
+    );
   };
 
   onEntriesChangeHandler = async value => {
@@ -166,11 +181,14 @@ export class PageComponentBuilder extends React.Component {
     this.setState({ internalMapping: value });
 
     clearTimeout(this.updateTimeout);
-
-    this.updateTimeout = setTimeout(
-      () => this.props.sdk.entry.fields.internalMapping.setValue(value),
-      500
-    );
+    if (timeout) {
+      this.updateTimeout = setTimeout(
+        () => this.props.sdk.entry.fields.internalMapping.setValue(value),
+        500
+      );
+    } else {
+      this.props.sdk.entry.fields.internalMapping.setValue(value);
+    }
   };
 
   onIsValidChangeHandler = event => {

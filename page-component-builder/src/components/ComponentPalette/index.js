@@ -23,7 +23,6 @@ const ComponentPalette = props => {
   };
 
   const handleSchemaClick = value => {
-    console.log(value);
     props.onChange(value.meta.id);
     toggleShown(false);
   };

@@ -71,7 +71,7 @@ const ComponentEditor = props => {
                 {isAssetLink(property.type, property.asset_types) && (
                   <AssetField
                     sdk={props.sdk}
-                    asset={props.hydratedAssets.find(a => a.sys.id === value.sys.id)}
+                    asset={props.hydratedAssets.find(a => a.sys.id === (value.sys || {}).id)}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                   />
                 )}

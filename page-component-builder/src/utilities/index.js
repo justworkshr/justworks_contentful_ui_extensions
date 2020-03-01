@@ -12,6 +12,7 @@ export const constructLink = entry => {
 };
 
 const isLinkOfType = (linkType = 'Entry', link) => {
+  if (!link) return false;
   return link.sys.linkType === linkType;
 };
 
