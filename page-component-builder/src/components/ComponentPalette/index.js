@@ -10,6 +10,7 @@ import {
   SectionHeading
 } from '@contentful/forma-36-react-components';
 import './style.scss';
+
 const ComponentPalette = props => {
   const [isShown, toggleShown] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);

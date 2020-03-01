@@ -1,5 +1,7 @@
-.component-palette__modal {
-  overflow: hidden;
+.component-palette {
+  &__modal {
+    overflow: hidden;
+  }
   &__wrapper {
     display: flex;
     flex-direction: row;
