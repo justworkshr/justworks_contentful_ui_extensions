@@ -13,8 +13,8 @@ export const mockSchemas = {
         'collection',
         'nav',
         'cta',
-        'mixed-media',
-        'hero'
+        'hero',
+        'mixed-media'
       ],
       content: ['curated-guide-list', 'guide', 'resource', 'blog-post', 'video', 'image'],
       location: ['landing-page', 'resource-center', 'marketing-site', 'guidepost']
@@ -33,10 +33,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -46,6 +47,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           autoplay: {
@@ -129,10 +131,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -142,6 +145,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           xl_max: {
@@ -193,6 +197,76 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'components/author_headshot_meta',
+          styleguide_path: '/styleguide/components%2Fauthor_headshot_meta',
+          description: 'Description of component.',
+          editor_role: 'component',
+          tags: [],
+          extension_of: null
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsAuthorHeadshotMetaComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          image_asset: {
+            type: 'link',
+            required: false,
+            asset_types: ['image'],
+            content_types: [],
+            description: 'Author photo',
+            related_to: null
+          },
+          author_name: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          meta_1_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          meta_2_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'components/basic_lead_form',
           styleguide_path: '/styleguide/components%2Fbasic_lead_form',
           description: 'A single page lead form which can support multiple input groups.',
@@ -203,10 +277,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -216,15 +291,17 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           top_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Text above the form.',
             related_to: 'elements/heading',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           submit_button_text: {
@@ -234,15 +311,17 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: 'components/cta_button',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           form_endpoint: {
             type: 'text',
             required: true,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           form_input_groups: {
@@ -268,10 +347,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -281,60 +361,67 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           heading_label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           paragraph_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           color_override: {
-            type: 'color',
+            type: 'text',
             required: false,
             default: null,
             options: null,
             description: 'Hex value -- color value overrides card cap color.',
             related_to: null,
+            editor_type: 'color-editor',
             hidden: false
           }
         }
@@ -352,10 +439,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -365,6 +453,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           stack_size: {
@@ -374,6 +463,7 @@ export const mockSchemas = {
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           link_texts: {
@@ -409,10 +499,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -422,6 +513,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           modal_component: {
@@ -455,10 +547,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -468,34 +561,8 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
-          },
-          theme_variant: {
-            type: 'text',
-            required: false,
-            default: 'page',
-            options: ['page', 'light', 'dark'],
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          heading_text: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          lead_text: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: null,
-            related_to: null,
-            hidden: false
           },
           preset_config: {
             type: 'text',
@@ -504,6 +571,7 @@ export const mockSchemas = {
             options: ['large-single', 'inline-all'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           items: {
@@ -530,10 +598,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -543,33 +612,37 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           icon_url: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Optional in place of using actual contentful asset.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           paragraph_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           icon_asset: {
@@ -595,10 +668,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -608,6 +682,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           xl_config: {
@@ -623,6 +698,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lg_config: {
@@ -638,6 +714,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           md_config: {
@@ -653,6 +730,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           sm_config: {
@@ -668,69 +746,77 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           title_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           description_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           meta_1_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           meta_2_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           image_url: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           image_asset: {
@@ -757,10 +843,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -770,6 +857,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           xl_config: {
@@ -785,6 +873,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lg_config: {
@@ -800,6 +889,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           md_config: {
@@ -815,6 +905,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           sm_config: {
@@ -830,13 +921,14 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           resource: {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['Content::BlogPost'],
+            content_types: ['Content::Resource'],
             description: null,
             related_to: null
           }
@@ -855,10 +947,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -868,57 +961,63 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           overline_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           body_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_intent: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: ['primary', 'secondary', 'tertiary'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_icon: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -943,15 +1042,17 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           modal_component: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -969,10 +1070,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -982,6 +1084,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           intent: {
@@ -991,6 +1094,7 @@ export const mockSchemas = {
             options: ['primary', 'secondary', 'tertiary'],
             description: null,
             related_to: 'foundations/theme_colors',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           size: {
@@ -1000,15 +1104,17 @@ export const mockSchemas = {
             options: ['default', 'sm'],
             description: null,
             related_to: 'foundations/inset_shapes',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           button_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           icon_name: {
@@ -1039,15 +1145,17 @@ export const mockSchemas = {
             ],
             description: 'May select any available icon.',
             related_to: 'elements/icon',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           onclick: {
@@ -1057,6 +1165,7 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           disabled: {
@@ -1084,10 +1193,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1097,6 +1207,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           max_items: {
@@ -1119,20 +1230,72 @@ export const mockSchemas = {
           cta_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_intent: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: ['primary', 'secondary', 'tertiary'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
+          }
+        }
+      },
+      {
+        meta: {
+          id: 'components/dropdown_selectables/component',
+          styleguide_path: '/styleguide/components%2Fdropdown_selectables%2Fcomponent',
+          description:
+            'A component which takes a list of options and a list of components and allows the user to select the component via dropdown.',
+          editor_role: 'component',
+          tags: ['collection'],
+          extension_of: null
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsDropdownSelectableComponentsComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          dropdown_options: {
+            type: 'multi-text',
+            required: false,
+            default: [],
+            options: null,
+            description: null,
+            related_to: null,
+            hidden: false
+          },
+          components: {
+            type: 'multi-component',
+            required: true,
+            default: [],
+            options: [],
+            description: null,
+            related_to: null
           }
         }
       },
@@ -1149,10 +1312,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1162,6 +1326,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           video_entries: {
@@ -1188,10 +1353,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1201,15 +1367,17 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           group_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Text above the form group',
             related_to: 'elements/lead_text',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           input_groups: {
@@ -1235,10 +1403,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1248,25 +1417,28 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           image_url: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/image',
+            editor_type: 'short-text-editor',
             hidden: true
           },
           alt: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description:
-              "Text for accessibility & screen-readers. When using contentful, use the 'description' property of the asset for this.",
+              "Text for accessibility \u0026 screen-readers. When using contentful, use the 'description' property of the asset for this.",
             related_to: 'elements/image',
+            editor_type: 'short-text-editor',
             hidden: true
           },
           format: {
@@ -1276,6 +1448,7 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: 'elements/image',
+            editor_type: 'short-text-editor',
             hidden: true
           },
           lazy: {
@@ -1320,10 +1493,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1333,6 +1507,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           action_component: {
@@ -1368,10 +1543,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1381,6 +1557,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           max_items: {
@@ -1402,19 +1579,21 @@ export const mockSchemas = {
           cta_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Default CTA button text',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_intent: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: ['primary', 'secondary', 'tertiary'],
             description: 'Default CTA button intent style.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           action_component: {
@@ -1444,10 +1623,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1457,23 +1637,27 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/heading',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           list_markdown: {
-            type: 'markdown',
+            type: 'text',
             required: true,
             default: null,
+            options: null,
             description: null,
             related_to: 'elements/markdown_list',
+            editor_type: 'markdown-editor',
             hidden: false
           }
         }
@@ -1490,10 +1674,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1503,33 +1688,58 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_size: {
             type: 'text',
             required: false,
             default: 'md',
-            options: ['xl', 'lg', 'md', 'xxs'],
+            options: ['xl', 'lg', 'md', 'sm', 'xxs'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           paragraph_text: {
-            type: 'markdown',
+            type: 'text',
             required: false,
             default: null,
+            options: null,
             description: null,
             related_to: null,
+            editor_type: 'markdown-editor',
             hidden: false
+          },
+          heading_element: {
+            type: 'text',
+            required: false,
+            default: 'h2',
+            options: ['h2', 'h3', 'h4', 'h5', 'h6', 'p'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          paragraph_element: {
+            type: 'text',
+            required: false,
+            default: 'p',
+            options: ['p', 'markdown'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
           }
         }
       },
@@ -1545,10 +1755,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1558,6 +1769,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           name: {
@@ -1588,6 +1800,7 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           size: {
@@ -1597,6 +1810,7 @@ export const mockSchemas = {
             options: ['xl', 'lg', 'md', 'sm'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
@@ -1606,15 +1820,17 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           onclick: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -1632,10 +1848,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1645,42 +1862,47 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           overline_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           meta_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lead_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           action_component: {
@@ -1705,10 +1927,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1718,24 +1941,27 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/form_label',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           name: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/select',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           size: {
@@ -1745,15 +1971,17 @@ export const mockSchemas = {
             options: ['default', 'sm'],
             description: null,
             related_to: 'elements/select',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           default_option: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Which option to select by default when this element loads.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           required: {
@@ -1772,6 +2000,7 @@ export const mockSchemas = {
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           options: {
@@ -1798,10 +2027,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1811,24 +2041,27 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/form_label',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           name: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           type: {
@@ -1838,6 +2071,7 @@ export const mockSchemas = {
             options: ['text', 'date', 'tel', 'email', 'password'],
             description: null,
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           size: {
@@ -1847,6 +2081,7 @@ export const mockSchemas = {
             options: ['default', 'sm'],
             description: null,
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           placeholder: {
@@ -1856,15 +2091,17 @@ export const mockSchemas = {
             options: null,
             description: 'Input placeholder text',
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           value: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Value of the input, if preset',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           stack_size: {
@@ -1874,6 +2111,7 @@ export const mockSchemas = {
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           required: {
@@ -1900,10 +2138,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1913,6 +2152,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           items: {
@@ -1969,10 +2209,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -1982,15 +2223,17 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           style: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Inline style',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
@@ -2000,24 +2243,27 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           link_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Pass configure as a text link. Overrides blocks.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           onclick: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           data: {
@@ -2052,10 +2298,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2065,6 +2312,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           title_link: {
@@ -2097,10 +2345,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2110,6 +2359,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           href: {
@@ -2119,15 +2369,17 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           link_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2144,10 +2396,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2157,6 +2410,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           icon_name: {
@@ -2187,24 +2441,27 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: 'elements/icon',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           pill_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/system_text',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'components/link',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           icon_variant: {
@@ -2214,6 +2471,7 @@ export const mockSchemas = {
             options: ['variant', 'accent-1', 'accent-2'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           pill_variant: {
@@ -2223,6 +2481,7 @@ export const mockSchemas = {
             options: ['outlined', 'surface-variant'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           size: {
@@ -2232,6 +2491,7 @@ export const mockSchemas = {
             options: ['default', 'sm'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2249,10 +2509,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2262,6 +2523,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           resource: {
@@ -2287,10 +2549,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2300,25 +2563,28 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           image_url: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           alt: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description:
-              "Text for accessibility & screen-readers. When using contentful, use the 'description' property of the asset for this.",
+              "Text for accessibility \u0026 screen-readers. When using contentful, use the 'description' property of the asset for this.",
             related_to: 'elements/image',
+            editor_type: 'short-text-editor',
             hidden: true
           },
           format: {
@@ -2328,6 +2594,7 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: 'elements/image',
+            editor_type: 'short-text-editor',
             hidden: true
           },
           lazy: {
@@ -2371,10 +2638,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2384,6 +2652,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           icon_name: {
@@ -2393,6 +2662,7 @@ export const mockSchemas = {
             options: ['play', 'play-circle-outline', 'play-circle-filled'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           video_entry: {
@@ -2400,7 +2670,7 @@ export const mockSchemas = {
             required: false,
             asset_types: ['video'],
             content_types: ['Content::Video', 'Content::Resource'],
-            description: 'Overrides video_url.',
+            description: null,
             related_to: null
           },
           image_asset: {
@@ -2408,7 +2678,8 @@ export const mockSchemas = {
             required: false,
             asset_types: ['image'],
             content_types: [],
-            description: 'Alternate field for image. Overrides entry video.',
+            description:
+              'Alternate field for image. Overrides the image pulled from a video entry.',
             related_to: null
           }
         }
@@ -2425,10 +2696,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2438,6 +2710,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           placeholder: {
@@ -2447,6 +2720,17 @@ export const mockSchemas = {
             options: null,
             description: 'Input placeholder',
             related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          value: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2464,10 +2748,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2477,15 +2762,17 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           xl_max: {
@@ -2544,10 +2831,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2557,6 +2845,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           search_type: {
@@ -2566,64 +2855,19 @@ export const mockSchemas = {
             options: ['default', 'seasonal'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           search_term: {
             type: 'text',
             required: true,
-            default: null,
+            default: '',
             options: null,
             description:
               'Enter a natural language search term and this component will display it on the pill and produce the correct search page link for it.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
-          }
-        }
-      },
-      {
-        meta: {
-          id: 'components/selectable_split_resource_grids',
-          styleguide_path: '/styleguide/components%2Fselectable_split_resource_grids',
-          description:
-            'A component which takes a list of options and a list of components and allows the user to select the component via dropdown.',
-          editor_role: 'component',
-          tags: ['collection']
-        },
-        properties: {
-          classname: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: 'CSS class name(s) for the component.',
-            related_to: null,
-            hidden: true
-          },
-          c_id: {
-            type: 'text',
-            required: false,
-            default: 'ComponentsSelectableSplitResourceGridsComponent',
-            options: null,
-            description: 'Internal testing ID.',
-            related_to: null,
-            hidden: true
-          },
-          grid_titles: {
-            type: 'multi-text',
-            required: false,
-            default: [],
-            options: null,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          collection_grids: {
-            type: 'multi-component',
-            required: true,
-            default: [],
-            options: ['components/split_resource_grid'],
-            description: null,
-            related_to: null
           }
         }
       },
@@ -2640,10 +2884,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2653,6 +2898,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           autoplay: {
@@ -2736,10 +2982,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2749,6 +2996,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           disabled: {
@@ -2775,10 +3023,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2788,6 +3037,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           size: {
@@ -2797,33 +3047,47 @@ export const mockSchemas = {
             options: ['default', 'sm'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          label_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: 'elements/form_label',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           input_name: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           input_type: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           input_placeholder: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/text_input',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           button_intent: {
@@ -2833,24 +3097,27 @@ export const mockSchemas = {
             options: ['primary', 'secondary', 'tertiary'],
             description: null,
             related_to: 'components/cta_button',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           button_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'components/cta_button',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           form_endpoint: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/form',
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2867,10 +3134,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2880,6 +3148,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           href: {
@@ -2889,6 +3158,7 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           logo_name: {
@@ -2898,6 +3168,7 @@ export const mockSchemas = {
             options: ['justworks'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           variant: {
@@ -2907,6 +3178,7 @@ export const mockSchemas = {
             options: ['default', 'accent-1'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2924,10 +3196,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -2937,6 +3210,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           icon_size: {
@@ -2946,6 +3220,7 @@ export const mockSchemas = {
             options: ['xl', 'lg', 'md', 'sm'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           icon_names: {
@@ -3002,10 +3277,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3015,14 +3291,31 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
+          },
+          max_items: {
+            type: 'number',
+            required: false,
+            default: 4,
+            description: null,
+            related_to: null,
+            hidden: false
           },
           resources: {
             type: 'multi-link',
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::BlogPost'],
+            content_types: ['Content::Resource'],
+            description: null,
+            related_to: null
+          },
+          action_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/cta_button', 'components/button_modal'],
             description: null,
             related_to: null
           }
@@ -3041,10 +3334,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3054,24 +3348,27 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Text for the label at the very top.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Primary display text',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_size: {
@@ -3081,6 +3378,7 @@ export const mockSchemas = {
             options: ['primary', 'secondary'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           alignment: {
@@ -3090,14 +3388,17 @@ export const mockSchemas = {
             options: ['left', 'center'],
             description: 'Text alignment for all elements.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lead_text: {
-            type: 'markdown',
+            type: 'text',
             required: false,
-            default: null,
+            default: '',
+            options: null,
             description: 'Lead text copy.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -3115,10 +3416,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3128,6 +3430,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           size: {
@@ -3137,12 +3440,13 @@ export const mockSchemas = {
             options: ['default', 'sm'],
             description: null,
             related_to: 'foundations/inset_shapes',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           icon_name: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -3167,6 +3471,7 @@ export const mockSchemas = {
             ],
             description: 'May select any available icon.',
             related_to: 'elements/icon',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           icon_side: {
@@ -3176,6 +3481,7 @@ export const mockSchemas = {
             options: ['left', 'right'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           color_variant: {
@@ -3185,33 +3491,37 @@ export const mockSchemas = {
             options: ['variant', 'text-link'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           button_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           onclick: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -3229,10 +3539,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3242,6 +3553,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
@@ -3251,6 +3563,7 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           content_spacing_size: {
@@ -3260,6 +3573,7 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           split_alignment: {
@@ -3269,6 +3583,7 @@ export const mockSchemas = {
             options: ['left', 'right'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           background_image: {
@@ -3306,10 +3621,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3319,6 +3635,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
@@ -3328,6 +3645,7 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           content_spacing_size: {
@@ -3337,7 +3655,18 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
+          },
+          provide_grid: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Includes a single-column grid structure by default. Disable that in order to render as a gridless component.',
+            related_to: null,
+            hidden: true
           },
           content_component: {
             type: 'component',
@@ -3363,6 +3692,65 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'patterns/bordered_cta_entry_box',
+          styleguide_path: '/styleguide/patterns%2Fbordered_cta_entry_box',
+          description:
+            'A direct interface for the BlogCta content type with a bordered content cta box.',
+          editor_role: 'pattern',
+          tags: ['cta', 'cta-module'],
+          extension_of: 'patterns/bordered_content_cta_box'
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'PatternsBorderedCtaEntryBoxComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          cta_entry: {
+            type: 'link',
+            required: false,
+            asset_types: [],
+            content_types: ['Content::BlogCta'],
+            description: null,
+            related_to: null
+          },
+          provide_grid: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description: null,
+            related_to: null,
+            hidden: true
+          },
+          gated: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: null,
+            related_to: null,
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'patterns/content_split',
           styleguide_path: '/styleguide/patterns%2Fcontent_split',
           description:
@@ -3374,10 +3762,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3387,6 +3776,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
@@ -3396,6 +3786,7 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           content_spacing_size: {
@@ -3405,6 +3796,7 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           left_content: {
@@ -3452,10 +3844,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3465,15 +3858,17 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           query: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'The search query that the results correspond with.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           resources: {
@@ -3500,10 +3895,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3513,33 +3909,37 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           overline_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           body_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'long-text-editor',
             hidden: false
           },
           theme_variant: {
@@ -3549,6 +3949,7 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           content_spacing_size: {
@@ -3558,6 +3959,7 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           cta_component: {
@@ -3585,16 +3987,17 @@ export const mockSchemas = {
           description:
             'A hero pattern comprised of a text stack and a configurable zone for another pattern beneath it.',
           editor_role: 'pattern',
-          tags: ['mixed-media', 'landing-page']
+          tags: ['hero', 'landing-page']
         },
         properties: {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3604,6 +4007,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
@@ -3613,24 +4017,27 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/heading',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_text: {
             type: 'text',
             required: true,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/display_text',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_size: {
@@ -3640,15 +4047,17 @@ export const mockSchemas = {
             options: ['primary', 'secondary'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lead_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: 'elements/lead_text',
+            editor_type: 'long-text-editor',
             hidden: false
           },
           bottom_pattern: {
@@ -3674,10 +4083,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3687,6 +4097,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
@@ -3696,6 +4107,7 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           sticky: {
@@ -3735,6 +4147,56 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'patterns/resource_article',
+          styleguide_path: '/styleguide/patterns%2Fresource_article',
+          description:
+            'The full article experience composed from a resource content type. Includes the hero, table of contents, content, and progress bar.',
+          editor_role: 'pattern',
+          tags: ['mixed-media', 'resource-center', 'resource'],
+          extension_of: null
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'PatternsResourceArticleComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          resource: {
+            type: 'link',
+            required: false,
+            asset_types: [],
+            content_types: ['Content::Resource'],
+            description:
+              'Add the resource to include category \u0026 glossary information into the hero and table of contents. Optional.',
+            related_to: null
+          },
+          article: {
+            type: 'link',
+            required: true,
+            asset_types: [],
+            content_types: ['Content::BlogPost'],
+            description: 'Should work with any blog article entry.',
+            related_to: null
+          }
+        }
+      },
+      {
+        meta: {
           id: 'patterns/resource_content_section',
           styleguide_path: '/styleguide/patterns%2Fresource_content_section',
           description:
@@ -3746,10 +4208,11 @@ export const mockSchemas = {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3759,6 +4222,7 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
@@ -3768,6 +4232,7 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           content_spacing_size: {
@@ -3777,24 +4242,27 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lead_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'long-text-editor',
             hidden: false
           },
           divider: {
@@ -3812,18 +4280,20 @@ export const mockSchemas = {
             default: null,
             options: [
               'components/single_column_carousel',
-              'components/selectable_split_resource_grids',
+              'components/guide_carousel',
+              'components/dropdown_curated_guide_lists',
               'components/featured_video_resource_showcase',
-              'components/card_resource_showcase_section'
+              'components/card_resource_showcase_section',
+              'components/adaptive_column_grid'
             ],
             description: null,
             related_to: null
           },
-          cta_button: {
+          action_component: {
             type: 'component',
             required: false,
             default: null,
-            options: ['components/cta_button'],
+            options: ['components/cta_button', 'components/button_modal'],
             description: null,
             related_to: null
           }
@@ -3835,17 +4305,18 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Fresource_hero',
           description: 'Description of component.',
           editor_role: 'pattern',
-          tags: ['mixed-media', 'resource-center'],
+          tags: ['hero', 'resource-center'],
           extension_of: null
         },
         properties: {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3855,7 +4326,18 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
+          },
+          theme_variant: {
+            type: 'text',
+            required: true,
+            default: 'page',
+            options: ['page', 'light', 'dark'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
           },
           breadcrumb_texts: {
             type: 'multi-text',
@@ -3878,28 +4360,21 @@ export const mockSchemas = {
           display_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lead_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
-            hidden: false
-          },
-          theme_variant: {
-            type: 'text',
-            required: true,
-            default: 'page',
-            options: ['page', 'light', 'dark'],
-            description: null,
-            related_to: null,
+            editor_type: 'long-text-editor',
             hidden: false
           }
         }
@@ -3911,16 +4386,17 @@ export const mockSchemas = {
           description:
             'A hero section which contains text, a search bar, and a search-term grid. When the search bar is the only component selected, it adds extra spacing for a standalone variation of this pattern.',
           editor_role: 'pattern',
-          tags: ['mixed-media', 'resource-center']
+          tags: ['hero', 'resource-center']
         },
         properties: {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -3930,33 +4406,37 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_size: {
@@ -3966,6 +4446,7 @@ export const mockSchemas = {
             options: ['primary', 'secondary'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           search_component: {
@@ -3993,16 +4474,17 @@ export const mockSchemas = {
           description:
             'A hero section with several configuration options including a short form, button, background image, and a marketing component.',
           editor_role: 'pattern',
-          tags: ['mixed-media', 'landing-page']
+          tags: ['hero', 'landing-page']
         },
         properties: {
           classname: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'CSS class name(s) for the component.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           c_id: {
@@ -4012,42 +4494,47 @@ export const mockSchemas = {
             options: null,
             description: 'Internal testing ID.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: true
           },
           theme_variant: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           heading_label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: 'Text for the label at the very top.',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           label_text: {
             type: 'text',
             required: false,
-            default: null,
+            default: '',
             options: null,
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_text: {
             type: 'text',
             required: true,
-            default: null,
+            default: '',
             options: null,
             description: 'Primary display text',
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           display_size: {
@@ -4057,14 +4544,17 @@ export const mockSchemas = {
             options: ['primary', 'secondary'],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           lead_text: {
-            type: 'markdown',
+            type: 'text',
             required: false,
-            default: null,
+            default: '',
+            options: null,
             description: 'Lead text copy.',
             related_to: null,
+            editor_type: 'long-text-editor',
             hidden: false
           },
           right_content: {
