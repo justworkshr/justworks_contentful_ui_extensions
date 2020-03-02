@@ -1,19 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactMde from 'react-mde';
 
 import * as c from '../../../constants';
 
-import { DropdownList, DropdownListItem, EntryCard } from '@contentful/forma-36-react-components';
+import {
+  AssetCard,
+  TextLink,
+  DropdownList,
+  DropdownListItem,
+  EntryCard
+} from '@contentful/forma-36-react-components';
 
 // import { getEntryContentTypeId } from '../utils';
 // import { getStatus } from '../../../../../shared/utilities/elementUtils';
 
 import classnames from 'classnames';
+import { constructLink, apiContentTypesToIds } from '../../../utilities';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
+  const handleLinkClick = async () => {
+    console.log(props.contentTypes);
+    const entry = await props.sdk.dialogs.selectSingleEntry({
+      contentTypes: props.contentTypes
+    });
+    if (entry) {
+      const link = constructLink(entry);
+      props.onChange(link);
+    }
+  };
+
   const renderEntryCard = () => {
     // const contentType = (props.entry.sys || {}).contentType
     //   ? getEntryContentTypeId(props.entry)
@@ -52,30 +69,31 @@ export const EntryField = props => {
     );
   };
 
-  return (
-    <div className={classnames('entry-field', props.className)}>
-      {props.entry && props.roleMappingObject.type === c.LINK_TYPE_ASSET && renderAssetCard()}
-      {props.entry && props.roleMappingObject.type === c.LINK_TYPE_ENTRY && renderEntryCard()}
-    </div>
-  );
+  if (props.entry) {
+    return <AssetCard type="image" src={props.asset.fields.file['en-US'].url} />;
+  } else {
+    return (
+      <div className="link-row">
+        <TextLink className="f36-margin-right--s">Create entry</TextLink>
+        <TextLink onClick={handleLinkClick}>Link entry</TextLink>
+      </div>
+    );
+  }
 };
 
 EntryField.propTypes = {
-  className: PropTypes.string,
+  contentTypes: PropTypes.array,
   entry: PropTypes.object,
   entryIndex: PropTypes.number,
   isLoading: PropTypes.bool,
+  onChange: PropTypes.func,
+  sdk: PropTypes.object,
   value: PropTypes.string
 };
 
 EntryField.defaultProps = {
-  entry: {
-    sys: {}
-  },
-  roleKey: '',
-  isLoading: false,
-  isDragActive: false,
-  roleMappingObject: {}
+  contentTypes: [],
+  isLoading: false
 };
 
 export default EntryField;

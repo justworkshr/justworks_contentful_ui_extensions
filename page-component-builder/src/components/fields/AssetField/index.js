@@ -11,6 +11,7 @@ const AssetField = props => {
       props.onChange(link);
     }
   };
+
   if (props.asset) {
     return <AssetCard type="image" src={props.asset.fields.file['en-US'].url} />;
   } else {

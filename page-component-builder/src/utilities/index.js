@@ -73,3 +73,7 @@ export const newInternalMappingFromSchema = schema => {
   });
   return internalMapping;
 };
+
+export const apiContentTypesToIds = contentTypes => {
+  return contentTypes;
+};

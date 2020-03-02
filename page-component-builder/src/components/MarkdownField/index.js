@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactMde from 'react-mde';
 
 import { TextInput } from '@contentful/forma-36-react-components';
 
-const ShortTextField = props => {
+const MarkdownField = props => {
   return (
     <TextInput
       testId="short-text-field"
@@ -13,13 +14,13 @@ const ShortTextField = props => {
   );
 };
 
-ShortTextField.propTypes = {
+MarkdownField.propTypes = {
   onChange: PropTypes.func,
   testId: PropTypes.string,
   value: PropTypes.string
 };
-ShortTextField.defaultProps = {
+MarkdownField.defaultProps = {
   value: ''
 };
 
-export default ShortTextField;
+export default MarkdownField;

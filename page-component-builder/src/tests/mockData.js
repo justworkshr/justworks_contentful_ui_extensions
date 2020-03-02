@@ -579,7 +579,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::BlogPost'],
+            content_types: ['blogPost'],
             description: null,
             related_to: null
           }
@@ -928,7 +928,7 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['Content::Resource'],
+            content_types: ['resourceWrapper'],
             description: null,
             related_to: null
           }
@@ -1223,7 +1223,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::CuratedGuideList'],
+            content_types: ['curatedGuideList'],
             description: null,
             related_to: null
           },
@@ -1334,7 +1334,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::Video', 'Content::Resource'],
+            content_types: ['video', 'resourceWrapper'],
             description: null,
             related_to: null
           }
@@ -1523,7 +1523,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::Guide'],
+            content_types: ['guide'],
             description: null,
             related_to: null
           }
@@ -1572,7 +1572,7 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['Content::CuratedGuideList'],
+            content_types: ['curatedGuideList'],
             description: null,
             related_to: null
           },
@@ -2530,7 +2530,7 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['Content::BlogPost'],
+            content_types: ['blogPost'],
             description: null,
             related_to: null
           }
@@ -2669,8 +2669,8 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: ['video'],
-            content_types: ['Content::Video', 'Content::Resource'],
-            description: null,
+            content_types: ['video', 'resourceWrapper'],
+            description: 'Overrides video_url.',
             related_to: null
           },
           image_asset: {
@@ -3307,7 +3307,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::Resource'],
+            content_types: ['blogPost'],
             description: null,
             related_to: null
           },
@@ -3725,7 +3725,7 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['Content::BlogCta'],
+            content_types: ['blogCta'],
             description: null,
             related_to: null
           },
@@ -3876,7 +3876,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['Content::BlogPost'],
+            content_types: ['blogPost'],
             description: null,
             related_to: null
           }
@@ -4180,7 +4180,7 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['Content::Resource'],
+            content_types: ['resourceWrapper'],
             description:
               'Add the resource to include category \u0026 glossary information into the hero and table of contents. Optional.',
             related_to: null
@@ -4189,7 +4189,7 @@ export const mockSchemas = {
             type: 'link',
             required: true,
             asset_types: [],
-            content_types: ['Content::BlogPost'],
+            content_types: ['blogPost'],
             description: 'Should work with any blog article entry.',
             related_to: null
           }

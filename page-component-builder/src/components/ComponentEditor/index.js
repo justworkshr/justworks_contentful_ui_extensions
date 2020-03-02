@@ -17,20 +17,54 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
+import LongTextField from '../fields/LongTextField';
+
 import RadioGroup from '../fields/RadioGroup';
 import AssetField from '../fields/AssetField';
+import EntryField from '../fields/EntryField';
 
 const ComponentEditor = props => {
-  const isShortTextField = (type, options = []) => {
-    return type === c.TEXT_PROPERTY && !(options && options.length);
+  const isShortTextField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.SHORT_TEXT_EDITOR &&
+      !(property.options && property.options.length)
+    );
   };
 
-  const isOptionTextField = (type, options = []) => {
-    return type === c.TEXT_PROPERTY && options && options.length;
+  const isLongTextField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.LONG_TEXT_EDITOR &&
+      !(property.options && property.options.length)
+    );
   };
 
-  const isAssetLink = (type, assetTypes) => {
-    return type === c.LINK_PROPERTY && assetTypes && assetTypes.length;
+  const isMarkdownTextField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.MARKDOWN_EDITOR &&
+      !(property.options && property.options.length)
+    );
+  };
+
+  const isOptionTextField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.SHORT_TEXT_EDITOR &&
+      property.options &&
+      property.options.length
+    );
+  };
+
+  const isAssetLink = property => {
+    return property.type === c.LINK_PROPERTY && property.assetTypes && property.assetTypes.length;
+  };
+
+  const isEntryLink = property => {
+    return (
+      property.type === c.LINK_PROPERTY && property.content_types && property.content_types.length
+    );
   };
 
   const updatePropertyValue = (propKey, value, timeout = true) => {
@@ -54,13 +88,25 @@ const ComponentEditor = props => {
                   <SectionHeading>{propKey}</SectionHeading>
                   <HelpText>{property.description || 'help text'}</HelpText>
                 </div>
-                {isShortTextField(property.type, property.options) && (
+                {isShortTextField(property) && (
                   <ShortTextField
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
                   />
                 )}
-                {isOptionTextField(property.type, property.options) && (
+                {isLongTextField(property) && (
+                  <LongTextField
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    value={value}
+                  />
+                )}
+                {isMarkdownTextField(property) && (
+                  <ShortTextField
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    value={value}
+                  />
+                )}
+                {isOptionTextField(property) && (
                   <RadioGroup
                     propKey={propKey}
                     options={property.options}
@@ -68,10 +114,18 @@ const ComponentEditor = props => {
                     value={value}
                   />
                 )}
-                {isAssetLink(property.type, property.asset_types) && (
+                {isAssetLink(property) && (
                   <AssetField
                     sdk={props.sdk}
                     asset={props.hydratedAssets.find(a => a.sys.id === (value.sys || {}).id)}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
+                  />
+                )}
+                {isEntryLink(property) && (
+                  <EntryField
+                    sdk={props.sdk}
+                    contentTypes={property.content_types}
+                    entry={props.hydratedEntries.find(e => e.sys.id === (value.sys || {}).id)}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                   />
                 )}

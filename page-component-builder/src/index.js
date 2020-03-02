@@ -145,6 +145,7 @@ export class PageComponentBuilder extends React.Component {
   };
 
   onInternalMappingChange = async value => {
+    if (!!this.updateTimeout) return; // Don't run if the timeout is running with a pending update
     let internalMappingObject = this.parseInternalMapping(value);
     const newEntries = extractEntries(internalMappingObject, c.ENTRY_LINK_TYPE) || [];
     const newAssets = extractEntries(internalMappingObject, c.ASSET_LINK_TYPE) || [];
@@ -168,6 +169,8 @@ export class PageComponentBuilder extends React.Component {
       : { items: [] };
 
     this.setState(oldState => {
+      if (!!this.updateTimeout) return; // Don't run if the timeout is running with a pending update
+
       return {
         ...oldState,
         internalMapping: value,
@@ -182,10 +185,10 @@ export class PageComponentBuilder extends React.Component {
 
     clearTimeout(this.updateTimeout);
     if (timeout) {
-      this.updateTimeout = setTimeout(
-        () => this.props.sdk.entry.fields.internalMapping.setValue(value),
-        500
-      );
+      this.updateTimeout = setTimeout(() => {
+        this.props.sdk.entry.fields.internalMapping.setValue(value);
+        this.updateTimeout = null;
+      }, 750);
     } else {
       this.props.sdk.entry.fields.internalMapping.setValue(value);
     }
