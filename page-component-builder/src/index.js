@@ -112,7 +112,10 @@ export class PageComponentBuilder extends React.Component {
         await this.props.sdk.entry.fields.entries.setValue([]); // clear entries
         await this.props.sdk.entry.fields.assets.setValue([]); // clear assets
         const schema = this.state.schemaData.components.find(s => s.meta.id === value);
-        const internalMapping = newInternalMappingFromSchema(schema).asJSON();
+        const internalMapping = schema
+          ? newInternalMappingFromSchema(schema).asJSON()
+          : JSON.stringify({});
+
         this.updateInternalMapping(internalMapping, false);
       }
     );

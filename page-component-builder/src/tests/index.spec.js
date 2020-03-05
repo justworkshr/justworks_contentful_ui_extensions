@@ -1,6 +1,6 @@
 import React from 'react';
 import { PageComponentBuilder } from '../index';
-import { render, cleanup, fireEvent, configure } from '@testing-library/react';
+import { render, cleanup, fireEvent, configure, wait } from '@testing-library/react';
 import { mockSdk, mockInternalMapping, mockLinkProperty } from './mockUtils';
 
 configure({
@@ -18,7 +18,7 @@ describe('App', () => {
 
   afterEach(cleanup);
 
-  it('should read values from entry.fields.*', () => {
+  it('should read values from entry.fields.*', async () => {
     const sdk = mockSdk();
     sdk.entry.fields.name.getValue.mockReturnValue('name-value');
     sdk.entry.fields.componentId.getValue.mockReturnValue('componentId-value');
@@ -42,16 +42,23 @@ describe('App', () => {
 
     expect(sdk.entry.fields.name.setValue).toHaveBeenCalledWith('new-name-value');
 
-    fireEvent.change(getByTestId('field-componentId'), {
-      target: { value: 'new-componentId-value' }
-    });
+    await jest.useFakeTimers();
+    await wait(() =>
+      fireEvent.change(getByTestId('field-componentId'), {
+        target: { value: 'new-componentId-value' }
+      })
+    );
 
     expect(sdk.entry.fields.componentId.setValue).toHaveBeenCalledWith('new-componentId-value');
+    expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith('{}'); // no schemas loaded so nil value passed
 
-    fireEvent.change(getByTestId('field-internalMapping'), {
-      target: { value: '{ "properties": {}}' }
+    const value = '{ "meta": {}, "properties": {}}';
+    await wait(() => {
+      fireEvent.change(getByTestId('field-internalMapping'), {
+        target: { value: '{ "meta": {}, "properties": {}}' }
+      });
     });
-
-    expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith('{ "properties": {}}');
+    await jest.runAllTimers();
+    expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith(value);
   });
 });

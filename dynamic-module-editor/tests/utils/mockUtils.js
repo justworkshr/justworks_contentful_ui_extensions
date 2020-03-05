@@ -202,7 +202,7 @@ export const mockSdk = (
     space: {
       getEntry: id => mockEntryResponse({ id }),
       getAsset: id => mockAssetResponse({ id }),
-      updateEntry: sinon.spy(),
+      updateEntry: jest.fn(),
       createEntry: () => {
         return mockEntryResponse({ id: 'newCreatedEntry1a' });
       },
@@ -247,7 +247,7 @@ export const mockSdk = (
         },
         internalMapping: {
           getValue: () => getValue(mockEntry, 'internalMapping'),
-          setValue: sinon.spy()
+          setValue: jest.fn()
         },
         entries: {
           getValue: () => getValue(mockEntry, 'entries'),

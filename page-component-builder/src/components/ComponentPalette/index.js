@@ -44,9 +44,10 @@ const ComponentPalette = props => {
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Component Tags</SectionHeading>
               {props.tags.component &&
-                props.tags.component.map(tag => {
+                props.tags.component.map((tag, index) => {
                   return (
                     <ToggleButton
+                      key={`component-tag--${index}`}
                       testId="palette-tag"
                       className="component-palette__pill"
                       isActive={selectedTags.some(t => t === tag)}
@@ -59,9 +60,10 @@ const ComponentPalette = props => {
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Content Tags</SectionHeading>
               {props.tags.content &&
-                props.tags.content.map(tag => {
+                props.tags.content.map((tag, index) => {
                   return (
                     <ToggleButton
+                      key={`content-tag--${index}`}
                       testId="palette-tag"
                       className="component-palette__pill"
                       isActive={selectedTags.some(t => t === tag)}
@@ -75,9 +77,10 @@ const ComponentPalette = props => {
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Location Tags</SectionHeading>
               {props.tags.location &&
-                props.tags.location.map(tag => {
+                props.tags.location.map((tag, index) => {
                   return (
                     <ToggleButton
+                      key={`location-tag--${index}`}
                       testId="palette-tag"
                       className="component-palette__pill"
                       isActive={selectedTags.some(t => t === tag)}
@@ -91,9 +94,10 @@ const ComponentPalette = props => {
           <div className="component-palette__collection">
             {props.schemas
               .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
-              .map(schema => {
+              .map((schema, index) => {
                 return (
                   <Card
+                    key={`palette-schema--${index}`}
                     testId="palette-schema"
                     className="component-palette__schema"
                     selected={schema.meta.id === props.componentId}
