@@ -69,8 +69,20 @@ const ComponentEditor = props => {
 
   const updatePropertyValue = (propKey, value, timeout = true) => {
     props.internalMappingInstance.updateValue(propKey, value);
+    debugger;
     props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout);
   };
+
+  const fetchHydratedAsset = value => {
+    if (!value) return;
+    return props.hydratedAssets.find(e => e.sys.id === (value.sys || {}).id);
+  };
+
+  const fetchHydratedEntry = value => {
+    if (!value) return;
+    return props.hydratedEntries.find(e => e.sys.id === (value.sys || {}).id);
+  };
+
   return (
     <div className="component-editor">
       <div className="component-editor__fields">
@@ -117,7 +129,7 @@ const ComponentEditor = props => {
                 {isAssetLink(property) && (
                   <AssetField
                     sdk={props.sdk}
-                    asset={props.hydratedAssets.find(a => a.sys.id === (value.sys || {}).id)}
+                    asset={fetchHydratedAsset(value)}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                   />
                 )}
@@ -125,7 +137,7 @@ const ComponentEditor = props => {
                   <EntryField
                     sdk={props.sdk}
                     contentTypes={property.content_types}
-                    entry={props.hydratedEntries.find(e => e.sys.id === (value.sys || {}).id)}
+                    entry={fetchHydratedEntry(value)}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                   />
                 )}
@@ -142,6 +154,7 @@ ComponentEditor.propTypes = {
   hydratedAssets: PropTypes.array,
   hydratedEntries: PropTypes.array,
   internalMappingInstance: PropTypes.object,
+  updateInternalMapping: PropTypes.func,
   schema: PropTypes.object
 };
 ComponentEditor.defaultProps = {

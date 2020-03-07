@@ -21,7 +21,6 @@ import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
   const handleLinkClick = async () => {
-    console.log(props.contentTypes);
     const entry = await props.sdk.dialogs.selectSingleEntry({
       contentTypes: props.contentTypes
     });
@@ -69,8 +68,9 @@ export const EntryField = props => {
     );
   };
 
-  if (props.entry) {
-    return <AssetCard type="image" src={props.asset.fields.file['en-US'].url} />;
+  if (props.entry.fields) {
+    console.log(props.entry);
+    return renderEntryCard();
   } else {
     return (
       <div className="link-row">
@@ -93,7 +93,8 @@ EntryField.propTypes = {
 
 EntryField.defaultProps = {
   contentTypes: [],
-  isLoading: false
+  isLoading: false,
+  entry: {}
 };
 
 export default EntryField;
