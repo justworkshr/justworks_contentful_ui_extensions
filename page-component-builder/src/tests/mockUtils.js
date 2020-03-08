@@ -5,11 +5,50 @@ import sinon from 'sinon';
 
 import { mount } from 'enzyme';
 
-export const mockInternalMapping = (componentId, properties = {}) => {
+export const mockSchemas = (tags = {}, components = []) => {
   return {
-    componentId,
+    tags,
+    components
+  };
+};
+
+export const mockComponentSchema = (id, properties = {}) => {
+  return {
+    meta: {
+      id
+    },
     properties
   };
+};
+
+export const mockComponentProperty = ({
+  name,
+  type,
+  required,
+  defaultProperty,
+  options,
+  description,
+  editor_type,
+  hidden
+} = {}) => {
+  return {
+    [name]: {
+      type,
+      editor_type,
+      defaultProperty,
+      description,
+      options,
+      required,
+      hidden
+    }
+  };
+};
+
+export const mockInternalMapping = (componentId = 'mockComponentId', properties = {}) => {
+  return JSON.stringify({
+    componentId,
+    properties
+  });
 };
 
 export const mockLinkProperty = (key, id) => {
@@ -21,9 +60,18 @@ export const mockLinkProperty = (key, id) => {
   };
 };
 
+export const mockTextProperty = (key, value) => {
+  return {
+    [key]: {
+      type: 'text',
+      value
+    }
+  };
+};
+
 export const mockPrimaryEntry = ({
   name = undefined,
-  type = undefined,
+  componentId = undefined,
   entries = undefined,
   assets = undefined,
   internalMapping = undefined,
@@ -32,7 +80,7 @@ export const mockPrimaryEntry = ({
 } = {}) => {
   return {
     name,
-    type,
+    componentId,
     entries,
     assets,
     internalMapping,

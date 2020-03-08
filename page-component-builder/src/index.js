@@ -56,11 +56,13 @@ export class PageComponentBuilder extends React.Component {
 
     this.updateTimeout = null;
 
+    const blankSchemaData = {
+      components: [],
+      tags: {}
+    };
+
     this.state = {
-      schemaData: {
-        components: [],
-        tags: {}
-      },
+      schemaData: props.schemas || blankSchemaData,
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
       entries: props.sdk.entry.fields.entries.getValue() || [],
@@ -84,8 +86,10 @@ export class PageComponentBuilder extends React.Component {
   fetchSchemas = async () => {
     // const response = await Axios.get('https://justworks.com/components.json');
 
+    // props.schemaData for tests
+    const schemaData = this.props.schemas || mockSchemas.data;
     this.setState({
-      schemaData: mockSchemas.data
+      schemaData
     });
   };
 
@@ -303,7 +307,7 @@ export class PageComponentBuilder extends React.Component {
 
 init(sdk => {
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
-    render(<PageComponentBuilder sdk={sdk} />, document.getElementById('root'));
+    render(<PageComponentBuilder schemas={null} sdk={sdk} />, document.getElementById('root'));
   }
 });
 

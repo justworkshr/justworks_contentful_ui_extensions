@@ -1,15 +1,31 @@
 import React from 'react';
 import { PageComponentBuilder } from '../index';
+
+import * as c from '../constants';
 import { render, cleanup, fireEvent, configure, wait } from '@testing-library/react';
-import { mockSdk, mockInternalMapping, mockLinkProperty } from './mockUtils';
+import {
+  mockSdk,
+  mockSchemas,
+  mockInternalMapping,
+  mockComponentSchema,
+  mockComponentProperty,
+  mockLinkProperty,
+  mockTextProperty
+} from './mockUtils';
 
 configure({
   testIdAttribute: 'data-test-id'
 });
 
-function renderComponent(sdk) {
-  return render(<PageComponentBuilder sdk={sdk} />);
+function renderComponent(sdk, schemas = mockSchemas()) {
+  return render(<PageComponentBuilder schemas={schemas} sdk={sdk} />);
 }
+
+const setupLoadedComponent = ({ sdk, schemas, componentId, internalMapping } = {}) => {
+  sdk.entry.fields.componentId.getValue.mockReturnValue(componentId);
+  sdk.entry.fields.internalMapping.getValue.mockReturnValue(internalMapping);
+  return render(<PageComponentBuilder schemas={schemas} sdk={sdk} />);
+};
 
 describe('App', () => {
   beforeEach(() => {
@@ -60,5 +76,56 @@ describe('App', () => {
     });
     await jest.runAllTimers();
     expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith(value);
+  });
+
+  describe('short text', () => {
+    it('should render a blank text field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const value = '';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockTextProperty(propKey, value)
+      });
+
+      const sdk = mockSdk();
+
+      const schemas = mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentProperty({
+            name: propKey,
+            type: c.TEXT_PROPERTY,
+            editor_type: c.SHORT_TEXT_EDITOR
+          })
+        })
+      ]);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('short-text-field').value).toEqual('');
+    });
+
+    it('should render a text field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const value = 'prop 1 value';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockTextProperty(propKey, value)
+      });
+
+      const sdk = mockSdk();
+      const schemas = mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentProperty({
+            name: propKey,
+            type: c.TEXT_PROPERTY,
+            editor_type: c.SHORT_TEXT_EDITOR
+          })
+        })
+      ]);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('short-text-field').value).toEqual(value);
+    });
   });
 });

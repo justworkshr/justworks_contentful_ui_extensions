@@ -95,7 +95,7 @@ const ComponentEditor = props => {
             return (
               <div
                 key={`component-editor-field--${propKey}`}
-                testId="editor-field"
+                data-test-id="editor-field"
                 className="component-editor__field f36-margin-bottom--l">
                 <div className="component-editor__field-heading f36-margin-bottom--s">
                   <SectionHeading>{propKey}</SectionHeading>
