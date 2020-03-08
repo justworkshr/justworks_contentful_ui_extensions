@@ -177,6 +177,7 @@ describe('App', () => {
 
       const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
 
+      expect(getByTestId('asset-field')).toBeTruthy();
       expect(getByTestId('asset-field-blank')).toBeTruthy();
     });
 
@@ -199,6 +200,7 @@ describe('App', () => {
         internalMapping
       });
 
+      expect(getByTestId('asset-field')).toBeTruthy();
       expect(getByTestId('hydrated-asset-card')).toBeTruthy();
     });
   });
@@ -230,6 +232,7 @@ describe('App', () => {
 
       const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
 
+      expect(getByTestId('entry-field')).toBeTruthy();
       expect(getByTestId('entry-field-blank')).toBeTruthy();
     });
 
@@ -252,6 +255,7 @@ describe('App', () => {
         internalMapping
       });
 
+      expect(getByTestId('entry-field')).toBeTruthy();
       expect(getByTestId('hydrated-entry-card')).toBeTruthy();
     });
   });

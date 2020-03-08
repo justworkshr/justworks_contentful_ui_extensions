@@ -43,24 +43,33 @@ const AssetField = props => {
       updateAsset(navigator.entity);
     }
   };
-  if (!!props.asset.sys) {
-    return (
-      <HydratedAssetCard
-        asset={props.asset}
-        handleEditClick={handleEditClick}
-        handleRemoveClick={() => updateAsset(null)}
-      />
-    );
-  } else {
-    return (
-      <div data-test-id="asset-field-blank" className="link-row">
-        <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
-          Create asset
-        </TextLink>
-        <TextLink onClick={handleLinkClick}>Link asset</TextLink>
-      </div>
-    );
-  }
+
+  const renderElement = () => {
+    if (!!props.asset.sys) {
+      return (
+        <HydratedAssetCard
+          asset={props.asset}
+          handleEditClick={handleEditClick}
+          handleRemoveClick={() => updateAsset(null)}
+        />
+      );
+    } else {
+      return (
+        <div data-test-id="asset-field-blank" className="link-row">
+          <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
+            Create asset
+          </TextLink>
+          <TextLink onClick={handleLinkClick}>Link asset</TextLink>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="asset-field" data-test-id="asset-field">
+      {renderElement()}
+    </div>
+  );
 };
 
 AssetField.propTypes = {

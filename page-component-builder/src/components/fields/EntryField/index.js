@@ -68,18 +68,26 @@ export const EntryField = props => {
     );
   };
 
-  if (props.entry.fields) {
-    return renderEntryCard();
-  } else {
-    return (
-      <div data-test-id="entry-field-blank" className="link-row">
-        <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
-          Create entry
-        </TextLink>
-        <TextLink onClick={handleLinkClick}>Link entry</TextLink>
-      </div>
-    );
-  }
+  const renderElement = () => {
+    if (props.entry.fields) {
+      return renderEntryCard();
+    } else {
+      return (
+        <div data-test-id="entry-field-blank" className="link-row">
+          <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
+            Create entry
+          </TextLink>
+          <TextLink onClick={handleLinkClick}>Link entry</TextLink>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="entry-field" data-test-id="entry-field">
+      {renderElement()}
+    </div>
+  );
 };
 
 EntryField.propTypes = {
