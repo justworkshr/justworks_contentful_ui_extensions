@@ -55,22 +55,26 @@ export class PageComponentBuilder extends React.Component {
     super(props);
 
     this.updateTimeout = null;
-
     const blankSchemaData = {
       components: [],
       tags: {}
     };
 
+    const schemaData = props.schemas || blankSchemaData;
+    const entries = props.sdk.entry.fields.entries.getValue() || [];
+    const assets = props.sdk.entry.fields.assets.getValue() || [];
+    const hydratedAssets = props.hydratedAssets || [];
+    const hydratedEntries = props.hydratedEntries || [];
     this.state = {
-      schemaData: props.schemas || blankSchemaData,
+      schemaData,
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
-      entries: props.sdk.entry.fields.entries.getValue() || [],
-      assets: props.sdk.entry.fields.assets.getValue() || [],
+      entries,
+      assets,
       internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
       isValid: props.sdk.entry.fields.isValid.getValue(),
-      hydratedEntries: [],
-      hydratedAssets: [],
+      hydratedEntries,
+      hydratedAssets,
       updatingAssets: false,
       updatingEntries: false
     };
@@ -307,7 +311,15 @@ export class PageComponentBuilder extends React.Component {
 
 init(sdk => {
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
-    render(<PageComponentBuilder schemas={null} sdk={sdk} />, document.getElementById('root'));
+    render(
+      <PageComponentBuilder
+        hydratedAssets={null}
+        hydratedEntries={null}
+        schemas={null}
+        sdk={sdk}
+      />,
+      document.getElementById('root')
+    );
   }
 });
 

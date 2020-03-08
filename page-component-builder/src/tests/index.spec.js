@@ -10,7 +10,11 @@ import {
   mockComponentSchema,
   mockComponentProperty,
   mockLinkProperty,
-  mockTextProperty
+  mockAssetProperty,
+  mockTextProperty,
+  mockAssetResponse,
+  mockEntryResponse,
+  mockLink
 } from './mockUtils';
 
 configure({
@@ -21,10 +25,30 @@ function renderComponent(sdk, schemas = mockSchemas()) {
   return render(<PageComponentBuilder schemas={schemas} sdk={sdk} />);
 }
 
-const setupLoadedComponent = ({ sdk, schemas, componentId, internalMapping } = {}) => {
+const setupLoadedComponent = ({
+  sdk,
+  schemas,
+  assets = [],
+  entries = [],
+  componentId,
+  internalMapping = JSON.stringify({})
+} = {}) => {
   sdk.entry.fields.componentId.getValue.mockReturnValue(componentId);
+  sdk.entry.fields.assets.getValue.mockReturnValue(assets);
+  sdk.entry.fields.entries.getValue.mockReturnValue(entries);
   sdk.entry.fields.internalMapping.getValue.mockReturnValue(internalMapping);
-  return render(<PageComponentBuilder schemas={schemas} sdk={sdk} />);
+
+  const hydratedAssets = assets.map(a => mockAssetResponse({ id: a.sys.id }));
+  const hydratedEntries = entries.map(e => mockEntryResponse({ id: e.sys.id }));
+
+  return render(
+    <PageComponentBuilder
+      hydratedAssets={hydratedAssets}
+      hydratedEntries={hydratedEntries}
+      schemas={schemas}
+      sdk={sdk}
+    />
+  );
 };
 
 describe('App', () => {
@@ -79,6 +103,18 @@ describe('App', () => {
   });
 
   describe('short text', () => {
+    const createSchema = (componentId, propKey, type, editor_type) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentProperty({
+            propKey,
+            type,
+            editor_type
+          })
+        })
+      ]);
+    };
+
     it('should render a blank text field', async () => {
       const componentId = 'mockComponent';
       const propKey = 'prop1';
@@ -89,15 +125,7 @@ describe('App', () => {
 
       const sdk = mockSdk();
 
-      const schemas = mockSchemas({}, [
-        mockComponentSchema(componentId, {
-          ...mockComponentProperty({
-            name: propKey,
-            type: c.TEXT_PROPERTY,
-            editor_type: c.SHORT_TEXT_EDITOR
-          })
-        })
-      ]);
+      const schemas = createSchema(componentId, propKey, c.TEXT_PROPERTY, c.SHORT_TEXT_EDITOR);
 
       const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
 
@@ -113,19 +141,64 @@ describe('App', () => {
       });
 
       const sdk = mockSdk();
-      const schemas = mockSchemas({}, [
-        mockComponentSchema(componentId, {
-          ...mockComponentProperty({
-            name: propKey,
-            type: c.TEXT_PROPERTY,
-            editor_type: c.SHORT_TEXT_EDITOR
-          })
-        })
-      ]);
+      const schemas = createSchema(componentId, propKey, c.TEXT_PROPERTY, c.SHORT_TEXT_EDITOR);
 
       const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
 
       expect(getByTestId('short-text-field').value).toEqual(value);
+    });
+  });
+
+  describe('single asset', () => {
+    const createSchema = (componentId, propKey, type) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentProperty({
+            propKey,
+            type,
+            assetTypes: [c.ASSET_TYPE_IMAGE]
+          })
+        })
+      ]);
+    };
+
+    it('should render a blank text field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const id = '';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockAssetProperty(propKey, id)
+      });
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, c.LINK_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('asset-field-blank')).toBeTruthy();
+    });
+
+    it('should render a text field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const id = 'prop 1 id';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockAssetProperty(propKey, id)
+      });
+
+      const sdk = mockSdk();
+      const schemas = createSchema(componentId, propKey, c.LINK_PROPERTY);
+      const assets = [mockLink({ type: 'Asset', id })];
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        assets,
+        internalMapping
+      });
+
+      expect(getByTestId('asset-field-card')).toBeTruthy();
     });
   });
 });

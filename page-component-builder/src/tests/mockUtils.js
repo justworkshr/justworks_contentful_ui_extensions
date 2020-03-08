@@ -22,23 +22,27 @@ export const mockComponentSchema = (id, properties = {}) => {
 };
 
 export const mockComponentProperty = ({
-  name,
+  propKey,
   type,
   required,
   defaultProperty,
   options,
   description,
   editor_type,
+  assetTypes = [],
+  contentTypes = [],
   hidden
 } = {}) => {
   return {
-    [name]: {
+    [propKey]: {
       type,
       editor_type,
       defaultProperty,
       description,
       options,
       required,
+      asset_types: assetTypes,
+      content_types: contentTypes,
       hidden
     }
   };
@@ -51,11 +55,29 @@ export const mockInternalMapping = (componentId = 'mockComponentId', properties 
   });
 };
 
-export const mockLinkProperty = (key, id) => {
+export const mockLinkProperty = (key, link) => {
   return {
     [key]: {
-      type: 'link',
-      value: id
+      type: c.LINK_PROPERTY,
+      value: link
+    }
+  };
+};
+
+export const mockAssetProperty = (key, id) => {
+  return {
+    [key]: {
+      type: c.LINK_PROPERTY,
+      value: mockLink({ type: 'Asset', id })
+    }
+  };
+};
+
+export const mockEntryProperty = (key, id) => {
+  return {
+    [key]: {
+      type: c.LINK_PROPERTY,
+      value: mockLink({ type: 'Entry', id })
     }
   };
 };
@@ -63,7 +85,7 @@ export const mockLinkProperty = (key, id) => {
 export const mockTextProperty = (key, value) => {
   return {
     [key]: {
-      type: 'text',
+      type: c.TEXT_PROPERTY,
       value
     }
   };

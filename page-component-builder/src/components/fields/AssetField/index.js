@@ -47,10 +47,10 @@ const AssetField = props => {
       updateAsset(navigator.entity);
     }
   };
-
   if (!!props.asset.sys) {
     return (
       <AssetCard
+        testId="asset-field-card"
         status={getStatus(props.asset)}
         title={`${(props.asset.fields.title || {})['en-US']} | ${(props.asset.fields.description ||
           {})['en-US'] || '<missing alt text>'}`}
@@ -74,7 +74,7 @@ const AssetField = props => {
     );
   } else {
     return (
-      <div className="link-row">
+      <div data-test-id="asset-field-blank" className="link-row">
         <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
           Create asset
         </TextLink>
