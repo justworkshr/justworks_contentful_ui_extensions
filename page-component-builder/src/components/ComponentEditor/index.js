@@ -6,7 +6,9 @@ import {
   DisplayText,
   Paragraph,
   HelpText,
+  TextLink,
   SectionHeading,
+  Subheading,
   TextInput,
   Textarea,
   Button,
@@ -18,6 +20,7 @@ import {
 
 import ShortTextField from '../fields/ShortTextField';
 import LongTextField from '../fields/LongTextField';
+import MarkdownField from '../fields/MarkdownField';
 
 import RadioGroup from '../fields/RadioGroup';
 import AssetField from '../fields/AssetField';
@@ -50,6 +53,10 @@ const ComponentEditor = props => {
       property.editor_type === c.MARKDOWN_EDITOR &&
       !(property.options && !!property.options.length)
     );
+  };
+
+  const isBoolProperty = property => {
+    return property.type === c.BOOL_PROPERTY;
   };
 
   const isOptionTextField = property => {
@@ -91,9 +98,22 @@ const ComponentEditor = props => {
     if (!value) return;
     return props.hydratedEntries.find(e => e.sys.id === (value.sys || {}).id);
   };
-
+  console.log(props.schema);
   return (
     <div className="component-editor">
+      <div className="f36-margin-bottom--l">
+        <Subheading>{(props.internalMappingInstance || {}).componentId}</Subheading>
+        {props.schema.meta && (
+          <HelpText>
+            <TextLink
+              target="_blank"
+              href={`https://justworks-staging-v2.herokuapp.com${props.schema.meta.styleguide_path}`}>
+              Styleguide link
+            </TextLink>
+          </HelpText>
+        )}
+      </div>
+
       <div className="component-editor__fields">
         {Object.keys(props.schema.properties)
           .filter(propKey => !props.schema.properties[propKey].hidden)
@@ -122,7 +142,16 @@ const ComponentEditor = props => {
                   />
                 )}
                 {isMarkdownTextField(property) && (
-                  <ShortTextField
+                  <MarkdownField
+                    propKey={propKey}
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    value={value}
+                  />
+                )}
+                {isBoolProperty(property) && (
+                  <RadioGroup
+                    propKey={propKey}
+                    options={[true, false]}
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
                   />

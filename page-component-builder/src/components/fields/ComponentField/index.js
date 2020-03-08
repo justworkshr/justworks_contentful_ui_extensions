@@ -27,6 +27,7 @@ const ComponentField = props => {
   };
 
   const updateSingletonEntry = (value, timeout = false) => {
+    // pass internal mapping json as raw object
     updateEntry(JSON.parse(value), timeout);
   };
 

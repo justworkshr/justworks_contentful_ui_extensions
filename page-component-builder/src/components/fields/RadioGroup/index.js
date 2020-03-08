@@ -4,6 +4,20 @@ import PropTypes from 'prop-types';
 import { FieldGroup, RadioButtonField, RadioButton } from '@contentful/forma-36-react-components';
 
 const RadioGroup = props => {
+  const getLabel = value => {
+    // coerce booleans
+    if (value === true) return 'True';
+    if (value === false) return 'False';
+    return value;
+  };
+
+  const getValue = value => {
+    // coerce booleans
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  };
+
   return (
     <FieldGroup className="radio-group">
       {props.options.map(option => {
@@ -12,12 +26,12 @@ const RadioGroup = props => {
           <RadioButtonField
             key={id}
             id={id}
-            labelText={option}
+            labelText={getLabel(option)}
             labelIsLight={true}
             name={option}
             value={option}
             checked={props.value === option}
-            onChange={e => props.onChange(e.target.value)}></RadioButtonField>
+            onChange={e => props.onChange(getValue(e.target.value))}></RadioButtonField>
         );
       })}
     </FieldGroup>

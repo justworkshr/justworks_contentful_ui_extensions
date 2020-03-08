@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMde from 'react-mde';
 
-import { TextInput } from '@contentful/forma-36-react-components';
-
 const MarkdownField = props => {
   return (
-    <TextInput
-      testId="short-text-field"
+    <ReactMde
+      testId="markdown-field"
+      selectedTab="write"
+      onTabChange={() => {}}
       onChange={e => props.onChange(e.target.value)}
       value={props.value}
     />
