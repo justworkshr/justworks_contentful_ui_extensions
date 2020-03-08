@@ -24,7 +24,7 @@ export const isAssetLink = link => {
   return link.sys.linkType === 'Asset';
 };
 
-export const extractEntries = (mappingObject, linkType = 'Entry') => {
+export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
   if (!(mappingObject && mappingObject['properties'])) return;
 
   let entries = [];
@@ -39,10 +39,17 @@ export const extractEntries = (mappingObject, linkType = 'Entry') => {
         if (isLinkOfType(linkType, link)) entries.push(link);
       });
     } else if (mappingObject.properties[key].type === c.COMPONENT_PROPERTY) {
-      entries = [
-        ...entries,
-        ...(extractEntries(mappingObject.properties[key].value, linkType) || [])
-      ];
+      if (isComponentPropertySingleton(mappingObject.properties[key].value)) {
+        entries = [
+          ...entries,
+          ...(extractEntries(mappingObject.properties[key].value, linkType) || [])
+        ];
+      } else if (
+        linkType === c.ENTRY_LINK_TYPE &&
+        isComponentPropertyLink(mappingObject.properties[key].value)
+      ) {
+        entries.push(mappingObject.properties[key].value);
+      }
     } else if (mappingObject.properties[key].type === c.MULTI_COMPONENT_PROPERTY) {
       mappingObject.properties[key].value.forEach(component => {
         entries = [...entries, ...(extractEntries(component, linkType) || [])];
@@ -51,6 +58,14 @@ export const extractEntries = (mappingObject, linkType = 'Entry') => {
   });
 
   return entries;
+};
+
+export const isComponentPropertySingleton = value => {
+  return !!(value || {}).componentId;
+};
+
+export const isComponentPropertyLink = value => {
+  return !!(value || {}).sys;
 };
 
 export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
@@ -105,19 +120,17 @@ export const getEntryContentTypeId = entry => {
   return entry.sys.contentType.sys.id;
 };
 
-export const createEntry = async (space, contentType, name, type = undefined) => {
+export const createEntry = async (space, contentType, name, componentId = '') => {
   let data = {
-    fields: {
-      name: { 'en-US': name }
-    }
+    fields: {}
   };
 
-  if (type) {
-    type = type
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-    data = { ...data, fields: { ...data.fields, type: { 'en-US': type } } };
+  if (name) {
+    data = { ...data, ...{ fields: { name: { 'en-US': name } } } };
+  }
+
+  if (componentId) {
+    data = { ...data, ...{ fields: { componentId: { 'en-US': componentId } } } };
   }
 
   const newEntry = await space.createEntry(contentType, data);

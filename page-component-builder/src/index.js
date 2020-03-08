@@ -80,6 +80,9 @@ export class PageComponentBuilder extends React.Component {
     };
 
     props.sdk.entry.fields.internalMapping.onValueChanged(this.onInternalMappingChange);
+
+    this.fetchSchemas = this.fetchSchemas.bind(this);
+    this.internalMappingFromComponentId = this.internalMappingFromComponentId.bind(this);
   }
 
   componentDidMount() {
@@ -92,15 +95,33 @@ export class PageComponentBuilder extends React.Component {
 
     // props.schemaData for tests
     const schemaData = this.props.schemas || mockSchemas.data;
-    this.setState({
-      schemaData
-    });
+
+    this.setState(
+      {
+        schemaData
+      },
+      () => {
+        if (this.state.componentId && this.state.internalMapping == '{}') {
+          const internalMapping = this.internalMappingFromComponentId(this.state.componentId);
+          this.updateInternalMapping(internalMapping, false);
+        }
+      }
+    );
   };
 
   onNameChangeHandler = event => {
     const value = event.target.value;
     this.setState({ name: value });
     this.props.sdk.entry.fields.name.setValue(value);
+  };
+
+  internalMappingFromComponentId = componentId => {
+    const schema = this.state.schemaData.components.find(s => s.meta.id === componentId);
+    const internalMapping = schema
+      ? newInternalMappingFromSchema(schema).asJSON()
+      : JSON.stringify({});
+
+    return internalMapping;
   };
 
   onComponentIdChangeHandler = async value => {
@@ -119,10 +140,7 @@ export class PageComponentBuilder extends React.Component {
         await this.props.sdk.entry.fields.componentId.setValue(value);
         await this.props.sdk.entry.fields.entries.setValue([]); // clear entries
         await this.props.sdk.entry.fields.assets.setValue([]); // clear assets
-        const schema = this.state.schemaData.components.find(s => s.meta.id === value);
-        const internalMapping = schema
-          ? newInternalMappingFromSchema(schema).asJSON()
-          : JSON.stringify({});
+        const internalMapping = this.internalMappingFromComponentId(value);
 
         this.updateInternalMapping(internalMapping, false);
       }
@@ -188,7 +206,6 @@ export class PageComponentBuilder extends React.Component {
 
     const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries) || [];
     const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets) || [];
-
     const fetchedEntries = !!entriesToFetch.length
       ? await this.props.sdk.space.getEntries({
           'sys.id[in]': entriesToFetch.map(l => l.sys.id).join(',')
@@ -233,7 +250,7 @@ export class PageComponentBuilder extends React.Component {
     this.props.sdk.entry.fields.isValid.setValue(value);
   };
 
-  parseInternalMapping = json => {
+  parseInternalMapping = () => {
     let internalMappingObject = {};
     try {
       internalMappingObject = JSON.parse(this.state.internalMapping);
@@ -295,10 +312,7 @@ export class PageComponentBuilder extends React.Component {
           replaceHydratedAsset={this.replaceHydratedAsset}
           replaceHydratedEntry={this.replaceHydratedEntry}
           internalMappingInstance={
-            new InternalMapping(
-              this.state.componentId,
-              this.parseInternalMapping(this.state.internalMapping).properties
-            )
+            new InternalMapping(this.state.componentId, this.parseInternalMapping().properties)
           }
           schema={this.state.schemaData.components.find(
             schema => schema.meta.id === this.state.componentId

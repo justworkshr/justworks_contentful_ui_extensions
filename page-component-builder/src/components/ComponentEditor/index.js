@@ -22,6 +22,7 @@ import LongTextField from '../fields/LongTextField';
 import RadioGroup from '../fields/RadioGroup';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
+import ComponentField from '../fields/ComponentField';
 
 const ComponentEditor = props => {
   const isShortTextField = property => {
@@ -67,6 +68,10 @@ const ComponentEditor = props => {
     return (
       property.type === c.LINK_PROPERTY && property.content_types && !!property.content_types.length
     );
+  };
+
+  const isComponentProperty = property => {
+    return property.type === c.COMPONENT_PROPERTY && property.options && !!property.options.length;
   };
 
   const updatePropertyValue = (propKey, value, timeout = true) => {
@@ -140,6 +145,17 @@ const ComponentEditor = props => {
                     sdk={props.sdk}
                     contentTypes={property.content_types}
                     entry={fetchHydratedEntry(value)}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    isLoading={!!value && !fetchHydratedEntry(value)}
+                  />
+                )}
+                {isComponentProperty(property) && (
+                  <ComponentField
+                    sdk={props.sdk}
+                    options={property.options}
+                    entry={fetchHydratedEntry(value)}
+                    internalMappingInstance={null}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     isLoading={!!value && !fetchHydratedEntry(value)}

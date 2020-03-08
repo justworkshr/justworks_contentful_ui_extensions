@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  AssetCard,
-  TextLink,
-  DropdownList,
-  DropdownListItem
-} from '@contentful/forma-36-react-components';
+import { TextLink } from '@contentful/forma-36-react-components';
 
 import { getStatus, createAsset, constructLink } from '../../../utilities';
+import HydratedAssetCard from '../../cards/HydratedAssetCard';
 
 const AssetField = props => {
   const updateAsset = entry => {
@@ -49,27 +45,10 @@ const AssetField = props => {
   };
   if (!!props.asset.sys) {
     return (
-      <AssetCard
-        testId="asset-field-card"
-        status={getStatus(props.asset)}
-        title={`${(props.asset.fields.title || {})['en-US']} | ${(props.asset.fields.description ||
-          {})['en-US'] || '<missing alt text>'}`}
-        type="image"
-        src={((props.asset.fields.file || {})['en-US'] || {}).url}
-        onClick={handleEditClick}
-        dropdownListElements={
-          <DropdownList>
-            <DropdownListItem isTitle>Actions</DropdownListItem>
-            <DropdownListItem className="asset-card__action--edit" onClick={handleEditClick}>
-              Edit
-            </DropdownListItem>
-            <DropdownListItem
-              className="asset-card__action--remove"
-              onClick={() => updateAsset(null)}>
-              Remove
-            </DropdownListItem>
-          </DropdownList>
-        }
+      <HydratedAssetCard
+        asset={props.asset}
+        handleEditClick={handleEditClick}
+        handleRemoveClick={() => updateAsset(null)}
       />
     );
   } else {

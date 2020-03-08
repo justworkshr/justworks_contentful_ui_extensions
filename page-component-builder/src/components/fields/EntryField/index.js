@@ -3,19 +3,10 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
 
-import {
-  AssetCard,
-  TextLink,
-  DropdownList,
-  DropdownListItem,
-  EntryCard
-} from '@contentful/forma-36-react-components';
+import { TextLink } from '@contentful/forma-36-react-components';
 
-// import { getEntryContentTypeId } from '../utils';
-import { getStatus, getEntryContentTypeId, createEntry } from '../../../utilities/index';
-
-import classnames from 'classnames';
-import { constructLink, apiContentTypesToIds } from '../../../utilities';
+import HydratedEntryCard from '../../cards/HydratedEntryCard';
+import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
@@ -55,36 +46,23 @@ export const EntryField = props => {
     const newEntryName = null;
     const newEntry = await createEntry(props.sdk.space, props.contentTypes, newEntryName, null);
 
-    props.sdk.navigator.openEntry(newEntry.sys.id, { slideIn: true });
-    updateEntry(newEntry);
+    const navigator = await props.sdk.navigator.openEntry(newEntry.sys.id, {
+      slideIn: { waitForClose: true }
+    });
+
+    if (navigator.navigated) {
+      updateEntry(navigator.entity);
+    }
   };
 
   const renderEntryCard = () => {
     return (
-      <EntryCard
-        loading={props.isLoading}
-        testId="entry-field-card"
-        className="entry-card"
-        size="small"
-        title={props.entry.fields ? props.entry.fields.name['en-US'] : 'Loading...'}
+      <HydratedEntryCard
         contentType={getContentType()}
-        status={getStatus(props.entry)}
-        withDragHandle={false}
-        onClick={handleEditClick}
-        dropdownListElements={
-          <DropdownList>
-            <DropdownListItem isTitle>Actions</DropdownListItem>
-            <DropdownListItem className="entry-card__action--edit" onClick={handleEditClick}>
-              Edit
-            </DropdownListItem>
-
-            <DropdownListItem
-              className="entry-card__action--remove"
-              onClick={() => updateEntry(null)}>
-              Remove
-            </DropdownListItem>
-          </DropdownList>
-        }
+        isLoading={props.isLoading}
+        handleEditClick={handleEditClick}
+        handleRemoveClick={() => updateEntry(null)}
+        entry={props.entry}
       />
     );
   };
@@ -106,10 +84,8 @@ export const EntryField = props => {
 EntryField.propTypes = {
   contentTypes: PropTypes.array,
   entry: PropTypes.object,
-  entryIndex: PropTypes.number,
   isLoading: PropTypes.bool,
   onChange: PropTypes.func,
-  onRemove: PropTypes.func,
   sdk: PropTypes.object
 };
 

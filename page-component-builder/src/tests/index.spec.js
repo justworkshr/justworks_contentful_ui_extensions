@@ -199,7 +199,7 @@ describe('App', () => {
         internalMapping
       });
 
-      expect(getByTestId('asset-field-card')).toBeTruthy();
+      expect(getByTestId('hydrated-asset-card')).toBeTruthy();
     });
   });
 
@@ -252,7 +252,7 @@ describe('App', () => {
         internalMapping
       });
 
-      expect(getByTestId('entry-field-card')).toBeTruthy();
+      expect(getByTestId('hydrated-entry-card')).toBeTruthy();
     });
   });
 });
