@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import { DropdownList, DropdownListItem, EntryCard } from '@contentful/forma-36-react-components';
 
 import { getStatus } from '../../../utilities/index';
+import classnames from 'classnames';
 
 const HydratedEntryCard = props => {
   return (
     <EntryCard
       loading={props.isLoading}
       testId="hydrated-entry-card"
-      className="entry-card"
+      className={classnames('entry-card', props.className)}
       size="small"
       title={
         props.entry.fields ? (props.entry.fields.name || {})['en-US'] || 'untitled' : 'Loading...'
@@ -45,6 +46,7 @@ const HydratedEntryCard = props => {
 };
 
 HydratedEntryCard.propTypes = {
+  className: PropTypes.string,
   contentType: PropTypes.string,
   entry: PropTypes.object,
   onClick: PropTypes.func,

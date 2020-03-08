@@ -5,6 +5,8 @@ import * as c from '../../constants';
 import { Modal, TextInput } from '@contentful/forma-36-react-components';
 import HydratedEntryCard from '../cards/HydratedEntryCard';
 
+import './style.scss';
+
 const SelectComponentModal = props => {
   const [isLoading, setLoading] = useState(false);
   const [isCompleted, setCompleted] = useState(false);
@@ -45,17 +47,30 @@ const SelectComponentModal = props => {
   };
 
   return (
-    <Modal onClose={onClose} isShown={props.isShown} size="large">
-      <div className="select-component-modal">
+    <Modal
+      className="select-component-modal"
+      onClose={onClose}
+      isShown={props.isShown}
+      title={'Select an existing view component'}
+      size="large">
+      <div className="select-component-modal__top f36-padding-bottom--m">
+        <p>
+          Filtering by: <b>{props.options.join(', ')}</b>
+        </p>
+        <p>Search for an entry:</p>
         <TextInput
+          className="f36-margin-bottom--m"
           type="text"
           width="full"
           onChange={e => setInputValue(e.target.value)}
           value={inputValue}
         />
+      </div>
+      <div className="select-component-modal__results">
         {matchingEntries.map(entry => {
           return (
             <HydratedEntryCard
+              className="f36-margin-bottom--s"
               contentType={entry.fields.componentId['en-US']}
               entry={entry}
               onClick={() => getOnClickFunction()(entry)}
