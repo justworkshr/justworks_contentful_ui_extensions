@@ -24,6 +24,9 @@ import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import ComponentField from '../fields/ComponentField';
 
+import { isComponentPropertySingleton } from '../../utilities/index';
+import InternalMapping from '../../classes/InternalMapping';
+
 const ComponentEditor = props => {
   const isShortTextField = property => {
     return (
@@ -153,10 +156,21 @@ const ComponentEditor = props => {
                 {isComponentProperty(property) && (
                   <ComponentField
                     sdk={props.sdk}
+                    schemas={props.schemas}
+                    hydratedAssets={props.hydratedAssets}
+                    hydratedEntries={props.hydratedEntries}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    replaceHydratedAsset={props.replaceHydratedAsset}
                     options={property.options}
                     entry={fetchHydratedEntry(value)}
-                    internalMappingInstance={null}
-                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    internalMappingInstance={
+                      isComponentPropertySingleton(value)
+                        ? new InternalMapping(value.componentId, value.properties)
+                        : null
+                    }
+                    onChange={(value, timeout = false) =>
+                      updatePropertyValue(propKey, value, timeout)
+                    }
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     isLoading={!!value && !fetchHydratedEntry(value)}
                   />
@@ -171,6 +185,7 @@ const ComponentEditor = props => {
 
 ComponentEditor.propTypes = {
   sdk: PropTypes.object,
+  schemas: PropTypes.array,
   hydratedAssets: PropTypes.array,
   hydratedEntries: PropTypes.array,
   internalMappingInstance: PropTypes.object,
@@ -182,6 +197,7 @@ ComponentEditor.defaultProps = {
   hydratedAssets: [],
   hydratedEntries: [],
   internalMappingInstance: {},
+  schemas: [],
   schema: {
     properties: {},
     meta: {}

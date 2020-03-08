@@ -306,6 +306,7 @@ export class PageComponentBuilder extends React.Component {
         />
         <ComponentEditor
           sdk={this.props.sdk}
+          schemas={this.state.schemaData.components}
           updateInternalMapping={this.updateInternalMapping}
           hydratedAssets={this.state.hydratedAssets}
           hydratedEntries={this.state.hydratedEntries}

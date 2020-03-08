@@ -10,28 +10,30 @@ import {
   DropdownListItem
 } from '@contentful/forma-36-react-components';
 
-import { createEntry, constructLink } from '../../../utilities/index';
+import { createEntry, constructLink, newInternalMappingFromSchema } from '../../../utilities/index';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import SelectComponentModal from '../../SelectComponentModal';
+import ComponentEditor from '../../ComponentEditor';
 
 const ComponentField = props => {
+  const [singletonOpen, toggleSingleton] = useState(false);
   const [createOpen, toggleCreate] = useState(false);
   const [linkOpen, toggleLink] = useState(false);
   const [linkModalOpen, toggleLinkModal] = useState(false);
   const [modalOptions, setModalOptions] = useState(props.options);
 
-  const updateEntry = entry => {
-    if (entry) {
-      const link = constructLink(entry);
-      props.onChange(link);
-    } else {
-      props.onChange(null);
-    }
+  const updateEntry = (value, timeout = false) => {
+    props.onChange(value, timeout);
+  };
+
+  const updateSingletonEntry = (value, timeout = false) => {
+    console.log(timeout);
+    updateEntry(JSON.parse(value), timeout);
   };
 
   const handleModalSubmit = entry => {
     if (entry) {
-      updateEntry(entry);
+      updateEntry(constructLink(entry));
     }
   };
 
@@ -53,8 +55,14 @@ const ComponentField = props => {
     });
 
     if (navigator.navigated) {
-      updateEntry(navigator.entity);
+      updateEntry(constructLink(navigator.entity));
     }
+  };
+
+  const handleCreateSingletonClick = componentId => {
+    const schema = props.schemas.find(s => s.meta.id === componentId);
+    const componentInternalMapping = newInternalMappingFromSchema(schema);
+    updateEntry(componentInternalMapping);
   };
 
   const handleEditClick = async () => {
@@ -80,6 +88,29 @@ const ComponentField = props => {
           handleRemoveClick={() => updateEntry(null)}
         />
       );
+    } else if (props.internalMappingInstance) {
+      return (
+        <div className="component-field-singleton" data-test-id="component-field-singleton">
+          <TextLink className="f36-margin-bottom--l" onClick={() => updateEntry(null)}>
+            Clear singleton
+          </TextLink>
+          <div className="component-field-singleton__editor f36-padding-left--xl">
+            <ComponentEditor
+              sdk={props.sdk}
+              schemas={props.schemas}
+              updateInternalMapping={updateSingletonEntry}
+              hydratedAssets={props.hydratedAssets}
+              hydratedEntries={props.hydratedEntries}
+              replaceHydratedAsset={props.replaceHydratedAsset}
+              replaceHydratedEntry={props.replaceHydratedEntry}
+              internalMappingInstance={props.internalMappingInstance}
+              schema={props.schemas.find(
+                s => s.meta.id === props.internalMappingInstance.componentId
+              )}
+            />
+          </div>
+        </div>
+      );
     } else {
       return (
         <div data-test-id="component-field-blank" className="link-row">
@@ -90,6 +121,23 @@ const ComponentField = props => {
             isShown={linkModalOpen}
             options={modalOptions}
           />
+          <Dropdown
+            toggleElement={<TextLink className="f36-margin-right--s">Create singleton</TextLink>}
+            onClick={() => toggleSingleton(!singletonOpen)}
+            isOpen={singletonOpen}>
+            <DropdownList>
+              <DropdownListItem isTitle>Options</DropdownListItem>
+              {props.options.map((option, index) => {
+                return (
+                  <DropdownListItem
+                    key={`component-option--${index}`}
+                    onClick={() => handleCreateSingletonClick(option)}>
+                    {option}
+                  </DropdownListItem>
+                );
+              })}
+            </DropdownList>
+          </Dropdown>
           <Dropdown
             toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
             onClick={() => toggleCreate(!createOpen)}
@@ -137,6 +185,11 @@ const ComponentField = props => {
 };
 
 ComponentField.propTypes = {
+  schemas: PropTypes.array,
+  hydratedAssets: PropTypes.array,
+  hydratedEntries: PropTypes.array,
+  replaceHydratedAsset: PropTypes.func,
+  replaceHydratedEntry: PropTypes.func,
   options: PropTypes.array,
   entry: PropTypes.object,
   internalMappingInstance: PropTypes.object,
@@ -145,6 +198,9 @@ ComponentField.propTypes = {
   sdk: PropTypes.object
 };
 ComponentField.defaultProps = {
+  hydratedAssets: [],
+  hydratedEntries: [],
+  schemas: [],
   options: [],
   entry: {},
   internalMappingInstance: null,
