@@ -77,3 +77,50 @@ export const newInternalMappingFromSchema = schema => {
 export const apiContentTypesToIds = contentTypes => {
   return contentTypes;
 };
+
+export const getStatus = entry => {
+  if (
+    entry &&
+    entry.sys &&
+    entry.sys.publishedAt &&
+    entry.sys.publishedAt === entry.sys.updatedAt
+  ) {
+    return 'published';
+  } else if (
+    entry &&
+    entry.sys &&
+    entry.sys.publishedAt &&
+    entry.sys.publishedAt !== entry.sys.updatedAt
+  ) {
+    return 'changed';
+  } else if (entry && entry.sys && entry.sys.archivedAt) {
+    return 'archived';
+  } else {
+    return 'draft';
+  }
+};
+
+export const getEntryContentTypeId = entry => {
+  if (!entry.sys || !entry.sys.contentType) return;
+  return entry.sys.contentType.sys.id;
+};
+
+export const createEntry = async (space, contentType, name, type = undefined) => {
+  let data = {
+    fields: {
+      name: { 'en-US': name }
+    }
+  };
+
+  if (type) {
+    type = type
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+    data = { ...data, fields: { ...data.fields, type: { 'en-US': type } } };
+  }
+
+  const newEntry = await space.createEntry(contentType, data);
+
+  return newEntry;
+};

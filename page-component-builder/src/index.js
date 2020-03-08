@@ -121,6 +121,28 @@ export class PageComponentBuilder extends React.Component {
     );
   };
 
+  replaceHydratedAsset = hydratedAsset => {
+    // Used on Asset updates to provide updated data to the UI
+    if (!hydratedAsset) return;
+    this.setState(oldState => ({
+      hydratedAssets: [
+        ...oldState.hydratedAssets.filter(e => e.sys.id !== hydratedAsset.sys.id),
+        hydratedAsset
+      ]
+    }));
+  };
+
+  replaceHydratedEntry = hydratedEntry => {
+    // Used on entry updates to provide updated data to the UI
+    if (!hydratedEntry) return;
+    this.setState(oldState => ({
+      hydratedEntries: [
+        ...oldState.hydratedEntries.filter(e => e.sys.id !== hydratedEntry.sys.id),
+        hydratedEntry
+      ]
+    }));
+  };
+
   onEntriesChangeHandler = async value => {
     if (Array.isArray(value)) {
       if (!this.state.updatingEntries) {
@@ -185,7 +207,6 @@ export class PageComponentBuilder extends React.Component {
 
   updateInternalMapping = (value, timeout = true) => {
     this.setState({ internalMapping: value });
-
     clearTimeout(this.updateTimeout);
     if (timeout) {
       this.updateTimeout = setTimeout(() => {
@@ -263,6 +284,8 @@ export class PageComponentBuilder extends React.Component {
           updateInternalMapping={this.updateInternalMapping}
           hydratedAssets={this.state.hydratedAssets}
           hydratedEntries={this.state.hydratedEntries}
+          replaceHydratedAsset={this.replaceHydratedAsset}
+          replaceHydratedEntry={this.replaceHydratedEntry}
           internalMappingInstance={
             new InternalMapping(
               this.state.componentId,

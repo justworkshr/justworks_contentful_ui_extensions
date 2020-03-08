@@ -1,9 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { AssetCard, TextLink } from '@contentful/forma-36-react-components';
-import { constructLink } from '../../../utilities';
+import {
+  AssetCard,
+  TextLink,
+  DropdownList,
+  DropdownListItem
+} from '@contentful/forma-36-react-components';
+
+import { getStatus, constructLink } from '../../../utilities';
+
 const AssetField = props => {
+  const updateAsset = entry => {
+    if (entry) {
+      const link = constructLink(entry);
+      props.onChange(link);
+    } else {
+      props.onChange(null);
+    }
+  };
+
   const handleLinkClick = async () => {
     const asset = await props.sdk.dialogs.selectSingleAsset();
     if (asset) {
@@ -12,8 +28,40 @@ const AssetField = props => {
     }
   };
 
-  if (props.asset) {
-    return <AssetCard type="image" src={props.asset.fields.file['en-US'].url} />;
+  const handleEditClick = async () => {
+    const navigation = await props.sdk.navigator.openAsset(props.asset.sys.id, {
+      slideIn: { waitForClose: true }
+    });
+
+    if (navigation.navigated) {
+      props.replaceHydratedAsset(navigation.entity);
+    }
+  };
+
+  if (!!props.asset.sys) {
+    return (
+      <AssetCard
+        status={getStatus(props.asset)}
+        title={`${(props.asset.fields.title || {})['en-US']} | ${(props.asset.fields.description ||
+          {})['en-US'] || '<missing alt text>'}`}
+        type="image"
+        src={props.asset.fields.file['en-US'].url}
+        onClick={handleEditClick}
+        dropdownListElements={
+          <DropdownList>
+            <DropdownListItem isTitle>Actions</DropdownListItem>
+            <DropdownListItem className="asset-card__action--edit" onClick={handleEditClick}>
+              Edit
+            </DropdownListItem>
+            <DropdownListItem
+              className="asset-card__action--remove"
+              onClick={() => updateAsset(null)}>
+              Remove
+            </DropdownListItem>
+          </DropdownList>
+        }
+      />
+    );
   } else {
     return (
       <div className="link-row">
@@ -30,7 +78,7 @@ AssetField.propTypes = {
   onChange: PropTypes.func
 };
 AssetField.defaultProps = {
-  asset: null
+  asset: {}
 };
 
 export default AssetField;

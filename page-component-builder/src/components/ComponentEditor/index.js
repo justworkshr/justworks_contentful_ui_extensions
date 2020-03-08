@@ -44,7 +44,7 @@ const ComponentEditor = props => {
     return (
       property.type === c.TEXT_PROPERTY &&
       property.editor_type === c.MARKDOWN_EDITOR &&
-      !(property.options && property.options.length)
+      !(property.options && !!property.options.length)
     );
   };
 
@@ -53,23 +53,24 @@ const ComponentEditor = props => {
       property.type === c.TEXT_PROPERTY &&
       property.editor_type === c.SHORT_TEXT_EDITOR &&
       property.options &&
-      property.options.length
+      !!property.options.length
     );
   };
 
   const isAssetLink = property => {
-    return property.type === c.LINK_PROPERTY && property.assetTypes && property.assetTypes.length;
+    return (
+      property.type === c.LINK_PROPERTY && property.asset_types && !!property.asset_types.length
+    );
   };
 
   const isEntryLink = property => {
     return (
-      property.type === c.LINK_PROPERTY && property.content_types && property.content_types.length
+      property.type === c.LINK_PROPERTY && property.content_types && !!property.content_types.length
     );
   };
 
   const updatePropertyValue = (propKey, value, timeout = true) => {
     props.internalMappingInstance.updateValue(propKey, value);
-    debugger;
     props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout);
   };
 
@@ -131,6 +132,7 @@ const ComponentEditor = props => {
                     sdk={props.sdk}
                     asset={fetchHydratedAsset(value)}
                     onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedAsset={props.replaceHydratedAsset}
                   />
                 )}
                 {isEntryLink(property) && (
@@ -139,6 +141,8 @@ const ComponentEditor = props => {
                     contentTypes={property.content_types}
                     entry={fetchHydratedEntry(value)}
                     onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    isLoading={!!value && !fetchHydratedEntry(value)}
                   />
                 )}
               </div>
@@ -155,6 +159,7 @@ ComponentEditor.propTypes = {
   hydratedEntries: PropTypes.array,
   internalMappingInstance: PropTypes.object,
   updateInternalMapping: PropTypes.func,
+  replaceHydratedEntry: PropTypes.func,
   schema: PropTypes.object
 };
 ComponentEditor.defaultProps = {

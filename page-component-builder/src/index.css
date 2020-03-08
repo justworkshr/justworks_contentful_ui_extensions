@@ -8,3 +8,7 @@ div {
   font: inherit;
   vertical-align: baseline;
 }
+
+.entry-card {
+  max-width: 600px;
+}
