@@ -21,7 +21,7 @@ export const mockComponentSchema = (id, properties = {}) => {
   };
 };
 
-export const mockComponentProperty = ({
+export const mockComponentSchemaProperty = ({
   propKey,
   type,
   required,
@@ -78,6 +78,27 @@ export const mockEntryProperty = (key, id) => {
     [key]: {
       type: c.LINK_PROPERTY,
       value: mockLink({ type: 'Entry', id })
+    }
+  };
+};
+
+export const mockComponentEntryProperty = (key, id) => {
+  return {
+    [key]: {
+      type: c.COMPONENT_PROPERTY,
+      value: mockLink({ type: 'Entry', id })
+    }
+  };
+};
+
+export const mockSingletonProperty = (key, componentId, properties = {}) => {
+  return {
+    [key]: {
+      type: c.COMPONENT_PROPERTY,
+      value: {
+        componentId,
+        properties
+      }
     }
   };
 };

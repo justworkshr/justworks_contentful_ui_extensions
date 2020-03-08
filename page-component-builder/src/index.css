@@ -9,6 +9,11 @@ div {
   vertical-align: baseline;
 }
 
+.editor {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .entry-card {
   max-width: 640px;
 }

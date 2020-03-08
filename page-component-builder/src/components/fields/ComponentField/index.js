@@ -27,7 +27,6 @@ const ComponentField = props => {
   };
 
   const updateSingletonEntry = (value, timeout = false) => {
-    console.log(timeout);
     updateEntry(JSON.parse(value), timeout);
   };
 

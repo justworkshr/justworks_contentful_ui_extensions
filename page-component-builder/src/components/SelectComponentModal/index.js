@@ -67,9 +67,10 @@ const SelectComponentModal = props => {
         />
       </div>
       <div className="select-component-modal__results">
-        {matchingEntries.map(entry => {
+        {matchingEntries.map((entry, index) => {
           return (
             <HydratedEntryCard
+              key={`modal-result--${index}`}
               className="f36-margin-bottom--s"
               contentType={entry.fields.componentId['en-US']}
               entry={entry}

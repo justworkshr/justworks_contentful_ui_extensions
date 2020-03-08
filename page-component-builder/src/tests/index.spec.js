@@ -8,14 +8,16 @@ import {
   mockSchemas,
   mockInternalMapping,
   mockComponentSchema,
-  mockComponentProperty,
+  mockComponentSchemaProperty,
   mockLinkProperty,
   mockAssetProperty,
   mockEntryProperty,
+  mockComponentEntryProperty,
   mockTextProperty,
   mockAssetResponse,
   mockEntryResponse,
-  mockLink
+  mockLink,
+  mockSingletonProperty
 } from './mockUtils';
 
 configure({
@@ -107,7 +109,7 @@ describe('App', () => {
     const createSchema = (componentId, propKey, type, editor_type) => {
       return mockSchemas({}, [
         mockComponentSchema(componentId, {
-          ...mockComponentProperty({
+          ...mockComponentSchemaProperty({
             propKey,
             type,
             editor_type
@@ -154,7 +156,7 @@ describe('App', () => {
     const createSchema = (componentId, propKey, type) => {
       return mockSchemas({}, [
         mockComponentSchema(componentId, {
-          ...mockComponentProperty({
+          ...mockComponentSchemaProperty({
             propKey,
             type,
             assetTypes: [c.ASSET_TYPE_IMAGE]
@@ -209,7 +211,7 @@ describe('App', () => {
     const createSchema = (componentId, propKey, type) => {
       return mockSchemas({}, [
         mockComponentSchema(componentId, {
-          ...mockComponentProperty({
+          ...mockComponentSchemaProperty({
             propKey,
             type,
             contentTypes: ['test']
@@ -261,15 +263,16 @@ describe('App', () => {
   });
 
   describe('single component link', () => {
-    const createSchema = (componentId, propKey, type) => {
+    const createSchema = (componentId, propKey, type, otherSchemas = []) => {
       return mockSchemas({}, [
         mockComponentSchema(componentId, {
-          ...mockComponentProperty({
+          ...mockComponentSchemaProperty({
             propKey,
             type,
             options: ['test']
           })
-        })
+        }),
+        ...otherSchemas
       ]);
     };
 
@@ -278,7 +281,7 @@ describe('App', () => {
       const propKey = 'prop1';
       const id = '';
       const internalMapping = mockInternalMapping(componentId, {
-        ...mockEntryProperty(propKey, id)
+        ...mockComponentEntryProperty(propKey, id)
       });
 
       const sdk = mockSdk();
@@ -312,6 +315,41 @@ describe('App', () => {
 
       expect(getByTestId('component-field')).toBeTruthy();
       expect(getByTestId('hydrated-entry-card')).toBeTruthy();
+    });
+
+    it('should render an singleton field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const singletonComponentId = 'singletonComponent';
+      const singletonPropKey = 'singletopProp1';
+      const singletonProp1Value = 'singleton prop1 value';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockSingletonProperty(propKey, singletonComponentId, {
+          ...mockTextProperty(singletonPropKey, singletonProp1Value)
+        })
+      });
+
+      const sdk = mockSdk();
+      const schemas = createSchema(componentId, propKey, c.COMPONENT_PROPERTY, [
+        mockComponentSchema(singletonComponentId, {
+          ...mockComponentSchemaProperty({
+            propKey: singletonPropKey,
+            type: c.TEXT_PROPERTY,
+            editor_type: c.SHORT_TEXT_EDITOR
+          })
+        })
+      ]);
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        internalMapping
+      });
+
+      expect(getByTestId('component-field')).toBeTruthy();
+      expect(getByTestId('component-field-singleton')).toBeTruthy();
+      expect(getByTestId('short-text-field')).toBeTruthy();
+      expect(getByTestId('short-text-field').value).toEqual(singletonProp1Value);
     });
   });
 });
