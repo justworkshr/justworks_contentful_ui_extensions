@@ -8,7 +8,7 @@ import {
   DropdownListItem
 } from '@contentful/forma-36-react-components';
 
-import { getStatus, constructLink } from '../../../utilities';
+import { getStatus, createAsset, constructLink } from '../../../utilities';
 
 const AssetField = props => {
   const updateAsset = entry => {
@@ -38,6 +38,16 @@ const AssetField = props => {
     }
   };
 
+  const handleCreateClick = async () => {
+    const newAsset = await createAsset(props.sdk.space);
+    const navigator = await props.sdk.navigator.openAsset(newAsset.sys.id, {
+      slideIn: { waitForClose: true }
+    });
+    if (navigator.navigated) {
+      updateAsset(navigator.entity);
+    }
+  };
+
   if (!!props.asset.sys) {
     return (
       <AssetCard
@@ -45,7 +55,7 @@ const AssetField = props => {
         title={`${(props.asset.fields.title || {})['en-US']} | ${(props.asset.fields.description ||
           {})['en-US'] || '<missing alt text>'}`}
         type="image"
-        src={props.asset.fields.file['en-US'].url}
+        src={((props.asset.fields.file || {})['en-US'] || {}).url}
         onClick={handleEditClick}
         dropdownListElements={
           <DropdownList>
@@ -65,7 +75,9 @@ const AssetField = props => {
   } else {
     return (
       <div className="link-row">
-        <TextLink className="f36-margin-right--s">Create asset</TextLink>
+        <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
+          Create asset
+        </TextLink>
         <TextLink onClick={handleLinkClick}>Link asset</TextLink>
       </div>
     );

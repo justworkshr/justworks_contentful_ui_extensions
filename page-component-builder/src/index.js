@@ -159,11 +159,11 @@ export class PageComponentBuilder extends React.Component {
   onAssetsChangeHandler = async value => {
     if (Array.isArray(value)) {
       if (!this.state.updatingAssets) {
-        this.setState({ assets: value });
         this.setState({ updatingAssets: true });
-        await this.props.sdk.entry.fields.assets.setValue(value);
+        this.setState({ assets: value });
         this.setState({ updatingAssets: false });
       }
+      await this.props.sdk.entry.fields.assets.setValue(value);
     } else {
       console.warn('onAssetsChangeHandler called with non-array value');
     }

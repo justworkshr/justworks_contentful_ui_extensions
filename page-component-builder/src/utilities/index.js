@@ -124,3 +124,13 @@ export const createEntry = async (space, contentType, name, type = undefined) =>
 
   return newEntry;
 };
+
+export const createAsset = async space => {
+  let data = {
+    fields: {}
+  };
+
+  const newAsset = await space.createAsset(data);
+
+  return newAsset;
+};
