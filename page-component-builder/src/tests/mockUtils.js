@@ -180,7 +180,7 @@ export const mockCustomTemplateEntryResponse = ({
   };
 };
 
-export const mockEntryResponse = ({ id = 0, contentType = 'text' } = {}) => {
+export const mockEntryResponse = ({ id = 0, contentType = 'test-content-type' } = {}) => {
   return {
     sys: {
       id,

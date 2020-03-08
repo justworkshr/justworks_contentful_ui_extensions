@@ -63,7 +63,7 @@ export const EntryField = props => {
     return (
       <EntryCard
         loading={props.isLoading}
-        testId="entry-card"
+        testId="entry-field-card"
         className="entry-card"
         size="small"
         title={props.entry.fields ? props.entry.fields.name['en-US'] : 'Loading...'}
@@ -93,7 +93,7 @@ export const EntryField = props => {
     return renderEntryCard();
   } else {
     return (
-      <div className="link-row">
+      <div data-test-id="entry-field-blank" className="link-row">
         <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
           Create entry
         </TextLink>
