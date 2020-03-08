@@ -255,4 +255,59 @@ describe('App', () => {
       expect(getByTestId('hydrated-entry-card')).toBeTruthy();
     });
   });
+
+  describe('single component link', () => {
+    const createSchema = (componentId, propKey, type) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentProperty({
+            propKey,
+            type,
+            options: ['test']
+          })
+        })
+      ]);
+    };
+
+    it('should render a blank field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const id = '';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockEntryProperty(propKey, id)
+      });
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, c.COMPONENT_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('component-field')).toBeTruthy();
+      expect(getByTestId('component-field-blank')).toBeTruthy();
+    });
+
+    it('should render an entry field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const id = 'prop 1 id';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockEntryProperty(propKey, id)
+      });
+
+      const sdk = mockSdk();
+      const schemas = createSchema(componentId, propKey, c.COMPONENT_PROPERTY);
+      const entries = [mockLink({ type: 'Entry', id })];
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        entries,
+        internalMapping
+      });
+
+      expect(getByTestId('component-field')).toBeTruthy();
+      expect(getByTestId('hydrated-entry-card')).toBeTruthy();
+    });
+  });
 });

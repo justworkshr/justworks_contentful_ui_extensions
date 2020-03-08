@@ -68,64 +68,72 @@ const ComponentField = props => {
     }
   };
 
-  if (props.entry.fields) {
-    return (
-      <HydratedEntryCard
-        contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
-        entry={props.entry}
-        isLoading={props.isLoading}
-        onClick={handleEditClick}
-        handleEditClick={handleEditClick}
-        handleRemoveClick={() => updateEntry(null)}
-      />
-    );
-  } else {
-    return (
-      <div data-test-id="component-field-blank" className="link-row">
-        <SelectComponentModal
-          sdk={props.sdk}
-          handleClose={() => toggleLinkModal(false)}
-          handleSubmit={handleModalSubmit}
-          isShown={linkModalOpen}
-          options={modalOptions}
+  const renderElement = () => {
+    if (props.entry.fields) {
+      return (
+        <HydratedEntryCard
+          contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
+          entry={props.entry}
+          isLoading={props.isLoading}
+          onClick={handleEditClick}
+          handleEditClick={handleEditClick}
+          handleRemoveClick={() => updateEntry(null)}
         />
-        <Dropdown
-          toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
-          onClick={() => toggleCreate(!createOpen)}
-          isOpen={createOpen}>
-          <DropdownList>
-            <DropdownListItem isTitle>Options</DropdownListItem>
-            {props.options.map((option, index) => {
-              return (
-                <DropdownListItem
-                  key={`component-option--${index}`}
-                  onClick={() => handleCreateClick(option)}>
-                  {option}
-                </DropdownListItem>
-              );
-            })}
-          </DropdownList>
-        </Dropdown>
-        <Dropdown
-          toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
-          onClick={() => toggleLink(!linkOpen)}
-          isOpen={linkOpen}>
-          <DropdownList>
-            <DropdownListItem isTitle>Options</DropdownListItem>
-            {props.options.map((option, index) => {
-              return (
-                <DropdownListItem
-                  key={`component-option--${index}`}
-                  onClick={() => handleLinkClick(option)}>
-                  {option}
-                </DropdownListItem>
-              );
-            })}
-          </DropdownList>
-        </Dropdown>
-      </div>
-    );
-  }
+      );
+    } else {
+      return (
+        <div data-test-id="component-field-blank" className="link-row">
+          <SelectComponentModal
+            sdk={props.sdk}
+            handleClose={() => toggleLinkModal(false)}
+            handleSubmit={handleModalSubmit}
+            isShown={linkModalOpen}
+            options={modalOptions}
+          />
+          <Dropdown
+            toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
+            onClick={() => toggleCreate(!createOpen)}
+            isOpen={createOpen}>
+            <DropdownList>
+              <DropdownListItem isTitle>Options</DropdownListItem>
+              {props.options.map((option, index) => {
+                return (
+                  <DropdownListItem
+                    key={`component-option--${index}`}
+                    onClick={() => handleCreateClick(option)}>
+                    {option}
+                  </DropdownListItem>
+                );
+              })}
+            </DropdownList>
+          </Dropdown>
+          <Dropdown
+            toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
+            onClick={() => toggleLink(!linkOpen)}
+            isOpen={linkOpen}>
+            <DropdownList>
+              <DropdownListItem isTitle>Options</DropdownListItem>
+              {props.options.map((option, index) => {
+                return (
+                  <DropdownListItem
+                    key={`component-option--${index}`}
+                    onClick={() => handleLinkClick(option)}>
+                    {option}
+                  </DropdownListItem>
+                );
+              })}
+            </DropdownList>
+          </Dropdown>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="component-field" data-test-id="component-field">
+      {renderElement()}
+    </div>
+  );
 };
 
 ComponentField.propTypes = {
