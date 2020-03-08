@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
@@ -12,10 +12,13 @@ import {
 
 import { createEntry, constructLink } from '../../../utilities/index';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
+import SelectComponentModal from '../../SelectComponentModal';
 
 const ComponentField = props => {
   const [createOpen, toggleCreate] = useState(false);
   const [linkOpen, toggleLink] = useState(false);
+  const [linkModalOpen, toggleLinkModal] = useState(false);
+  const [modalOptions, setModalOptions] = useState(props.options);
 
   const updateEntry = entry => {
     if (entry) {
@@ -26,8 +29,15 @@ const ComponentField = props => {
     }
   };
 
+  const handleModalSubmit = entry => {
+    if (entry) {
+      updateEntry(entry);
+    }
+  };
+
   const handleLinkClick = componentId => {
-    console.log(componentId);
+    setModalOptions([componentId]);
+    toggleLinkModal(true);
   };
 
   const handleCreateClick = async componentId => {
@@ -64,6 +74,7 @@ const ComponentField = props => {
         contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
         entry={props.entry}
         isLoading={props.isLoading}
+        onClick={handleEditClick}
         handleEditClick={handleEditClick}
         handleRemoveClick={() => updateEntry(null)}
       />
@@ -71,6 +82,13 @@ const ComponentField = props => {
   } else {
     return (
       <div data-test-id="component-field-blank" className="link-row">
+        <SelectComponentModal
+          sdk={props.sdk}
+          handleClose={() => toggleLinkModal(false)}
+          handleSubmit={handleModalSubmit}
+          isShown={linkModalOpen}
+          options={modalOptions}
+        />
         <Dropdown
           toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
           onClick={() => toggleCreate(!createOpen)}

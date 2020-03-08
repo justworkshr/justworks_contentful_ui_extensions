@@ -60,6 +60,7 @@ export const EntryField = props => {
       <HydratedEntryCard
         contentType={getContentType()}
         isLoading={props.isLoading}
+        onClick={handleEditClick}
         handleEditClick={handleEditClick}
         handleRemoveClick={() => updateEntry(null)}
         entry={props.entry}

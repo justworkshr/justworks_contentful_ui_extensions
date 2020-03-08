@@ -18,20 +18,27 @@ const HydratedEntryCard = props => {
       contentType={props.contentType}
       status={getStatus(props.entry)}
       withDragHandle={false}
-      onClick={props.handleEditClick}
+      onClick={props.onClick}
       dropdownListElements={
-        <DropdownList>
-          <DropdownListItem isTitle>Actions</DropdownListItem>
-          <DropdownListItem className="entry-card__action--edit" onClick={props.handleEditClick}>
-            Edit
-          </DropdownListItem>
-
-          <DropdownListItem
-            className="entry-card__action--remove"
-            onClick={props.handleRemoveClick}>
-            Remove
-          </DropdownListItem>
-        </DropdownList>
+        !!(props.handleRemoveClick || props.handleEditClick) ? (
+          <DropdownList>
+            <DropdownListItem isTitle>Actions</DropdownListItem>
+            {props.handleEditClick && (
+              <DropdownListItem
+                className="entry-card__action--edit"
+                onClick={props.handleEditClick}>
+                Edit
+              </DropdownListItem>
+            )}
+            {props.handleRemoveClick && (
+              <DropdownListItem
+                className="entry-card__action--remove"
+                onClick={props.handleRemoveClick}>
+                Remove
+              </DropdownListItem>
+            )}
+          </DropdownList>
+        ) : null
       }
     />
   );
@@ -40,6 +47,7 @@ const HydratedEntryCard = props => {
 HydratedEntryCard.propTypes = {
   contentType: PropTypes.string,
   entry: PropTypes.object,
+  onClick: PropTypes.func,
   handleEditClick: PropTypes.func,
   handleRemoveClick: PropTypes.func,
   isLoading: PropTypes.bool
