@@ -98,7 +98,7 @@ const ComponentEditor = props => {
     if (!value) return;
     return props.hydratedEntries.find(e => e.sys.id === (value.sys || {}).id);
   };
-  console.log(props.schema);
+
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
