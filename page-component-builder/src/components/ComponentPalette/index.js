@@ -27,6 +27,10 @@ const ComponentPalette = props => {
     toggleShown(false);
   };
 
+  const selectedTagMatchesMeta = (tags = []) => {
+    tags.some(tag => selectedTags.includes(tag));
+  };
+
   return (
     <div className="component-palette">
       <Button onClick={() => toggleShown(!isShown)}>Change Component</Button>
@@ -93,7 +97,7 @@ const ComponentPalette = props => {
           </div>
           <div className="component-palette__collection">
             {props.schemas
-              .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
+              .filter(schema => selectedTagMatchesMeta(schema.meta.tags))
               .map((schema, index) => {
                 return (
                   <Card
