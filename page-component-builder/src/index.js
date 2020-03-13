@@ -21,6 +21,9 @@ import {
   RadioButtonField,
   Form
 } from '@contentful/forma-36-react-components';
+
+import RadioGroup from './components/fields/RadioGroup';
+
 import { init, locations } from 'contentful-ui-extensions-sdk';
 import * as c from './constants';
 
@@ -57,6 +60,7 @@ export class PageComponentBuilder extends React.Component {
     this.updateTimeout = null;
     const blankSchemaData = {
       components: [],
+      config_templates: [],
       tags: {}
     };
 
@@ -69,6 +73,7 @@ export class PageComponentBuilder extends React.Component {
       schemaData,
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
+      configObject: props.sdk.entry.fields.configObject.getValue(),
       entries,
       assets,
       internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
@@ -82,6 +87,7 @@ export class PageComponentBuilder extends React.Component {
     props.sdk.entry.fields.internalMapping.onValueChanged(this.onInternalMappingChange);
 
     this.fetchSchemas = this.fetchSchemas.bind(this);
+    this.currentSchema = this.currentSchema.bind(this);
     this.internalMappingFromComponentId = this.internalMappingFromComponentId.bind(this);
   }
 
@@ -113,6 +119,11 @@ export class PageComponentBuilder extends React.Component {
     const value = event.target.value;
     this.setState({ name: value });
     this.props.sdk.entry.fields.name.setValue(value);
+  };
+
+  onConfigObjectChangeHandler = value => {
+    this.setState({ configObject: value });
+    this.props.sdk.entry.fields.configObject.setValue(value);
   };
 
   internalMappingFromComponentId = componentId => {
@@ -261,6 +272,18 @@ export class PageComponentBuilder extends React.Component {
     return internalMappingObject;
   };
 
+  currentSchema() {
+    if (this.state.configObject) {
+      return this.state.schemaData.config_templates.find(
+        schema => schema.meta.id === this.state.componentId
+      );
+    } else {
+      return this.state.schemaData.components.find(
+        schema => schema.meta.id === this.state.componentId
+      );
+    }
+  }
+
   render() {
     return (
       <Form className="editor f36-margin--l">
@@ -280,11 +303,21 @@ export class PageComponentBuilder extends React.Component {
           onChange={e => this.onComponentIdChangeHandler(e.target.value)}
           value={this.state.componentId}
         />
-        <ComponentPalette
-          componentId={this.state.componentId}
-          onChange={this.onComponentIdChangeHandler}
-          schemas={this.state.schemaData.components}
-          tags={this.state.schemaData.tags}
+        {// Only allow palette when this entry isn't serving as a config object
+        !this.state.configObject && (
+          <ComponentPalette
+            componentId={this.state.componentId}
+            onChange={this.onComponentIdChangeHandler}
+            schemas={this.state.schemaData.components}
+            tags={this.state.schemaData.tags}
+          />
+        )}
+
+        <SectionHeading>Config Object</SectionHeading>
+        <RadioGroup
+          options={[true, false]}
+          onChange={value => this.onConfigObjectChangeHandler(value)}
+          value={this.state.configObject}
         />
         <SectionHeading>Entries</SectionHeading>
         <Textarea testId="field-entries" value={this.state.entries.map(e => e.sys.id).join(', ')} />
@@ -315,9 +348,7 @@ export class PageComponentBuilder extends React.Component {
           internalMappingInstance={
             new InternalMapping(this.state.componentId, this.parseInternalMapping().properties)
           }
-          schema={this.state.schemaData.components.find(
-            schema => schema.meta.id === this.state.componentId
-          )}
+          schema={this.currentSchema()}
         />
       </Form>
     );

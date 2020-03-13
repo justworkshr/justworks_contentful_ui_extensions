@@ -17,7 +17,6 @@ const RadioGroup = props => {
     if (value === 'false') return false;
     return value;
   };
-
   return (
     <FieldGroup className="radio-group">
       {props.options.map(option => {
