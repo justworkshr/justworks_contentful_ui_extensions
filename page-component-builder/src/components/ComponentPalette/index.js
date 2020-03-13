@@ -93,7 +93,8 @@ const ComponentPalette = props => {
           </div>
           <div className="component-palette__collection">
             {props.schemas
-              .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
+              // .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
+              .filter(schema => () => schema.meta.tags.some(tag => selectedTags.includes(tag)))
               .map((schema, index) => {
                 return (
                   <Card
