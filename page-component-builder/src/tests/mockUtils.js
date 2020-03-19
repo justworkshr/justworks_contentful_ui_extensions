@@ -341,6 +341,11 @@ export const mockSdk = (
           setValue: jest.fn(),
           onValueChanged: jest.fn()
         },
+        configObject: {
+          getValue: jest.fn(),
+          setValue: jest.fn(),
+          onValueChanged: jest.fn()
+        },
         internalMapping: {
           getValue: jest.fn(),
           setValue: jest.fn(),
