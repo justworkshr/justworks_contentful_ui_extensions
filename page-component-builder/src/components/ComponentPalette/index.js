@@ -92,20 +92,35 @@ const ComponentPalette = props => {
             </div>
           </div>
           <div className="component-palette__collection">
-            {props.schemas
-              .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
-              .map((schema, index) => {
-                return (
-                  <Card
-                    key={`palette-schema--${index}`}
-                    testId="palette-schema"
-                    className="component-palette__schema"
-                    selected={schema.meta.id === props.componentId}
-                    onClick={() => handleSchemaClick(schema)}>
-                    {schema.meta.id || 'Schema'}
-                  </Card>
-                );
-              })}
+            {selectedTags.length
+              ? props.schemas
+                  .filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
+                  .map((schema, index) => {
+                    return (
+                      <Card
+                        key={`palette-schema--${index}`}
+                        testId="palette-schema"
+                        className="component-palette__schema"
+                        selected={schema.meta.id === props.componentId}
+                        onClick={() => handleSchemaClick(schema)}>
+                        {schema.meta.id || 'Schema'}
+                      </Card>
+                    );
+                  })
+              : props.schemas
+                  .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
+                  .map((schema, index) => {
+                    return (
+                      <Card
+                        key={`palette-schema--${index}`}
+                        testId="palette-schema"
+                        className="component-palette__schema"
+                        selected={schema.meta.id === props.componentId}
+                        onClick={() => handleSchemaClick(schema)}>
+                        {schema.meta.id || 'Schema'}
+                      </Card>
+                    );
+                  })}
           </div>
         </div>
       </Modal>
