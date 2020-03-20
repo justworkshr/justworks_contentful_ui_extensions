@@ -4,14 +4,21 @@
   "description": "Colour picker UI extension for Contentful's web app.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "create": "contentful-extension create --space-id $SPACE_ID",
-    "update": "contentful-extension update --space-id $SPACE_ID --force",
-    "dev": "contentful-extension update --space-id $SPACE_ID --force --src 'http://localhost:3030/index.html'"
+    "start": "contentful-extension-scripts start",
+    "build": "contentful-extension-scripts build",
+    "deploy": "npm run build && contentful extension update --force",
+    "configure": "contentful space use && contentful space environment use",
+    "login": "contentful login",
+    "logout": "contentful logout",
+    "help": "contentful-extension-scripts help"
   },
   "author": "josh@condoculture.ca",
   "license": "MIT",
   "devDependencies": {
     "contentful-extension-cli": "^2.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@contentful/contentful-extension-scripts": "^0.15.1",
+    "contentful-ui-extensions-sdk": "^3.11.1"
+  }
 }
