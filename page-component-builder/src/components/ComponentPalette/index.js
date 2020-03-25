@@ -14,6 +14,13 @@ import './style.scss';
 const ComponentPalette = props => {
   const [isShown, toggleShown] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const filterSchemas = schemas => {
+    return selectedTags.length
+      ? schemas.filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
+      : schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
+  };
+
   const handleTagClick = value => {
     if (selectedTags.some(tag => tag === value)) {
       setSelectedTags(selectedTags.filter(tag => tag !== value));
@@ -92,20 +99,18 @@ const ComponentPalette = props => {
             </div>
           </div>
           <div className="component-palette__collection">
-            {props.schemas
-              .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE)
-              .map((schema, index) => {
-                return (
-                  <Card
-                    key={`palette-schema--${index}`}
-                    testId="palette-schema"
-                    className="component-palette__schema"
-                    selected={schema.meta.id === props.componentId}
-                    onClick={() => handleSchemaClick(schema)}>
-                    {schema.meta.id || 'Schema'}
-                  </Card>
-                );
-              })}
+            {filterSchemas(props.schemas).map((schema, index) => {
+              return (
+                <Card
+                  key={`palette-schema--${index}`}
+                  testId="palette-schema"
+                  className="component-palette__schema"
+                  selected={schema.meta.id === props.componentId}
+                  onClick={() => handleSchemaClick(schema)}>
+                  {schema.meta.id || 'Schema'}
+                </Card>
+              );
+            })}
           </div>
         </div>
       </Modal>
