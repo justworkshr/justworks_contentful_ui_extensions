@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   Modal,
+  TextInput,
   ToggleButton,
   SectionHeading
 } from '@contentful/forma-36-react-components';
@@ -14,6 +15,24 @@ import './style.scss';
 const ComponentPalette = props => {
   const [isShown, toggleShown] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [searchTags, setSearchTags] = useState([]);
+  const handleOnChange = e => {
+    let query = e.target.value.length > 1 ? e.target.value.split(' ') : [e.target.value];
+    // query = query[query.length - 1];
+    console.log('21', typeof query, searchTags);
+    setSearchTags(query);
+
+    // let tags = [...selectedTags];
+    // let searchTag = searchTags.split(' ')[searchTags.split(' ').length - 1];
+    // console.log('@24', searchTag);
+    //
+    // let filteredTags = tags.filter(tag => tag.some(tag => prevSearchTags.includes(tag)));
+    // .filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
+    // tags = [...filteredTags, ...e.target.value.split(' ')];
+    // setSelectedTags(tags);
+    // setSearchTags(e.target.value);
+    // console.log('@L19', e.target.value);
+  };
   const handleTagClick = value => {
     if (selectedTags.some(tag => tag === value)) {
       setSelectedTags(selectedTags.filter(tag => tag !== value));
@@ -41,6 +60,10 @@ const ComponentPalette = props => {
         topOffset="0px">
         <div className="component-palette__wrapper">
           <div className="component-palette__sidebar f36-background-color--element-dark">
+            <div className="f36-padding--s f36-background-color--element-light">
+              <SectionHeading className="f36-margin-bottom--s">Search</SectionHeading>
+              <TextInput type="text" onChange={handleOnChange} width="large" value="" />
+            </div>
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Component Tags</SectionHeading>
               {props.tags.component &&
@@ -92,9 +115,33 @@ const ComponentPalette = props => {
             </div>
           </div>
           <div className="component-palette__collection">
-            {selectedTags.length
+            {// selectedTags.length
+            //   ? props.schemas
+            //       .filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
+            //       .map((schema, index) => {
+            //         return (
+            //           <Card
+            //             key={`palette-schema--${index}`}
+            //             testId="palette-schema"
+            //             className="component-palette__schema"
+            //             selected={schema.meta.id === props.componentId}
+            //             onClick={() => handleSchemaClick(schema)}>
+            //             {schema.meta.id || 'Schema'}
+            //           </Card>
+            //         );
+            //       })
+            searchTags.length && selectedTags.length
               ? props.schemas
-                  .filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
+                  .filter(
+                    schema =>
+                      schema.meta.description &&
+                      schema.meta.description.split(' ').some(tag => searchTags.includes(tag))
+                  )
+                  .concat(
+                    props.schemas.filter(schema =>
+                      schema.meta.tags.some(tag => selectedTags.includes(tag))
+                    )
+                  )
                   .map((schema, index) => {
                     return (
                       <Card
