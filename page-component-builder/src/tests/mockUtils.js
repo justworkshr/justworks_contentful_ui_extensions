@@ -12,10 +12,11 @@ export const mockSchemas = (tags = {}, components = []) => {
   };
 };
 
-export const mockComponentSchema = (id, properties = {}) => {
+export const mockComponentSchema = (id, properties = {}, tags = []) => {
   return {
     meta: {
-      id
+      id,
+      tags
     },
     properties
   };

@@ -24,8 +24,18 @@ configure({
 
 const mockOnChange = jest.fn();
 
-const mockTags = {};
-const mockComponents = [];
+const mockTag = 'test-tag';
+
+const mockTags = {
+  component: [mockTag],
+  content: [],
+  location: []
+};
+const mockComponents = [
+  mockComponentSchema('component1', {}, [mockTag]),
+  mockComponentSchema('component2', {}, []),
+  mockComponentSchema('component3', {}, [])
+];
 const testSchemas = mockSchemas(mockTags, mockComponents);
 
 const renderComponent = ({
