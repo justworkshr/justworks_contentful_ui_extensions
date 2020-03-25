@@ -22,14 +22,19 @@ const ComponentPalette = props => {
   const filterBySearch = schemas => {
     return searchText ? schemas.filter(schema => schema.meta.id.includes(searchText)) : schemas;
   };
+
   const filterByTag = schemas => {
     return selectedTags.length
       ? schemas.filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
-      : schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
+      : schemas;
+  };
+
+  const filterByPattern = schemas => {
+    return schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
   };
 
   const filterSchemas = schemas => {
-    return filterBySearch(filterByTag(schemas));
+    return filterBySearch(filterByTag(filterByPattern(schemas)));
   };
 
   const handleTagClick = value => {
