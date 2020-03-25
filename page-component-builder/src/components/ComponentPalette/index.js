@@ -15,7 +15,7 @@ import './style.scss';
 const ComponentPalette = props => {
   const [isShown, toggleShown] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [searchText, setSearchText] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
   const handleOnChange = e => setSearchText(e.target.value);
 
