@@ -123,15 +123,18 @@ describe('ComponentPalette', () => {
 
   describe('filtering', () => {
     xit('filters by tag', () => {
-      // 1) expect that component1 and component2 shows up
+      // 1) expect that 3 cards render (component, component2, component3)
+      // 2) expect that component1 and component2 shows up
     });
 
     xit('filters by search text', () => {
-      // 1) expect that component2 shows up if we type component2
+      // 1) expect that 3 cards render (component, component2, component3)
+      // 2) expect that only component2 shows up if we type component2
     });
 
     xit('filters by all 3', () => {
-      // 2) expect that component1 shows up if we type component1 and have the tag selected
+      // 1) expect that 3 cards render (component, component2, component3)
+      // 2) expect that  only component1 shows up if we type component1 and have the tag selected
     });
   });
 });
