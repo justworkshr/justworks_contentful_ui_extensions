@@ -49,11 +49,13 @@ const ComponentPalette = props => {
     props.onChange(value.meta.id);
     toggleShown(false);
   };
-
   return (
-    <div className="component-palette">
-      <Button onClick={() => toggleShown(!isShown)}>Change Component</Button>
+    <div className="component-palette" data-test-id="component-palette">
+      <Button testId="component-palette__button" onClick={() => toggleShown(!isShown)}>
+        Change Component
+      </Button>
       <Modal
+        testId="component-palette__modal"
         className="component-palette__modal"
         isShown={isShown}
         onClose={() => toggleShown(false)}
@@ -75,7 +77,7 @@ const ComponentPalette = props => {
                   return (
                     <ToggleButton
                       key={`component-tag--${index}`}
-                      testId="palette-tag"
+                      testId={`palette-tag--${tag}`}
                       className="component-palette__pill"
                       isActive={selectedTags.some(t => t === tag)}
                       onClick={() => handleTagClick(tag)}>
@@ -91,7 +93,7 @@ const ComponentPalette = props => {
                   return (
                     <ToggleButton
                       key={`content-tag--${index}`}
-                      testId="palette-tag"
+                      testId={`palette-tag--${tag}`}
                       className="component-palette__pill"
                       isActive={selectedTags.some(t => t === tag)}
                       onClick={() => handleTagClick(tag)}>
@@ -123,7 +125,7 @@ const ComponentPalette = props => {
               return (
                 <Card
                   key={`palette-schema--${index}`}
-                  testId="palette-schema"
+                  testId={`palette-card--${schema.meta.id}`}
                   className="component-palette__schema"
                   selected={schema.meta.id === props.componentId}
                   onClick={() => handleSchemaClick(schema)}>

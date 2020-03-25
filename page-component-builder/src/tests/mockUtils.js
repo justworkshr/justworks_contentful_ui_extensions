@@ -12,11 +12,17 @@ export const mockSchemas = (tags = {}, components = []) => {
   };
 };
 
-export const mockComponentSchema = (id, properties = {}, tags = []) => {
+export const mockComponentSchema = (
+  id,
+  properties = {},
+  tags = [],
+  editor_role = c.PATTERN_ROLE
+) => {
   return {
     meta: {
       id,
-      tags
+      tags,
+      editor_role
     },
     properties
   };
