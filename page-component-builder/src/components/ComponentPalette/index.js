@@ -6,19 +6,35 @@ import {
   Button,
   Card,
   Modal,
-  ToggleButton,
-  SectionHeading
+  SectionHeading,
+  TextInput,
+  ToggleButton
 } from '@contentful/forma-36-react-components';
 import './style.scss';
 
 const ComponentPalette = props => {
   const [isShown, toggleShown] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [searchText, setSearchText] = useState([]);
 
-  const filterSchemas = schemas => {
+  const handleOnChange = e => setSearchText(e.target.value);
+
+  const filterBySearch = schemas => {
+    return searchText ? schemas.filter(schema => schema.meta.id.includes(searchText)) : schemas;
+  };
+
+  const filterByTag = schemas => {
     return selectedTags.length
       ? schemas.filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
-      : schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
+      : schemas;
+  };
+
+  const filterByPattern = schemas => {
+    return schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
+  };
+
+  const filterSchemas = schemas => {
+    return filterBySearch(filterByTag(filterByPattern(schemas)));
   };
 
   const handleTagClick = value => {
@@ -48,6 +64,10 @@ const ComponentPalette = props => {
         topOffset="0px">
         <div className="component-palette__wrapper">
           <div className="component-palette__sidebar f36-background-color--element-dark">
+            <div className="f36-padding--s f36-background-color--element-light">
+              <SectionHeading className="f36-margin-bottom--s">Search</SectionHeading>
+              <TextInput type="text" onChange={handleOnChange} width="large" value="" />
+            </div>
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Component Tags</SectionHeading>
               {props.tags.component &&
