@@ -24,9 +24,9 @@ configure({
   testIdAttribute: 'data-test-id'
 });
 
-function renderComponent(sdk, schemas = mockSchemas()) {
+const renderComponent = (sdk, schemas = mockSchemas()) => {
   return render(<PageComponentBuilder schemas={schemas} sdk={sdk} />);
-}
+};
 
 const setupLoadedComponent = ({
   sdk,
