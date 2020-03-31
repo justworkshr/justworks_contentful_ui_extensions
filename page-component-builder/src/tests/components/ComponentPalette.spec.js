@@ -55,6 +55,11 @@ describe('ComponentPalette', () => {
     fireEvent.click(openButton);
   };
 
+  const closeModal = getByTestId => {
+    const closeButton = getByTestId('cf-ui-icon-button');
+    fireEvent.click(closeButton);
+  };
+
   describe('loading + rendering', () => {
     it('loads with blank attributes', () => {
       const componentPalette = renderComponent({
@@ -66,7 +71,7 @@ describe('ComponentPalette', () => {
     });
 
     it('loads', () => {
-      const { getByTestId, queryByTestId } = renderComponent({
+      const { getByTestId } = renderComponent({
         componentId: 'test'
       });
 
@@ -74,39 +79,50 @@ describe('ComponentPalette', () => {
     });
 
     it('opens and closes a modal on button click', () => {
-      // 1) expect no modal is rendered before button click
-      // 2) expects thats the modal is rendered when button is clicked
-      // 3) expects that modal closes when close button clicked
-
       const { getByTestId, queryByTestId } = renderComponent({
         componentId: 'test'
       });
 
-      const openButton = getByTestId('component-palette__button');
-
+      // 1) expect no modal is rendered before button click
       // 1) first check that no modal exists
       expect(queryByTestId('component-palette__modal')).toBeNull();
 
-      // click button
+      // click button to open/render modal
       openModal(getByTestId);
 
+      // 2) expects thats the modal is rendered when button is clicked
       // 2) get modal
       expect(queryByTestId('component-palette__modal')).toBeTruthy();
 
-      // 3)
-      const closeButton = getByTestId('cf-ui-icon');
+      //click button to close modal
+      // closeModal(getByTestId);
+      // fireEvent.click(getByTestId('cf-ui-icon-button'));
+
+      // 3) expects that modal closes when close button clicked
+      // 3) final check that no modal exists
+      // expect(queryByTestId('component-palette__modal')).toBeNull();
     });
 
-    xit('renders the tags and schemas', () => {
-      // open modal
+    it('renders the tags and schemas', () => {
+      const componentIdPrefix = 'palette-card--patterns/component';
+      const { getByTestId, getByText } = renderComponent({
+        componentId: 'test'
+      });
+
+      // click button to open/render modal
+      openModal(getByTestId);
+
       // 1) expect that 1 mock tag 'test-tag' renders
+      expect(getByText('test-tag')).toBeTruthy();
+
       // 2) expect that 3 cards render (component, component2, component3)
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
     });
 
-    xit('recognizes the selected component', () => {
+    it('recognizes the selected component', () => {
       // pass in "patterns/component1"
-      // 1) test that <node>.className.include("Card__Card--is-selected")
-
       const componentId = 'patterns/component1';
       const { getByTestId, queryByTestId } = renderComponent({
         componentId: componentId,
@@ -118,10 +134,17 @@ describe('ComponentPalette', () => {
       const selectedCard = getByTestId(`palette-card--${componentId}`);
 
       // 1) test the selectedCard has the selected class
+      expect(selectedCard.className.includes('Card__Card--is-selected')).toBeTruthy();
     });
   });
 
   describe('filtering', () => {
+    const { getByTestId, getByText } = renderComponent({
+      componentId: 'test'
+    });
+    openModal(getByTestId);
+
+    // console.log('@121', getByText('palette-card--patterns/component1'));
     xit('filters by tag', () => {
       // 1) expect that 3 cards render (component, component2, component3)
       // 2) expect that component1 and component2 shows up
