@@ -80,7 +80,7 @@ describe('ComponentPalette', () => {
     });
 
     it('opens and closes a modal on button click', () => {
-      const { getByTestId, queryByTestId } = renderComponent({
+      const { getByTestId, queryByTestId, getByText } = renderComponent({
         componentId: 'test'
       });
 
@@ -95,6 +95,7 @@ describe('ComponentPalette', () => {
       // 3) expects that modal closes when close button clicked
       // final check that no modal exists
       // expect(queryByTestId('component-palette__modal')).toBeNull();
+      // console.log('@149', getByText('component-palette__modal'));
     });
 
     it('renders the tags and schemas', () => {
@@ -108,6 +109,7 @@ describe('ComponentPalette', () => {
       expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
+      // query length of cards to = 3 = cards.length
     });
 
     it('recognizes the selected component', () => {
