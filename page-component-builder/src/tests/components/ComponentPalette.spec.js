@@ -2,7 +2,14 @@ import React from 'react';
 import ComponentPalette from '../../components/ComponentPalette';
 
 import * as c from '../../constants';
-import { render, cleanup, fireEvent, configure, wait } from '@testing-library/react';
+import {
+  render,
+  cleanup,
+  fireEvent,
+  configure,
+  wait,
+  waitForElementToBeRemoved
+} from '@testing-library/react';
 import { mockSchemas, mockComponentSchema } from '../mockUtils';
 
 configure({
@@ -55,11 +62,6 @@ describe('ComponentPalette', () => {
     fireEvent.click(openButton);
   };
 
-  const closeModal = getByTestId => {
-    const closeButton = getByTestId('cf-ui-icon-button');
-    fireEvent.click(closeButton);
-  };
-
   describe('loading + rendering', () => {
     it('loads with blank attributes', () => {
       const componentPalette = renderComponent({
@@ -79,7 +81,7 @@ describe('ComponentPalette', () => {
       expect(getByTestId('component-palette')).toBeTruthy();
     });
 
-    it('opens and closes a modal on button click', () => {
+    it('opens and closes a modal on button click', async () => {
       const { getByTestId, queryByTestId, getByText } = renderComponent({
         componentId: 'test'
       });
@@ -87,15 +89,10 @@ describe('ComponentPalette', () => {
       expect(queryByTestId('component-palette__modal')).toBeNull();
       openModal(getByTestId);
       expect(queryByTestId('component-palette__modal')).toBeTruthy();
+      fireEvent.click(getByTestId('cf-ui-icon-button'));
 
-      //click button to close modal
-      // closeModal(getByTestId);
-      // fireEvent.click(getByTestId('cf-ui-icon-button'));
-
-      // 3) expects that modal closes when close button clicked
-      // final check that no modal exists
-      // expect(queryByTestId('component-palette__modal')).toBeNull();
-      // console.log('@149', getByText('component-palette__modal'));
+      await waitForElementToBeRemoved(() => queryByTestId('component-palette__modal'));
+      expect(queryByTestId('component-palette__modal')).toBeNull();
     });
 
     it('renders the tags and schemas', () => {
@@ -136,17 +133,26 @@ describe('ComponentPalette', () => {
 
     // console.log('@149', getByText('palette-card--patterns/component1'));
     xit('filters by tag', () => {
-      // 1) expect that 3 cards render (component, component2, component3)
+      // similar to lines 105 - 108
+      // 1) expect that 3 cards render (component1, component2, component3)
       // 2) expect that component1 and component2 shows up
     });
 
+    // fireEvent.change(getByTestId('field-name'), { // component-palette__search-input
+    // target: { value: 'new-name-value' } // change this to component1/2
+    // });
+
     xit('filters by search text', () => {
-      // 1) expect that 3 cards render (component, component2, component3)
+      // 1) expect that 3 cards render (component1, component2, component3) // render pre search
+      // 1b) component-palette__search-input .value === component2 // search input "component2"
       // 2) expect that only component2 shows up if we type component2
     });
 
-    xit('filters by all 3', () => {
-      // 1) expect that 3 cards render (component, component2, component3)
+    xit('filters by tag and text combined', () => {
+      // 1) expect that 3 cards render (component1, component2, component3) // render pre search
+      // select tag / check for test-tag
+      // all 3 compnonts length = 3
+      // search  input "component1"
       // 2) expect that  only component1 shows up if we type component1 and have the tag selected
     });
   });
