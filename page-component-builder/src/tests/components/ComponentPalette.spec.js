@@ -67,6 +67,7 @@ describe('ComponentPalette', () => {
         tags: undefined,
         componentId: undefined
       });
+
       expect(componentPalette).toBeTruthy();
     });
 
@@ -83,15 +84,8 @@ describe('ComponentPalette', () => {
         componentId: 'test'
       });
 
-      // 1) expect no modal is rendered before button click
-      // 1) first check that no modal exists
       expect(queryByTestId('component-palette__modal')).toBeNull();
-
-      // click button to open/render modal
       openModal(getByTestId);
-
-      // 2) expects thats the modal is rendered when button is clicked
-      // 2) get modal
       expect(queryByTestId('component-palette__modal')).toBeTruthy();
 
       //click button to close modal
@@ -99,7 +93,7 @@ describe('ComponentPalette', () => {
       // fireEvent.click(getByTestId('cf-ui-icon-button'));
 
       // 3) expects that modal closes when close button clicked
-      // 3) final check that no modal exists
+      // final check that no modal exists
       // expect(queryByTestId('component-palette__modal')).toBeNull();
     });
 
@@ -109,32 +103,26 @@ describe('ComponentPalette', () => {
         componentId: 'test'
       });
 
-      // click button to open/render modal
       openModal(getByTestId);
-
-      // 1) expect that 1 mock tag 'test-tag' renders
       expect(getByText('test-tag')).toBeTruthy();
-
-      // 2) expect that 3 cards render (component, component2, component3)
       expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
     });
 
     it('recognizes the selected component', () => {
-      // pass in "patterns/component1"
       const componentId = 'patterns/component1';
-      const { getByTestId, queryByTestId } = renderComponent({
+      const componentIdPrefix = 'palette-card--patterns/component';
+      const selectedClass = 'Card__Card--is-selected';
+      const { getByTestId } = renderComponent({
         componentId: componentId,
         schemas: mockComponents,
         tags: mockTags
       });
 
       openModal(getByTestId);
-      const selectedCard = getByTestId(`palette-card--${componentId}`);
-
-      // 1) test the selectedCard has the selected class
-      expect(selectedCard.className.includes('Card__Card--is-selected')).toBeTruthy();
+      const selectedCard = getByTestId(`${componentIdPrefix}1`);
+      expect(selectedCard.className.includes(selectedClass)).toBeTruthy();
     });
   });
 
@@ -144,7 +132,7 @@ describe('ComponentPalette', () => {
     });
     openModal(getByTestId);
 
-    // console.log('@121', getByText('palette-card--patterns/component1'));
+    // console.log('@149', getByText('palette-card--patterns/component1'));
     xit('filters by tag', () => {
       // 1) expect that 3 cards render (component, component2, component3)
       // 2) expect that component1 and component2 shows up
