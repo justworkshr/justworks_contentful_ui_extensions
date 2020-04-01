@@ -352,4 +352,12 @@ describe('App', () => {
       expect(getByTestId('short-text-field').value).toEqual(singletonProp1Value);
     });
   });
+
+  xdescribe('multi component link', () => {});
+
+  xdescribe('multi entry link', () => {});
+
+  xdescribe('config object link', () => {});
+
+  xdescribe('multi config object link', () => {});
 });
