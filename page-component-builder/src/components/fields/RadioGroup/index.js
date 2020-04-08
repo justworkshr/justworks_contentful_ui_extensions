@@ -11,12 +11,13 @@ const RadioGroup = props => {
     return value;
   };
 
-  const getValue = value => {
+  const coerceValue = value => {
     // coerce booleans
     if (value === 'true') return true;
     if (value === 'false') return false;
     return value;
   };
+
   return (
     <FieldGroup className="radio-group">
       {props.options.map(option => {
@@ -27,10 +28,10 @@ const RadioGroup = props => {
             id={id}
             labelText={getLabel(option)}
             labelIsLight={true}
-            name={option}
-            value={option}
+            name={id}
+            value={String(option)}
             checked={props.value === option}
-            onChange={e => props.onChange(getValue(e.target.value))}></RadioButtonField>
+            onChange={e => props.onChange(coerceValue(e.target.value))}></RadioButtonField>
         );
       })}
     </FieldGroup>
