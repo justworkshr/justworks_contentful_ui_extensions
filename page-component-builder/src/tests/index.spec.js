@@ -262,6 +262,12 @@ describe('App', () => {
     });
   });
 
+  xdescribe('multi entry link', () => {
+    xit('should render a blank field', async () => {});
+
+    xit('should render an entry field with value', async () => {});
+  });
+
   describe('single component link', () => {
     const createSchema = (componentId, propKey, type, otherSchemas = []) => {
       return mockSchemas({}, [
@@ -351,5 +357,23 @@ describe('App', () => {
       expect(getByTestId('short-text-field')).toBeTruthy();
       expect(getByTestId('short-text-field').value).toEqual(singletonProp1Value);
     });
+  });
+
+  xdescribe('multi component link', () => {
+    xit('should render a blank field', async () => {});
+
+    xit('should render an entry field with value', async () => {});
+  });
+
+  xdescribe('single config object link', () => {
+    xit('should render a blank field', async () => {});
+
+    xit('should render an entry field with value', async () => {});
+  });
+
+  xdescribe('multi config object link', () => {
+    xit('should render a blank field', async () => {});
+
+    xit('should render an entry field with value', async () => {});
   });
 });
