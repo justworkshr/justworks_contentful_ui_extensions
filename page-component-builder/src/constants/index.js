@@ -1,3 +1,7 @@
+/*
+  Synced w/ komponent_constants.rb in rails
+*/
+
 export const ENTRY_LINK_TYPE = 'Entry';
 export const ASSET_LINK_TYPE = 'Asset';
 
@@ -13,6 +17,8 @@ export const LINK_PROPERTY = 'link';
 export const MULTI_LINK_PROPERTY = 'multi-link';
 export const COMPONENT_PROPERTY = 'component';
 export const MULTI_COMPONENT_PROPERTY = 'multi-component';
+export const CONFIG_PROPERTY = 'config';
+export const MULTI_CONFIG_PROPERTY = 'multi-config';
 export const TEXT_PROPERTY = 'text';
 export const BOOL_PROPERTY = 'bool';
 

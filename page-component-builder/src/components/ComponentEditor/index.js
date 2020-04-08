@@ -80,8 +80,30 @@ const ComponentEditor = props => {
     );
   };
 
+  const isMultiLinkProperty = property => {
+    return (
+      property.type === c.MULTI_LINK_PROPERTY &&
+      ((property.content_types && !!property.content_types.length) ||
+        (property.asset_types && !!property.asset_types.length))
+    );
+  };
+
   const isComponentProperty = property => {
     return property.type === c.COMPONENT_PROPERTY && property.options && !!property.options.length;
+  };
+
+  const isMultiComponentProperty = property => {
+    return (
+      property.type === c.MULTI_COMPONENT_PROPERTY && property.options && !!property.options.length
+    );
+  };
+
+  const isConfigProperty = property => {
+    return property.type === c.CONFIG_PROPERTY && !!property.related_to;
+  };
+
+  const isMultiConfigProperty = property => {
+    return property.type === c.MULTI_CONFIG_PROPERTY && !!property.related_to;
   };
 
   const updatePropertyValue = (propKey, value, timeout = true) => {
@@ -97,6 +119,67 @@ const ComponentEditor = props => {
   const fetchHydratedEntry = value => {
     if (!value) return;
     return props.hydratedEntries.find(e => e.sys.id === (value.sys || {}).id);
+  };
+
+  const renderLinkableField = (propKey, property, value) => {
+    console.log(value);
+    if (!value && isAssetLink(property) && isEntryLink(property)) {
+      return (
+        <div>
+          <AssetField
+            sdk={props.sdk}
+            asset={fetchHydratedAsset(value)}
+            onChange={value => updatePropertyValue(propKey, value, false)}
+            replaceHydratedAsset={props.replaceHydratedAsset}
+          />
+
+          <EntryField
+            sdk={props.sdk}
+            contentTypes={property.content_types}
+            entry={fetchHydratedEntry(value)}
+            onChange={value => updatePropertyValue(propKey, value, false)}
+            replaceHydratedEntry={props.replaceHydratedEntry}
+            isLoading={!!value && !fetchHydratedEntry(value)}
+          />
+        </div>
+      );
+    } else if (!value && isAssetLink(property)) {
+      <AssetField
+        sdk={props.sdk}
+        asset={fetchHydratedAsset(value)}
+        onChange={value => updatePropertyValue(propKey, value, false)}
+        replaceHydratedAsset={props.replaceHydratedAsset}
+      />;
+    } else if (!value && isEntryLink(property)) {
+      <EntryField
+        sdk={props.sdk}
+        contentTypes={property.content_types}
+        entry={fetchHydratedEntry(value)}
+        onChange={value => updatePropertyValue(propKey, value, false)}
+        replaceHydratedEntry={props.replaceHydratedEntry}
+        isLoading={!!value && !fetchHydratedEntry(value)}
+      />;
+    } else if (value && value.sys && value.sys.linkType === c.ENTRY_LINK_TYPE) {
+      return (
+        <EntryField
+          sdk={props.sdk}
+          contentTypes={property.content_types}
+          entry={fetchHydratedEntry(value)}
+          onChange={value => updatePropertyValue(propKey, value, false)}
+          replaceHydratedEntry={props.replaceHydratedEntry}
+          isLoading={!!value && !fetchHydratedEntry(value)}
+        />
+      );
+    } else if (value && value.sys && value.sys.linkType === c.ASSET_LINK_TYPE) {
+      return (
+        <AssetField
+          sdk={props.sdk}
+          asset={fetchHydratedAsset(value)}
+          onChange={value => updatePropertyValue(propKey, value, false)}
+          replaceHydratedAsset={props.replaceHydratedAsset}
+        />
+      );
+    }
   };
 
   return (
@@ -164,24 +247,11 @@ const ComponentEditor = props => {
                     value={value}
                   />
                 )}
-                {isAssetLink(property) && (
-                  <AssetField
-                    sdk={props.sdk}
-                    asset={fetchHydratedAsset(value)}
-                    onChange={value => updatePropertyValue(propKey, value, false)}
-                    replaceHydratedAsset={props.replaceHydratedAsset}
-                  />
-                )}
-                {isEntryLink(property) && (
-                  <EntryField
-                    sdk={props.sdk}
-                    contentTypes={property.content_types}
-                    entry={fetchHydratedEntry(value)}
-                    onChange={value => updatePropertyValue(propKey, value, false)}
-                    replaceHydratedEntry={props.replaceHydratedEntry}
-                    isLoading={!!value && !fetchHydratedEntry(value)}
-                  />
-                )}
+                {/* in some cases, a field can link assets OR entries */}
+                {(isEntryLink(property) || isAssetLink(property)) &&
+                  renderLinkableField(propKey, property, value)}
+                {isMultiLinkProperty(property) && <div>TODO: Multi-Link Property</div>}
+
                 {isComponentProperty(property) && (
                   <ComponentField
                     sdk={props.sdk}
@@ -200,10 +270,13 @@ const ComponentEditor = props => {
                     onChange={(value, timeout = false) =>
                       updatePropertyValue(propKey, value, timeout)
                     }
-                    replaceHydratedEntry={props.replaceHydratedEntry}
                     isLoading={!!value && !fetchHydratedEntry(value)}
                   />
                 )}
+                {isMultiComponentProperty(property) && <div>TODO: Multi-Component Property</div>}
+
+                {isConfigProperty(property) && <div>TODO: Config Property</div>}
+                {isMultiConfigProperty(property) && <div>TODO: Multi-Config Property</div>}
               </div>
             );
           })}
@@ -220,6 +293,7 @@ ComponentEditor.propTypes = {
   internalMappingInstance: PropTypes.object,
   updateInternalMapping: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
+  replaceHydratedAsset: PropTypes.func,
   schema: PropTypes.object
 };
 ComponentEditor.defaultProps = {

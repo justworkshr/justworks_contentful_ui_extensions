@@ -122,6 +122,7 @@ export const mockTextProperty = (key, value) => {
 export const mockPrimaryEntry = ({
   name = undefined,
   componentId = undefined,
+  configObject = false,
   entries = undefined,
   assets = undefined,
   internalMapping = undefined,
@@ -131,6 +132,7 @@ export const mockPrimaryEntry = ({
   return {
     name,
     componentId,
+    configObject,
     entries,
     assets,
     internalMapping,
