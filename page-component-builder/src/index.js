@@ -315,6 +315,7 @@ export class PageComponentBuilder extends React.Component {
 
         <SectionHeading>Config Object</SectionHeading>
         <RadioGroup
+          name="field-configObject"
           options={[true, false]}
           onChange={value => this.onConfigObjectChangeHandler(value)}
           value={this.state.configObject}
