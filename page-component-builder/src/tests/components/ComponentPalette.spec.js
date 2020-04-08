@@ -2,7 +2,14 @@ import React from 'react';
 import ComponentPalette from '../../components/ComponentPalette';
 
 import * as c from '../../constants';
-import { render, cleanup, fireEvent, configure, wait } from '@testing-library/react';
+import {
+  render,
+  cleanup,
+  fireEvent,
+  configure,
+  wait,
+  waitForElementToBeRemoved
+} from '@testing-library/react';
 import { mockSchemas, mockComponentSchema } from '../mockUtils';
 
 configure({
@@ -62,79 +69,119 @@ describe('ComponentPalette', () => {
         tags: undefined,
         componentId: undefined
       });
+
       expect(componentPalette).toBeTruthy();
     });
 
     it('loads', () => {
-      const { getByTestId, queryByTestId } = renderComponent({
+      const { getByTestId } = renderComponent({
         componentId: 'test'
       });
 
       expect(getByTestId('component-palette')).toBeTruthy();
     });
 
-    it('opens and closes a modal on button click', () => {
-      // 1) expect no modal is rendered before button click
-      // 2) expects thats the modal is rendered when button is clicked
-      // 3) expects that modal closes when close button clicked
-
-      const { getByTestId, queryByTestId } = renderComponent({
+    it('opens and closes a modal on button click', async () => {
+      const { getByTestId, queryByTestId, getByText } = renderComponent({
         componentId: 'test'
       });
 
-      const openButton = getByTestId('component-palette__button');
-
-      // 1) first check that no modal exists
       expect(queryByTestId('component-palette__modal')).toBeNull();
-
-      // click button
       openModal(getByTestId);
-
-      // 2) get modal
       expect(queryByTestId('component-palette__modal')).toBeTruthy();
+      fireEvent.click(getByTestId('cf-ui-icon-button'));
 
-      // 3)
-      const closeButton = getByTestId('cf-ui-icon');
+      await waitForElementToBeRemoved(() => queryByTestId('component-palette__modal'));
+      expect(queryByTestId('component-palette__modal')).toBeNull();
     });
 
-    xit('renders the tags and schemas', () => {
-      // open modal
-      // 1) expect that 1 mock tag 'test-tag' renders
-      // 2) expect that 3 cards render (component, component2, component3)
+    it('renders the tags and schemas', () => {
+      const componentIdPrefix = 'palette-card--patterns/component';
+      const { getByTestId, getByText } = renderComponent({
+        componentId: 'test'
+      });
+      openModal(getByTestId);
+      expect(getByText('test-tag')).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
     });
 
-    xit('recognizes the selected component', () => {
-      // pass in "patterns/component1"
-      // 1) test that <node>.className.include("Card__Card--is-selected")
-
+    it('recognizes the selected component', () => {
       const componentId = 'patterns/component1';
-      const { getByTestId, queryByTestId } = renderComponent({
+      const componentIdPrefix = 'palette-card--patterns/component';
+      const selectedClass = 'Card__Card--is-selected';
+      const { getByTestId } = renderComponent({
         componentId: componentId,
         schemas: mockComponents,
         tags: mockTags
       });
 
       openModal(getByTestId);
-      const selectedCard = getByTestId(`palette-card--${componentId}`);
-
-      // 1) test the selectedCard has the selected class
+      const selectedCard = getByTestId(`${componentIdPrefix}1`);
+      expect(selectedCard.className.includes(selectedClass)).toBeTruthy();
     });
   });
 
   describe('filtering', () => {
-    xit('filters by tag', () => {
-      // 1) expect that 3 cards render (component, component2, component3)
-      // 2) expect that component1 and component2 shows up
+    it('filters by tag', () => {
+      const { getByTestId, getByText, queryByTestId } = renderComponent({
+        componentId: 'test',
+        schemas: mockComponents,
+        tags: mockTags
+      });
+      const componentIdPrefix = 'palette-card--patterns/component';
+      openModal(getByTestId);
+      expect(getByText('test-tag')).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
+      fireEvent.click(getByTestId('button'));
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(queryByTestId(`${componentIdPrefix}3`)).toBeNull();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(2);
     });
 
-    xit('filters by search text', () => {
-      // 1) expect that 3 cards render (component, component2, component3)
-      // 2) expect that only component2 shows up if we type component2
+    it('filters by search text', () => {
+      const { getByTestId, getByText, queryByTestId } = renderComponent({
+        componentId: 'test',
+        schemas: mockComponents,
+        tags: mockTags
+      });
+      const componentIdPrefix = 'palette-card--patterns/component';
+      openModal(getByTestId);
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
+      fireEvent.change(getByTestId('component-palette__search-input'), {
+        target: { value: 'component2' }
+      });
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(1);
+      expect(queryByTestId(`${componentIdPrefix}1`)).toBeNull();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(queryByTestId(`${componentIdPrefix}3`)).toBeNull();
     });
 
-    xit('filters by all 3', () => {
-      // 1) expect that 3 cards render (component, component2, component3)
-      // 2) expect that  only component1 shows up if we type component1 and have the tag selected
+    it('filters by tag and text combined', () => {
+      const { getByTestId, getByText, queryByTestId } = renderComponent({
+        componentId: 'test',
+        schemas: mockComponents,
+        tags: mockTags
+      });
+      const componentIdPrefix = 'palette-card--patterns/component';
+      openModal(getByTestId);
+      expect(getByText('test-tag')).toBeTruthy();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
+      fireEvent.click(getByTestId('button'));
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(2);
+      fireEvent.change(getByTestId('component-palette__search-input'), {
+        target: { value: 'component1' }
+      });
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(1);
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(queryByTestId(`${componentIdPrefix}2`)).toBeNull();
+      expect(queryByTestId(`${componentIdPrefix}3`)).toBeNull();
     });
   });
 });

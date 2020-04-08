@@ -68,7 +68,13 @@ const ComponentPalette = props => {
           <div className="component-palette__sidebar f36-background-color--element-dark">
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Search</SectionHeading>
-              <TextInput type="text" onChange={handleOnChange} width="large" value="" />
+              <TextInput
+                data-test-id="component-palette__search-input"
+                type="text"
+                onChange={handleOnChange}
+                width="large"
+                value=""
+              />
             </div>
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Component Tags</SectionHeading>
@@ -120,7 +126,9 @@ const ComponentPalette = props => {
                 })}
             </div>
           </div>
-          <div className="component-palette__collection">
+          <div
+            className="component-palette__collection"
+            data-test-id="component-palette-collection">
             {filterSchemas(props.schemas).map((schema, index) => {
               return (
                 <Card
