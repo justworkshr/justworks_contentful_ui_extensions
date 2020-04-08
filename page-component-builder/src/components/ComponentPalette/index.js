@@ -126,7 +126,9 @@ const ComponentPalette = props => {
                 })}
             </div>
           </div>
-          <div className="component-palette__collection">
+          <div
+            className="component-palette__collection"
+            data-test-id="component-palette-collection">
             {filterSchemas(props.schemas).map((schema, index) => {
               return (
                 <Card

@@ -100,13 +100,12 @@ describe('ComponentPalette', () => {
       const { getByTestId, getByText } = renderComponent({
         componentId: 'test'
       });
-
       openModal(getByTestId);
       expect(getByText('test-tag')).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
-      // query length of cards to = 3 = cards.length
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
     });
 
     it('recognizes the selected component', () => {
@@ -126,34 +125,63 @@ describe('ComponentPalette', () => {
   });
 
   describe('filtering', () => {
-    const { getByTestId, getByText } = renderComponent({
-      componentId: 'test'
-    });
-    openModal(getByTestId);
-
-    // console.log('@149', getByText('palette-card--patterns/component1'));
-    xit('filters by tag', () => {
-      // similar to lines 105 - 108
-      // 1) expect that 3 cards render (component1, component2, component3)
-      // 2) expect that component1 and component2 shows up
-    });
-
-    // fireEvent.change(getByTestId('field-name'), { // component-palette__search-input
-    // target: { value: 'new-name-value' } // change this to component1/2
-    // });
-
-    xit('filters by search text', () => {
-      // 1) expect that 3 cards render (component1, component2, component3) // render pre search
-      // 1b) component-palette__search-input .value === component2 // search input "component2"
-      // 2) expect that only component2 shows up if we type component2
+    it('filters by tag', () => {
+      const { getByTestId, getByText, queryByTestId } = renderComponent({
+        componentId: 'test',
+        schemas: mockComponents,
+        tags: mockTags
+      });
+      const componentIdPrefix = 'palette-card--patterns/component';
+      openModal(getByTestId);
+      expect(getByText('test-tag')).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}3`)).toBeTruthy();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
+      fireEvent.click(getByTestId('button'));
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(queryByTestId(`${componentIdPrefix}3`)).toBeNull();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(2);
     });
 
-    xit('filters by tag and text combined', () => {
-      // 1) expect that 3 cards render (component1, component2, component3) // render pre search
-      // select tag / check for test-tag
-      // all 3 compnonts length = 3
-      // search  input "component1"
-      // 2) expect that  only component1 shows up if we type component1 and have the tag selected
+    it('filters by search text', () => {
+      const { getByTestId, getByText, queryByTestId } = renderComponent({
+        componentId: 'test',
+        schemas: mockComponents,
+        tags: mockTags
+      });
+      const componentIdPrefix = 'palette-card--patterns/component';
+      openModal(getByTestId);
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
+      fireEvent.change(getByTestId('component-palette__search-input'), {
+        target: { value: 'component2' }
+      });
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(1);
+      expect(queryByTestId(`${componentIdPrefix}1`)).toBeNull();
+      expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
+      expect(queryByTestId(`${componentIdPrefix}3`)).toBeNull();
+    });
+
+    it('filters by tag and text combined', () => {
+      const { getByTestId, getByText, queryByTestId } = renderComponent({
+        componentId: 'test',
+        schemas: mockComponents,
+        tags: mockTags
+      });
+      const componentIdPrefix = 'palette-card--patterns/component';
+      openModal(getByTestId);
+      expect(getByText('test-tag')).toBeTruthy();
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
+      fireEvent.click(getByTestId('button'));
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(2);
+      fireEvent.change(getByTestId('component-palette__search-input'), {
+        target: { value: 'component1' }
+      });
+      expect(getByTestId('component-palette-collection').childNodes.length).toEqual(1);
+      expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
+      expect(queryByTestId(`${componentIdPrefix}2`)).toBeNull();
+      expect(queryByTestId(`${componentIdPrefix}3`)).toBeNull();
     });
   });
 });
