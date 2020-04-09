@@ -35,6 +35,7 @@ export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
         entries.push(link);
       }
     } else if (mappingObject.properties[key].type === c.MULTI_LINK_PROPERTY) {
+      if (!mappingObject.properties[key].value) return;
       mappingObject.properties[key].value.forEach(link => {
         if (isLinkOfType(linkType, link)) entries.push(link);
       });
@@ -57,6 +58,7 @@ export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
       mappingObject.properties[key].type === c.MULTI_COMPONENT_PROPERTY ||
       mappingObject.properties[key].type === c.MULTI_CONFIG_PROPERTY
     ) {
+      if (!mappingObject.properties[key].value) return;
       mappingObject.properties[key].value.forEach(component => {
         entries = [...entries, ...(extractEntries(component, linkType) || [])];
       });

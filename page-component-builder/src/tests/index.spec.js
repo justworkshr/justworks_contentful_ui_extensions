@@ -367,13 +367,13 @@ describe('App', () => {
   });
 
   describe('single config object link', () => {
-    const createSchema = (componentId, propKey, otherSchemas = []) => {
+    const createSchema = (componentId, propKey, related_to = 'test', otherSchemas = []) => {
       return mockSchemas({}, [
         mockComponentSchema(componentId, {
           ...mockComponentSchemaProperty({
             propKey,
             type: c.CONFIG_PROPERTY,
-            related_to: 'test'
+            related_to: related_to
           })
         }),
         ...otherSchemas
@@ -396,6 +396,25 @@ describe('App', () => {
 
       expect(getByTestId('component-field')).toBeTruthy();
       expect(getByTestId('component-field-blank')).toBeTruthy();
+    });
+
+    it('should not render if the schema property lacks a "related_to" field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const internalMapping = mockInternalMapping(componentId, {});
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, null);
+
+      const { queryByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        internalMapping
+      });
+
+      expect(queryByTestId('component-field')).toBeNull();
     });
 
     it('should render an entry field with value', async () => {

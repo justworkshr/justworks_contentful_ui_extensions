@@ -25,6 +25,7 @@ import MarkdownField from '../fields/MarkdownField';
 import RadioGroup from '../fields/RadioGroup';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
+import MultiLinkField from '../fields/MultiLinkField';
 import ComponentField from '../fields/ComponentField';
 
 import { isComponentPropertySingleton } from '../../utilities/index';
@@ -248,7 +249,18 @@ const ComponentEditor = props => {
                 {/* in some cases, a field can link assets OR entries */}
                 {(isEntryLink(property) || isAssetLink(property)) &&
                   renderLinkableField(propKey, property, value)}
-                {isMultiLinkProperty(property) && <div>TODO: Multi-Link Property</div>}
+                {isMultiLinkProperty(property) && (
+                  <MultiLinkField
+                    sdk={props.sdk}
+                    propKey={propKey}
+                    contentTypes={property.content_types}
+                    entries={(value || []).map(entry => {
+                      return fetchHydratedEntry(entry);
+                    })}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                  />
+                )}
 
                 {isComponentProperty(property) && (
                   <ComponentField
