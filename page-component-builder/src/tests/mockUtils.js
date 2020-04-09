@@ -91,6 +91,15 @@ export const mockEntryProperty = (key, id) => {
   };
 };
 
+export const mockMultiLinkProperty = (key, ids = []) => {
+  return {
+    [key]: {
+      type: c.LINK_PROPERTY,
+      value: ids.map(id => mockLink({ type: 'Entry', id }))
+    }
+  };
+};
+
 export const mockComponentEntryProperty = (key, id) => {
   return {
     [key]: {
