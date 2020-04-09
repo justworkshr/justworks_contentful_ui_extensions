@@ -38,7 +38,10 @@ export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
       mappingObject.properties[key].value.forEach(link => {
         if (isLinkOfType(linkType, link)) entries.push(link);
       });
-    } else if (mappingObject.properties[key].type === c.COMPONENT_PROPERTY) {
+    } else if (
+      mappingObject.properties[key].type === c.COMPONENT_PROPERTY ||
+      mappingObject.properties[key].type === c.CONFIG_PROPERTY
+    ) {
       if (isComponentPropertySingleton(mappingObject.properties[key].value)) {
         entries = [
           ...entries,
@@ -50,7 +53,10 @@ export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
       ) {
         entries.push(mappingObject.properties[key].value);
       }
-    } else if (mappingObject.properties[key].type === c.MULTI_COMPONENT_PROPERTY) {
+    } else if (
+      mappingObject.properties[key].type === c.MULTI_COMPONENT_PROPERTY ||
+      mappingObject.properties[key].type === c.MULTI_CONFIG_PROPERTY
+    ) {
       mappingObject.properties[key].value.forEach(component => {
         entries = [...entries, ...(extractEntries(component, linkType) || [])];
       });
@@ -120,20 +126,8 @@ export const getEntryContentTypeId = entry => {
   return entry.sys.contentType.sys.id;
 };
 
-export const createEntry = async (space, contentType, name, componentId = '') => {
-  let data = {
-    fields: {}
-  };
-
-  if (name) {
-    data = { ...data, ...{ fields: { name: { 'en-US': name } } } };
-  }
-
-  if (componentId) {
-    data = { ...data, ...{ fields: { componentId: { 'en-US': componentId } } } };
-  }
-
-  const newEntry = await space.createEntry(contentType, data);
+export const createEntry = async (space, contentType, fields = {}) => {
+  const newEntry = await space.createEntry(contentType, { fields });
 
   return newEntry;
 };

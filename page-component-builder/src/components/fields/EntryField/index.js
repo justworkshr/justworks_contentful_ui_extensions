@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
 
-import { TextLink } from '@contentful/forma-36-react-components';
+import {
+  TextLink,
+  Dropdown,
+  DropdownList,
+  DropdownListItem
+} from '@contentful/forma-36-react-components';
 
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
@@ -11,6 +16,9 @@ import { constructLink, getEntryContentTypeId, createEntry } from '../../../util
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
+  const [createOpen, toggleCreate] = useState(false);
+  const [linkOpen, toggleLink] = useState(false);
+
   const getContentType = () => {
     return (props.entry.sys || {}).contentType ? getEntryContentTypeId(props.entry) : null;
   };
@@ -24,9 +32,9 @@ export const EntryField = props => {
     }
   };
 
-  const handleLinkClick = async () => {
+  const handleLinkClick = async option => {
     const entry = await props.sdk.dialogs.selectSingleEntry({
-      contentTypes: props.contentTypes
+      contentTypes: [option]
     });
     updateEntry(entry);
   };
@@ -42,9 +50,8 @@ export const EntryField = props => {
     }
   };
 
-  const handleCreateClick = async () => {
-    const newEntryName = null;
-    const newEntry = await createEntry(props.sdk.space, props.contentTypes, newEntryName, null);
+  const handleCreateClick = async contentType => {
+    const newEntry = await createEntry(props.sdk.space, contentType);
 
     const navigator = await props.sdk.navigator.openEntry(newEntry.sys.id, {
       slideIn: { waitForClose: true }
@@ -74,10 +81,40 @@ export const EntryField = props => {
     } else {
       return (
         <div data-test-id="entry-field-blank" className="link-row">
-          <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
-            Create entry
-          </TextLink>
-          <TextLink onClick={handleLinkClick}>Link entry</TextLink>
+          <Dropdown
+            toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
+            onClick={() => toggleCreate(!createOpen)}
+            isOpen={createOpen}>
+            <DropdownList>
+              <DropdownListItem isTitle>Options</DropdownListItem>
+              {props.contentTypes.map((option, index) => {
+                return (
+                  <DropdownListItem
+                    key={`component-option--${index}`}
+                    onClick={() => handleCreateClick(option)}>
+                    {option}
+                  </DropdownListItem>
+                );
+              })}
+            </DropdownList>
+          </Dropdown>
+          <Dropdown
+            toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
+            onClick={() => toggleLink(!linkOpen)}
+            isOpen={linkOpen}>
+            <DropdownList>
+              <DropdownListItem isTitle>Options</DropdownListItem>
+              {props.contentTypes.map((option, index) => {
+                return (
+                  <DropdownListItem
+                    key={`component-option--${index}`}
+                    onClick={() => handleLinkClick(option)}>
+                    {option}
+                  </DropdownListItem>
+                );
+              })}
+            </DropdownList>
+          </Dropdown>
         </div>
       );
     }
@@ -95,7 +132,8 @@ EntryField.propTypes = {
   entry: PropTypes.object,
   isLoading: PropTypes.bool,
   onChange: PropTypes.func,
-  sdk: PropTypes.object
+  sdk: PropTypes.object,
+  replaceHydratedEntry: PropTypes.func
 };
 
 EntryField.defaultProps = {

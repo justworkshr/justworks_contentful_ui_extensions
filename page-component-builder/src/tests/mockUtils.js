@@ -34,6 +34,7 @@ export const mockComponentSchemaProperty = ({
   required,
   defaultProperty,
   options,
+  related_to,
   description,
   editor_type,
   assetTypes = [],
@@ -46,6 +47,7 @@ export const mockComponentSchemaProperty = ({
       editor_type,
       defaultProperty,
       description,
+      related_to,
       options,
       required,
       asset_types: assetTypes,
@@ -98,6 +100,15 @@ export const mockComponentEntryProperty = (key, id) => {
   };
 };
 
+export const mockConfigProperty = (key, id) => {
+  return {
+    [key]: {
+      type: c.CONFIG_PROPERTY,
+      value: mockLink({ type: 'Entry', id })
+    }
+  };
+};
+
 export const mockSingletonProperty = (key, componentId, properties = {}) => {
   return {
     [key]: {
@@ -122,6 +133,7 @@ export const mockTextProperty = (key, value) => {
 export const mockPrimaryEntry = ({
   name = undefined,
   componentId = undefined,
+  configObject = false,
   entries = undefined,
   assets = undefined,
   internalMapping = undefined,
@@ -131,6 +143,7 @@ export const mockPrimaryEntry = ({
   return {
     name,
     componentId,
+    configObject,
     entries,
     assets,
     internalMapping,
