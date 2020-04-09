@@ -13,6 +13,7 @@ import {
   mockAssetProperty,
   mockEntryProperty,
   mockComponentEntryProperty,
+  mockConfigProperty,
   mockTextProperty,
   mockAssetResponse,
   mockEntryResponse,
@@ -365,10 +366,60 @@ describe('App', () => {
     xit('should render an entry field with value', async () => {});
   });
 
-  xdescribe('single config object link', () => {
-    xit('should render a blank field', async () => {});
+  describe('single config object link', () => {
+    const createSchema = (componentId, propKey, otherSchemas = []) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentSchemaProperty({
+            propKey,
+            type: c.CONFIG_PROPERTY,
+            related_to: 'test'
+          })
+        }),
+        ...otherSchemas
+      ]);
+    };
 
-    xit('should render an entry field with value', async () => {});
+    it('should render a blank field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const id = '';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockConfigProperty(propKey, id)
+      });
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('component-field')).toBeTruthy();
+      expect(getByTestId('component-field-blank')).toBeTruthy();
+    });
+
+    it('should render an entry field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const id = 'prop 1 id';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockConfigProperty(propKey, id)
+      });
+
+      const sdk = mockSdk();
+      const schemas = createSchema(componentId, propKey);
+      const entries = [mockLink({ type: 'Entry', id })];
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        entries,
+        internalMapping
+      });
+
+      expect(getByTestId('component-field')).toBeTruthy();
+      expect(getByTestId('hydrated-entry-card')).toBeTruthy();
+    });
   });
 
   xdescribe('multi config object link', () => {

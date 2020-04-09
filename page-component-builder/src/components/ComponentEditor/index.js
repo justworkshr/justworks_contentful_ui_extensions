@@ -122,7 +122,6 @@ const ComponentEditor = props => {
   };
 
   const renderLinkableField = (propKey, property, value) => {
-    console.log(value);
     if (!value && isAssetLink(property) && isEntryLink(property)) {
       return (
         <div>
@@ -132,7 +131,6 @@ const ComponentEditor = props => {
             onChange={value => updatePropertyValue(propKey, value, false)}
             replaceHydratedAsset={props.replaceHydratedAsset}
           />
-
           <EntryField
             sdk={props.sdk}
             contentTypes={property.content_types}
@@ -260,7 +258,7 @@ const ComponentEditor = props => {
                     hydratedEntries={props.hydratedEntries}
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     replaceHydratedAsset={props.replaceHydratedAsset}
-                    options={property.options}
+                    property={property}
                     entry={fetchHydratedEntry(value)}
                     internalMappingInstance={
                       isComponentPropertySingleton(value)
@@ -275,7 +273,28 @@ const ComponentEditor = props => {
                 )}
                 {isMultiComponentProperty(property) && <div>TODO: Multi-Component Property</div>}
 
-                {isConfigProperty(property) && <div>TODO: Config Property</div>}
+                {isConfigProperty(property) && (
+                  <ComponentField
+                    sdk={props.sdk}
+                    schemas={props.schemas}
+                    hydratedAssets={props.hydratedAssets}
+                    hydratedEntries={props.hydratedEntries}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    replaceHydratedAsset={props.replaceHydratedAsset}
+                    property={property}
+                    entry={fetchHydratedEntry(value)}
+                    internalMappingInstance={
+                      isComponentPropertySingleton(value)
+                        ? new InternalMapping(value.componentId, value.properties)
+                        : null
+                    }
+                    onChange={(value, timeout = false) =>
+                      updatePropertyValue(propKey, value, timeout)
+                    }
+                    isLoading={!!value && !fetchHydratedEntry(value)}
+                    useConfigObjects={true}
+                  />
+                )}
                 {isMultiConfigProperty(property) && <div>TODO: Multi-Config Property</div>}
               </div>
             );

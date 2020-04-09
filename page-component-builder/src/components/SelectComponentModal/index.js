@@ -25,7 +25,8 @@ const SelectComponentModal = props => {
     setLoading(true);
     const response = await props.sdk.space.getEntries({
       content_type: c.CONTENT_TYPE_VIEW_COMPONENT,
-      'fields.componentId[in]': props.options.join(',')
+      'fields.componentId[in]': props.options.join(','),
+      'fields.configObject': props.useConfigObjects
     });
 
     setMatchingEntries(response.items);
@@ -89,7 +90,8 @@ SelectComponentModal.propTypes = {
   handleSubmit: PropTypes.func,
   handleClose: PropTypes.func,
   isShown: PropTypes.bool,
-  options: PropTypes.array
+  options: PropTypes.array,
+  useConfigObjects: PropTypes.bool
 };
 SelectComponentModal.defaultProps = {
   type: 'single',

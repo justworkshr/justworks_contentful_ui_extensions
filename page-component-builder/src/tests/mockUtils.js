@@ -34,6 +34,7 @@ export const mockComponentSchemaProperty = ({
   required,
   defaultProperty,
   options,
+  related_to,
   description,
   editor_type,
   assetTypes = [],
@@ -46,6 +47,7 @@ export const mockComponentSchemaProperty = ({
       editor_type,
       defaultProperty,
       description,
+      related_to,
       options,
       required,
       asset_types: assetTypes,
@@ -93,6 +95,15 @@ export const mockComponentEntryProperty = (key, id) => {
   return {
     [key]: {
       type: c.COMPONENT_PROPERTY,
+      value: mockLink({ type: 'Entry', id })
+    }
+  };
+};
+
+export const mockConfigProperty = (key, id) => {
+  return {
+    [key]: {
+      type: c.CONFIG_PROPERTY,
       value: mockLink({ type: 'Entry', id })
     }
   };
