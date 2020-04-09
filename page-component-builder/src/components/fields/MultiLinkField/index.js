@@ -85,7 +85,7 @@ export const MultiLinkField = props => {
   };
   return (
     <div className="multi-link-field" data-test-id="multi-link-field">
-      <div className="multi-link-field--links">{renderEntryCards()}</div>
+      <div data-test-id="multi-link-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">
         <Dropdown
           toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
