@@ -128,6 +128,10 @@ const mockObject = (linkType = 'Entry') => {
             }
           }
         }
+      },
+      testMultiComponent2: {
+        type: 'multi-component',
+        value: [mockLink({ id: '10a', type: linkType }), mockLink({ id: '10b', type: linkType })]
       }
     }
   };
@@ -137,13 +141,13 @@ describe('extractEntries', () => {
   it('loads entries from link, multi-link, component, multi-component properties, config, and multi-config properties', () => {
     const entries = extractEntries(mockObject('Entry'), 'Entry');
 
-    expect(entries.length).toEqual(10);
+    expect(entries.length).toEqual(12);
     expect(entries.every(e => e.sys.linkType === 'Entry')).toEqual(true);
   });
 
   it('loads assets from link, multi-link, component, multi-component properties, config, and multi-config properties', () => {
     const assets = extractEntries(mockObject('Asset'), 'Asset');
-    expect(assets.length).toEqual(10);
+    expect(assets.length).toEqual(12);
     expect(assets.every(e => e.sys.linkType === 'Asset')).toEqual(true);
   });
 });

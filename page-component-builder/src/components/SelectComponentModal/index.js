@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../constants';
 
-import { Modal, TextInput } from '@contentful/forma-36-react-components';
+import { Button, Modal, TextInput } from '@contentful/forma-36-react-components';
 import HydratedEntryCard from '../cards/HydratedEntryCard';
 
 import './style.scss';
@@ -12,11 +12,13 @@ const SelectComponentModal = props => {
   const [isCompleted, setCompleted] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [matchingEntries, setMatchingEntries] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   const onClose = () => {
     setCompleted(false);
     setLoading(false);
     setMatchingEntries([]);
+    setSelected([]);
     props.handleClose();
   };
 
@@ -44,6 +46,14 @@ const SelectComponentModal = props => {
         props.handleSubmit(value);
         onClose();
       };
+    } else if (props.type === 'multiple') {
+      return value => {
+        if (selected.includes(value)) {
+          setSelected(selected.filter(e => e.sys.id !== value.sys.id));
+        } else {
+          setSelected([...selected, value]);
+        }
+      };
     }
   };
 
@@ -52,7 +62,7 @@ const SelectComponentModal = props => {
       className="select-component-modal"
       onClose={onClose}
       isShown={props.isShown}
-      title={'Select an existing view component'}
+      title={'Insert existing view components'}
       size="large">
       <div className="select-component-modal__top f36-padding-bottom--m">
         <p>
@@ -76,10 +86,27 @@ const SelectComponentModal = props => {
               contentType={entry.fields.componentId['en-US']}
               entry={entry}
               onClick={() => getOnClickFunction()(entry)}
+              selected={selected.includes(entry)}
             />
           );
         })}
       </div>
+      {props.type === 'multiple' && (
+        <div className="select-component-modal__actions">
+          <Button
+            className="f36-margin-right--m"
+            buttonType="positive"
+            onClick={() => {
+              props.handleSubmit(selected);
+              onClose();
+            }}>
+            Submit
+          </Button>
+          <Button buttonType="muted" onClick={onClose}>
+            Cancel
+          </Button>
+        </div>
+      )}
     </Modal>
   );
 };
