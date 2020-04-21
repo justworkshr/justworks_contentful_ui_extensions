@@ -127,6 +127,15 @@ export const mockConfigProperty = (key, id) => {
   };
 };
 
+export const mockMultiConfigProperty = (key, ids = []) => {
+  return {
+    [key]: {
+      type: c.MULTI_CONFIG_PROPERTY,
+      value: ids.map(id => mockLink({ type: 'Entry', id }))
+    }
+  };
+};
+
 export const mockSingletonProperty = (key, componentId, properties = {}) => {
   return {
     [key]: {

@@ -281,7 +281,7 @@ const ComponentEditor = props => {
                   <MultiComponentField
                     sdk={props.sdk}
                     propKey={propKey}
-                    options={property.options}
+                    options={property.related_to}
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}
@@ -312,7 +312,19 @@ const ComponentEditor = props => {
                     useConfigObjects={true}
                   />
                 )}
-                {isMultiConfigProperty(property) && <div>TODO: Multi-Config Property</div>}
+                {isMultiConfigProperty(property) && (
+                  <MultiComponentField
+                    sdk={props.sdk}
+                    propKey={propKey}
+                    options={[property.related_to]}
+                    entries={(value || []).map(entry => {
+                      return fetchHydratedEntry(entry);
+                    })}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    useConfigObjects={true}
+                  />
+                )}
                 <HelpText className="component-editor__hint f36-margin-top--xs">
                   {property.description || 'help text'}
                 </HelpText>
