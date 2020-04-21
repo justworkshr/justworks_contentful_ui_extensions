@@ -12,7 +12,7 @@ import ComponentEditor from './components/ComponentEditor';
 import {
   DisplayText,
   Paragraph,
-  SectionHeading,
+  FormLabel,
   TextInput,
   Textarea,
   Button,
@@ -34,6 +34,7 @@ import {
   linksToFetch,
   newInternalMappingFromSchema
 } from './utilities';
+import { schemaTitle } from './utilities/copyUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
@@ -286,59 +287,90 @@ export class PageComponentBuilder extends React.Component {
   }
 
   render() {
+    const schema = this.currentSchema();
     return (
       <Form className="editor f36-margin--l">
         <DisplayText>Entry extension demo</DisplayText>
         <Paragraph>
           This demo uses a single UI Extension to render the whole editor for an entry.
         </Paragraph>
-        <SectionHeading>Name</SectionHeading>
-        <TextInput
-          testId="field-name"
-          onChange={this.onNameChangeHandler}
-          value={this.state.name}
-        />
-        <SectionHeading>Component ID</SectionHeading>
-        <TextInput
-          testId="field-componentId"
-          onChange={e => this.onComponentIdChangeHandler(e.target.value)}
-          value={this.state.componentId}
-        />
-        {// Only allow palette when this entry isn't serving as a config object
-        !this.state.configObject && (
-          <ComponentPalette
-            componentId={this.state.componentId}
-            onChange={this.onComponentIdChangeHandler}
-            schemas={this.state.schemaData.components}
-            tags={this.state.schemaData.tags}
+        <div className="component-editor__field">
+          <FormLabel htmlFor="field-name">Name</FormLabel>
+          <TextInput
+            id="field-name"
+            testId="field-name"
+            onChange={this.onNameChangeHandler}
+            value={this.state.name}
           />
-        )}
+        </div>
 
-        <SectionHeading>Config Object</SectionHeading>
-        <RadioGroup
-          name="field-configObject"
-          options={[true, false]}
-          onChange={value => this.onConfigObjectChangeHandler(value)}
-          value={this.state.configObject}
-        />
-        <SectionHeading>Entries</SectionHeading>
-        <Textarea testId="field-entries" value={this.state.entries.map(e => e.sys.id).join(', ')} />
+        <div className="component-editor__field">
+          <FormLabel htmlFor="field-componentId">Component ID</FormLabel>
+          <TextInput
+            id="field-componentId"
+            testId="field-componentId"
+            className="f36-margin-bottom--m"
+            onChange={e => this.onComponentIdChangeHandler(e.target.value)}
+            value={this.state.componentId}
+          />
+          {// Only allow palette when this entry isn't serving as a config object
+          !this.state.configObject && (
+            <ComponentPalette
+              componentId={this.state.componentId}
+              onChange={this.onComponentIdChangeHandler}
+              schemas={this.state.schemaData.components}
+              tags={this.state.schemaData.tags}
+            />
+          )}
+        </div>
 
-        <SectionHeading>Assets</SectionHeading>
-        <Textarea testId="field-assets" value={this.state.assets.map(a => a.sys.id).join(', ')} />
-        <SectionHeading>Internal Mapping</SectionHeading>
-        <Textarea
-          testId="field-internalMapping"
-          onChange={e => this.updateInternalMapping(e.target.value)}
-          value={this.state.internalMapping}
-        />
+        <div className="component-editor__field d-none">
+          <FormLabel htmlFor="field-configObject">Config Object</FormLabel>
+          <RadioGroup
+            id="field-configObject"
+            name="field-configObject"
+            options={[true, false]}
+            onChange={value => this.onConfigObjectChangeHandler(value)}
+            value={this.state.configObject}
+          />
+        </div>
 
-        <SectionHeading>Is Valid?</SectionHeading>
-        <TextInput
-          testId="field-isValid"
-          onChange={this.onIsValidChangeHandler}
-          value={this.state.isValid}
-        />
+        <div className="component-editor__field d-none">
+          <Textarea
+            testId="field-entries"
+            value={this.state.entries.map(e => e.sys.id).join(', ')}
+          />
+        </div>
+
+        <div className="component-editor__field d-none">
+          <FormLabel htmlFor="field-assets">Assets</FormLabel>
+          <Textarea
+            id="field-assets"
+            testId="field-assets"
+            value={this.state.assets.map(a => a.sys.id).join(', ')}
+          />
+        </div>
+
+        <div className="component-editor__field d-none">
+          <FormLabel htmlFor="field-internalMapping">Internal Mapping</FormLabel>
+          <Textarea
+            id="field-internalMapping"
+            testId="field-internalMapping"
+            onChange={e => this.updateInternalMapping(e.target.value)}
+            value={this.state.internalMapping}
+          />
+        </div>
+
+        <div className="component-editor__field d-none">
+          <FormLabel htmlFor="field-isValid">Is Valid?</FormLabel>
+          <TextInput
+            id="field-isValid"
+            testId="field-isValid"
+            onChange={this.onIsValidChangeHandler}
+            value={this.state.isValid}
+          />
+        </div>
+
         <ComponentEditor
           sdk={this.props.sdk}
           schemas={this.state.schemaData.components}
@@ -350,7 +382,8 @@ export class PageComponentBuilder extends React.Component {
           internalMappingInstance={
             new InternalMapping(this.state.componentId, this.parseInternalMapping().properties)
           }
-          schema={this.currentSchema()}
+          schema={schema}
+          title={schemaTitle(schema)}
         />
       </Form>
     );

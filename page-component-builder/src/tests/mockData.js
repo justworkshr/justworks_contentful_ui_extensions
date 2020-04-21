@@ -1356,7 +1356,7 @@ export const mockSchemas = {
             ],
             description: 'May select any available icon.',
             related_to: 'elements/icon',
-            editor_type: 'short-text-editor',
+            editor_type: 'dropdown',
             hidden: false
           },
           href: {
@@ -5129,7 +5129,7 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Falgolia_search_results',
           title: 'Algolia Search Results Pattern',
           description: 'Description of component.',
-          editor_role: 'component',
+          editor_role: 'pattern',
           tags: [],
           extension_of: null
         },

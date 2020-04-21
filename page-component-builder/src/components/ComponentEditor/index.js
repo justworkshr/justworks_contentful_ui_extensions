@@ -2,19 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../constants';
 
-import {
-  HelpText,
-  TextLink,
-  SectionHeading,
-  Subheading,
-  Paragraph
-} from '@contentful/forma-36-react-components';
+import { HelpText, TextLink, Subheading, FormLabel } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
 import LongTextField from '../fields/LongTextField';
 import MarkdownField from '../fields/MarkdownField';
 
 import RadioGroup from '../fields/RadioGroup';
+import DropdownField from '../fields/DropdownField';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
@@ -23,6 +18,8 @@ import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
 
 import { isComponentPropertySingleton } from '../../utilities/index';
+import { parse_underscore } from '../../utilities/copyUtils';
+
 import InternalMapping from '../../classes/InternalMapping';
 
 import './style.scss';
@@ -56,10 +53,19 @@ const ComponentEditor = props => {
     return property.type === c.BOOL_PROPERTY;
   };
 
-  const isOptionTextField = property => {
+  const isRadioTextField = property => {
     return (
       property.type === c.TEXT_PROPERTY &&
       property.editor_type === c.SHORT_TEXT_EDITOR &&
+      property.options &&
+      !!property.options.length
+    );
+  };
+
+  const isDropdownTextField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.DROPDOWN_EDITOR &&
       property.options &&
       !!property.options.length
     );
@@ -180,7 +186,7 @@ const ComponentEditor = props => {
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
-        <Subheading>{(props.internalMappingInstance || {}).componentId}</Subheading>
+        <Subheading>{props.title}</Subheading>
         {props.schema.meta && (
           <HelpText>
             <TextLink
@@ -203,8 +209,10 @@ const ComponentEditor = props => {
                 key={`component-editor-field--${propKey}`}
                 data-test-id="editor-field"
                 className="component-editor__field f36-margin-bottom--l">
-                <div className="component-editor__field-heading f36-margin-bottom--s">
-                  <Paragraph>{propKey}</Paragraph>
+                <div className="component-editor__field-heading">
+                  <FormLabel className="component-editor__field-label" required={property.required}>
+                    {parse_underscore(propKey) || '<label missing>'}
+                  </FormLabel>
                 </div>
                 {isShortTextField(property) && (
                   <ShortTextField
@@ -233,8 +241,16 @@ const ComponentEditor = props => {
                     value={value}
                   />
                 )}
-                {isOptionTextField(property) && (
+                {isRadioTextField(property) && (
                   <RadioGroup
+                    propKey={propKey}
+                    options={property.options}
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    value={value}
+                  />
+                )}
+                {isDropdownTextField(property) && (
+                  <DropdownField
                     propKey={propKey}
                     options={property.options}
                     onChange={value => updatePropertyValue(propKey, value, true)}
@@ -281,7 +297,7 @@ const ComponentEditor = props => {
                   <MultiComponentField
                     sdk={props.sdk}
                     propKey={propKey}
-                    options={property.related_to}
+                    options={property.options}
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}
@@ -345,7 +361,8 @@ ComponentEditor.propTypes = {
   updateInternalMapping: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
   replaceHydratedAsset: PropTypes.func,
-  schema: PropTypes.object
+  schema: PropTypes.object,
+  title: PropTypes.string
 };
 ComponentEditor.defaultProps = {
   hydratedAssets: [],

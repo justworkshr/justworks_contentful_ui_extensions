@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../constants';
+import { schemaTitle } from '../../utilities/copyUtils';
 
 import {
   Button,
@@ -20,7 +21,7 @@ const ComponentPalette = props => {
   const handleOnChange = e => setSearchText(e.target.value);
 
   const filterBySearch = schemas => {
-    return searchText ? schemas.filter(schema => schema.meta.id.includes(searchText)) : schemas;
+    return searchText ? schemas.filter(schema => schema.meta.title.includes(searchText)) : schemas;
   };
 
   const filterByTag = schemas => {
@@ -137,7 +138,7 @@ const ComponentPalette = props => {
                   className="component-palette__schema"
                   selected={schema.meta.id === props.componentId}
                   onClick={() => handleSchemaClick(schema)}>
-                  {schema.meta.id || 'Schema'}
+                  {schemaTitle(schema)}
                 </Card>
               );
             })}
