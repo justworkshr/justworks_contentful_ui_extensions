@@ -56,6 +56,41 @@ const mockObject = (linkType = 'Entry') => {
                 mockLink({ id: '3b', type: linkType })
               ]
             },
+            testConfigObjectWithMulti: {
+              type: 'config',
+              value: {
+                componentId: 'components/config1',
+                properties: {
+                  testComponentEntry3: {
+                    type: 'link',
+                    value: mockLink({ id: '7', type: linkType })
+                  },
+                  'multi-component': {
+                    type: 'multi-config',
+                    value: [
+                      {
+                        componentId: 'mconfig1',
+                        properties: {
+                          prop1: {
+                            type: 'link',
+                            value: mockLink({ id: '8', type: linkType })
+                          }
+                        }
+                      },
+                      {
+                        componentId: 'mconfig2',
+                        properties: {
+                          prop1: {
+                            type: 'link',
+                            value: mockLink({ id: '9', type: linkType })
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
             testComponentEntry2: {
               type: 'component',
               value: {
@@ -99,16 +134,16 @@ const mockObject = (linkType = 'Entry') => {
 };
 
 describe('extractEntries', () => {
-  it('loads entries from link, multi-link, component, and mulit-component properties', () => {
+  it('loads entries from link, multi-link, component, multi-component properties, config, and multi-config properties', () => {
     const entries = extractEntries(mockObject('Entry'), 'Entry');
 
-    expect(entries.length).toEqual(7);
+    expect(entries.length).toEqual(10);
     expect(entries.every(e => e.sys.linkType === 'Entry')).toEqual(true);
   });
 
-  it('loads assets from link, multi-link, component, and mulit-component properties', () => {
+  it('loads assets from link, multi-link, component, multi-component properties, config, and multi-config properties', () => {
     const assets = extractEntries(mockObject('Asset'), 'Asset');
-    expect(assets.length).toEqual(7);
+    expect(assets.length).toEqual(10);
     expect(assets.every(e => e.sys.linkType === 'Asset')).toEqual(true);
   });
 });

@@ -20,7 +20,7 @@ const ComponentField = props => {
   const [createOpen, toggleCreate] = useState(false);
   const [linkOpen, toggleLink] = useState(false);
   const [linkModalOpen, toggleLinkModal] = useState(false);
-  const [modalOptions, setModalOptions] = useState(props.options);
+  const [modalOptions, setModalOptions] = useState([]);
 
   const updateEntry = (value, timeout = false) => {
     props.onChange(value, timeout);
@@ -43,12 +43,14 @@ const ComponentField = props => {
   };
 
   const handleCreateClick = async componentId => {
-    const newEntry = await createEntry(
-      props.sdk.space,
-      c.CONTENT_TYPE_VIEW_COMPONENT,
-      null,
-      componentId
-    );
+    const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
+      componentId: {
+        'en-US': componentId
+      },
+      configObject: {
+        'en-US': props.useConfigObjects
+      }
+    });
 
     const navigator = await props.sdk.navigator.openEntry(newEntry.sys.id, {
       slideIn: { waitForClose: true }
@@ -74,6 +76,17 @@ const ComponentField = props => {
     if (navigation.navigated) {
       props.replaceHydratedEntry(navigation.entity);
     }
+  };
+
+  const getOptions = () => {
+    let options = [];
+    if (props.useConfigObjects) {
+      options = [props.property.related_to];
+    } else {
+      options = props.property.options;
+    }
+
+    return options || [];
   };
 
   const renderElement = () => {
@@ -120,31 +133,34 @@ const ComponentField = props => {
             handleSubmit={handleModalSubmit}
             isShown={linkModalOpen}
             options={modalOptions}
+            useConfigObjects={props.useConfigObjects}
           />
-          <Dropdown
-            toggleElement={<TextLink className="f36-margin-right--s">Create singleton</TextLink>}
-            onClick={() => toggleSingleton(!singletonOpen)}
-            isOpen={singletonOpen}>
-            <DropdownList>
-              <DropdownListItem isTitle>Options</DropdownListItem>
-              {props.options.map((option, index) => {
-                return (
-                  <DropdownListItem
-                    key={`component-option--${index}`}
-                    onClick={() => handleCreateSingletonClick(option)}>
-                    {option}
-                  </DropdownListItem>
-                );
-              })}
-            </DropdownList>
-          </Dropdown>
+          {!props.useConfigObjects && (
+            <Dropdown
+              toggleElement={<TextLink className="f36-margin-right--s">Create singleton</TextLink>}
+              onClick={() => toggleSingleton(!singletonOpen)}
+              isOpen={singletonOpen}>
+              <DropdownList>
+                <DropdownListItem isTitle>Options</DropdownListItem>
+                {getOptions().map((option, index) => {
+                  return (
+                    <DropdownListItem
+                      key={`component-option--${index}`}
+                      onClick={() => handleCreateSingletonClick(option)}>
+                      {option}
+                    </DropdownListItem>
+                  );
+                })}
+              </DropdownList>
+            </Dropdown>
+          )}
           <Dropdown
             toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
             onClick={() => toggleCreate(!createOpen)}
             isOpen={createOpen}>
             <DropdownList>
               <DropdownListItem isTitle>Options</DropdownListItem>
-              {props.options.map((option, index) => {
+              {getOptions().map((option, index) => {
                 return (
                   <DropdownListItem
                     key={`component-option--${index}`}
@@ -161,7 +177,7 @@ const ComponentField = props => {
             isOpen={linkOpen}>
             <DropdownList>
               <DropdownListItem isTitle>Options</DropdownListItem>
-              {props.options.map((option, index) => {
+              {getOptions().map((option, index) => {
                 return (
                   <DropdownListItem
                     key={`component-option--${index}`}
@@ -190,21 +206,23 @@ ComponentField.propTypes = {
   hydratedEntries: PropTypes.array,
   replaceHydratedAsset: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
-  options: PropTypes.array,
+  property: PropTypes.object,
   entry: PropTypes.object,
   internalMappingInstance: PropTypes.object,
   isLoading: PropTypes.bool,
   onChange: PropTypes.func,
-  sdk: PropTypes.object
+  sdk: PropTypes.object,
+  useConfigObjects: PropTypes.bool
 };
 ComponentField.defaultProps = {
   hydratedAssets: [],
   hydratedEntries: [],
   schemas: [],
-  options: [],
+  property: {},
   entry: {},
   internalMappingInstance: null,
-  sdk: {}
+  sdk: {},
+  useConfigObjects: false
 };
 
 export default ComponentField;

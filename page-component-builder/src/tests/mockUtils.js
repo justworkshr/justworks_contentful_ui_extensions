@@ -34,6 +34,7 @@ export const mockComponentSchemaProperty = ({
   required,
   defaultProperty,
   options,
+  related_to,
   description,
   editor_type,
   assetTypes = [],
@@ -46,6 +47,7 @@ export const mockComponentSchemaProperty = ({
       editor_type,
       defaultProperty,
       description,
+      related_to,
       options,
       required,
       asset_types: assetTypes,
@@ -89,10 +91,28 @@ export const mockEntryProperty = (key, id) => {
   };
 };
 
+export const mockMultiLinkProperty = (key, ids = []) => {
+  return {
+    [key]: {
+      type: c.LINK_PROPERTY,
+      value: ids.map(id => mockLink({ type: 'Entry', id }))
+    }
+  };
+};
+
 export const mockComponentEntryProperty = (key, id) => {
   return {
     [key]: {
       type: c.COMPONENT_PROPERTY,
+      value: mockLink({ type: 'Entry', id })
+    }
+  };
+};
+
+export const mockConfigProperty = (key, id) => {
+  return {
+    [key]: {
+      type: c.CONFIG_PROPERTY,
       value: mockLink({ type: 'Entry', id })
     }
   };
@@ -122,6 +142,7 @@ export const mockTextProperty = (key, value) => {
 export const mockPrimaryEntry = ({
   name = undefined,
   componentId = undefined,
+  configObject = false,
   entries = undefined,
   assets = undefined,
   internalMapping = undefined,
@@ -131,6 +152,7 @@ export const mockPrimaryEntry = ({
   return {
     name,
     componentId,
+    configObject,
     entries,
     assets,
     internalMapping,
