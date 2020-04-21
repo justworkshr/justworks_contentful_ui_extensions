@@ -17,3 +17,7 @@ div {
 .entry-card {
   max-width: 640px;
 }
+
+.d-none {
+  display: none;
+}

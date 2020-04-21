@@ -2,13 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../constants';
 
-import {
-  HelpText,
-  TextLink,
-  SectionHeading,
-  Subheading,
-  Paragraph
-} from '@contentful/forma-36-react-components';
+import { HelpText, TextLink, Subheading, FormLabel } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
 import LongTextField from '../fields/LongTextField';
@@ -23,6 +17,8 @@ import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
 
 import { isComponentPropertySingleton } from '../../utilities/index';
+import { schemaTitle, parse_underscore } from '../../utilities/copyUtils';
+
 import InternalMapping from '../../classes/InternalMapping';
 
 import './style.scss';
@@ -180,7 +176,7 @@ const ComponentEditor = props => {
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
-        <Subheading>{(props.internalMappingInstance || {}).componentId}</Subheading>
+        <Subheading>{schemaTitle(props.schema)}</Subheading>
         {props.schema.meta && (
           <HelpText>
             <TextLink
@@ -203,8 +199,10 @@ const ComponentEditor = props => {
                 key={`component-editor-field--${propKey}`}
                 data-test-id="editor-field"
                 className="component-editor__field f36-margin-bottom--l">
-                <div className="component-editor__field-heading f36-margin-bottom--s">
-                  <Paragraph>{propKey}</Paragraph>
+                <div className="component-editor__field-heading">
+                  <FormLabel className="component-editor__field-label" required={property.required}>
+                    {parse_underscore(propKey)}
+                  </FormLabel>
                 </div>
                 {isShortTextField(property) && (
                   <ShortTextField
@@ -281,7 +279,7 @@ const ComponentEditor = props => {
                   <MultiComponentField
                     sdk={props.sdk}
                     propKey={propKey}
-                    options={property.related_to}
+                    options={property.options}
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}
