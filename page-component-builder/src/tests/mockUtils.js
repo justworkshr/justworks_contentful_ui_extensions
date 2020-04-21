@@ -109,11 +109,29 @@ export const mockComponentEntryProperty = (key, id) => {
   };
 };
 
+export const mockMultiComponentProperty = (key, ids = []) => {
+  return {
+    [key]: {
+      type: c.MULTI_COMPONENT_PROPERTY,
+      value: ids.map(id => mockLink({ type: 'Entry', id }))
+    }
+  };
+};
+
 export const mockConfigProperty = (key, id) => {
   return {
     [key]: {
       type: c.CONFIG_PROPERTY,
       value: mockLink({ type: 'Entry', id })
+    }
+  };
+};
+
+export const mockMultiConfigProperty = (key, ids = []) => {
+  return {
+    [key]: {
+      type: c.MULTI_CONFIG_PROPERTY,
+      value: ids.map(id => mockLink({ type: 'Entry', id }))
     }
   };
 };

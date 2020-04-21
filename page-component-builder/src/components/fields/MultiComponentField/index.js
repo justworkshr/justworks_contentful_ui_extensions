@@ -10,14 +10,18 @@ import {
   DropdownListItem
 } from '@contentful/forma-36-react-components';
 
+import SelectComponentModal from '../../SelectComponentModal';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
-import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
+import { constructLink, createEntry } from '../../../utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
-export const MultiLinkField = props => {
+export const MultiComponentField = props => {
   const [createOpen, toggleCreate] = useState(false);
   const [linkOpen, toggleLink] = useState(false);
+  const [linkModalOpen, toggleLinkModal] = useState(false);
+  const [modalOptions, setModalOptions] = useState([]);
+
   const [dragged, setDragged] = useState(undefined);
   const [draggedOver, setDraggedOver] = useState(undefined);
 
@@ -31,6 +35,7 @@ export const MultiLinkField = props => {
 
   const onDragEnd = e => {
     e.preventDefault();
+
     // checks if a dragged and a draggedOver exist and ensures dragged isn't same as draggedOver
     if (
       (dragged !== 0 && !dragged) ||
@@ -46,17 +51,12 @@ export const MultiLinkField = props => {
     links[dragged] = links[draggedOver];
     links[draggedOver] = draggedEntry;
     props.onChange(links.map(entry => constructLink(entry)));
+
     resetDrag();
   };
-
   const resetDrag = () => {
     setDragged(undefined);
     setDraggedOver(undefined);
-  };
-
-  const getContentType = entry => {
-    if (!entry) return;
-    return (entry.sys || {}).contentType ? getEntryContentTypeId(entry) : null;
   };
 
   const updateEntry = (entries = []) => {
@@ -66,13 +66,19 @@ export const MultiLinkField = props => {
     } else {
       props.onChange([]);
     }
+
+    resetDrag();
   };
 
-  const handleLinkClick = async option => {
-    const entries = await props.sdk.dialogs.selectMultipleEntries({
-      contentTypes: [option]
-    });
-    updateEntry([...props.entries, ...entries]);
+  const handleModalSubmit = (entries = []) => {
+    if (entries.length) {
+      updateEntry([...props.entries, ...entries]);
+    }
+  };
+
+  const handleLinkClick = componentId => {
+    setModalOptions([componentId]);
+    toggleLinkModal(true);
   };
 
   const handleEditClick = async entry => {
@@ -86,20 +92,28 @@ export const MultiLinkField = props => {
     }
   };
 
-  const handleRemoveClick = entry => {
-    const entries = props.entries.filter(e => e.sys.id !== entry.sys.id);
+  const handleRemoveClick = index => {
+    let entries = [...props.entries.slice(0, index), ...props.entries.slice(index + 1)];
     updateEntry(entries);
   };
 
-  const handleCreateClick = async contentType => {
-    const newEntry = await createEntry(props.sdk.space, contentType);
+  const handleCreateClick = async componentId => {
+    const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
+      componentId: {
+        'en-US': componentId
+      },
+      configObject: {
+        'en-US': props.useConfigObjects
+      }
+    });
 
     const navigator = await props.sdk.navigator.openEntry(newEntry.sys.id, {
       slideIn: { waitForClose: true }
     });
 
     if (navigator.navigated) {
-      updateEntry([...props.entries, navigator.entity]);
+      const entries = [...props.entries, navigator.entity];
+      updateEntry(entries);
     }
   };
 
@@ -110,11 +124,13 @@ export const MultiLinkField = props => {
           key={`${props.propKey}-entries--${index}`}
           index={index}
           className="f36-margin-bottom--xs"
-          contentType={getContentType(entry)}
+          contentType={`${
+            entry ? (entry.fields.componentId || {})['en-US'] : c.CONTENT_TYPE_VIEW_COMPONENT
+          }`}
           isLoading={!(entry && entry.fields)}
           onClick={() => handleEditClick(entry)}
           handleEditClick={() => handleEditClick(entry)}
-          handleRemoveClick={() => handleRemoveClick(entry)}
+          handleRemoveClick={() => handleRemoveClick(index)}
           draggable={true}
           isDragActive={index === dragged || index === draggedOver}
           onDragStart={onDragStart}
@@ -125,9 +141,19 @@ export const MultiLinkField = props => {
       );
     });
   };
+
   return (
-    <div className="multi-link-field" data-test-id="multi-link-field">
-      <div data-test-id="multi-link-field--links">{renderEntryCards()}</div>
+    <div className="multi-component-field" data-test-id="multi-component-field">
+      <SelectComponentModal
+        sdk={props.sdk}
+        handleClose={() => toggleLinkModal(false)}
+        handleSubmit={handleModalSubmit}
+        isShown={linkModalOpen}
+        options={modalOptions}
+        useConfigObjects={props.useConfigObjects}
+        type={'multiple'}
+      />
+      <div data-test-id="multi-component-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">
         <Dropdown
           toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
@@ -135,7 +161,7 @@ export const MultiLinkField = props => {
           isOpen={createOpen}>
           <DropdownList>
             <DropdownListItem isTitle>Options</DropdownListItem>
-            {props.contentTypes.map((option, index) => {
+            {props.options.map((option, index) => {
               return (
                 <DropdownListItem
                   key={`component-option--${index}`}
@@ -152,7 +178,7 @@ export const MultiLinkField = props => {
           isOpen={linkOpen}>
           <DropdownList>
             <DropdownListItem isTitle>Options</DropdownListItem>
-            {props.contentTypes.map((option, index) => {
+            {props.options.map((option, index) => {
               return (
                 <DropdownListItem
                   key={`component-option--${index}`}
@@ -168,18 +194,20 @@ export const MultiLinkField = props => {
   );
 };
 
-MultiLinkField.propTypes = {
-  contentTypes: PropTypes.array,
+MultiComponentField.propTypes = {
+  options: PropTypes.array,
   entries: PropTypes.array,
   onChange: PropTypes.func,
   sdk: PropTypes.object,
   replaceHydratedEntry: PropTypes.func,
-  propKey: PropTypes.string
+  propKey: PropTypes.string,
+  useConfigObjects: PropTypes.bool
 };
 
-MultiLinkField.defaultProps = {
-  contentTypes: [],
-  entries: []
+MultiComponentField.defaultProps = {
+  options: [],
+  entries: [],
+  useConfigObjects: false
 };
 
-export default MultiLinkField;
+export default MultiComponentField;

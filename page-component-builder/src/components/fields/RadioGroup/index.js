@@ -42,7 +42,7 @@ RadioGroup.propTypes = {
   onChange: PropTypes.func,
   options: PropTypes.array,
   propKey: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 RadioGroup.defaultProps = {
   options: []

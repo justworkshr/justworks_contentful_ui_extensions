@@ -3,19 +3,11 @@ import PropTypes from 'prop-types';
 import * as c from '../../constants';
 
 import {
-  DisplayText,
-  Paragraph,
   HelpText,
   TextLink,
   SectionHeading,
   Subheading,
-  TextInput,
-  Textarea,
-  Button,
-  Modal,
-  FieldGroup,
-  RadioButtonField,
-  Form
+  Paragraph
 } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
@@ -26,10 +18,14 @@ import RadioGroup from '../fields/RadioGroup';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
+
 import ComponentField from '../fields/ComponentField';
+import MultiComponentField from '../fields/MultiComponentField';
 
 import { isComponentPropertySingleton } from '../../utilities/index';
 import InternalMapping from '../../classes/InternalMapping';
+
+import './style.scss';
 
 const ComponentEditor = props => {
   const isShortTextField = property => {
@@ -208,8 +204,7 @@ const ComponentEditor = props => {
                 data-test-id="editor-field"
                 className="component-editor__field f36-margin-bottom--l">
                 <div className="component-editor__field-heading f36-margin-bottom--s">
-                  <SectionHeading>{propKey}</SectionHeading>
-                  <HelpText>{property.description || 'help text'}</HelpText>
+                  <Paragraph>{propKey}</Paragraph>
                 </div>
                 {isShortTextField(property) && (
                   <ShortTextField
@@ -261,7 +256,6 @@ const ComponentEditor = props => {
                     replaceHydratedEntry={props.replaceHydratedEntry}
                   />
                 )}
-
                 {isComponentProperty(property) && (
                   <ComponentField
                     sdk={props.sdk}
@@ -283,8 +277,19 @@ const ComponentEditor = props => {
                     isLoading={!!value && !fetchHydratedEntry(value)}
                   />
                 )}
-                {isMultiComponentProperty(property) && <div>TODO: Multi-Component Property</div>}
-
+                {isMultiComponentProperty(property) && (
+                  <MultiComponentField
+                    sdk={props.sdk}
+                    propKey={propKey}
+                    options={property.related_to}
+                    entries={(value || []).map(entry => {
+                      return fetchHydratedEntry(entry);
+                    })}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    useConfigObjects={false}
+                  />
+                )}
                 {isConfigProperty(property) && (
                   <ComponentField
                     sdk={props.sdk}
@@ -307,7 +312,22 @@ const ComponentEditor = props => {
                     useConfigObjects={true}
                   />
                 )}
-                {isMultiConfigProperty(property) && <div>TODO: Multi-Config Property</div>}
+                {isMultiConfigProperty(property) && (
+                  <MultiComponentField
+                    sdk={props.sdk}
+                    propKey={propKey}
+                    options={[property.related_to]}
+                    entries={(value || []).map(entry => {
+                      return fetchHydratedEntry(entry);
+                    })}
+                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    replaceHydratedEntry={props.replaceHydratedEntry}
+                    useConfigObjects={true}
+                  />
+                )}
+                <HelpText className="component-editor__hint f36-margin-top--xs">
+                  {property.description || 'help text'}
+                </HelpText>
               </div>
             );
           })}

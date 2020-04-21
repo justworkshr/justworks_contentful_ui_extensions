@@ -60,7 +60,11 @@ export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
     ) {
       if (!mappingObject.properties[key].value) return;
       mappingObject.properties[key].value.forEach(component => {
-        entries = [...entries, ...(extractEntries(component, linkType) || [])];
+        if (isComponentPropertySingleton(component)) {
+          entries = [...entries, ...(extractEntries(component, linkType) || [])];
+        } else {
+          entries.push(component);
+        }
       });
     }
   });

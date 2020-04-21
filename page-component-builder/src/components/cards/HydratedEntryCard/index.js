@@ -18,7 +18,14 @@ const HydratedEntryCard = props => {
       }
       contentType={props.contentType}
       status={getStatus(props.entry)}
-      withDragHandle={false}
+      selected={props.selected}
+      draggable={props.draggable}
+      withDragHandle={props.draggable}
+      isDragActive={props.isDragActive}
+      onMouseDown={props.onDragStart ? () => props.onDragStart(props.index) : null}
+      onDragStart={props.onDragStart ? () => props.onDragStart(props.index) : null}
+      onDragOver={props.onDragOver ? () => props.onDragOver(props.index) : null}
+      onDragEnd={props.onDragEnd}
       onClick={props.onClick}
       dropdownListElements={
         !!(props.handleRemoveClick || props.handleEditClick) ? (
@@ -52,7 +59,14 @@ HydratedEntryCard.propTypes = {
   onClick: PropTypes.func,
   handleEditClick: PropTypes.func,
   handleRemoveClick: PropTypes.func,
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  draggable: PropTypes.bool,
+  isDragActive: PropTypes.bool,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDragEnd: PropTypes.func,
+  index: PropTypes.number,
+  selected: PropTypes.bool
 };
 HydratedEntryCard.defaultProps = {
   entry: {}

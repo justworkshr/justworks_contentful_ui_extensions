@@ -11,7 +11,7 @@ import {
   EntryCard,
   AssetCard,
   Icon,
-  Subheading
+  Subheading,
 } from '@contentful/forma-36-react-components';
 
 import { getEntryContentTypeId } from '../utils';
@@ -21,7 +21,7 @@ import classnames from 'classnames';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
-export const EntryField = props => {
+export const EntryField = (props) => {
   const getFieldIcon = () => {
     switch (props.propertyType) {
       case c.FIELD_TYPE_ENTRY:
@@ -134,14 +134,14 @@ export const EntryField = props => {
     );
   };
 
-  const renderTextField = value => {
-    return <TextInput onChange={e => props.onFieldChange(e, props.roleKey)} value={value} />;
+  const renderTextField = (value) => {
+    return <TextInput onChange={(e) => props.onFieldChange(e, props.roleKey)} value={value} />;
   };
-  const renderMarkdownField = value => {
+  const renderMarkdownField = (value) => {
     return (
       <ReactMde
         selectedTab="write"
-        onChange={newValue => {
+        onChange={(newValue) => {
           props.onFieldChange({ currentTarget: { value: newValue } }, props.roleKey);
         }}
         value={value}
@@ -188,17 +188,17 @@ EntryField.propTypes = {
   onDragOver: PropTypes.func,
   onDragEnd: PropTypes.func,
   isDragActive: PropTypes.bool,
-  value: PropTypes.string
+  value: PropTypes.string,
 };
 
 EntryField.defaultProps = {
   entry: {
-    sys: {}
+    sys: {},
   },
   roleKey: '',
   isLoading: false,
   isDragActive: false,
-  roleMappingObject: {}
+  roleMappingObject: {},
 };
 
 export default EntryField;

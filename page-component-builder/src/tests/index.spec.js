@@ -11,10 +11,12 @@ import {
   mockComponentSchemaProperty,
   mockLinkProperty,
   mockMultiLinkProperty,
+  mockMultiComponentProperty,
   mockAssetProperty,
   mockEntryProperty,
   mockComponentEntryProperty,
   mockConfigProperty,
+  mockMultiConfigProperty,
   mockTextProperty,
   mockAssetResponse,
   mockEntryResponse,
@@ -299,7 +301,7 @@ describe('App', () => {
       const propKey = 'prop1';
       const ids = ['1a', '1b'];
       const internalMapping = mockInternalMapping(componentId, {
-        ...mockMultiLinkProperty(propKey, ids)
+        ...mockMultiComponentProperty(propKey, ids)
       });
 
       const sdk = mockSdk();
@@ -411,10 +413,60 @@ describe('App', () => {
     });
   });
 
-  xdescribe('multi component link', () => {
-    xit('should render a blank field', async () => {});
+  describe('multi component link', () => {
+    const createSchema = (componentId, propKey) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentSchemaProperty({
+            propKey,
+            type: c.MULTI_COMPONENT_PROPERTY,
+            options: ['test']
+          })
+        })
+      ]);
+    };
 
-    xit('should render an entry field with value', async () => {});
+    it('should render a blank field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockMultiComponentProperty(propKey, [])
+      });
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, c.MULTI_COMPONENT_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('multi-component-field')).toBeTruthy();
+      expect(getByTestId('multi-component-field--links').childNodes).toHaveLength(0);
+    });
+
+    it('should render an entry field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const ids = ['1a', '1b'];
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockMultiComponentProperty(propKey, ids)
+      });
+
+      const sdk = mockSdk();
+      const entries = ids.map(id => mockLink({ type: 'Entry', id }));
+
+      const schemas = createSchema(componentId, propKey, c.MULTI_COMPONENT_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        entries,
+        internalMapping
+      });
+
+      expect(getByTestId('multi-component-field')).toBeTruthy();
+      expect(getByTestId('multi-component-field--links').childNodes).toHaveLength(entries.length);
+    });
   });
 
   describe('single config object link', () => {
@@ -492,9 +544,59 @@ describe('App', () => {
     });
   });
 
-  xdescribe('multi config object link', () => {
-    xit('should render a blank field', async () => {});
+  describe('multi config object link', () => {
+    const createSchema = (componentId, propKey) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentSchemaProperty({
+            propKey,
+            type: c.MULTI_CONFIG_PROPERTY,
+            related_to: 'test'
+          })
+        })
+      ]);
+    };
 
-    xit('should render an entry field with value', async () => {});
+    it('should render a blank field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockMultiConfigProperty(propKey, [])
+      });
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, c.MULTI_CONFIG_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('multi-component-field')).toBeTruthy();
+      expect(getByTestId('multi-component-field--links').childNodes).toHaveLength(0);
+    });
+
+    it('should render an entry field with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const ids = ['1a', '1b'];
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockMultiConfigProperty(propKey, ids)
+      });
+
+      const sdk = mockSdk();
+      const entries = ids.map(id => mockLink({ type: 'Entry', id }));
+
+      const schemas = createSchema(componentId, propKey, c.MULTI_CONFIG_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        entries,
+        internalMapping
+      });
+
+      expect(getByTestId('multi-component-field')).toBeTruthy();
+      expect(getByTestId('multi-component-field--links').childNodes).toHaveLength(entries.length);
+    });
   });
 });

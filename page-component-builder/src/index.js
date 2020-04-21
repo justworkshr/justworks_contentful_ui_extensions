@@ -217,6 +217,7 @@ export class PageComponentBuilder extends React.Component {
 
     const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries) || [];
     const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets) || [];
+
     const fetchedEntries = !!entriesToFetch.length
       ? await this.props.sdk.space.getEntries({
           'sys.id[in]': entriesToFetch.map(l => l.sys.id).join(',')
