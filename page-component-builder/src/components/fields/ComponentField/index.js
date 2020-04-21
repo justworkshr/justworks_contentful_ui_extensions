@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
@@ -7,16 +7,21 @@ import {
   TextLink,
   Dropdown,
   DropdownList,
-  DropdownListItem
+  DropdownListItem,
+  EntryCard
 } from '@contentful/forma-36-react-components';
 
 import { createEntry, constructLink, newInternalMappingFromSchema } from '../../../utilities/index';
+import { schemaTitle } from '../../../utilities/copyUtils';
+
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import SelectComponentModal from '../../SelectComponentModal';
 import ComponentEditor from '../../ComponentEditor';
 
 const ComponentField = props => {
   const [singletonOpen, toggleSingleton] = useState(false);
+  const [singletonCardOpen, toggleSingletonCard] = useState(false);
+
   const [createOpen, toggleCreate] = useState(false);
   const [linkOpen, toggleLink] = useState(false);
   const [linkModalOpen, toggleLinkModal] = useState(false);
@@ -102,25 +107,45 @@ const ComponentField = props => {
         />
       );
     } else if (props.internalMappingInstance) {
+      const schema = props.schemas.find(
+        s => s.meta.id === props.internalMappingInstance.componentId
+      );
       return (
         <div className="component-field-singleton" data-test-id="component-field-singleton">
-          <TextLink className="f36-margin-bottom--l" onClick={() => updateEntry(null)}>
-            Clear singleton
-          </TextLink>
           <div className="component-field-singleton__editor f36-padding-left--xl">
-            <ComponentEditor
-              sdk={props.sdk}
-              schemas={props.schemas}
-              updateInternalMapping={updateSingletonEntry}
-              hydratedAssets={props.hydratedAssets}
-              hydratedEntries={props.hydratedEntries}
-              replaceHydratedAsset={props.replaceHydratedAsset}
-              replaceHydratedEntry={props.replaceHydratedEntry}
-              internalMappingInstance={props.internalMappingInstance}
-              schema={props.schemas.find(
-                s => s.meta.id === props.internalMappingInstance.componentId
-              )}
+            <EntryCard
+              className="f36-margin-top--s f36-margin-bottom--m"
+              loading={false}
+              title={schemaTitle(schema)}
+              contentType="Singleton"
+              description={schema.meta.description}
+              size="default"
+              statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
+              onClick={() => toggleSingletonCard(!singletonCardOpen)}
+              dropdownListElements={
+                <DropdownList>
+                  <DropdownListItem isTitle>Options</DropdownListItem>
+                  <DropdownListItem
+                    key="singleton-option--remove"
+                    onClick={() => updateEntry(null)}>
+                    Remove
+                  </DropdownListItem>
+                </DropdownList>
+              }
             />
+            {!!singletonCardOpen && (
+              <ComponentEditor
+                sdk={props.sdk}
+                schemas={props.schemas}
+                updateInternalMapping={updateSingletonEntry}
+                hydratedAssets={props.hydratedAssets}
+                hydratedEntries={props.hydratedEntries}
+                replaceHydratedAsset={props.replaceHydratedAsset}
+                replaceHydratedEntry={props.replaceHydratedEntry}
+                internalMappingInstance={props.internalMappingInstance}
+                schema={schema}
+              />
+            )}
           </div>
         </div>
       );

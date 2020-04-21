@@ -34,6 +34,7 @@ import {
   linksToFetch,
   newInternalMappingFromSchema
 } from './utilities';
+import { schemaTitle } from './utilities/copyUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
@@ -286,6 +287,7 @@ export class PageComponentBuilder extends React.Component {
   }
 
   render() {
+    const schema = this.currentSchema();
     return (
       <Form className="editor f36-margin--l">
         <DisplayText>Entry extension demo</DisplayText>
@@ -293,8 +295,9 @@ export class PageComponentBuilder extends React.Component {
           This demo uses a single UI Extension to render the whole editor for an entry.
         </Paragraph>
         <div className="component-editor__field">
-          <FormLabel>Name</FormLabel>
+          <FormLabel htmlFor="field-name">Name</FormLabel>
           <TextInput
+            id="field-name"
             testId="field-name"
             onChange={this.onNameChangeHandler}
             value={this.state.name}
@@ -302,8 +305,9 @@ export class PageComponentBuilder extends React.Component {
         </div>
 
         <div className="component-editor__field">
-          <FormLabel>Component ID</FormLabel>
+          <FormLabel htmlFor="field-componentId">Component ID</FormLabel>
           <TextInput
+            id="field-componentId"
             testId="field-componentId"
             className="f36-margin-bottom--m"
             onChange={e => this.onComponentIdChangeHandler(e.target.value)}
@@ -321,8 +325,9 @@ export class PageComponentBuilder extends React.Component {
         </div>
 
         <div className="component-editor__field d-none">
-          <FormLabel>Config Object</FormLabel>
+          <FormLabel htmlFor="field-configObject">Config Object</FormLabel>
           <RadioGroup
+            id="field-configObject"
             name="field-configObject"
             options={[true, false]}
             onChange={value => this.onConfigObjectChangeHandler(value)}
@@ -338,13 +343,18 @@ export class PageComponentBuilder extends React.Component {
         </div>
 
         <div className="component-editor__field d-none">
-          <FormLabel>Assets</FormLabel>
-          <Textarea testId="field-assets" value={this.state.assets.map(a => a.sys.id).join(', ')} />
+          <FormLabel htmlFor="field-assets">Assets</FormLabel>
+          <Textarea
+            id="field-assets"
+            testId="field-assets"
+            value={this.state.assets.map(a => a.sys.id).join(', ')}
+          />
         </div>
 
         <div className="component-editor__field d-none">
-          <FormLabel>Internal Mapping</FormLabel>
+          <FormLabel htmlFor="field-internalMapping">Internal Mapping</FormLabel>
           <Textarea
+            id="field-internalMapping"
             testId="field-internalMapping"
             onChange={e => this.updateInternalMapping(e.target.value)}
             value={this.state.internalMapping}
@@ -352,8 +362,9 @@ export class PageComponentBuilder extends React.Component {
         </div>
 
         <div className="component-editor__field d-none">
-          <FormLabel>Is Valid?</FormLabel>
+          <FormLabel htmlFor="field-isValid">Is Valid?</FormLabel>
           <TextInput
+            id="field-isValid"
             testId="field-isValid"
             onChange={this.onIsValidChangeHandler}
             value={this.state.isValid}
@@ -371,7 +382,8 @@ export class PageComponentBuilder extends React.Component {
           internalMappingInstance={
             new InternalMapping(this.state.componentId, this.parseInternalMapping().properties)
           }
-          schema={this.currentSchema()}
+          schema={schema}
+          title={schemaTitle(schema)}
         />
       </Form>
     );

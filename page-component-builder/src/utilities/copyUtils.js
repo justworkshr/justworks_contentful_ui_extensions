@@ -3,6 +3,7 @@ export const capitalizeString = string => {
 };
 
 export const schemaTitle = schema => {
+  if (!schema) return '';
   return schema.meta.title || schema.meta.id || '< schema title missing >';
 };
 

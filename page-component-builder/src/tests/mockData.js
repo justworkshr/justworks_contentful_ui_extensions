@@ -1356,7 +1356,7 @@ export const mockSchemas = {
             ],
             description: 'May select any available icon.',
             related_to: 'elements/icon',
-            editor_type: 'short-text-editor',
+            editor_type: 'dropdown',
             hidden: false
           },
           href: {

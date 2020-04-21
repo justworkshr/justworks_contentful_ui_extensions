@@ -9,6 +9,7 @@ import LongTextField from '../fields/LongTextField';
 import MarkdownField from '../fields/MarkdownField';
 
 import RadioGroup from '../fields/RadioGroup';
+import DropdownField from '../fields/DropdownField';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
@@ -17,7 +18,7 @@ import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
 
 import { isComponentPropertySingleton } from '../../utilities/index';
-import { schemaTitle, parse_underscore } from '../../utilities/copyUtils';
+import { parse_underscore } from '../../utilities/copyUtils';
 
 import InternalMapping from '../../classes/InternalMapping';
 
@@ -52,10 +53,19 @@ const ComponentEditor = props => {
     return property.type === c.BOOL_PROPERTY;
   };
 
-  const isOptionTextField = property => {
+  const isRadioTextField = property => {
     return (
       property.type === c.TEXT_PROPERTY &&
       property.editor_type === c.SHORT_TEXT_EDITOR &&
+      property.options &&
+      !!property.options.length
+    );
+  };
+
+  const isDropdownTextField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.DROPDOWN_EDITOR &&
       property.options &&
       !!property.options.length
     );
@@ -176,7 +186,7 @@ const ComponentEditor = props => {
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
-        <Subheading>{schemaTitle(props.schema)}</Subheading>
+        <Subheading>{props.title}</Subheading>
         {props.schema.meta && (
           <HelpText>
             <TextLink
@@ -201,7 +211,7 @@ const ComponentEditor = props => {
                 className="component-editor__field f36-margin-bottom--l">
                 <div className="component-editor__field-heading">
                   <FormLabel className="component-editor__field-label" required={property.required}>
-                    {parse_underscore(propKey)}
+                    {parse_underscore(propKey) || '<label missing>'}
                   </FormLabel>
                 </div>
                 {isShortTextField(property) && (
@@ -231,8 +241,16 @@ const ComponentEditor = props => {
                     value={value}
                   />
                 )}
-                {isOptionTextField(property) && (
+                {isRadioTextField(property) && (
                   <RadioGroup
+                    propKey={propKey}
+                    options={property.options}
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    value={value}
+                  />
+                )}
+                {isDropdownTextField(property) && (
+                  <DropdownField
                     propKey={propKey}
                     options={property.options}
                     onChange={value => updatePropertyValue(propKey, value, true)}
@@ -343,7 +361,8 @@ ComponentEditor.propTypes = {
   updateInternalMapping: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
   replaceHydratedAsset: PropTypes.func,
-  schema: PropTypes.object
+  schema: PropTypes.object,
+  title: PropTypes.string
 };
 ComponentEditor.defaultProps = {
   hydratedAssets: [],
