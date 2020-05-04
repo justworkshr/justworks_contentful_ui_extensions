@@ -309,6 +309,7 @@ const ComponentEditor = props => {
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}
+                    schemas={props.schemas}
                     loadingEntries={props.loadingEntries}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
@@ -352,6 +353,7 @@ const ComponentEditor = props => {
                     sdk={props.sdk}
                     propKey={propKey}
                     options={[property.related_to]}
+                    schemas={props.schemas}
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}

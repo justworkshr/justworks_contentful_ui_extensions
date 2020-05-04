@@ -48,12 +48,17 @@ const ComponentField = props => {
   };
 
   const handleCreateClick = async componentId => {
+    const schema = props.schemas.find(s => s.meta.id === componentId);
+
     const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
       componentId: {
         'en-US': componentId
       },
       configObject: {
         'en-US': props.useConfigObjects
+      },
+      internalMapping: {
+        'en-US': newInternalMappingFromSchema(schema, props.useConfigObjects).asJSON()
       }
     });
 

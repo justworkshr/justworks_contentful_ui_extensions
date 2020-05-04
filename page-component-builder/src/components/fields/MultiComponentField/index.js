@@ -12,7 +12,7 @@ import {
 
 import SelectComponentModal from '../../SelectComponentModal';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
-import { constructLink, createEntry } from '../../../utilities/index';
+import { constructLink, createEntry, newInternalMappingFromSchema } from '../../../utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
@@ -103,12 +103,17 @@ export const MultiComponentField = props => {
   };
 
   const handleCreateClick = async componentId => {
+    const schema = props.schemas.find(s => s.meta.id === componentId);
+
     const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
       componentId: {
         'en-US': componentId
       },
       configObject: {
         'en-US': props.useConfigObjects
+      },
+      internalMapping: {
+        'en-US': newInternalMappingFromSchema(schema, props.useConfigObjects).asJSON()
       }
     });
 
@@ -203,20 +208,23 @@ export const MultiComponentField = props => {
 MultiComponentField.propTypes = {
   options: PropTypes.array,
   entries: PropTypes.array,
+  loadingEntries: PropTypes.object,
   onChange: PropTypes.func,
+  schemas: PropTypes.array,
   sdk: PropTypes.object,
   replaceHydratedEntry: PropTypes.func,
   propKey: PropTypes.string,
   useConfigObjects: PropTypes.bool,
-  loadingEntries: PropTypes.object,
   value: PropTypes.object
 };
 
 MultiComponentField.defaultProps = {
   options: [],
   entries: [],
+  schemas: [],
   useConfigObjects: false,
-  loadingEntries: {}
+  loadingEntries: {},
+  value: []
 };
 
 export default MultiComponentField;
