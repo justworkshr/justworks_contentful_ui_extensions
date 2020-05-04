@@ -8,7 +8,7 @@ const MarkdownField = props => {
       testId="markdown-field"
       selectedTab="write"
       onTabChange={() => {}}
-      onChange={e => props.onChange(e.target.value)}
+      onChange={value => props.onChange(value)}
       value={props.value}
     />
   );
