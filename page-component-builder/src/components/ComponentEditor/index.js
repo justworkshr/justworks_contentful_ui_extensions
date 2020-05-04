@@ -287,7 +287,12 @@ const ComponentEditor = props => {
                     entry={fetchHydratedEntry(value)}
                     internalMappingInstance={
                       isComponentPropertySingleton(value)
-                        ? new InternalMapping(value.componentId, value.properties, props.schema)
+                        ? new InternalMapping(
+                            value.componentId,
+                            value.properties,
+                            props.schema,
+                            false
+                          )
                         : null
                     }
                     onChange={(value, timeout = false) =>
@@ -304,9 +309,11 @@ const ComponentEditor = props => {
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}
+                    loadingEntries={props.loadingEntries}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     useConfigObjects={false}
+                    value={value}
                   />
                 )}
                 {isConfigProperty(property) && (
@@ -321,13 +328,22 @@ const ComponentEditor = props => {
                     entry={fetchHydratedEntry(value)}
                     internalMappingInstance={
                       isComponentPropertySingleton(value)
-                        ? new InternalMapping(value.componentId, value.properties, props.schema)
+                        ? new InternalMapping(
+                            value.componentId,
+                            value.properties,
+                            props.schema,
+                            true
+                          )
                         : null
                     }
                     onChange={(value, timeout = false) =>
                       updatePropertyValue(propKey, value, timeout)
                     }
-                    isLoading={!!value && !fetchHydratedEntry(value)}
+                    isLoading={
+                      fetchHydratedEntry(value)
+                        ? props.loadingEntries[(fetchHydratedEntry(value).sys || {}).id]
+                        : null
+                    }
                     useConfigObjects={true}
                   />
                 )}
@@ -339,9 +355,11 @@ const ComponentEditor = props => {
                     entries={(value || []).map(entry => {
                       return fetchHydratedEntry(entry);
                     })}
+                    loadingEntries={props.loadingEntries}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     useConfigObjects={true}
+                    value={value}
                   />
                 )}
                 <HelpText className="component-editor__hint f36-margin-top--xs">
@@ -360,6 +378,7 @@ ComponentEditor.propTypes = {
   schemas: PropTypes.array,
   hydratedAssets: PropTypes.array,
   hydratedEntries: PropTypes.array,
+  loadingEntries: PropTypes.object,
   internalMappingInstance: PropTypes.object,
   updateInternalMapping: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
@@ -370,6 +389,7 @@ ComponentEditor.propTypes = {
 ComponentEditor.defaultProps = {
   hydratedAssets: [],
   hydratedEntries: [],
+  loadingEntries: {},
   internalMappingInstance: {},
   schemas: [],
   schema: {

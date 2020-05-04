@@ -79,6 +79,7 @@ export class PageComponentBuilder extends React.Component {
       assets,
       internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
       isValid: props.sdk.entry.fields.isValid.getValue(),
+      loadingEntries: {}, // key: status (false | true | null) = not loading, loading, not found
       hydratedEntries,
       hydratedAssets,
       updatingAssets: false,
@@ -130,7 +131,7 @@ export class PageComponentBuilder extends React.Component {
   internalMappingFromComponentId = componentId => {
     const schema = this.state.schemaData.components.find(s => s.meta.id === componentId);
     const internalMapping = schema
-      ? newInternalMappingFromSchema(schema).asJSON()
+      ? newInternalMappingFromSchema(schema, this.state.configObject).asJSON()
       : JSON.stringify({});
 
     return internalMapping;
@@ -219,11 +220,20 @@ export class PageComponentBuilder extends React.Component {
     const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries) || [];
     const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets) || [];
 
+    // set loading
+    const loadingEntries = {};
+    entriesToFetch.forEach(e => (loadingEntries[e.sys.id] = true));
+    this.setState({ loadingEntries });
+    // fetch
     const fetchedEntries = !!entriesToFetch.length
       ? await this.props.sdk.space.getEntries({
           'sys.id[in]': entriesToFetch.map(l => l.sys.id).join(',')
         })
       : { items: [] };
+
+    // update loading
+    Object.keys(loadingEntries).forEach(key => (loadingEntries[key] = null));
+    fetchedEntries.items.forEach(e => (loadingEntries[e.sys.id] = false));
 
     const fetchedAssets = !!assetsToFetch.length
       ? await this.props.sdk.space.getAssets({
@@ -237,6 +247,7 @@ export class PageComponentBuilder extends React.Component {
       return {
         ...oldState,
         internalMapping: value,
+        loadingEntries,
         hydratedEntries: [...oldState.hydratedEntries, ...fetchedEntries.items],
         hydratedAssets: [...oldState.hydratedAssets, ...fetchedAssets.items]
       };
@@ -377,13 +388,15 @@ export class PageComponentBuilder extends React.Component {
           updateInternalMapping={this.updateInternalMapping}
           hydratedAssets={this.state.hydratedAssets}
           hydratedEntries={this.state.hydratedEntries}
+          loadingEntries={this.state.loadingEntries}
           replaceHydratedAsset={this.replaceHydratedAsset}
           replaceHydratedEntry={this.replaceHydratedEntry}
           internalMappingInstance={
             new InternalMapping(
               this.state.componentId,
               this.parseInternalMapping().properties,
-              schema
+              schema,
+              this.state.configObject
             )
           }
           schema={schema}

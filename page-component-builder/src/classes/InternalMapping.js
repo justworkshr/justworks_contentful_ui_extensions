@@ -1,10 +1,11 @@
 import * as c from '../constants';
 
 export default class InternalMapping {
-  constructor(componentId, properties, schema = {}) {
+  constructor(componentId, properties, schema = {}, configObject = false) {
     this.componentId = componentId;
     this.properties = properties || {};
     this.schema = schema;
+    this.configObject = configObject;
   }
 
   get class() {

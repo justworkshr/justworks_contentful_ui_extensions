@@ -85,6 +85,7 @@ const SelectComponentModal = props => {
               className="f36-margin-bottom--s"
               contentType={entry.fields.componentId['en-US']}
               entry={entry}
+              isLoading={false}
               onClick={() => getOnClickFunction()(entry)}
               selected={selected.includes(entry)}
             />

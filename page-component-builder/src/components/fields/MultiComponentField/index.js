@@ -82,13 +82,18 @@ export const MultiComponentField = props => {
   };
 
   const handleEditClick = async entry => {
-    const navigation = await props.sdk.navigator.openEntry(entry.sys.id, {
-      slideIn: { waitForClose: true }
-    });
-
-    // updates entry in parent if editing applied
-    if (navigation.navigated) {
-      props.replaceHydratedEntry(navigation.entity);
+    try {
+      const navigation = await props.sdk.navigator.openEntry(entry.sys.id, {
+        slideIn: { waitForClose: true }
+      });
+      // updates entry in parent if editing applied
+      if (navigation.navigated) {
+        props.replaceHydratedEntry(navigation.entity);
+      }
+    } catch (e) {
+      // entity deleted
+      const index = props.value.findIndex(e => e.sys.id === entry.sys.id);
+      handleRemoveClick(index);
     }
   };
 
@@ -118,7 +123,8 @@ export const MultiComponentField = props => {
   };
 
   const renderEntryCards = () => {
-    return props.entries.map((entry, index) => {
+    return props.value.map((link, index) => {
+      const entry = props.entries.find(e => ((e && e.sys) || {}).id === link.sys.id);
       return (
         <HydratedEntryCard
           key={`${props.propKey}-entries--${index}`}
@@ -127,7 +133,7 @@ export const MultiComponentField = props => {
           contentType={`${
             entry ? (entry.fields.componentId || {})['en-US'] : c.CONTENT_TYPE_VIEW_COMPONENT
           }`}
-          isLoading={!(entry && entry.fields)}
+          isLoading={props.loadingEntries[link.sys.id]}
           onClick={() => handleEditClick(entry)}
           handleEditClick={() => handleEditClick(entry)}
           handleRemoveClick={() => handleRemoveClick(index)}
@@ -142,6 +148,7 @@ export const MultiComponentField = props => {
     });
   };
 
+  console.log('ok');
   return (
     <div className="multi-component-field" data-test-id="multi-component-field">
       <SelectComponentModal
@@ -201,13 +208,16 @@ MultiComponentField.propTypes = {
   sdk: PropTypes.object,
   replaceHydratedEntry: PropTypes.func,
   propKey: PropTypes.string,
-  useConfigObjects: PropTypes.bool
+  useConfigObjects: PropTypes.bool,
+  loadingEntries: PropTypes.object,
+  value: PropTypes.object
 };
 
 MultiComponentField.defaultProps = {
   options: [],
   entries: [],
-  useConfigObjects: false
+  useConfigObjects: false,
+  loadingEntries: {}
 };
 
 export default MultiComponentField;

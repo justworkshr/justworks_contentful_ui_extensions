@@ -68,7 +68,7 @@ const ComponentField = props => {
 
   const handleCreateSingletonClick = componentId => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
-    const componentInternalMapping = newInternalMappingFromSchema(schema);
+    const componentInternalMapping = newInternalMappingFromSchema(schema, false);
     updateEntry(componentInternalMapping);
   };
 

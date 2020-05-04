@@ -6,7 +6,35 @@ import { DropdownList, DropdownListItem, EntryCard } from '@contentful/forma-36-
 import { getStatus } from '../../../utilities/index';
 import classnames from 'classnames';
 
+const renderMissingEntry = props => {
+  return (
+    <EntryCard
+      loading={false}
+      testId="missing-entry-card"
+      title="Entry is missing or corrupted. Please remove"
+      size="small"
+      dropdownListElements={
+        !!(props.handleRemoveClick || props.handleEditClick) ? (
+          <DropdownList>
+            <DropdownListItem isTitle>Actions</DropdownListItem>
+            {props.handleRemoveClick && (
+              <DropdownListItem
+                className="entry-card__action--remove"
+                onClick={props.handleRemoveClick}>
+                Remove
+              </DropdownListItem>
+            )}
+          </DropdownList>
+        ) : null
+      }
+    />
+  );
+};
+
 const HydratedEntryCard = props => {
+  if (props.isLoading === null) {
+    return renderMissingEntry(props);
+  }
   return (
     <EntryCard
       loading={props.isLoading}
