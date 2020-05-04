@@ -380,7 +380,11 @@ export class PageComponentBuilder extends React.Component {
           replaceHydratedAsset={this.replaceHydratedAsset}
           replaceHydratedEntry={this.replaceHydratedEntry}
           internalMappingInstance={
-            new InternalMapping(this.state.componentId, this.parseInternalMapping().properties)
+            new InternalMapping(
+              this.state.componentId,
+              this.parseInternalMapping().properties,
+              schema
+            )
           }
           schema={schema}
           title={schemaTitle(schema)}

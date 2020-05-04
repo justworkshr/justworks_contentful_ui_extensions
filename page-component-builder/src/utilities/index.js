@@ -93,7 +93,7 @@ export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
 };
 
 export const newInternalMappingFromSchema = schema => {
-  const internalMapping = new InternalMapping(schema.meta.id);
+  const internalMapping = new InternalMapping(schema.meta.id, {}, schema);
   Object.keys(schema.properties).forEach(propKey => {
     const property = schema.properties[propKey];
     internalMapping.addProperty(propKey, property.type, property.default);

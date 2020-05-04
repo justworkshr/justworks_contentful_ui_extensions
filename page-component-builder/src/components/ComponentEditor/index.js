@@ -186,7 +186,6 @@ const ComponentEditor = props => {
       );
     }
   };
-
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
@@ -288,7 +287,7 @@ const ComponentEditor = props => {
                     entry={fetchHydratedEntry(value)}
                     internalMappingInstance={
                       isComponentPropertySingleton(value)
-                        ? new InternalMapping(value.componentId, value.properties)
+                        ? new InternalMapping(value.componentId, value.properties, props.schema)
                         : null
                     }
                     onChange={(value, timeout = false) =>
@@ -322,7 +321,7 @@ const ComponentEditor = props => {
                     entry={fetchHydratedEntry(value)}
                     internalMappingInstance={
                       isComponentPropertySingleton(value)
-                        ? new InternalMapping(value.componentId, value.properties)
+                        ? new InternalMapping(value.componentId, value.properties, props.schema)
                         : null
                     }
                     onChange={(value, timeout = false) =>

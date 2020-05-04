@@ -1,9 +1,10 @@
 import * as c from '../constants';
 
 export default class InternalMapping {
-  constructor(componentId, properties) {
+  constructor(componentId, properties, schema = {}) {
     this.componentId = componentId;
     this.properties = properties || {};
+    this.schema = schema;
   }
 
   get class() {
@@ -25,7 +26,11 @@ export default class InternalMapping {
   }
 
   updateValue(propertyKey, value) {
-    this.properties[propertyKey].value = value;
+    if (!this.properties[propertyKey]) {
+      this.addProperty(propertyKey, this.schema[propertyKey].type, value);
+    } else {
+      this.properties[propertyKey].value = value;
+    }
   }
 
   addLink(propertyKey, link) {
