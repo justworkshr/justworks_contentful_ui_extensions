@@ -21,7 +21,12 @@ const ComponentPalette = props => {
   const handleOnChange = e => setSearchText(e.target.value);
 
   const filterBySearch = schemas => {
-    return searchText ? schemas.filter(schema => schema.meta.title.includes(searchText)) : schemas;
+    return searchText
+      ? schemas.filter(schema => {
+          const titleText = schema.meta.title ? schema.meta.title : schema.meta.id;
+          return titleText.includes(searchText);
+        })
+      : schemas;
   };
 
   const filterByTag = schemas => {
