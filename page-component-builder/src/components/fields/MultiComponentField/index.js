@@ -148,7 +148,6 @@ export const MultiComponentField = props => {
     });
   };
 
-  console.log('ok');
   return (
     <div className="multi-component-field" data-test-id="multi-component-field">
       <SelectComponentModal

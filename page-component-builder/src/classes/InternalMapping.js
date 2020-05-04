@@ -20,6 +20,13 @@ export default class InternalMapping {
   }
 
   addProperty(propertyKey, type, value) {
+    // don't add property if this is for a config object and the propertyKey being specified does not exist in the meta.config_template
+    if (
+      this.configObject &&
+      this.schema.meta.config_template &&
+      !this.schema.meta.config_template.includes(propertyKey)
+    )
+      return;
     this.properties[propertyKey] = {
       type,
       value

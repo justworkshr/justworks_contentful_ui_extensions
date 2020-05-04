@@ -73,13 +73,18 @@ const ComponentField = props => {
   };
 
   const handleEditClick = async () => {
-    const navigation = await props.sdk.navigator.openEntry(props.entry.sys.id, {
-      slideIn: { waitForClose: true }
-    });
+    try {
+      const navigation = await props.sdk.navigator.openEntry(props.entry.sys.id, {
+        slideIn: { waitForClose: true }
+      });
 
-    // updates entry in parent if editing applied
-    if (navigation.navigated) {
-      props.replaceHydratedEntry(navigation.entity);
+      // updates entry in parent if editing applied
+      if (navigation.navigated) {
+        props.replaceHydratedEntry(navigation.entity);
+      }
+    } catch (e) {
+      // entity deleted
+      updateEntry(null);
     }
   };
 
