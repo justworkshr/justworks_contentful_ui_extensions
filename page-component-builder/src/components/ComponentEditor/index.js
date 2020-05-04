@@ -145,21 +145,25 @@ const ComponentEditor = props => {
         </div>
       );
     } else if (!value && isAssetLink(property)) {
-      <AssetField
-        sdk={props.sdk}
-        asset={fetchHydratedAsset(value)}
-        onChange={value => updatePropertyValue(propKey, value, false)}
-        replaceHydratedAsset={props.replaceHydratedAsset}
-      />;
+      return (
+        <AssetField
+          sdk={props.sdk}
+          asset={fetchHydratedAsset(value)}
+          onChange={value => updatePropertyValue(propKey, value, false)}
+          replaceHydratedAsset={props.replaceHydratedAsset}
+        />
+      );
     } else if (!value && isEntryLink(property)) {
-      <EntryField
-        sdk={props.sdk}
-        contentTypes={property.content_types}
-        entry={fetchHydratedEntry(value)}
-        onChange={value => updatePropertyValue(propKey, value, false)}
-        replaceHydratedEntry={props.replaceHydratedEntry}
-        isLoading={!!value && !fetchHydratedEntry(value)}
-      />;
+      return (
+        <EntryField
+          sdk={props.sdk}
+          contentTypes={property.content_types}
+          entry={fetchHydratedEntry(value)}
+          onChange={value => updatePropertyValue(propKey, value, false)}
+          replaceHydratedEntry={props.replaceHydratedEntry}
+          isLoading={!!value && !fetchHydratedEntry(value)}
+        />
+      );
     } else if (value && value.sys && value.sys.linkType === c.ENTRY_LINK_TYPE) {
       return (
         <EntryField

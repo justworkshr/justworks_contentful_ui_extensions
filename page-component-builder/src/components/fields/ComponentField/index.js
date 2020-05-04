@@ -94,11 +94,26 @@ const ComponentField = props => {
     return options || [];
   };
 
+  const contentTypeLabel = contentType => {
+    let schema = {};
+    if (props.entry.fields) {
+      schema = props.schemas.find(
+        schema => schema.meta.id === props.entry.fields.componentId['en-US']
+      );
+    } else if (props.internalMappingInstance) {
+      schema = props.schemas.find(
+        schema => schema.meta.id === props.internalMappingInstance.componentId
+      );
+    }
+
+    return `${contentType} | ${(schema.meta || {}).title || (schema.meta || {}).id}`;
+  };
+
   const renderElement = () => {
     if (props.entry.fields) {
       return (
         <HydratedEntryCard
-          contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
+          contentType={contentTypeLabel(c.CONTENT_TYPE_VIEW_COMPONENT)}
           entry={props.entry}
           isLoading={props.isLoading}
           onClick={handleEditClick}
@@ -117,7 +132,7 @@ const ComponentField = props => {
               className="f36-margin-top--s f36-margin-bottom--m"
               loading={false}
               title={schemaTitle(schema)}
-              contentType="Singleton"
+              contentType={contentTypeLabel('Singleton')}
               description={schema.meta.description}
               size="default"
               statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}

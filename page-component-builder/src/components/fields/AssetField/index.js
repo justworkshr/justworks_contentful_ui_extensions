@@ -64,7 +64,6 @@ const AssetField = props => {
       );
     }
   };
-
   return (
     <div className="asset-field" data-test-id="asset-field">
       {renderElement()}

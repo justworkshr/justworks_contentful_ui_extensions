@@ -124,6 +124,7 @@ export const mockSchemas = {
           items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/basic_text_nav_card'],
             presets: [],
@@ -197,6 +198,7 @@ export const mockSchemas = {
           items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [
               'components/basic_text_nav_card',
@@ -404,6 +406,7 @@ export const mockSchemas = {
           form_pages: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/form_page'],
             presets: [],
@@ -419,6 +422,16 @@ export const mockSchemas = {
               'Internal toggle for amp forms rendered via iframe to let the form know its intended for an AMP page.',
             related_to: null,
             hidden: true
+          },
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the form submit button should include stylstic shadows and animated hover effects.',
+            related_to: null,
+            hidden: false
           },
           form_config: {
             type: 'config',
@@ -796,6 +809,88 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'components/company_logo',
+          styleguide_path: '/styleguide/components%2Fcompany_logo',
+          description: 'A component for the property logo.',
+          editor_role: 'component',
+          tags: ['media']
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsCompanyLogoComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          href: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Optional url to turn the logo into a link.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          logo_name: {
+            type: 'text',
+            required: true,
+            default: 'justworks-logo',
+            options: ['justworks-logo', 'justworks-x-connect-your-care'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['variant', 'accent-1', 'accent-2'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          height: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['lg', 'xl', 'xxl'],
+            description:
+              'Setting the individual logo height will result in the width automatically scaling to preserve its aspect ratio. This is recommended for non-grid based logos.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          stack_size: {
+            type: 'text',
+            required: true,
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Spacing token for the amount of spacing beneath the element.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'components/composable_text',
           styleguide_path: '/styleguide/components%2Fcomposable_text',
           title: 'Composable Text Component',
@@ -829,6 +924,7 @@ export const mockSchemas = {
           text_components: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [
               'elements/display_text',
@@ -1125,6 +1221,79 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'components/contact_box',
+          styleguide_path: '/styleguide/components%2Fcontact_box',
+          title: 'Contact Box Component',
+          description:
+            'A box for listing various contact numbers \u0026 links (email, SMS, slack, etc).',
+          editor_role: 'component',
+          tags: ['media'],
+          extension_of: null,
+          snapshot: false
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsContactBoxComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          surface_color_token: {
+            type: 'text',
+            required: true,
+            default: 'variant',
+            options: ['default', 'variant'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          heading_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          contact_icons: {
+            type: 'multi-text',
+            required: false,
+            default: [],
+            options: ['mail', 'mail-outline', 'phone', 'sms', 'speech-bubble-outline'],
+            description:
+              'Each option adds a row. Add a link in the "contact links field to finish the row.',
+            related_to: null,
+            hidden: false
+          },
+          contact_links: {
+            type: 'multi-config',
+            required: false,
+            default: [],
+            description: null,
+            related_to: 'components/text_link',
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'components/conversion_modal_content',
           styleguide_path: '/styleguide/components%2Fconversion_modal_content',
           description: 'A component with text content and a cta button with popup modal.',
@@ -1224,14 +1393,18 @@ export const mockSchemas = {
               'instagram',
               'linked-in',
               'mail',
+              'mail-outline',
               'menu-close',
               'minus',
+              'phone',
               'play',
               'play-circle-filled',
               'play-circle-outline',
               'play-youtube-circle-filled',
               'plus',
               'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
               'twitter',
               'youtube'
             ],
@@ -1248,6 +1421,16 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: false
+          },
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the modal button should include stylstic shadows and animated hover effects.',
+            related_to: null,
             hidden: false
           }
         }
@@ -1296,7 +1479,7 @@ export const mockSchemas = {
             type: 'text',
             required: true,
             default: 'default',
-            options: ['default', 'sm'],
+            options: ['default', 'sm', 'legacy-nav'],
             description: null,
             related_to: 'foundations/inset_shapes',
             editor_type: 'short-text-editor',
@@ -1311,16 +1494,6 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
-          },
-          type: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'HTML input type',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
           },
           icon_name: {
             type: 'text',
@@ -1343,20 +1516,24 @@ export const mockSchemas = {
               'instagram',
               'linked-in',
               'mail',
+              'mail-outline',
               'menu-close',
               'minus',
+              'phone',
               'play',
               'play-circle-filled',
               'play-circle-outline',
               'play-youtube-circle-filled',
               'plus',
               'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
               'twitter',
               'youtube'
             ],
             description: 'May select any available icon.',
             related_to: 'elements/icon',
-            editor_type: 'dropdown',
+            editor_type: 'short-text-editor',
             hidden: false
           },
           href: {
@@ -1364,7 +1541,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Only needed if the button is a link to somewhere.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1380,6 +1557,36 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether this button should include stylstic shadows and animated hover effects.',
+            related_to: null,
+            hidden: false
+          },
+          connect_left: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether to style this button as if it were connected to something at the left.',
+            related_to: null,
+            hidden: false
+          },
+          type: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'HTML input type',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
           on: {
             type: 'text',
             required: false,
@@ -1389,16 +1596,16 @@ export const mockSchemas = {
               'AMP directive if serving as an action component to other components like lightboxes.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
+            hidden: true
           },
           disabled: {
             type: 'bool',
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: "Manually set the button's disabled state.",
             related_to: null,
-            hidden: false
+            hidden: true
           }
         }
       },
@@ -1525,6 +1732,7 @@ export const mockSchemas = {
           components: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [],
             presets: [],
@@ -1651,6 +1859,78 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
+          },
+          link_stack_size: {
+            type: 'text',
+            required: false,
+            default: 'sm',
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
+          id: 'components/footer_three_column_section',
+          styleguide_path: '/styleguide/components%2Ffooter_three_column_section',
+          title: 'Footer Three Column Section Component',
+          description:
+            'A footer section built specifically for the newsletter subscribe form from legacy pages.',
+          editor_role: 'component',
+          tags: ['nav'],
+          extension_of: null,
+          snapshot: false
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsFooterThreeColumnSectionComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          left_column: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/footer_link_collection'],
+            description: null,
+            related_to: null,
+            hidden: false
+          },
+          center_column: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/single_text_inline_form'],
+            description: null,
+            related_to: null,
+            hidden: false
+          },
+          right_column: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/social_icon_row'],
+            description: null,
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -1697,6 +1977,7 @@ export const mockSchemas = {
           input_fields: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/labeled_text_input', 'components/labeled_select_input'],
             presets: [],
@@ -1738,6 +2019,7 @@ export const mockSchemas = {
           form_input_groups: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/form_input_group'],
             presets: [],
@@ -2110,7 +2392,7 @@ export const mockSchemas = {
           heading_stack_size: {
             type: 'text',
             required: false,
-            default: '',
+            default: 'md',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: null,
             related_to: null,
@@ -2142,6 +2424,16 @@ export const mockSchemas = {
             required: false,
             default: 'paragraph--lg',
             options: ['lead--lg', 'lead--md', 'paragraph--lg', 'paragraph--sm'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          body_stack_size: {
+            type: 'text',
+            required: false,
+            default: 'md',
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
@@ -2209,14 +2501,18 @@ export const mockSchemas = {
               'instagram',
               'linked-in',
               'mail',
+              'mail-outline',
               'menu-close',
               'minus',
+              'phone',
               'play',
               'play-circle-filled',
               'play-circle-outline',
               'play-youtube-circle-filled',
               'plus',
               'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
               'twitter',
               'youtube'
             ],
@@ -2242,6 +2538,27 @@ export const mockSchemas = {
             options: null,
             description:
               'AMP directive if serving as an action component to other components like lightboxes.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: null,
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2537,6 +2854,16 @@ export const mockSchemas = {
             related_to: 'elements/text_input',
             hidden: false
           },
+          connect_right: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether or not to style this input as if connected to something (probably a button) to the right.',
+            related_to: null,
+            hidden: false
+          },
           validation_type: {
             type: 'text',
             required: false,
@@ -2582,6 +2909,7 @@ export const mockSchemas = {
           items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/pill', 'components/search_term_pill'],
             presets: [],
@@ -2703,8 +3031,19 @@ export const mockSchemas = {
           sections: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/mobile_nav_link_section'],
+            presets: [],
+            description: null,
+            related_to: null
+          },
+          bottom_ctas: {
+            type: 'multi-component',
+            required: true,
+            hidden: false,
+            default: [],
+            options: ['components/text_link', 'components/cta_button'],
             presets: [],
             description: null,
             related_to: null
@@ -2809,14 +3148,18 @@ export const mockSchemas = {
               'instagram',
               'linked-in',
               'mail',
+              'mail-outline',
               'menu-close',
               'minus',
+              'phone',
               'play',
               'play-circle-filled',
               'play-circle-outline',
               'play-youtube-circle-filled',
               'plus',
               'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
               'twitter',
               'youtube'
             ],
@@ -3201,6 +3544,7 @@ export const mockSchemas = {
           search_terms: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/search_term_pill'],
             presets: [],
@@ -3365,6 +3709,7 @@ export const mockSchemas = {
           items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['components/basic_text_nav_card'],
             presets: [],
@@ -3496,6 +3841,7 @@ export const mockSchemas = {
           hidden_fields: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: ['elements/text_input'],
             presets: [],
@@ -3518,66 +3864,25 @@ export const mockSchemas = {
             description: 'Data object for configuring a form element.',
             related_to: 'elements/form',
             hidden: false
-          }
-        }
-      },
-      {
-        meta: {
-          id: 'components/site_logo',
-          styleguide_path: '/styleguide/components%2Fsite_logo',
-          description: 'A component for the property logo.',
-          editor_role: 'component',
-          tags: ['media']
-        },
-        properties: {
-          classname: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'CSS class name(s) for the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
           },
-          c_id: {
-            type: 'text',
-            required: false,
-            default: 'ComponentsSiteLogoComponent',
-            options: null,
-            description: 'Internal testing ID.',
+          connected_button: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether to connect the submit button to the text input inline or not. Otherwise, elements will stack.',
             related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          href: {
-            type: 'text',
-            required: false,
-            default: '/',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
             hidden: false
           },
-          logo_name: {
-            type: 'text',
+          animated_shadows: {
+            type: 'bool',
             required: true,
-            default: 'justworks',
-            options: ['justworks'],
-            description: null,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the form submit button should include stylstic shadows and animated hover effects.',
             related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          variant: {
-            type: 'text',
-            required: true,
-            default: 'default',
-            options: ['default', 'accent-1'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -3615,7 +3920,7 @@ export const mockSchemas = {
           icon_size: {
             type: 'text',
             required: false,
-            default: 'sm',
+            default: 'md',
             options: ['xxl', 'xl', 'lg', 'md', 'sm'],
             description: null,
             related_to: null,
@@ -3653,14 +3958,18 @@ export const mockSchemas = {
               'instagram',
               'linked-in',
               'mail',
+              'mail-outline',
               'menu-close',
               'minus',
+              'phone',
               'play',
               'play-circle-filled',
               'play-circle-outline',
               'play-youtube-circle-filled',
               'plus',
               'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
               'twitter',
               'youtube'
             ],
@@ -3676,6 +3985,28 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             hidden: false
+          },
+          action_icons: {
+            type: 'multi-component',
+            required: true,
+            hidden: false,
+            default: [],
+            options: ['components/icon_button', 'components/button_modal'],
+            presets: [
+              {
+                name: 'Icon Link',
+                component_id: 'components/icon_button',
+                properties: {
+                  href: '/',
+                  icon_size: 'md',
+                  icon_name: 'mail',
+                  color_token: 'variant'
+                }
+              }
+            ],
+            description:
+              'Link an icon component to appear in the row. Icons can perform different actions such as link, open modals, etc.',
+            related_to: null
           }
         }
       },
@@ -3892,7 +4223,7 @@ export const mockSchemas = {
           color_token: {
             type: 'text',
             required: false,
-            default: '',
+            default: 'text-link',
             options: ['text-link', 'variant', 'accent-1', 'accent-2'],
             description: null,
             related_to: null,
@@ -3903,7 +4234,24 @@ export const mockSchemas = {
             type: 'text',
             required: false,
             default: '',
-            options: ['system--sm', 'system--md', 'system--lg', 'paragraph--sm', 'paragraph--lg'],
+            options: [
+              'system--sm',
+              'system--md',
+              'system--lg',
+              'paragraph--sm',
+              'paragraph--lg',
+              'lead--md'
+            ],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
@@ -3972,14 +4320,18 @@ export const mockSchemas = {
               'instagram',
               'linked-in',
               'mail',
+              'mail-outline',
               'menu-close',
               'minus',
+              'phone',
               'play',
               'play-circle-filled',
               'play-circle-outline',
               'play-youtube-circle-filled',
               'plus',
               'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
               'twitter',
               'youtube'
             ],
@@ -4223,7 +4575,8 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: 'The (non-pardot) URL endpoint for where form submission should go.',
+            description:
+              'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4233,7 +4586,8 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: 'The form handler url if this form submits to pardot.',
+            description:
+              'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4734,7 +5088,7 @@ export const mockSchemas = {
           },
           stack_size: {
             type: 'text',
-            required: true,
+            required: false,
             default: '',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: 'Spacing token for the amount of spacing beneath the element.',
@@ -5112,6 +5466,16 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
+          connect_right: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether or not to style this input as if connected to something (probably a button) to the right.',
+            related_to: null,
+            hidden: false
+          },
           autofocus: {
             type: 'bool',
             required: true,
@@ -5119,7 +5483,7 @@ export const mockSchemas = {
             default: false,
             description: null,
             related_to: null,
-            hidden: false
+            hidden: true
           }
         }
       },
@@ -5129,7 +5493,7 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Falgolia_search_results',
           title: 'Algolia Search Results Pattern',
           description: 'Description of component.',
-          editor_role: 'pattern',
+          editor_role: 'component',
           tags: [],
           extension_of: null
         },
@@ -5479,6 +5843,120 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'patterns/composable_lp_hero',
+          styleguide_path: '/styleguide/patterns%2Fcomposable_lp_hero',
+          title: 'Composable Lp Hero Pattern',
+          description: 'Description of component.',
+          editor_role: 'component',
+          tags: [],
+          extension_of: null,
+          snapshot: false
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'PatternsComposableLpHeroComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          theme_variant: {
+            type: 'text',
+            required: true,
+            default: 'page',
+            options: ['page', 'light', 'dark'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          background_color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'variant'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          content_spacing_size: {
+            type: 'text',
+            required: true,
+            default: 'xl',
+            options: ['xl', 'xxxxl'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          hero_components: {
+            type: 'multi-component',
+            required: true,
+            hidden: false,
+            default: [],
+            options: [
+              'elements/display_text',
+              'elements/heading',
+              'elements/lead_text',
+              'elements/paragraph_text',
+              'components/company_logo'
+            ],
+            presets: [
+              {
+                name: 'Overline',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'center',
+                  size: 'xxs',
+                  stack_size: 'lg',
+                  color_token: 'default',
+                  text: 'Overline Text'
+                }
+              },
+              {
+                name: 'Title',
+                component_id: 'elements/display_text',
+                properties: {
+                  alignment: 'center',
+                  size: 'secondary',
+                  stack_size: 'md',
+                  color_token: 'variant',
+                  text: 'Title Text'
+                }
+              },
+              {
+                name: 'Body',
+                component_id: 'elements/lead_text',
+                properties: {
+                  alignment: 'center',
+                  size: 'md',
+                  stack_size: null,
+                  color_token: 'default',
+                  text: 'Body Text'
+                }
+              }
+            ],
+            description: 'Composable section for the hero elements you wish to add.',
+            related_to: null
+          }
+        }
+      },
+      {
+        meta: {
           id: 'patterns/content_split',
           styleguide_path: '/styleguide/patterns%2Fcontent_split',
           description:
@@ -5527,11 +6005,60 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
+          content_alignment: {
+            type: 'text',
+            required: false,
+            default: 'center',
+            options: ['center', 'top', 'stretch'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          title_components: {
+            type: 'multi-component',
+            required: true,
+            hidden: false,
+            default: [],
+            options: [
+              'elements/display_text',
+              'elements/heading',
+              'elements/lead_text',
+              'elements/paragraph_text'
+            ],
+            presets: [
+              {
+                name: 'Title',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'center',
+                  size: 'xl',
+                  stack_size: 'md',
+                  color_token: 'variant',
+                  text: 'Title Text'
+                }
+              },
+              {
+                name: 'Body',
+                component_id: 'elements/lead_text',
+                properties: {
+                  alignment: 'center',
+                  size: 'md',
+                  stack_size: 'xl',
+                  color_token: 'default',
+                  text: 'Body Text'
+                }
+              }
+            ],
+            description: 'Optional, composable section for the title elements you wish to add.',
+            related_to: null
+          },
           left_content: {
             type: 'component',
             required: true,
             default: null,
             options: [
+              'components/contact_box',
               'components/headed_list',
               'components/responsive_image',
               'components/heading_body_text',
@@ -5548,6 +6075,7 @@ export const mockSchemas = {
             required: true,
             default: null,
             options: [
+              'components/contact_box',
               'components/headed_list',
               'components/responsive_image',
               'components/heading_body_text',
@@ -5866,7 +6394,7 @@ export const mockSchemas = {
             type: 'component',
             required: false,
             default: null,
-            options: ['components/site_logo'],
+            options: ['components/company_logo'],
             description: null,
             related_to: null,
             hidden: false
@@ -5874,6 +6402,7 @@ export const mockSchemas = {
           left_items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [
               'components/mobile_nav_modal',
@@ -5888,6 +6417,7 @@ export const mockSchemas = {
           right_items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [
               'components/text_link',
@@ -5897,6 +6427,17 @@ export const mockSchemas = {
             ],
             presets: [],
             description: null,
+            related_to: null
+          },
+          right_items_mobile: {
+            type: 'multi-component',
+            required: true,
+            hidden: true,
+            default: [],
+            options: ['components/text_link', 'components/cta_button', 'components/nav_dropdown'],
+            presets: [],
+            description:
+              "Only use this for swapping a different element in at mobile view, such as the very specific 'Get Started' button changing to 'Start' in the mobile nav.",
             related_to: null
           },
           top_items: {
@@ -5940,6 +6481,34 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
+          is_mobile: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: null,
+            related_to: null,
+            hidden: false
+          },
+          column_components: {
+            type: 'multi-component',
+            required: true,
+            hidden: false,
+            default: [],
+            options: ['components/footer_link_collection'],
+            presets: [],
+            description: 'All of the link collections at the top of the footer.',
+            related_to: null
+          },
+          bottom_section: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/footer_three_column_section'],
+            description: 'Section above the fine print. Usually for newletter subscribe form.',
+            related_to: null,
+            hidden: false
+          },
           fine_print: {
             type: 'text',
             required: false,
@@ -5950,32 +6519,14 @@ export const mockSchemas = {
             editor_type: 'markdown-editor',
             hidden: false
           },
-          is_mobile: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
           social_icons_component: {
             type: 'component',
             required: false,
             default: null,
             options: ['components/social_icon_row'],
-            description: null,
+            description: 'These go inside the fine print section only.',
             related_to: null,
             hidden: false
-          },
-          column_components: {
-            type: 'multi-component',
-            required: true,
-            default: [],
-            options: ['components/footer_link_collection'],
-            presets: [],
-            description: null,
-            related_to: null
           }
         }
       },
@@ -6183,15 +6734,6 @@ export const mockSchemas = {
             related_to: 'components/text_link',
             hidden: false
           },
-          include_social: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description: 'Whether social links should be included or not?',
-            related_to: null,
-            hidden: false
-          },
           title_typography_style: {
             type: 'text',
             required: false,
@@ -6211,6 +6753,24 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
+          },
+          include_social: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether social links should be included or not. Please add a resource when including social links to correctly generate the links.',
+            related_to: null,
+            hidden: false
+          },
+          resource: {
+            type: 'link',
+            required: false,
+            asset_types: [],
+            content_types: ['resourceWrapper', 'guide'],
+            description: 'Only required when this hero needs social icons to be available.',
+            related_to: null
           },
           lead_text: {
             type: 'text',
@@ -6400,6 +6960,7 @@ export const mockSchemas = {
           text_components: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [
               'elements/display_text',
@@ -6467,6 +7028,7 @@ export const mockSchemas = {
           action_items: {
             type: 'multi-component',
             required: true,
+            hidden: false,
             default: [],
             options: [
               'components/single_text_inline_form',
@@ -6711,7 +7273,8 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: 'The (non-pardot) URL endpoint for where form submission should go.',
+            description:
+              'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6721,7 +7284,8 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: 'The form handler url if this form submits to pardot.',
+            description:
+              'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
