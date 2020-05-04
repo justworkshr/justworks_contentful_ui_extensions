@@ -106,6 +106,8 @@ const ComponentField = props => {
       );
     }
 
+    if (!schema) return '';
+
     return `${contentType} | ${(schema.meta || {}).title || (schema.meta || {}).id}`;
   };
 
@@ -130,6 +132,7 @@ const ComponentField = props => {
           <div className="component-field-singleton__editor f36-padding-left--xl">
             <EntryCard
               className="f36-margin-top--s f36-margin-bottom--m"
+              testId="singleton-entry-card"
               loading={false}
               title={schemaTitle(schema)}
               contentType={contentTypeLabel('Singleton')}

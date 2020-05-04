@@ -232,6 +232,9 @@ export const mockCustomTemplateEntryResponse = ({
       name: {
         'en-US': 'Entry Title.'
       },
+      componentId: {
+        'en-US': 'componentIdField'
+      },
       f1: {
         'en-US': 'text!!!'
       },
@@ -262,6 +265,9 @@ export const mockEntryResponse = ({ id = 0, contentType = 'test-content-type' } 
     fields: {
       name: {
         'en-US': 'Entry Title.'
+      },
+      componentId: {
+        'en-US': 'componentIdField'
       },
       f1: {
         'en-US': 'text!!!'

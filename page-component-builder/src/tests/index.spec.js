@@ -408,6 +408,10 @@ describe('App', () => {
 
       expect(getByTestId('component-field')).toBeTruthy();
       expect(getByTestId('component-field-singleton')).toBeTruthy();
+
+      // open singleton
+      fireEvent.click(getByTestId('singleton-entry-card'));
+
       expect(getByTestId('short-text-field')).toBeTruthy();
       expect(getByTestId('short-text-field').value).toEqual(singletonProp1Value);
     });
