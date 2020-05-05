@@ -5,6 +5,46 @@ import sinon from 'sinon';
 
 import { mount } from 'enzyme';
 
+export const mockSchema = (id = 'components/mock') => {
+  return {
+    meta: {
+      id,
+      styleguide_path: '',
+      description: '',
+      editor_role: '',
+      tags: []
+    },
+    properties: {
+      classname: {
+        type: 'text',
+        required: false,
+        default: null,
+        options: null,
+        description: '',
+        related_to: null,
+        hidden: true
+      },
+      prop1: {
+        type: c.TEXT_PROPERTY,
+        required: false,
+        default: 'prop1Value',
+        options: null,
+        description: '',
+        related_to: null,
+        hidden: true
+      },
+      componentProp: {
+        type: c.COMPONENT_PROPERTY,
+        required: false,
+        options: ['components/a', 'components/b', 'components/c'],
+        description: '',
+        related_to: null,
+        hidden: true
+      }
+    }
+  };
+};
+
 export const mockSchemas = (tags = {}, components = []) => {
   return {
     tags,
@@ -356,14 +396,20 @@ export const mockSdk = (
       createAsset: jest.fn(({}) => {
         return mockEntryResponse({ id: 'createdEntry1a' });
       }),
-      getEntries: query => {
-        const ids = query['sys.id[in]'].split(',');
+      getEntries: jest.fn(query => {
+        let ids;
+        if (query['sys.id[in]']) {
+          ids = query['sys.id[in]'].split(',');
+        } else if (query['fields.componentId[in]']) {
+          ids = query['fields.componentId[in]'].split(',');
+        }
+
         return {
           items: ids.map(id => {
             return mockEntryResponse({ id });
           })
         };
-      },
+      }),
       getAssets: query => {
         const ids = query['sys.id[in]'].split(',');
         return ids.map(id => {

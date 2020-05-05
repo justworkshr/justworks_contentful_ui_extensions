@@ -49,7 +49,6 @@ const ComponentField = props => {
 
   const handleCreateClick = async componentId => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
-
     const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
       componentId: {
         'en-US': componentId
@@ -137,6 +136,7 @@ const ComponentField = props => {
       const schema = props.schemas.find(
         s => s.meta.id === props.internalMappingInstance.componentId
       );
+
       return (
         <div className="component-field-singleton" data-test-id="component-field-singleton">
           <div className="component-field-singleton__editor f36-padding-left--xl">
@@ -155,6 +155,7 @@ const ComponentField = props => {
                   <DropdownListItem isTitle>Options</DropdownListItem>
                   <DropdownListItem
                     key="singleton-option--remove"
+                    testId="remove-component-singleton"
                     onClick={() => updateEntry(null)}>
                     Remove
                   </DropdownListItem>
@@ -190,6 +191,7 @@ const ComponentField = props => {
           />
           {!props.useConfigObjects && (
             <Dropdown
+              testId="create-component-singleton"
               toggleElement={<TextLink className="f36-margin-right--s">Create singleton</TextLink>}
               onClick={() => toggleSingleton(!singletonOpen)}
               isOpen={singletonOpen}>
@@ -199,6 +201,7 @@ const ComponentField = props => {
                   return (
                     <DropdownListItem
                       key={`component-option--${index}`}
+                      testId={`create-singleton-type--${option}`}
                       onClick={() => handleCreateSingletonClick(option)}>
                       {option}
                     </DropdownListItem>
@@ -208,6 +211,7 @@ const ComponentField = props => {
             </Dropdown>
           )}
           <Dropdown
+            testId="create-component"
             toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
             onClick={() => toggleCreate(!createOpen)}
             isOpen={createOpen}>
@@ -217,6 +221,7 @@ const ComponentField = props => {
                 return (
                   <DropdownListItem
                     key={`component-option--${index}`}
+                    testId={`create-component-type--${option}`}
                     onClick={() => handleCreateClick(option)}>
                     {option}
                   </DropdownListItem>
@@ -225,6 +230,7 @@ const ComponentField = props => {
             </DropdownList>
           </Dropdown>
           <Dropdown
+            testId="link-component"
             toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
             onClick={() => toggleLink(!linkOpen)}
             isOpen={linkOpen}>
@@ -234,6 +240,7 @@ const ComponentField = props => {
                 return (
                   <DropdownListItem
                     key={`component-option--${index}`}
+                    testId={`link-component-type--${option}`}
                     onClick={() => handleLinkClick(option)}>
                     {option}
                   </DropdownListItem>

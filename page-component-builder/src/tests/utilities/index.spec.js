@@ -1,37 +1,5 @@
 import { extractEntries, linksToFetch, newInternalMappingFromSchema } from '../../utilities/index';
-import { mockLink } from '../mockUtils';
-
-const mockSchema = () => {
-  return {
-    meta: {
-      id: 'components/mock',
-      styleguide_path: '',
-      description: '',
-      editor_role: '',
-      tags: []
-    },
-    properties: {
-      classname: {
-        type: 'text',
-        required: false,
-        default: null,
-        options: null,
-        description: '',
-        related_to: null,
-        hidden: true
-      },
-      prop1: {
-        type: 'text',
-        required: false,
-        default: 'prop1Value',
-        options: null,
-        description: '',
-        related_to: null,
-        hidden: true
-      }
-    }
-  };
-};
+import { mockLink, mockSchema } from '../mockUtils';
 
 const mockObject = (linkType = 'Entry') => {
   return {

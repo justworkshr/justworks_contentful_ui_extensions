@@ -30,11 +30,11 @@ const SelectComponentModal = props => {
       'fields.componentId[in]': props.options.join(','),
       'fields.configObject': props.useConfigObjects
     });
-
     setMatchingEntries(response.items);
     setLoading(false);
     setCompleted(true);
   };
+
   if (props.isShown && !isCompleted && !isLoading) {
     performQuery();
     setCompleted(false);
@@ -59,10 +59,11 @@ const SelectComponentModal = props => {
 
   return (
     <Modal
+      testId="select-component-modal"
       className="select-component-modal"
       onClose={onClose}
       isShown={props.isShown}
-      title={'Insert existing view components'}
+      title="Insert existing view components"
       size="large">
       <div className="select-component-modal__top f36-padding-bottom--m">
         <p>
@@ -82,6 +83,7 @@ const SelectComponentModal = props => {
           return (
             <HydratedEntryCard
               key={`modal-result--${index}`}
+              testId={`result-card--${index}`}
               className="f36-margin-bottom--s"
               contentType={entry.fields.componentId['en-US']}
               entry={entry}

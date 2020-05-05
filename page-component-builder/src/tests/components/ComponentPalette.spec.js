@@ -6,7 +6,6 @@ import {
   cleanup,
   fireEvent,
   configure,
-  wait,
   waitForElementToBeRemoved
 } from '@testing-library/react';
 import * as c from '../../constants';

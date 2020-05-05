@@ -119,6 +119,7 @@ describe('actions', () => {
       sdk: sdk,
       entry: {}
     });
+
     const linkDropdown = queryByTestId('link-entry');
     expect(queryByTestId('link-entry')).toBeTruthy();
 
