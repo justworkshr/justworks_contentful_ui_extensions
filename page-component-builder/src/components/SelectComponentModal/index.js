@@ -98,6 +98,7 @@ const SelectComponentModal = props => {
         <div className="select-component-modal__actions">
           <Button
             className="f36-margin-right--m"
+            testId="select-component--submit"
             buttonType="positive"
             onClick={() => {
               props.handleSubmit(selected);

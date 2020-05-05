@@ -162,11 +162,12 @@ export const MultiComponentField = props => {
         isShown={linkModalOpen}
         options={modalOptions}
         useConfigObjects={props.useConfigObjects}
-        type={'multiple'}
+        type="multiple"
       />
       <div data-test-id="multi-component-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">
         <Dropdown
+          testId="create-multi-component"
           toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
           onClick={() => toggleCreate(!createOpen)}
           isOpen={createOpen}>
@@ -176,6 +177,7 @@ export const MultiComponentField = props => {
               return (
                 <DropdownListItem
                   key={`component-option--${index}`}
+                  testId={`create-multi-component-type--${option}`}
                   onClick={() => handleCreateClick(option)}>
                   {option}
                 </DropdownListItem>
@@ -184,6 +186,7 @@ export const MultiComponentField = props => {
           </DropdownList>
         </Dropdown>
         <Dropdown
+          testId="link-multi-component"
           toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
           onClick={() => toggleLink(!linkOpen)}
           isOpen={linkOpen}>
@@ -193,6 +196,7 @@ export const MultiComponentField = props => {
               return (
                 <DropdownListItem
                   key={`component-option--${index}`}
+                  testId={`link-multi-component-type--${option}`}
                   onClick={() => handleLinkClick(option)}>
                   {option}
                 </DropdownListItem>
