@@ -44,8 +44,8 @@ describe('actions', () => {
     });
 
     expect(queryByTestId('entry-field')).toBeTruthy();
-    expect(queryByTestId('create-entry')).toBeTruthy();
-    expect(queryByTestId('link-entry')).toBeTruthy();
+    expect(queryByTestId('dropdown-create')).toBeTruthy();
+    expect(queryByTestId('dropdown-link')).toBeTruthy();
 
     // expect no card renders
     expect(queryByTestId('hydrated-entry-card')).toBeNull();
@@ -61,8 +61,8 @@ describe('actions', () => {
 
     // expect create, link buttons dont render
     expect(queryByTestId('entry-field')).toBeTruthy();
-    expect(queryByTestId('create-entry')).toBeNull();
-    expect(queryByTestId('link-entry')).toBeNull();
+    expect(queryByTestId('dropdown-create')).toBeNull();
+    expect(queryByTestId('dropdown-link')).toBeNull();
 
     // expect card renders
     expect(queryByTestId('hydrated-entry-card')).toBeTruthy();
@@ -82,13 +82,13 @@ describe('actions', () => {
       sdk: sdk,
       entry: {}
     });
-    const createDropdown = queryByTestId('create-entry');
-    expect(queryByTestId('create-entry')).toBeTruthy();
+    const createDropdown = queryByTestId('dropdown-create');
+    expect(queryByTestId('dropdown-create')).toBeTruthy();
 
     // click create dropdown
     fireEvent.click(createDropdown.querySelector('button'));
 
-    const createButton = queryByTestId(`create-entry-type--${mockContentType}`);
+    const createButton = queryByTestId(`dropdown-create-type--${mockContentType}`);
     expect(createButton).toBeTruthy();
 
     // click create type button
@@ -120,13 +120,13 @@ describe('actions', () => {
       entry: {}
     });
 
-    const linkDropdown = queryByTestId('link-entry');
-    expect(queryByTestId('link-entry')).toBeTruthy();
+    const linkDropdown = queryByTestId('dropdown-link');
+    expect(queryByTestId('dropdown-link')).toBeTruthy();
 
     // click link dropdown
     fireEvent.click(linkDropdown.querySelector('button'));
 
-    const linkButton = queryByTestId(`link-entry-type--${mockContentType}`);
+    const linkButton = queryByTestId(`dropdown-link-type--${mockContentType}`);
     expect(linkButton).toBeTruthy();
 
     // click link type button

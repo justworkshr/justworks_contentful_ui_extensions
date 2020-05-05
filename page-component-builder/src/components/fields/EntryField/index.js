@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import * as c from '../../../constants';
-
-import {
-  TextLink,
-  Dropdown,
-  DropdownList,
-  DropdownListItem
-} from '@contentful/forma-36-react-components';
-
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
+import DropdownCreate from '../../elements/DropdownCreate';
+import DropdownLink from '../../elements/DropdownLink';
+
 import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const EntryField = props => {
-  const [createOpen, toggleCreate] = useState(false);
-  const [linkOpen, toggleLink] = useState(false);
-
   const getContentType = () => {
     return (props.entry.sys || {}).contentType ? getEntryContentTypeId(props.entry) : null;
   };
@@ -81,44 +72,8 @@ export const EntryField = props => {
     } else {
       return (
         <div data-test-id="entry-field-blank" className="link-row">
-          <Dropdown
-            testId="create-entry"
-            toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
-            onClick={() => toggleCreate(!createOpen)}
-            isOpen={createOpen}>
-            <DropdownList>
-              <DropdownListItem isTitle>Options</DropdownListItem>
-              {props.contentTypes.map((option, index) => {
-                return (
-                  <DropdownListItem
-                    testId={`create-entry-type--${option}`}
-                    key={`component-option--${index}`}
-                    onClick={() => handleCreateClick(option)}>
-                    {option}
-                  </DropdownListItem>
-                );
-              })}
-            </DropdownList>
-          </Dropdown>
-          <Dropdown
-            testId="link-entry"
-            toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
-            onClick={() => toggleLink(!linkOpen)}
-            isOpen={linkOpen}>
-            <DropdownList>
-              <DropdownListItem isTitle>Options</DropdownListItem>
-              {props.contentTypes.map((option, index) => {
-                return (
-                  <DropdownListItem
-                    testId={`link-entry-type--${option}`}
-                    key={`component-option--${index}`}
-                    onClick={() => handleLinkClick(option)}>
-                    {option}
-                  </DropdownListItem>
-                );
-              })}
-            </DropdownList>
-          </Dropdown>
+          <DropdownCreate handleCreateClick={handleCreateClick} options={props.contentTypes} />
+          <DropdownLink handleLinkClick={handleLinkClick} options={props.contentTypes} />
         </div>
       );
     }

@@ -3,23 +3,16 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
 
-import {
-  TextLink,
-  Dropdown,
-  DropdownList,
-  DropdownListItem
-} from '@contentful/forma-36-react-components';
-
 import SelectComponentModal from '../../SelectComponentModal';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
+import DropdownCreate from '../../elements/DropdownCreate';
+import DropdownLink from '../../elements/DropdownLink';
 
 import { constructLink, createEntry, newInternalMappingFromSchema } from '../../../utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const MultiComponentField = props => {
-  const [createOpen, toggleCreate] = useState(false);
-  const [linkOpen, toggleLink] = useState(false);
   const [linkModalOpen, toggleLinkModal] = useState(false);
   const [modalOptions, setModalOptions] = useState([]);
 
@@ -167,44 +160,8 @@ export const MultiComponentField = props => {
       />
       <div data-test-id="multi-component-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">
-        <Dropdown
-          testId="create-multi-component"
-          toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
-          onClick={() => toggleCreate(!createOpen)}
-          isOpen={createOpen}>
-          <DropdownList>
-            <DropdownListItem isTitle>Options</DropdownListItem>
-            {props.options.map((option, index) => {
-              return (
-                <DropdownListItem
-                  key={`component-option--${index}`}
-                  testId={`create-multi-component-type--${option}`}
-                  onClick={() => handleCreateClick(option)}>
-                  {option}
-                </DropdownListItem>
-              );
-            })}
-          </DropdownList>
-        </Dropdown>
-        <Dropdown
-          testId="link-multi-component"
-          toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
-          onClick={() => toggleLink(!linkOpen)}
-          isOpen={linkOpen}>
-          <DropdownList>
-            <DropdownListItem isTitle>Options</DropdownListItem>
-            {props.options.map((option, index) => {
-              return (
-                <DropdownListItem
-                  key={`component-option--${index}`}
-                  testId={`link-multi-component-type--${option}`}
-                  onClick={() => handleLinkClick(option)}>
-                  {option}
-                </DropdownListItem>
-              );
-            })}
-          </DropdownList>
-        </Dropdown>
+        <DropdownCreate handleCreateClick={handleCreateClick} options={props.options} />
+        <DropdownLink handleLinkClick={handleLinkClick} options={props.options} />
       </div>
     </div>
   );

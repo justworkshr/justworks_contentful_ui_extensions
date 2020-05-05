@@ -53,8 +53,8 @@ describe('actions', () => {
     });
 
     expect(queryByTestId('component-field-blank')).toBeTruthy();
-    expect(queryByTestId('create-component')).toBeTruthy();
-    expect(queryByTestId('link-component')).toBeTruthy();
+    expect(queryByTestId('dropdown-create')).toBeTruthy();
+    expect(queryByTestId('dropdown-link')).toBeTruthy();
 
     // expect no card renders
     expect(queryByTestId('hydrated-entry-card')).toBeNull();
@@ -70,8 +70,8 @@ describe('actions', () => {
 
     // expect create, link buttons dont render
     expect(queryByTestId('component-field')).toBeTruthy();
-    expect(queryByTestId('create-component')).toBeNull();
-    expect(queryByTestId('link-component')).toBeNull();
+    expect(queryByTestId('dropdown-create')).toBeNull();
+    expect(queryByTestId('dropdown-link')).toBeNull();
 
     // expect card renders
     expect(queryByTestId('hydrated-entry-card')).toBeTruthy();
@@ -97,8 +97,8 @@ describe('actions', () => {
 
     // expect create, link buttons dont render
     expect(queryByTestId('component-field')).toBeTruthy();
-    expect(queryByTestId('create-component')).toBeNull();
-    expect(queryByTestId('link-component')).toBeNull();
+    expect(queryByTestId('dropdown-create')).toBeNull();
+    expect(queryByTestId('dropdown-link')).toBeNull();
 
     // expect card renders
     expect(queryByTestId('hydrated-entry-card')).toBeNull();
@@ -109,7 +109,7 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect remove buttons render
-    expect(queryByTestId('remove-component-singleton')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--remove')).toBeTruthy();
   });
 
   it('creates an entry', async () => {
@@ -123,12 +123,12 @@ describe('actions', () => {
       }
     });
 
-    const createDropdown = queryByTestId('create-component');
+    const createDropdown = queryByTestId('dropdown-create');
     expect(createDropdown).toBeTruthy();
 
     // click create dropdown
     fireEvent.click(createDropdown.querySelector('button'));
-    const createButton = queryByTestId(`create-component-type--${mockComponentOption}`);
+    const createButton = queryByTestId(`dropdown-create-type--${mockComponentOption}`);
     expect(createButton).toBeTruthy();
 
     // click create type button
@@ -165,12 +165,12 @@ describe('actions', () => {
       }
     });
 
-    const linkDropdown = queryByTestId('link-component');
-    expect(queryByTestId('link-component')).toBeTruthy();
+    const linkDropdown = queryByTestId('dropdown-link');
+    expect(queryByTestId('dropdown-link')).toBeTruthy();
 
     // click link dropdown
     fireEvent.click(linkDropdown.querySelector('button'));
-    const linkButton = queryByTestId(`link-component-type--${mockComponentOption}`);
+    const linkButton = queryByTestId(`dropdown-link-type--${mockComponentOption}`);
     expect(linkButton).toBeTruthy();
 
     // click link type button
@@ -250,12 +250,12 @@ describe('actions', () => {
       }
     });
 
-    const createDropdown = queryByTestId('create-component-singleton');
+    const createDropdown = queryByTestId('dropdown-create-singleton');
     expect(createDropdown).toBeTruthy();
 
     // click create dropdown
     fireEvent.click(createDropdown.querySelector('button'));
-    const createButton = queryByTestId(`create-component-singleton-type--${mockComponentOption}`);
+    const createButton = queryByTestId(`dropdown-create-type--${mockComponentOption}`);
     expect(createButton).toBeTruthy();
 
     // click create type button
@@ -282,8 +282,8 @@ describe('actions', () => {
 
     // expect create, link buttons dont render
     expect(queryByTestId('component-field')).toBeTruthy();
-    expect(queryByTestId('create-component')).toBeNull();
-    expect(queryByTestId('link-component')).toBeNull();
+    expect(queryByTestId('dropdown-create')).toBeNull();
+    expect(queryByTestId('dropdown-link')).toBeNull();
 
     // expect card renders
     expect(queryByTestId('hydrated-entry-card')).toBeNull();
@@ -294,7 +294,7 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect remove buttons render
-    const removeButton = queryByTestId('remove-component-singleton');
+    const removeButton = queryByTestId('action-dropdown--remove');
     expect(removeButton).toBeTruthy();
 
     fireEvent.click(removeButton.querySelector('button'));

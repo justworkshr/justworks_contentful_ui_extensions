@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
 
-import {
-  TextLink,
-  Dropdown,
-  DropdownList,
-  DropdownListItem,
-  EntryCard
-} from '@contentful/forma-36-react-components';
+import { EntryCard } from '@contentful/forma-36-react-components';
 
 import { createEntry, constructLink, newInternalMappingFromSchema } from '../../../utilities/index';
 import { schemaTitle } from '../../../utilities/copyUtils';
@@ -17,13 +11,13 @@ import { schemaTitle } from '../../../utilities/copyUtils';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import SelectComponentModal from '../../SelectComponentModal';
 import ComponentEditor from '../../ComponentEditor';
+import ActionDropdown from '../../elements/ActionDropdown';
+import DropdownCreate from '../../elements/DropdownCreate';
+import DropdownLink from '../../elements/DropdownLink';
 
 const ComponentField = props => {
-  const [singletonOpen, toggleSingleton] = useState(false);
   const [singletonCardOpen, toggleSingletonCard] = useState(false);
 
-  const [createOpen, toggleCreate] = useState(false);
-  const [linkOpen, toggleLink] = useState(false);
   const [linkModalOpen, toggleLinkModal] = useState(false);
   const [modalOptions, setModalOptions] = useState([]);
 
@@ -150,17 +144,7 @@ const ComponentField = props => {
               size="default"
               statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
               onClick={() => toggleSingletonCard(!singletonCardOpen)}
-              dropdownListElements={
-                <DropdownList>
-                  <DropdownListItem isTitle>Options</DropdownListItem>
-                  <DropdownListItem
-                    key="singleton-option--remove"
-                    testId="remove-component-singleton"
-                    onClick={() => updateEntry(null)}>
-                    Remove
-                  </DropdownListItem>
-                </DropdownList>
-              }
+              dropdownListElements={<ActionDropdown handleRemoveClick={() => updateEntry(null)} />}
             />
             {!!singletonCardOpen && (
               <ComponentEditor
@@ -190,64 +174,15 @@ const ComponentField = props => {
             useConfigObjects={props.useConfigObjects}
           />
           {!props.useConfigObjects && (
-            <Dropdown
-              testId="create-component-singleton"
-              toggleElement={<TextLink className="f36-margin-right--s">Create singleton</TextLink>}
-              onClick={() => toggleSingleton(!singletonOpen)}
-              isOpen={singletonOpen}>
-              <DropdownList>
-                <DropdownListItem isTitle>Options</DropdownListItem>
-                {getOptions().map((option, index) => {
-                  return (
-                    <DropdownListItem
-                      key={`component-option--${index}`}
-                      testId={`create-component-singleton-type--${option}`}
-                      onClick={() => handleCreateSingletonClick(option)}>
-                      {option}
-                    </DropdownListItem>
-                  );
-                })}
-              </DropdownList>
-            </Dropdown>
+            <DropdownCreate
+              testId="dropdown-create-singleton"
+              handleCreateClick={handleCreateSingletonClick}
+              toggleText="Create singleton"
+              options={getOptions()}
+            />
           )}
-          <Dropdown
-            testId="create-component"
-            toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
-            onClick={() => toggleCreate(!createOpen)}
-            isOpen={createOpen}>
-            <DropdownList>
-              <DropdownListItem isTitle>Options</DropdownListItem>
-              {getOptions().map((option, index) => {
-                return (
-                  <DropdownListItem
-                    key={`component-option--${index}`}
-                    testId={`create-component-type--${option}`}
-                    onClick={() => handleCreateClick(option)}>
-                    {option}
-                  </DropdownListItem>
-                );
-              })}
-            </DropdownList>
-          </Dropdown>
-          <Dropdown
-            testId="link-component"
-            toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
-            onClick={() => toggleLink(!linkOpen)}
-            isOpen={linkOpen}>
-            <DropdownList>
-              <DropdownListItem isTitle>Options</DropdownListItem>
-              {getOptions().map((option, index) => {
-                return (
-                  <DropdownListItem
-                    key={`component-option--${index}`}
-                    testId={`link-component-type--${option}`}
-                    onClick={() => handleLinkClick(option)}>
-                    {option}
-                  </DropdownListItem>
-                );
-              })}
-            </DropdownList>
-          </Dropdown>
+          <DropdownCreate handleCreateClick={handleCreateClick} options={getOptions()} />
+          <DropdownLink handleLinkClick={handleLinkClick} options={getOptions()} />
         </div>
       );
     }
