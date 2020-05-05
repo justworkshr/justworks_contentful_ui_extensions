@@ -14,21 +14,7 @@ const renderMissingEntry = props => {
       testId="missing-entry-card"
       title="Entry is missing or corrupted. Please remove"
       size="small"
-      dropdownListElements={
-        !!(props.handleRemoveClick || props.handleEditClick) ? (
-          <DropdownList>
-            <DropdownListItem isTitle>Actions</DropdownListItem>
-            {props.handleRemoveClick && (
-              <DropdownListItem
-                testId="action-dropdown--remove"
-                className="entry-card__action--remove"
-                onClick={props.handleRemoveClick}>
-                Remove
-              </DropdownListItem>
-            )}
-          </DropdownList>
-        ) : null
-      }
+      dropdownListElements={<ActionDropdown handleRemoveClick={props.handleRemoveClick} />}
     />
   );
 };

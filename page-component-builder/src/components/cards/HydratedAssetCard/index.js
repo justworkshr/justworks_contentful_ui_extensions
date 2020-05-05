@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DropdownList, DropdownListItem, AssetCard } from '@contentful/forma-36-react-components';
+import { AssetCard } from '@contentful/forma-36-react-components';
 import ActionDropdown from '../../elements/ActionDropdown';
 
 import { getStatus } from '../../../utilities/index';
