@@ -23,6 +23,13 @@ const HydratedEntryCard = props => {
   if (props.isLoading === null) {
     return renderMissingEntry(props);
   }
+
+  const remove = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    props.handleRemoveClick();
+  };
+
   return (
     <EntryCard
       loading={props.isLoading}
@@ -44,10 +51,7 @@ const HydratedEntryCard = props => {
       onDragEnd={props.onDragEnd}
       onClick={props.onClick}
       dropdownListElements={
-        <ActionDropdown
-          handleEditClick={props.handleEditClick}
-          handleRemoveClick={props.handleRemoveClick}
-        />
+        <ActionDropdown handleEditClick={props.handleEditClick} handleRemoveClick={remove} />
       }
     />
   );
