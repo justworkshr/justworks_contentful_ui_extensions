@@ -350,9 +350,12 @@ export const mockSdk = (
       getEntry: id => mockEntryResponse({ id }),
       getAsset: id => mockAssetResponse({ id }),
       updateEntry: jest.fn(),
-      createEntry: () => {
-        return mockEntryResponse({ id: 'newCreatedEntry1a' });
-      },
+      createEntry: jest.fn((contentType, {}) => {
+        return mockEntryResponse({ id: 'createdEntry1a' });
+      }),
+      createAsset: jest.fn(({}) => {
+        return mockEntryResponse({ id: 'createdEntry1a' });
+      }),
       getEntries: query => {
         const ids = query['sys.id[in]'].split(',');
         return {
@@ -369,7 +372,18 @@ export const mockSdk = (
       }
     },
     navigator: {
-      openEntry: jest.fn()
+      openEntry: jest.fn((id, options = {}) => {
+        return {
+          navigated: true,
+          entity: mockEntryResponse({ id: 'mockNavigatedEntry1' })
+        };
+      }),
+      openAsset: jest.fn((id, options = {}) => {
+        return {
+          navigated: true,
+          entity: mockEntryResponse({ id: 'mockNavigatedAsset1' })
+        };
+      })
     },
     entry: {
       getSys: () => {
@@ -422,24 +436,24 @@ export const mockSdk = (
       }
     },
     dialogs: {
-      selectMultipleAssets: () => {
+      selectMultipleAssets: jest.fn((options = {}) => {
         return [
           mockAssetResponse({ id: 'newLinkedAsset1a' }),
           mockAssetResponse({ id: 'newLinkedAsset2a' })
         ];
-      },
-      selectSingleAsset: () => {
+      }),
+      selectSingleAsset: jest.fn((options = {}) => {
         return mockAssetResponse({ id: 'newLinkedAsset1b' });
-      },
-      selectMultipleEntries: () => {
+      }),
+      selectMultipleEntries: jest.fn((options = {}) => {
         return [
           mockEntryResponse({ id: 'newLinkedEntry1a' }),
           mockEntryResponse({ id: 'newLinkedEntry2a' })
         ];
-      },
-      selectSingleEntry: () => {
+      }),
+      selectSingleEntry: jest.fn((options = {}) => {
         return mockEntryResponse({ id: 'newLinkedEntry1b' });
-      }
+      })
     },
     field: {
       getValue: jest.fn(),

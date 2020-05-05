@@ -18,10 +18,14 @@ const HydratedAssetCard = props => {
       dropdownListElements={
         <DropdownList>
           <DropdownListItem isTitle>Actions</DropdownListItem>
-          <DropdownListItem className="asset-card__action--edit" onClick={props.handleEditClick}>
+          <DropdownListItem
+            testId="hydrated-edit-asset"
+            className="asset-card__action--edit"
+            onClick={props.handleEditClick}>
             Edit
           </DropdownListItem>
           <DropdownListItem
+            testId="hydrated-remove-asset"
             className="asset-card__action--remove"
             onClick={props.handleRemoveClick}>
             Remove

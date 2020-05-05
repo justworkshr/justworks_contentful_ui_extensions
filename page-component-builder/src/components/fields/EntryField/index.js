@@ -91,6 +91,7 @@ export const EntryField = props => {
               {props.contentTypes.map((option, index) => {
                 return (
                   <DropdownListItem
+                    testId={`create-entry-type--${option}`}
                     key={`component-option--${index}`}
                     onClick={() => handleCreateClick(option)}>
                     {option}
@@ -109,6 +110,7 @@ export const EntryField = props => {
               {props.contentTypes.map((option, index) => {
                 return (
                   <DropdownListItem
+                    testId={`link-entry-type--${option}`}
                     key={`component-option--${index}`}
                     onClick={() => handleLinkClick(option)}>
                     {option}
@@ -122,7 +124,6 @@ export const EntryField = props => {
     }
   };
 
-  console.log(props.entry);
   return (
     <div className="entry-field" data-test-id="entry-field">
       {renderElement()}

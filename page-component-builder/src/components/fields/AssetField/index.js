@@ -56,10 +56,15 @@ const AssetField = props => {
     } else {
       return (
         <div data-test-id="asset-field-blank" className="link-row">
-          <TextLink className="f36-margin-right--s" onClick={handleCreateClick}>
+          <TextLink
+            testId="create-asset"
+            className="f36-margin-right--s"
+            onClick={handleCreateClick}>
             Create asset
           </TextLink>
-          <TextLink onClick={handleLinkClick}>Link asset</TextLink>
+          <TextLink testId="link-asset" onClick={handleLinkClick}>
+            Link asset
+          </TextLink>
         </div>
       );
     }
@@ -74,7 +79,8 @@ const AssetField = props => {
 AssetField.propTypes = {
   sdk: PropTypes.object,
   asset: PropTypes.object,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  replaceHydratedAsset: PropTypes.func
 };
 AssetField.defaultProps = {
   asset: {}
