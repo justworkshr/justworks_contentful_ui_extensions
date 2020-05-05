@@ -201,7 +201,7 @@ const ComponentField = props => {
                   return (
                     <DropdownListItem
                       key={`component-option--${index}`}
-                      testId={`create-singleton-type--${option}`}
+                      testId={`create-component-singleton-type--${option}`}
                       onClick={() => handleCreateSingletonClick(option)}>
                       {option}
                     </DropdownListItem>

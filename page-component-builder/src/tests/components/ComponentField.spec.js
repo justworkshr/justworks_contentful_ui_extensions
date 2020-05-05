@@ -156,7 +156,7 @@ describe('actions', () => {
 
   it('links an entry', async () => {
     const sdk = mockSdk();
-    const { debug, queryByTestId } = renderComponent({
+    const { queryByTestId } = renderComponent({
       sdk: sdk,
       entry: {},
       property: {
@@ -189,9 +189,116 @@ describe('actions', () => {
     await expect(mockOnChange.mock.calls).toHaveLength(1);
     await expect(mockOnChange.mock.calls[0][0]).toMatchObject({ sys: { id: mockComponentOption } });
   });
-  it('edits an entry', async () => {});
-  it('removes an entry', async () => {});
+  it('edits an entry', async () => {
+    const sdk = mockSdk();
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      entry: mockEntryResponse({ id: 1, contentType: mockContentType })
+    });
 
-  it('creates a singleton', async () => {});
-  it('removes a singleton', async () => {});
+    // open action dropdown
+    const actionButton = queryByTestId('cf-ui-card-actions');
+    fireEvent.click(actionButton.querySelector('button'));
+
+    const editButton = queryByTestId('hydrated-edit-entry');
+    expect(editButton).toBeTruthy();
+
+    fireEvent.click(editButton.querySelector('button'));
+
+    await expect(sdk.navigator.openEntry.mock.calls).toHaveLength(1);
+    await expect(sdk.navigator.openEntry.mock.calls[0][0]).toBe(1);
+
+    // confirms mockReplaceHydratedEntry called w/ correct args
+    await expect(mockReplaceHydratedEntry.mock.calls).toHaveLength(1);
+    await expect(mockReplaceHydratedEntry.mock.calls[0][0]).toMatchObject({ fields: {} });
+  });
+
+  it('removes an entry', async () => {
+    const sdk = mockSdk();
+
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      entry: mockEntryResponse({ id: 1, contentType: mockContentType })
+    });
+
+    // open action dropdown
+    const actionButton = queryByTestId('cf-ui-card-actions');
+    fireEvent.click(actionButton.querySelector('button'));
+
+    // expect edit and remove buttons render
+    const removeButton = queryByTestId('hydrated-remove-entry');
+    expect(removeButton).toBeTruthy();
+
+    // click remove button
+
+    fireEvent.click(removeButton.querySelector('button'));
+
+    // confirms mockOnChange called w/ correct args
+
+    await expect(mockOnChange.mock.calls).toHaveLength(1);
+    await expect(mockOnChange.mock.calls[0][0]).toBeNull();
+  });
+
+  it('creates a singleton', async () => {
+    const sdk = mockSdk();
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      entry: {},
+      property: {
+        type: c.COMPONENT_PROPERTY,
+        options: [mockComponentOption]
+      }
+    });
+
+    const createDropdown = queryByTestId('create-component-singleton');
+    expect(createDropdown).toBeTruthy();
+
+    // click create dropdown
+    fireEvent.click(createDropdown.querySelector('button'));
+    const createButton = queryByTestId(`create-component-singleton-type--${mockComponentOption}`);
+    expect(createButton).toBeTruthy();
+
+    // click create type button
+    fireEvent.click(createButton.querySelector('button'));
+
+    await expect(mockOnChange.mock.calls).toHaveLength(1);
+    await expect(mockOnChange.mock.calls[0][0]).toMatchObject({
+      componentId: mockComponentOption,
+      properties: {}
+    });
+  });
+
+  it('removes a singleton', async () => {
+    // renders edit and remove buttons
+    const sdk = mockSdk();
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      entry: {},
+      internalMappingInstance: {
+        componentId: mockComponentId,
+        properties: {}
+      }
+    });
+
+    // expect create, link buttons dont render
+    expect(queryByTestId('component-field')).toBeTruthy();
+    expect(queryByTestId('create-component')).toBeNull();
+    expect(queryByTestId('link-component')).toBeNull();
+
+    // expect card renders
+    expect(queryByTestId('hydrated-entry-card')).toBeNull();
+    expect(queryByTestId('component-field-singleton')).toBeTruthy();
+
+    // open action dropdown
+    const actionButton = queryByTestId('cf-ui-card-actions');
+    fireEvent.click(actionButton.querySelector('button'));
+
+    // expect remove buttons render
+    const removeButton = queryByTestId('remove-component-singleton');
+    expect(removeButton).toBeTruthy();
+
+    fireEvent.click(removeButton.querySelector('button'));
+    await expect(mockOnChange.mock.calls).toHaveLength(1);
+    await expect(mockOnChange.mock.calls[0][0]).toBeNull();
+  });
 });
