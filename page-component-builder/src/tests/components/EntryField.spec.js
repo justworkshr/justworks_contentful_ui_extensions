@@ -49,8 +49,8 @@ describe('actions', () => {
 
     // expect no card renders
     expect(queryByTestId('hydrated-entry-card')).toBeNull();
-    expect(queryByTestId('hydrated-edit-entry')).toBeNull();
-    expect(queryByTestId('hydrated-remove-entry')).toBeNull();
+    expect(queryByTestId('action-dropdown--edit')).toBeNull();
+    expect(queryByTestId('action-dropdown--remove')).toBeNull();
   });
 
   it('hydrated entry - loads actions', () => {
@@ -72,8 +72,8 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect edit and remove buttons render
-    expect(queryByTestId('hydrated-edit-entry')).toBeTruthy();
-    expect(queryByTestId('hydrated-remove-entry')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--edit')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--remove')).toBeTruthy();
   });
 
   it('creates an entry', async () => {
@@ -154,12 +154,12 @@ describe('actions', () => {
     const actionButton = queryByTestId('cf-ui-card-actions');
     fireEvent.click(actionButton.querySelector('button'));
 
-    const editButton = queryByTestId('hydrated-edit-entry');
+    const editButton = queryByTestId('action-dropdown--edit');
     expect(editButton).toBeTruthy();
 
     // click edit button
 
-    fireEvent.click(editButton.querySelector('button'));
+    fireEvent.click(editButton);
 
     // confirms navigator.openEntry called w/ correct args
 
@@ -183,7 +183,7 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect edit and remove buttons render
-    const removeButton = queryByTestId('hydrated-remove-entry');
+    const removeButton = queryByTestId('action-dropdown--remove');
     expect(removeButton).toBeTruthy();
 
     // click remove button

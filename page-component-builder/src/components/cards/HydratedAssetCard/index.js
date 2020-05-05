@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { DropdownList, DropdownListItem, AssetCard } from '@contentful/forma-36-react-components';
+import ActionDropdown from '../../elements/ActionDropdown';
 
 import { getStatus } from '../../../utilities/index';
 
@@ -16,21 +17,10 @@ const HydratedAssetCard = props => {
       src={((props.asset.fields.file || {})['en-US'] || {}).url}
       onClick={props.handleEditClick}
       dropdownListElements={
-        <DropdownList>
-          <DropdownListItem isTitle>Actions</DropdownListItem>
-          <DropdownListItem
-            testId="hydrated-edit-asset"
-            className="asset-card__action--edit"
-            onClick={props.handleEditClick}>
-            Edit
-          </DropdownListItem>
-          <DropdownListItem
-            testId="hydrated-remove-asset"
-            className="asset-card__action--remove"
-            onClick={props.handleRemoveClick}>
-            Remove
-          </DropdownListItem>
-        </DropdownList>
+        <ActionDropdown
+          handleEditClick={props.handleEditClick}
+          handleRemoveClick={props.handleRemoveClick}
+        />
       }
     />
   );

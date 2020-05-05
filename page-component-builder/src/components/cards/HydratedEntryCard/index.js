@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { DropdownList, DropdownListItem, EntryCard } from '@contentful/forma-36-react-components';
+import ActionDropdown from '../../elements/ActionDropdown';
 
 import { getStatus } from '../../../utilities/index';
 import classnames from 'classnames';
@@ -19,7 +20,7 @@ const renderMissingEntry = props => {
             <DropdownListItem isTitle>Actions</DropdownListItem>
             {props.handleRemoveClick && (
               <DropdownListItem
-                testId="hydrated-remove-entry"
+                testId="action-dropdown--remove"
                 className="entry-card__action--remove"
                 onClick={props.handleRemoveClick}>
                 Remove
@@ -57,27 +58,10 @@ const HydratedEntryCard = props => {
       onDragEnd={props.onDragEnd}
       onClick={props.onClick}
       dropdownListElements={
-        !!(props.handleRemoveClick || props.handleEditClick) ? (
-          <DropdownList testId="hydrated-entry-actions">
-            <DropdownListItem isTitle>Actions</DropdownListItem>
-            {props.handleEditClick && (
-              <DropdownListItem
-                testId="hydrated-edit-entry"
-                className="entry-card__action--edit"
-                onClick={props.handleEditClick}>
-                Edit
-              </DropdownListItem>
-            )}
-            {props.handleRemoveClick && (
-              <DropdownListItem
-                testId="hydrated-remove-entry"
-                className="entry-card__action--remove"
-                onClick={props.handleRemoveClick}>
-                Remove
-              </DropdownListItem>
-            )}
-          </DropdownList>
-        ) : null
+        <ActionDropdown
+          handleEditClick={props.handleEditClick}
+          handleRemoveClick={props.handleRemoveClick}
+        />
       }
     />
   );

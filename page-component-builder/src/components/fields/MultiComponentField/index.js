@@ -12,6 +12,7 @@ import {
 
 import SelectComponentModal from '../../SelectComponentModal';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
+
 import { constructLink, createEntry, newInternalMappingFromSchema } from '../../../utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
@@ -219,7 +220,7 @@ MultiComponentField.propTypes = {
   replaceHydratedEntry: PropTypes.func,
   propKey: PropTypes.string,
   useConfigObjects: PropTypes.bool,
-  value: PropTypes.object
+  value: PropTypes.array
 };
 
 MultiComponentField.defaultProps = {

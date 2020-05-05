@@ -58,8 +58,8 @@ describe('actions', () => {
 
     // expect no card renders
     expect(queryByTestId('hydrated-entry-card')).toBeNull();
-    expect(queryByTestId('hydrated-edit-entry')).toBeNull();
-    expect(queryByTestId('hydrated-remove-entry')).toBeNull();
+    expect(queryByTestId('action-dropdown--edit')).toBeNull();
+    expect(queryByTestId('action-dropdown--remove')).toBeNull();
   });
 
   it('hydrated component - loads actions', () => {
@@ -81,8 +81,8 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect edit and remove buttons render
-    expect(queryByTestId('hydrated-edit-entry')).toBeTruthy();
-    expect(queryByTestId('hydrated-remove-entry')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--edit')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--remove')).toBeTruthy();
   });
 
   it('singleton component - loads actions', () => {
@@ -200,10 +200,10 @@ describe('actions', () => {
     const actionButton = queryByTestId('cf-ui-card-actions');
     fireEvent.click(actionButton.querySelector('button'));
 
-    const editButton = queryByTestId('hydrated-edit-entry');
+    const editButton = queryByTestId('action-dropdown--edit');
     expect(editButton).toBeTruthy();
 
-    fireEvent.click(editButton.querySelector('button'));
+    fireEvent.click(editButton);
 
     await expect(sdk.navigator.openEntry.mock.calls).toHaveLength(1);
     await expect(sdk.navigator.openEntry.mock.calls[0][0]).toBe(1);
@@ -226,7 +226,7 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect edit and remove buttons render
-    const removeButton = queryByTestId('hydrated-remove-entry');
+    const removeButton = queryByTestId('action-dropdown--remove');
     expect(removeButton).toBeTruthy();
 
     // click remove button

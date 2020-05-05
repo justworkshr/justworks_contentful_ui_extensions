@@ -41,8 +41,8 @@ describe('actions', () => {
 
     // expect no card renders
     expect(queryByTestId('hydrated-asset-card')).toBeNull();
-    expect(queryByTestId('hydrated-edit-asset')).toBeNull();
-    expect(queryByTestId('hydrated-remove-asset')).toBeNull();
+    expect(queryByTestId('action-dropdown--edit')).toBeNull();
+    expect(queryByTestId('action-dropdown--remove')).toBeNull();
   });
 
   it('hydrated asset - loads actions', () => {
@@ -64,8 +64,8 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect edit and remove buttons render
-    expect(queryByTestId('hydrated-edit-asset')).toBeTruthy();
-    expect(queryByTestId('hydrated-remove-asset')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--edit')).toBeTruthy();
+    expect(queryByTestId('action-dropdown--remove')).toBeTruthy();
   });
 
   it('creates an asset', async () => {
@@ -131,12 +131,12 @@ describe('actions', () => {
     const actionButton = queryByTestId('cf-ui-card-actions');
     fireEvent.click(actionButton.querySelector('button'));
 
-    const editButton = queryByTestId('hydrated-edit-asset');
+    const editButton = queryByTestId('action-dropdown--edit');
     expect(editButton).toBeTruthy();
 
     // click edit button
 
-    fireEvent.click(editButton.querySelector('button'));
+    fireEvent.click(editButton);
 
     // confirms navigator.openAsset called w/ correct args
 
@@ -160,7 +160,7 @@ describe('actions', () => {
     fireEvent.click(actionButton.querySelector('button'));
 
     // expect edit and remove buttons render
-    const removeButton = queryByTestId('hydrated-remove-asset');
+    const removeButton = queryByTestId('action-dropdown--remove');
     expect(removeButton).toBeTruthy();
 
     // click remove button

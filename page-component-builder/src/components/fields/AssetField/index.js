@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { TextLink } from '@contentful/forma-36-react-components';
 
-import { getStatus, createAsset, constructLink } from '../../../utilities';
+import { createAsset, constructLink } from '../../../utilities';
 import HydratedAssetCard from '../../cards/HydratedAssetCard';
 
 const AssetField = props => {
