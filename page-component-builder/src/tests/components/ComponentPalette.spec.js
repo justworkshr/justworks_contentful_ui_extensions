@@ -1,7 +1,6 @@
 import React from 'react';
 import ComponentPalette from '../../components/ComponentPalette';
 
-import * as c from '../../constants';
 import {
   render,
   cleanup,
@@ -10,6 +9,7 @@ import {
   wait,
   waitForElementToBeRemoved
 } from '@testing-library/react';
+import * as c from '../../constants';
 import { mockSchemas, mockComponentSchema } from '../mockUtils';
 
 configure({

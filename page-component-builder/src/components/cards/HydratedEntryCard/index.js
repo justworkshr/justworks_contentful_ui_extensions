@@ -19,6 +19,7 @@ const renderMissingEntry = props => {
             <DropdownListItem isTitle>Actions</DropdownListItem>
             {props.handleRemoveClick && (
               <DropdownListItem
+                testId="hydrated-remove-entry"
                 className="entry-card__action--remove"
                 onClick={props.handleRemoveClick}>
                 Remove
@@ -57,10 +58,11 @@ const HydratedEntryCard = props => {
       onClick={props.onClick}
       dropdownListElements={
         !!(props.handleRemoveClick || props.handleEditClick) ? (
-          <DropdownList>
+          <DropdownList testId="hydrated-entry-actions">
             <DropdownListItem isTitle>Actions</DropdownListItem>
             {props.handleEditClick && (
               <DropdownListItem
+                testId="hydrated-edit-entry"
                 className="entry-card__action--edit"
                 onClick={props.handleEditClick}>
                 Edit
@@ -68,6 +70,7 @@ const HydratedEntryCard = props => {
             )}
             {props.handleRemoveClick && (
               <DropdownListItem
+                testId="hydrated-remove-entry"
                 className="entry-card__action--remove"
                 onClick={props.handleRemoveClick}>
                 Remove

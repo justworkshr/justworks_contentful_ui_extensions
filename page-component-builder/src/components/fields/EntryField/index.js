@@ -82,6 +82,7 @@ export const EntryField = props => {
       return (
         <div data-test-id="entry-field-blank" className="link-row">
           <Dropdown
+            testId="create-entry"
             toggleElement={<TextLink className="f36-margin-right--s">Create entry</TextLink>}
             onClick={() => toggleCreate(!createOpen)}
             isOpen={createOpen}>
@@ -99,6 +100,7 @@ export const EntryField = props => {
             </DropdownList>
           </Dropdown>
           <Dropdown
+            testId="link-entry"
             toggleElement={<TextLink className="f36-margin-right--s">Link entry</TextLink>}
             onClick={() => toggleLink(!linkOpen)}
             isOpen={linkOpen}>
@@ -120,6 +122,7 @@ export const EntryField = props => {
     }
   };
 
+  console.log(props.entry);
   return (
     <div className="entry-field" data-test-id="entry-field">
       {renderElement()}
