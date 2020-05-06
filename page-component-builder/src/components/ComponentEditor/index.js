@@ -71,6 +71,15 @@ const ComponentEditor = props => {
     );
   };
 
+  const isDropdownWithCustomField = property => {
+    return (
+      property.type === c.TEXT_PROPERTY &&
+      property.editor_type === c.DROPDOWN_WITH_CUSTOM_EDITOR &&
+      property.options &&
+      !!property.options.length
+    );
+  };
+
   const isAssetLink = property => {
     return (
       property.type === c.LINK_PROPERTY && property.asset_types && !!property.asset_types.length
@@ -216,6 +225,13 @@ const ComponentEditor = props => {
                   <FormLabel className="component-editor__field-label" required={property.required}>
                     {parse_underscore(propKey) || '<label missing>'}
                   </FormLabel>
+                  {!property.required && (
+                    <TextLink
+                      className="f36-margin-left--xs"
+                      onClick={() => updatePropertyValue(propKey, null, false)}>
+                      Clear
+                    </TextLink>
+                  )}
                 </div>
                 {isShortTextField(property) && (
                   <ShortTextField
@@ -244,16 +260,28 @@ const ComponentEditor = props => {
                     value={value}
                   />
                 )}
-                {isRadioTextField(property) && (
-                  <RadioGroup
+                {isDropdownTextField(property) && (
+                  <DropdownField
                     propKey={propKey}
+                    required={property.required}
                     options={property.options}
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
+                    withCustomText={false}
                   />
                 )}
-                {isDropdownTextField(property) && (
+                {isDropdownWithCustomField(property) && (
                   <DropdownField
+                    propKey={propKey}
+                    required={property.required}
+                    options={property.options}
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    value={value}
+                    withCustomText={true}
+                  />
+                )}
+                {isRadioTextField(property) && (
+                  <RadioGroup
                     propKey={propKey}
                     options={property.options}
                     onChange={value => updatePropertyValue(propKey, value, true)}

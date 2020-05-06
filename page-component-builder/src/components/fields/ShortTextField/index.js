@@ -6,9 +6,9 @@ import { TextInput } from '@contentful/forma-36-react-components';
 const ShortTextField = props => {
   return (
     <TextInput
-      testId="short-text-field"
+      testId={props.testId}
       onChange={e => props.onChange(e.target.value)}
-      value={props.value}
+      value={props.value || ''}
     />
   );
 };
@@ -19,6 +19,7 @@ ShortTextField.propTypes = {
   value: PropTypes.string
 };
 ShortTextField.defaultProps = {
+  testId: 'short-text-field',
   value: ''
 };
 
