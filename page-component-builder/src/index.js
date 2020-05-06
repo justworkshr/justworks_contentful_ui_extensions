@@ -70,6 +70,9 @@ export class PageComponentBuilder extends React.Component {
     const assets = props.sdk.entry.fields.assets.getValue() || [];
     const hydratedAssets = props.hydratedAssets || [];
     const hydratedEntries = props.hydratedEntries || [];
+
+    const internalMappingJson =
+      props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({});
     this.state = {
       schemaData,
       name: props.sdk.entry.fields.name.getValue(),
@@ -77,7 +80,7 @@ export class PageComponentBuilder extends React.Component {
       configObject: props.sdk.entry.fields.configObject.getValue(),
       entries: entries.filter(e => e),
       assets: assets.filter(e => e),
-      internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
+      internalMapping: internalMappingJson,
       isValid: props.sdk.entry.fields.isValid.getValue(),
       loadingEntries: {}, // key: status (false | true | null) = not loading, loading, not found
       hydratedEntries,
@@ -88,15 +91,26 @@ export class PageComponentBuilder extends React.Component {
 
     props.sdk.entry.fields.internalMapping.onValueChanged(this.onInternalMappingChange);
 
+    // load initial entries / assets
+
     this.fetchSchemas = this.fetchSchemas.bind(this);
     this.currentSchema = this.currentSchema.bind(this);
     this.internalMappingFromComponentId = this.internalMappingFromComponentId.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    await this.syncEntriesAssets();
     this.fetchSchemas();
     this.onInternalMappingChange(this.state.internalMapping);
-  }
+  };
+
+  syncEntriesAssets = async () => {
+    const internalMappingObject = this.parseInternalMapping(this.state.internalMapping);
+    const newEntries = extractEntries(internalMappingObject, c.ENTRY_LINK_TYPE) || [];
+    const newAssets = extractEntries(internalMappingObject, c.ASSET_LINK_TYPE) || [];
+    await this.onEntriesChangeHandler(newEntries);
+    await this.onAssetsChangeHandler(newAssets);
+  };
 
   fetchSchemas = async () => {
     // const response = await Axios.get('https://justworks.com/components.json');
@@ -214,32 +228,36 @@ export class PageComponentBuilder extends React.Component {
     const newEntries = extractEntries(internalMappingObject, c.ENTRY_LINK_TYPE) || [];
     const newAssets = extractEntries(internalMappingObject, c.ASSET_LINK_TYPE) || [];
 
-    await this.onEntriesChangeHandler(newEntries);
-    await this.onAssetsChangeHandler(newAssets);
-
     const entriesToFetch = linksToFetch(this.state.hydratedEntries, newEntries) || [];
     const assetsToFetch = linksToFetch(this.state.hydratedAssets, newAssets) || [];
-
     // set loading
     const loadingEntries = {};
     entriesToFetch.forEach(e => (loadingEntries[(e.sys || {}).id] = true));
     this.setState({ loadingEntries });
     // fetch
-    const fetchedEntries = !!entriesToFetch.length
-      ? await this.props.sdk.space.getEntries({
-          'sys.id[in]': entriesToFetch.map(l => l.sys.id).join(',')
-        })
-      : { items: [] };
+    let fetchedEntries = { items: [] };
+    let fetchedAssets = { items: [] };
+    if (entriesToFetch.length) {
+      await this.onEntriesChangeHandler(newEntries);
+      fetchedEntries = !!entriesToFetch.length
+        ? await this.props.sdk.space.getEntries({
+            'sys.id[in]': entriesToFetch.map(l => l.sys.id).join(',')
+          })
+        : { items: [] };
 
-    // update loading
-    Object.keys(loadingEntries).forEach(key => (loadingEntries[key] = null));
-    fetchedEntries.items.forEach(e => (loadingEntries[(e.sys || {}).id] = false));
+      // update loading
+      Object.keys(loadingEntries).forEach(key => (loadingEntries[key] = null));
+      fetchedEntries.items.forEach(e => (loadingEntries[(e.sys || {}).id] = false));
+    }
 
-    const fetchedAssets = !!assetsToFetch.length
-      ? await this.props.sdk.space.getAssets({
-          'sys.id[in]': assetsToFetch.map(l => l.sys.id).join(',')
-        })
-      : { items: [] };
+    if (assetsToFetch.length) {
+      await this.onAssetsChangeHandler(newAssets);
+      fetchedAssets = !!assetsToFetch.length
+        ? await this.props.sdk.space.getAssets({
+            'sys.id[in]': assetsToFetch.map(l => l.sys.id).join(',')
+          })
+        : { items: [] };
+    }
 
     this.setState(oldState => {
       if (!!this.updateTimeout) return; // Don't run if the timeout is running with a pending update
@@ -362,7 +380,7 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field d-none">
+        <div className="component-editor__field">
           <FormLabel htmlFor="field-internalMapping">Internal Mapping</FormLabel>
           <Textarea
             id="field-internalMapping"

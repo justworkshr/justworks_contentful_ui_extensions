@@ -417,7 +417,7 @@ export const mockSchemas = {
           form_config: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: 'Data object for configuring a form element.',
             related_to: 'elements/form',
             hidden: false
@@ -635,8 +635,8 @@ export const mockSchemas = {
             type: 'component',
             required: false,
             default: null,
-            options: [],
-            description: null,
+            options: ['components/basic_lead_form'],
+            description: 'The component which will appear in the modal.',
             related_to: null,
             hidden: false
           },
@@ -1429,7 +1429,6 @@ export const mockSchemas = {
             type: 'text',
             required: false,
             default: '',
-            editor_type: 'dropdown-editor',
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -1464,16 +1463,16 @@ export const mockSchemas = {
             ],
             description: null,
             related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           modal_component: {
-            type: 'text',
+            type: 'component',
             required: false,
-            default: '',
-            options: null,
-            description: null,
+            default: null,
+            options: ['components/basic_lead_form'],
+            description: 'The component which will appear in the modal.',
             related_to: null,
-            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -1542,7 +1541,6 @@ export const mockSchemas = {
             type: 'text',
             required: false,
             default: null,
-            editor_type: 'dropdown-editor',
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -2552,7 +2550,6 @@ export const mockSchemas = {
             type: 'text',
             required: false,
             default: 'plus',
-            editor_type: 'dropdown-editor',
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -2842,7 +2839,7 @@ export const mockSchemas = {
           input_config: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: null,
             related_to: 'elements/select',
             hidden: false
@@ -2921,7 +2918,7 @@ export const mockSchemas = {
           input_config: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: null,
             related_to: 'elements/text_input',
             hidden: false
@@ -3055,7 +3052,7 @@ export const mockSchemas = {
           title_link: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: null,
             related_to: 'components/text_link',
             hidden: false
@@ -3155,7 +3152,7 @@ export const mockSchemas = {
           title_link: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: null,
             related_to: 'components/text_link',
             hidden: false
@@ -3203,7 +3200,6 @@ export const mockSchemas = {
             type: 'text',
             required: false,
             default: null,
-            editor_type: 'dropdown-editor',
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -3480,7 +3476,6 @@ export const mockSchemas = {
             type: 'text',
             required: false,
             default: 'play-circle-filled',
-            editor_type: 'dropdown-editor',
             options: ['play', 'play-circle-outline', 'play-circle-filled'],
             description: null,
             related_to: null,
@@ -3958,7 +3953,7 @@ export const mockSchemas = {
           form_config: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: 'Data object for configuring a form element.',
             related_to: 'elements/form',
             hidden: false
@@ -4297,7 +4292,7 @@ export const mockSchemas = {
           data: {
             type: 'json',
             required: false,
-            default: '{}',
+            default: {},
             description: 'HTML dataset info applied to content_tag',
             related_to: null,
             hidden: true
@@ -4305,7 +4300,7 @@ export const mockSchemas = {
           link_config: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: 'Use a config object to provide data.',
             related_to: 'components/text_link',
             hidden: false
@@ -5067,7 +5062,7 @@ export const mockSchemas = {
           data: {
             type: 'json',
             required: false,
-            default: '{}',
+            default: {},
             description: 'HTML dataset info applied to content_tag',
             related_to: null,
             hidden: false
@@ -5539,7 +5534,7 @@ export const mockSchemas = {
           input_config: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description: 'Use a config object to provide data.',
             related_to: 'elements/text_input',
             hidden: false
@@ -7221,7 +7216,7 @@ export const mockSchemas = {
           cta_link: {
             type: 'config',
             required: false,
-            default: '{}',
+            default: {},
             description:
               "Add this to override the 'show more' default cta with a persistant cta link.",
             related_to: 'components/text_link',

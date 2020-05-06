@@ -71,13 +71,16 @@ export const MultiComponentField = props => {
       .filter(f => f);
   };
 
-  const updateEntry = (entries = []) => {
+  const updateEntry = (entries = [], timeout = false) => {
     if (entries.length) {
       const parsedEntries = parseEntries(entries);
 
-      props.onChange(parsedEntries.filter(e => e));
+      props.onChange(
+        parsedEntries.filter(e => e),
+        timeout
+      );
     } else {
-      props.onChange([]);
+      props.onChange([], timeout);
     }
 
     resetDrag();

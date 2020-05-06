@@ -341,7 +341,7 @@ const ComponentEditor = props => {
                       .filter(e => e)}
                     schemas={props.schemas}
                     loadingEntries={props.loadingEntries}
-                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     replaceHydratedAsset={props.replaceHydratedAsset}
                     useConfigObjects={false}

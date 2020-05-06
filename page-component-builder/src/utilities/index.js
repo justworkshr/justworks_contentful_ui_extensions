@@ -5,14 +5,14 @@ export const constructLink = entry => {
   return {
     sys: {
       type: 'Link',
-      linkType: entry.sys.type,
+      linkType: entry.sys.linkType || entry.sys.type, // redundant check linkType in case link accidentally passed in
       id: entry.sys.id
     }
   };
 };
 
 const isLinkOfType = (linkType = 'Entry', link) => {
-  if (!link) return false;
+  if (!link || !link.sys) return false;
   return link.sys.linkType === linkType;
 };
 
@@ -62,7 +62,7 @@ export const extractEntries = (mappingObject, linkType = c.ENTRY_LINK_TYPE) => {
       mappingObject.properties[key].value.forEach(component => {
         if (isComponentPropertySingleton(component)) {
           entries = [...entries, ...(extractEntries(component, linkType) || [])];
-        } else {
+        } else if (isLinkOfType(linkType, component)) {
           entries.push(component);
         }
       });
