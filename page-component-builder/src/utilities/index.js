@@ -83,11 +83,14 @@ export const isComponentPropertyLink = value => {
 export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
   const linksToFetch = [];
 
-  allLinks.forEach(link => {
-    if (!hydratedEntries.some(e => e.sys.id === link.sys.id)) {
-      linksToFetch.push(link);
-    }
-  });
+  allLinks
+    .filter(l => l)
+    .forEach(link => {
+      console.log(link);
+      if (!hydratedEntries.some(e => e.sys.id === link.sys.id)) {
+        linksToFetch.push(link);
+      }
+    });
 
   return linksToFetch;
 };

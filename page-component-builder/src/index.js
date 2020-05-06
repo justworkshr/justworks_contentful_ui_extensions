@@ -75,8 +75,8 @@ export class PageComponentBuilder extends React.Component {
       name: props.sdk.entry.fields.name.getValue(),
       componentId: props.sdk.entry.fields.componentId.getValue(),
       configObject: props.sdk.entry.fields.configObject.getValue(),
-      entries,
-      assets,
+      entries: entries.filter(e => e),
+      assets: assets.filter(e => e),
       internalMapping: props.sdk.entry.fields.internalMapping.getValue() || JSON.stringify({}),
       isValid: props.sdk.entry.fields.isValid.getValue(),
       loadingEntries: {}, // key: status (false | true | null) = not loading, loading, not found
@@ -186,7 +186,7 @@ export class PageComponentBuilder extends React.Component {
     if (Array.isArray(value)) {
       if (!this.state.updatingEntries) {
         this.setState({ updatingEntries: true });
-        this.setState({ entries: value });
+        this.setState({ entries: value.filter(e => e) });
         this.setState({ updatingEntries: false });
       }
       await this.props.sdk.entry.fields.entries.setValue(value);
@@ -199,7 +199,7 @@ export class PageComponentBuilder extends React.Component {
     if (Array.isArray(value)) {
       if (!this.state.updatingAssets) {
         this.setState({ updatingAssets: true });
-        this.setState({ assets: value });
+        this.setState({ assets: value.filter(e => e) });
         this.setState({ updatingAssets: false });
       }
       await this.props.sdk.entry.fields.assets.setValue(value);
@@ -222,7 +222,7 @@ export class PageComponentBuilder extends React.Component {
 
     // set loading
     const loadingEntries = {};
-    entriesToFetch.forEach(e => (loadingEntries[e.sys.id] = true));
+    entriesToFetch.forEach(e => (loadingEntries[(e.sys || {}).id] = true));
     this.setState({ loadingEntries });
     // fetch
     const fetchedEntries = !!entriesToFetch.length
@@ -233,7 +233,7 @@ export class PageComponentBuilder extends React.Component {
 
     // update loading
     Object.keys(loadingEntries).forEach(key => (loadingEntries[key] = null));
-    fetchedEntries.items.forEach(e => (loadingEntries[e.sys.id] = false));
+    fetchedEntries.items.forEach(e => (loadingEntries[(e.sys || {}).id] = false));
 
     const fetchedAssets = !!assetsToFetch.length
       ? await this.props.sdk.space.getAssets({
@@ -346,7 +346,7 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field d-none">
+        <div className="component-editor__field">
           <Textarea
             testId="field-entries"
             value={this.state.entries.map(e => e.sys.id).join(', ')}

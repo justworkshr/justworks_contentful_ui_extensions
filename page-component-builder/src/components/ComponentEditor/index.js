@@ -341,6 +341,7 @@ const ComponentEditor = props => {
                     loadingEntries={props.loadingEntries}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
+                    replaceHydratedAsset={props.replaceHydratedAsset}
                     useConfigObjects={false}
                     value={value}
                   />

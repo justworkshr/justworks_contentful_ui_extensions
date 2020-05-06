@@ -3,21 +3,15 @@ import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
 
-import { EntryCard } from '@contentful/forma-36-react-components';
-
 import { createEntry, constructLink, newInternalMappingFromSchema } from '../../../utilities/index';
-import { schemaTitle } from '../../../utilities/copyUtils';
 
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import SelectComponentModal from '../../SelectComponentModal';
-import ComponentEditor from '../../ComponentEditor';
-import ActionDropdown from '../../elements/ActionDropdown';
+import SingletonField from '../SingletonField';
 import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
 
 const ComponentField = props => {
-  const [singletonCardOpen, toggleSingletonCard] = useState(false);
-
   const [linkModalOpen, toggleLinkModal] = useState(false);
   const [modalOptions, setModalOptions] = useState([]);
 
@@ -132,35 +126,18 @@ const ComponentField = props => {
       );
 
       return (
-        <div className="component-field-singleton" data-test-id="component-field-singleton">
-          <div className="component-field-singleton__editor f36-padding-left--xl">
-            <EntryCard
-              className="f36-margin-top--s f36-margin-bottom--m"
-              testId="singleton-entry-card"
-              loading={false}
-              title={schemaTitle(schema)}
-              contentType={contentTypeLabel('Singleton')}
-              description={schema.meta.description}
-              size="default"
-              statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
-              onClick={() => toggleSingletonCard(!singletonCardOpen)}
-              dropdownListElements={<ActionDropdown handleRemoveClick={() => updateEntry(null)} />}
-            />
-            {!!singletonCardOpen && (
-              <ComponentEditor
-                sdk={props.sdk}
-                schemas={props.schemas}
-                updateInternalMapping={updateSingletonEntry}
-                hydratedAssets={props.hydratedAssets}
-                hydratedEntries={props.hydratedEntries}
-                replaceHydratedAsset={props.replaceHydratedAsset}
-                replaceHydratedEntry={props.replaceHydratedEntry}
-                internalMappingInstance={props.internalMappingInstance}
-                schema={schema}
-              />
-            )}
-          </div>
-        </div>
+        <SingletonField
+          sdk={props.sdk}
+          schema={schema}
+          schemas={props.schemas}
+          hydratedAssets={props.hydratedAssets}
+          hydratedEntries={props.hydratedEntries}
+          replaceHydratedAsset={props.replaceHydratedAsset}
+          replaceHydratedEntry={props.replaceHydratedEntry}
+          onChange={updateSingletonEntry}
+          internalMappingInstance={props.internalMappingInstance}
+          handleRemoveClick={() => updateEntry(null)}
+        />
       );
     } else {
       return (

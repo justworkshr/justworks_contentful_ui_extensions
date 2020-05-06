@@ -7,6 +7,8 @@ import SelectComponentModal from '../../SelectComponentModal';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
+import SingletonField from '../SingletonField';
+import InternalMapping from '../../../classes/InternalMapping';
 
 import { constructLink, createEntry, newInternalMappingFromSchema } from '../../../utilities/index';
 
@@ -55,8 +57,18 @@ export const MultiComponentField = props => {
 
   const updateEntry = (entries = []) => {
     if (entries.length) {
-      const links = entries.map(entry => constructLink(entry));
-      props.onChange(links);
+      const parsedEntries = entries
+        .filter(f => f)
+        .map(entry => {
+          // pass singleton object or link
+          if (entry.sys) {
+            return constructLink(entry);
+          } else if (entry.componentId) {
+            return entry;
+          }
+        });
+
+      props.onChange(parsedEntries.filter(e => e));
     } else {
       props.onChange([]);
     }
@@ -96,6 +108,20 @@ export const MultiComponentField = props => {
     updateEntry(entries);
   };
 
+  const handleCreateSingletonClick = componentId => {
+    const schema = props.schemas.find(s => s.meta.id === componentId);
+    const componentInternalMapping = newInternalMappingFromSchema(schema, false);
+    const entries = [...props.entries, JSON.parse(componentInternalMapping.asJSON())];
+    console.log(componentId, entries);
+    updateEntry(entries);
+  };
+
+  const updateSingletonEntry = (value, timeout = false) => {
+    // pass internal mapping json as raw object
+    const entries = [...props.entries, JSON.parse(value)];
+    updateEntry(entries, timeout);
+  };
+
   const handleCreateClick = async componentId => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
 
@@ -122,29 +148,54 @@ export const MultiComponentField = props => {
   };
 
   const renderEntryCards = () => {
-    return props.value.map((link, index) => {
-      const entry = props.entries.find(e => ((e && e.sys) || {}).id === link.sys.id);
-      return (
-        <HydratedEntryCard
-          key={`${props.propKey}-entries--${index}`}
-          index={index}
-          className="f36-margin-bottom--xs"
-          contentType={`${
-            entry ? (entry.fields.componentId || {})['en-US'] : c.CONTENT_TYPE_VIEW_COMPONENT
-          }`}
-          isLoading={props.loadingEntries[link.sys.id]}
-          onClick={() => handleEditClick(entry)}
-          handleEditClick={() => handleEditClick(entry)}
-          handleRemoveClick={() => handleRemoveClick(index)}
-          draggable={true}
-          isDragActive={index === dragged || index === draggedOver}
-          onDragStart={onDragStart}
-          onDragOver={onDragOver}
-          onDragEnd={onDragEnd}
-          entry={entry}
-        />
-      );
-    });
+    return props.value
+      .filter(e => e)
+      .map((linkOrSingleton, index) => {
+        console.log(linkOrSingleton);
+        if (linkOrSingleton.sys) {
+          // linked entry
+          const entry = props.entries.find(e => ((e && e.sys) || {}).id === linkOrSingleton.sys.id);
+          return (
+            <HydratedEntryCard
+              key={`${props.propKey}-entries--${index}`}
+              index={index}
+              className="f36-margin-bottom--xs"
+              contentType={`${
+                entry ? (entry.fields.componentId || {})['en-US'] : c.CONTENT_TYPE_VIEW_COMPONENT
+              }`}
+              isLoading={props.loadingEntries[linkOrSingleton.sys.id]}
+              onClick={() => handleEditClick(entry)}
+              handleEditClick={() => handleEditClick(entry)}
+              handleRemoveClick={() => handleRemoveClick(index)}
+              draggable={true}
+              isDragActive={index === dragged || index === draggedOver}
+              onDragStart={onDragStart}
+              onDragOver={onDragOver}
+              onDragEnd={onDragEnd}
+              entry={entry}
+            />
+          );
+        } else if (linkOrSingleton.componentId) {
+          // singleton
+          const schema = props.schemas.find(s => s.meta.id === linkOrSingleton.componentId);
+          return (
+            <SingletonField
+              sdk={props.sdk}
+              schemas={props.schemas}
+              onChange={updateSingletonEntry}
+              hydratedAssets={props.hydratedAssets}
+              hydratedEntries={props.hydratedEntries}
+              replaceHydratedAsset={props.replaceHydratedAsset}
+              replaceHydratedEntry={props.replaceHydratedEntry}
+              internalMappingInstance={
+                new InternalMapping(linkOrSingleton.componentId, linkOrSingleton.properties, schema)
+              }
+              schema={schema}
+              handleRemoveClick={() => updateEntry(null)}
+            />
+          );
+        }
+      });
   };
 
   return (
@@ -160,6 +211,12 @@ export const MultiComponentField = props => {
       />
       <div data-test-id="multi-component-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">
+        <DropdownCreate
+          testId="dropdown-create-singleton"
+          handleCreateClick={handleCreateSingletonClick}
+          toggleText="Create singleton"
+          options={props.options}
+        />
         <DropdownCreate handleCreateClick={handleCreateClick} options={props.options} />
         <DropdownLink handleLinkClick={handleLinkClick} options={props.options} />
       </div>
@@ -174,6 +231,7 @@ MultiComponentField.propTypes = {
   onChange: PropTypes.func,
   schemas: PropTypes.array,
   sdk: PropTypes.object,
+  replaceHydratedAsset: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
   propKey: PropTypes.string,
   useConfigObjects: PropTypes.bool,
