@@ -206,7 +206,8 @@ export const MultiComponentField = props => {
                 new InternalMapping(
                   linkOrSingleton.componentId,
                   linkOrSingleton.properties,
-                  schema.props.useConfigObjects
+                  schema,
+                  props.useConfigObjects
                 )
               }
               schema={schema}

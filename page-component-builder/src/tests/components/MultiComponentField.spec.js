@@ -17,18 +17,19 @@ const mockComponentId = 'patterns/componentId';
 const mockComponentOption = 'components/a';
 
 const renderComponent = ({
-  entries = [mockEntryResponse({ id: 1, contentType: mockContentType })],
+  hydratedEntries = [mockEntryResponse({ id: 1, contentType: mockContentType })],
   internalMappingInstance = null, // singleton data
   sdk = mockSdk(),
-  options = [mockComponentOption]
+  options = [mockComponentOption],
+  value = [mockEntryResponse({ id: 1, contentType: mockContentType })]
 } = {}) => {
   const schemas = mockSchemas({}, [mockSchema(mockComponentId), mockSchema(mockComponentOption)]);
   return render(
     <MultiComponentField
       sdk={sdk}
       schemas={schemas.components}
-      hydratedEntries={entries}
-      value={entries}
+      hydratedEntries={hydratedEntries}
+      value={value}
       internalMappingInstance={internalMappingInstance}
       isLoading={false}
       onChange={mockOnChange}
@@ -48,7 +49,8 @@ describe('actions', () => {
 
   it('blank component - loads actions', () => {
     const { queryByTestId } = renderComponent({
-      entries: []
+      hydratedEntries: [],
+      value: []
     });
 
     expect(queryByTestId('multi-component-field')).toBeTruthy();
@@ -63,8 +65,10 @@ describe('actions', () => {
 
   it('hydrated component - loads actions', () => {
     // renders edit and remove buttons
+    const entries = [mockEntryResponse({ id: 1, contentType: mockContentType })];
     const { queryByTestId } = renderComponent({
-      entries: [mockEntryResponse({ id: 1, contentType: mockContentType })],
+      hydratedEntries: entries,
+      value: entries,
       options: [mockComponentOption]
     });
 
@@ -89,7 +93,8 @@ describe('actions', () => {
     const sdk = mockSdk();
     const { queryByTestId } = renderComponent({
       sdk: sdk,
-      entries: []
+      hydratedEntries: [],
+      value: []
     });
 
     const createDropdown = queryByTestId('dropdown-create');
@@ -129,7 +134,8 @@ describe('actions', () => {
     const sdk = mockSdk();
     const { queryByTestId } = renderComponent({
       sdk: sdk,
-      entries: []
+      hydratedEntries: [],
+      value: []
     });
 
     const linkDropdown = queryByTestId('dropdown-link');
@@ -164,9 +170,11 @@ describe('actions', () => {
 
   it('edits an entry', async () => {
     const sdk = mockSdk();
+    const value = [mockEntryResponse({ id: 1, contentType: mockContentType })];
     const { queryByTestId } = renderComponent({
       sdk: sdk,
-      entries: [mockEntryResponse({ id: 1, contentType: mockContentType })],
+      hydratedEntries: value,
+      value: value,
       options: [mockComponentOption]
     });
 
@@ -189,10 +197,11 @@ describe('actions', () => {
 
   it('removes an entry', async () => {
     const sdk = mockSdk();
-
+    const value = [mockEntryResponse({ id: 1, contentType: mockContentType })];
     const { queryByTestId } = renderComponent({
       sdk: sdk,
-      entries: [mockEntryResponse({ id: 1, contentType: mockContentType })],
+      hydratedEntries: value,
+      value,
       options: [mockComponentOption]
     });
 
@@ -212,5 +221,64 @@ describe('actions', () => {
 
     await expect(mockOnChange.mock.calls).toHaveLength(1);
     await expect(mockOnChange.mock.calls[0][0]).toStrictEqual([]);
+  });
+
+  it('creates a singleton', async () => {
+    const sdk = mockSdk();
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      hydratedEntries: [],
+      value: []
+    });
+
+    const createDropdown = queryByTestId('dropdown-create-singleton');
+    expect(createDropdown).toBeTruthy();
+
+    // click create dropdown
+    fireEvent.click(createDropdown.querySelector('button'));
+    const createButton = queryByTestId(`dropdown-create-type--${mockComponentOption}`);
+    expect(createButton).toBeTruthy();
+
+    // click create type button
+    await fireEvent.click(createButton.querySelector('button'));
+
+    await expect(mockOnChange.mock.calls).toHaveLength(1);
+    await expect(mockOnChange.mock.calls[0][0]).toMatchObject([
+      {
+        componentId: mockComponentOption,
+        properties: {}
+      }
+    ]);
+  });
+
+  it('removes a singleton', async () => {
+    const sdk = mockSdk();
+    const value = [
+      {
+        componentId: mockComponentId,
+        properties: {}
+      }
+    ];
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      hydratedEntries: [],
+      value: value
+    });
+
+    // expect card renders
+    expect(queryByTestId('hydrated-entry-card')).toBeNull();
+    expect(queryByTestId('component-field-singleton')).toBeTruthy();
+
+    // open action dropdown
+    const actionButton = queryByTestId('cf-ui-card-actions');
+    fireEvent.click(actionButton.querySelector('button'));
+
+    // expect remove buttons render
+    const removeButton = queryByTestId('action-dropdown--remove');
+    expect(removeButton).toBeTruthy();
+
+    fireEvent.click(removeButton.querySelector('button'));
+    await expect(mockOnChange.mock.calls).toHaveLength(1);
+    await expect(mockOnChange.mock.calls[0][0]).toEqual([]);
   });
 });
