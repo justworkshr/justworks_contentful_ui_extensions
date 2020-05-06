@@ -203,7 +203,11 @@ export const MultiComponentField = props => {
               replaceHydratedAsset={props.replaceHydratedAsset}
               replaceHydratedEntry={props.replaceHydratedEntry}
               internalMappingInstance={
-                new InternalMapping(linkOrSingleton.componentId, linkOrSingleton.properties, schema)
+                new InternalMapping(
+                  linkOrSingleton.componentId,
+                  linkOrSingleton.properties,
+                  schema.props.useConfigObjects
+                )
               }
               schema={schema}
               handleRemoveClick={() => handleRemoveClick(index)}
@@ -233,12 +237,14 @@ export const MultiComponentField = props => {
       />
       <div data-test-id="multi-component-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">
-        <DropdownCreate
-          testId="dropdown-create-singleton"
-          handleCreateClick={handleCreateSingletonClick}
-          toggleText="Create singleton"
-          options={props.options}
-        />
+        {!props.useConfigObjects && (
+          <DropdownCreate
+            testId="dropdown-create-singleton"
+            handleCreateClick={handleCreateSingletonClick}
+            toggleText="Create singleton"
+            options={props.options}
+          />
+        )}
         <DropdownCreate handleCreateClick={handleCreateClick} options={props.options} />
         <DropdownLink handleLinkClick={handleLinkClick} options={props.options} />
       </div>
@@ -262,7 +268,7 @@ MultiComponentField.propTypes = {
 
 MultiComponentField.defaultProps = {
   options: [],
-  entries: [],
+  hydratedEntries: [],
   schemas: [],
   useConfigObjects: false,
   loadingEntries: {},
