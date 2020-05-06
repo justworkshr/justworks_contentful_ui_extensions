@@ -21,12 +21,12 @@ export const MultiComponentField = props => {
   const [dragged, setDragged] = useState(undefined);
   const [draggedOver, setDraggedOver] = useState(undefined);
 
-  const onDragStart = entry => {
-    setDragged(entry);
+  const onDragStart = index => {
+    setDragged(index);
   };
 
-  const onDragOver = entry => {
-    setDraggedOver(entry);
+  const onDragOver = index => {
+    setDraggedOver(index);
   };
 
   const onDragEnd = e => {
@@ -42,11 +42,12 @@ export const MultiComponentField = props => {
     }
 
     // flip by index
-    const links = props.entries;
-    const draggedEntry = props.entries[dragged];
+    const links = props.value;
+    const draggedEntry = props.value[dragged];
     links[dragged] = links[draggedOver];
     links[draggedOver] = draggedEntry;
-    props.onChange(links.map(entry => constructLink(entry)));
+
+    props.onChange(parseEntries(links));
 
     resetDrag();
   };
@@ -55,18 +56,24 @@ export const MultiComponentField = props => {
     setDraggedOver(undefined);
   };
 
+  const parseEntries = entries => {
+    // parses link or singletons
+    return entries
+      .filter(f => f)
+      .map(entry => {
+        // pass singleton object or link
+        if (entry.sys) {
+          return constructLink(entry);
+        } else if (entry.componentId) {
+          return entry;
+        }
+      })
+      .filter(f => f);
+  };
+
   const updateEntry = (entries = []) => {
     if (entries.length) {
-      const parsedEntries = entries
-        .filter(f => f)
-        .map(entry => {
-          // pass singleton object or link
-          if (entry.sys) {
-            return constructLink(entry);
-          } else if (entry.componentId) {
-            return entry;
-          }
-        });
+      const parsedEntries = parseEntries(entries);
 
       props.onChange(parsedEntries.filter(e => e));
     } else {
@@ -78,7 +85,7 @@ export const MultiComponentField = props => {
 
   const handleModalSubmit = (entries = []) => {
     if (entries.length) {
-      updateEntry([...props.entries, ...entries]);
+      updateEntry([...props.value, ...entries]);
     }
   };
 
@@ -104,21 +111,22 @@ export const MultiComponentField = props => {
   };
 
   const handleRemoveClick = index => {
-    let entries = [...props.entries.slice(0, index), ...props.entries.slice(index + 1)];
+    let entries = [...props.value.slice(0, index), ...props.value.slice(index + 1)];
     updateEntry(entries);
   };
 
   const handleCreateSingletonClick = componentId => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
     const componentInternalMapping = newInternalMappingFromSchema(schema, false);
-    const entries = [...props.entries, JSON.parse(componentInternalMapping.asJSON())];
-    console.log(componentId, entries);
+    const entries = [...props.value, JSON.parse(componentInternalMapping.asJSON())];
+
     updateEntry(entries);
   };
 
-  const updateSingletonEntry = (value, timeout = false) => {
+  const updateSingletonEntry = (value, timeout = false, index) => {
     // pass internal mapping json as raw object
-    const entries = [...props.entries, JSON.parse(value)];
+    const entries = props.value;
+    entries[index] = JSON.parse(value);
     updateEntry(entries, timeout);
   };
 
@@ -142,7 +150,7 @@ export const MultiComponentField = props => {
     });
 
     if (navigator.navigated) {
-      const entries = [...props.entries, navigator.entity];
+      const entries = [...props.value, navigator.entity];
       updateEntry(entries);
     }
   };
@@ -151,10 +159,15 @@ export const MultiComponentField = props => {
     return props.value
       .filter(e => e)
       .map((linkOrSingleton, index) => {
-        console.log(linkOrSingleton);
         if (linkOrSingleton.sys) {
           // linked entry
-          const entry = props.entries.find(e => ((e && e.sys) || {}).id === linkOrSingleton.sys.id);
+          let schema;
+          const entry = props.hydratedEntries.find(
+            e => ((e && e.sys) || {}).id === linkOrSingleton.sys.id
+          );
+          if (entry) {
+            schema = props.schemas.find(s => s.meta.id === entry.fields.componentId['en-US']);
+          }
           return (
             <HydratedEntryCard
               key={`${props.propKey}-entries--${index}`}
@@ -163,6 +176,7 @@ export const MultiComponentField = props => {
               contentType={`${
                 entry ? (entry.fields.componentId || {})['en-US'] : c.CONTENT_TYPE_VIEW_COMPONENT
               }`}
+              description={schema ? schema.meta.description : null}
               isLoading={props.loadingEntries[linkOrSingleton.sys.id]}
               onClick={() => handleEditClick(entry)}
               handleEditClick={() => handleEditClick(entry)}
@@ -180,10 +194,11 @@ export const MultiComponentField = props => {
           const schema = props.schemas.find(s => s.meta.id === linkOrSingleton.componentId);
           return (
             <SingletonField
+              key={`${props.propKey}-entries--${index}`}
               sdk={props.sdk}
               schemas={props.schemas}
-              onChange={updateSingletonEntry}
-              hydratedAssets={props.hydratedAssets}
+              onChange={(value, timeout) => updateSingletonEntry(value, timeout, index)}
+              // hydratedAssets={props.hydratedAssets}
               hydratedEntries={props.hydratedEntries}
               replaceHydratedAsset={props.replaceHydratedAsset}
               replaceHydratedEntry={props.replaceHydratedEntry}
@@ -191,7 +206,14 @@ export const MultiComponentField = props => {
                 new InternalMapping(linkOrSingleton.componentId, linkOrSingleton.properties, schema)
               }
               schema={schema}
-              handleRemoveClick={() => updateEntry(null)}
+              handleRemoveClick={() => handleRemoveClick(index)}
+              draggable={true}
+              isDragActive={index === dragged || index === draggedOver}
+              onDragStart={onDragStart}
+              onDragOver={onDragOver}
+              onDragEnd={onDragEnd}
+              index={index}
+              indent={false}
             />
           );
         }
@@ -226,7 +248,7 @@ export const MultiComponentField = props => {
 
 MultiComponentField.propTypes = {
   options: PropTypes.array,
-  entries: PropTypes.array,
+  hydratedEntries: PropTypes.array,
   loadingEntries: PropTypes.object,
   onChange: PropTypes.func,
   schemas: PropTypes.array,

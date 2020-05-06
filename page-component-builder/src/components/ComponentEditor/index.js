@@ -334,9 +334,11 @@ const ComponentEditor = props => {
                     sdk={props.sdk}
                     propKey={propKey}
                     options={property.options}
-                    entries={(value || []).map(entry => {
-                      return fetchHydratedEntry(entry);
-                    })}
+                    hydratedEntries={(value || [])
+                      .map(entry => {
+                        return fetchHydratedEntry(entry);
+                      })
+                      .filter(e => e)}
                     schemas={props.schemas}
                     loadingEntries={props.loadingEntries}
                     onChange={value => updatePropertyValue(propKey, value, false)}

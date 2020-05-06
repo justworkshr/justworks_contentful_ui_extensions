@@ -137,6 +137,7 @@ const ComponentField = props => {
           onChange={updateSingletonEntry}
           internalMappingInstance={props.internalMappingInstance}
           handleRemoveClick={() => updateEntry(null)}
+          indent={true}
         />
       );
     } else {

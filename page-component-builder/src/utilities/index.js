@@ -86,7 +86,6 @@ export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
   allLinks
     .filter(l => l)
     .forEach(link => {
-      console.log(link);
       if (!hydratedEntries.some(e => e.sys.id === link.sys.id)) {
         linksToFetch.push(link);
       }

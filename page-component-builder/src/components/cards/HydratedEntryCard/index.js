@@ -12,7 +12,7 @@ const renderMissingEntry = props => {
     <EntryCard
       loading={false}
       testId="missing-entry-card"
-      title="Entry is missing or corrupted. Please remove"
+      title="Entry is missing or inaccessible."
       size="small"
       dropdownListElements={<ActionDropdown handleRemoveClick={props.handleRemoveClick} />}
     />
@@ -35,7 +35,8 @@ const HydratedEntryCard = props => {
       loading={props.isLoading}
       testId="hydrated-entry-card"
       className={classnames('entry-card', props.className)}
-      size="small"
+      description={props.description}
+      size={props.description ? 'default' : 'small'}
       title={
         props.entry.fields ? (props.entry.fields.name || {})['en-US'] || 'untitled' : 'Loading...'
       }
@@ -71,6 +72,7 @@ HydratedEntryCard.propTypes = {
   onDragOver: PropTypes.func,
   onDragEnd: PropTypes.func,
   index: PropTypes.number,
+  description: PropTypes.string,
   selected: PropTypes.bool
 };
 HydratedEntryCard.defaultProps = {

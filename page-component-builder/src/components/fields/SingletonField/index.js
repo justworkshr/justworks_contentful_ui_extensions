@@ -22,7 +22,10 @@ const Component = props => {
 
   return (
     <div className="component-field-singleton" data-test-id="component-field-singleton">
-      <div className="component-field-singleton__editor f36-padding-left--xl">
+      <div
+        className={`component-field-singleton__editor ${
+          props.indent ? 'f36-padding-left--xl' : ''
+        }`}>
         <EntryCard
           className="f36-margin-top--s f36-margin-bottom--m"
           testId="singleton-entry-card"
@@ -34,6 +37,13 @@ const Component = props => {
           statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
           onClick={() => toggleSingletonCard(!singletonCardOpen)}
           dropdownListElements={<ActionDropdown handleRemoveClick={props.handleRemoveClick} />}
+          draggable={props.draggable}
+          withDragHandle={props.draggable}
+          isDragActive={props.isDragActive}
+          onMouseDown={props.onDragStart ? () => props.onDragStart(props.index) : null}
+          onDragStart={props.onDragStart ? () => props.onDragStart(props.index) : null}
+          onDragOver={props.onDragOver ? () => props.onDragOver(props.index) : null}
+          onDragEnd={props.onDragEnd}
         />
         {!!singletonCardOpen && (
           <ComponentEditor
@@ -63,7 +73,14 @@ Component.propTypes = {
   replaceHydratedEntry: PropTypes.func,
   replaceHydratedAsset: PropTypes.func,
   handleRemoveClick: PropTypes.func,
-  internalMappingInstance: PropTypes.object
+  internalMappingInstance: PropTypes.object,
+  draggable: PropTypes.bool,
+  isDragActive: PropTypes.bool,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDragEnd: PropTypes.func,
+  index: PropTypes.number,
+  indent: PropTypes.bool
 };
 Component.defaultProps = {};
 
