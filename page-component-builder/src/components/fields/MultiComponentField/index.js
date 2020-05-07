@@ -44,7 +44,21 @@ export const MultiComponentField = props => {
     // flip by index
     const links = props.value;
     const draggedEntry = props.value[dragged];
-    links[dragged] = links[draggedOver];
+    // links[dragged] = links[draggedOver];
+
+    if (dragged > draggedOver) {
+      // dragged higher in the list, pushes things down
+
+      for (let i = dragged; i > draggedOver; i--) {
+        links[i] = links[i - 1];
+      }
+    } else if (dragged < draggedOver) {
+      // dragged lower in the list, pulls things up
+
+      for (let i = dragged; i < draggedOver; i++) {
+        links[i] = links[i + 1];
+      }
+    }
     links[draggedOver] = draggedEntry;
 
     props.onChange(parseEntries(links));
