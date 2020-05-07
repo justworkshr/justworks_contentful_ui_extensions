@@ -63,6 +63,7 @@ const Component = props => {
 };
 
 Component.propTypes = {
+  errors: PropTypes.array,
   sdk: PropTypes.object,
   schema: PropTypes.object,
   schemas: PropTypes.array,
@@ -81,6 +82,8 @@ Component.propTypes = {
   index: PropTypes.number,
   indent: PropTypes.bool
 };
-Component.defaultProps = {};
+Component.defaultProps = {
+  errors: []
+};
 
 export default Component;

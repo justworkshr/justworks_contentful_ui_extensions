@@ -6,10 +6,93 @@ export default class InternalMapping {
     this.properties = properties || {};
     this.schema = schema;
     this.configObject = configObject;
+
+    this.validateProperties = this.validateProperties.bind(this);
+    this.validateRequired = this.validateRequired.bind(this);
+    this.validateOptions = this.validateOptions.bind(this);
   }
 
   get class() {
     return this.constructor.name;
+  }
+
+  get errors() {
+    return this.validateProperties();
+  }
+
+  validateProperties() {
+    const errors = {};
+    Object.keys(this.properties).forEach(propKey => {
+      if (!this.schema.properties) return;
+      if (!errors[propKey]) {
+        errors[propKey] = [];
+      }
+
+      const schemaProperty = this.schema.properties[propKey];
+      if (!schemaProperty) return;
+      errors[propKey].push(
+        this.validateRequired(propKey, this.properties[propKey], schemaProperty)
+      );
+      errors[propKey].push(this.validateOptions(propKey, this.properties[propKey], schemaProperty));
+
+      errors[propKey] = errors[propKey].filter(e => e);
+    });
+
+    // return errors only if a field has messages
+    const hasErrors = Object.keys(errors).some(field => {
+      return errors[field].length;
+    });
+
+    if (hasErrors) {
+      return errors;
+    } else {
+      return {};
+    }
+  }
+
+  validateRequired(propKey, property = {}, schemaProperty = {}) {
+    if (!this.schema.properties) return;
+    const errorMessage = 'This field is required';
+    if (!schemaProperty.required) return;
+    if (schemaProperty.required) {
+      if (
+        // multi-fields
+        schemaProperty.type === c.MULTI_COMPONENT_PROPERTY ||
+        schemaProperty === c.MULTI_CONFIG_PROPERTY ||
+        schemaProperty === c.MULTI_LINK_PROPERTY
+      ) {
+        if (!(property.value || {}).length) return errorMessage;
+      } else if (schemaProperty.type === c.BOOL_PROPERTY) {
+        // bool properties
+        if (property.value !== false && property.value !== true) return errorMessage;
+      } else if (schemaProperty.type === c.NUMBER_PROPERTY) {
+        // number properties
+        if (property.value !== 0 && !property.value) return errorMessage;
+      } else if (!property.value) {
+        // all others
+        console.log(property);
+        return errorMessage;
+      }
+    }
+  }
+
+  validateOptions(propKey, property = {}, schemaProperty = {}) {
+    if (!this.schema.properties) return;
+    if (!schemaProperty.options || !schemaProperty.options.length) return;
+
+    const errorMessage = `The value: '${
+      property.value
+    }' is not allowed. Please select from: ${schemaProperty.options.join(' | ')}`;
+
+    if (schemaProperty === c.COMPONENT_PROPERTY) {
+      // single component
+    } else if (schemaProperty.type === c.CONFIG_PROPERTY) {
+      // single config
+    } else if (schemaProperty.type === c.MULTI_COMPONENT_PROPERTY) {
+      // multi component
+    } else if (schemaProperty.type === c.MULTI_CONFIG_PROPERTY) {
+      // multi config
+    } else if (!schemaProperty.options.includes(property.value)) return errorMessage;
   }
 
   asJSON() {

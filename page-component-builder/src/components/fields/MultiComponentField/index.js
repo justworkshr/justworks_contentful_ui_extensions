@@ -9,6 +9,7 @@ import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
 import SingletonField from '../SingletonField';
 import InternalMapping from '../../../classes/InternalMapping';
+import ErrorList from '../ErrorList';
 
 import { constructLink, createEntry, newInternalMappingFromSchema } from '../../../utilities/index';
 
@@ -286,11 +287,13 @@ export const MultiComponentField = props => {
         />
         <DropdownLink handleLinkClick={handleLinkClick} options={props.options} />
       </div>
+      <ErrorList errors={props.errors} />
     </div>
   );
 };
 
 MultiComponentField.propTypes = {
+  errors: PropTypes.array,
   options: PropTypes.array,
   presets: PropTypes.array,
   hydratedEntries: PropTypes.array,
@@ -306,6 +309,7 @@ MultiComponentField.propTypes = {
 };
 
 MultiComponentField.defaultProps = {
+  errors: [],
   options: [],
   presets: [],
   hydratedEntries: [],

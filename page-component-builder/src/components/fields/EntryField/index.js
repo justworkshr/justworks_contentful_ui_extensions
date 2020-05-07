@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
+import ErrorList from '../ErrorList';
 
 import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
 
@@ -82,11 +83,13 @@ export const EntryField = props => {
   return (
     <div className="entry-field" data-test-id="entry-field">
       {renderElement()}
+      <ErrorList errors={props.errors} />
     </div>
   );
 };
 
 EntryField.propTypes = {
+  errors: PropTypes.array,
   contentTypes: PropTypes.array,
   entry: PropTypes.object,
   isLoading: PropTypes.bool,
@@ -97,6 +100,7 @@ EntryField.propTypes = {
 
 EntryField.defaultProps = {
   contentTypes: [],
+  errors: [],
   isLoading: false,
   entry: {}
 };

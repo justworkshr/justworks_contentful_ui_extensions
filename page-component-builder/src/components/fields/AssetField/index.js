@@ -5,6 +5,7 @@ import { TextLink } from '@contentful/forma-36-react-components';
 
 import { createAsset, constructLink } from '../../../utilities';
 import HydratedAssetCard from '../../cards/HydratedAssetCard';
+import ErrorList from '../ErrorList';
 
 const AssetField = props => {
   const updateAsset = entry => {
@@ -72,18 +73,21 @@ const AssetField = props => {
   return (
     <div className="asset-field" data-test-id="asset-field">
       {renderElement()}
+      <ErrorList errors={props.errors} />
     </div>
   );
 };
 
 AssetField.propTypes = {
+  errors: [],
   sdk: PropTypes.object,
   asset: PropTypes.object,
   onChange: PropTypes.func,
   replaceHydratedAsset: PropTypes.func
 };
 AssetField.defaultProps = {
-  asset: {}
+  asset: {},
+  errors: []
 };
 
 export default AssetField;

@@ -10,6 +10,7 @@ import SelectComponentModal from '../../SelectComponentModal';
 import SingletonField from '../SingletonField';
 import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
+import ErrorList from '../ErrorList';
 
 const ComponentField = props => {
   const [linkModalOpen, toggleLinkModal] = useState(false);
@@ -175,11 +176,13 @@ const ComponentField = props => {
   return (
     <div className="component-field" data-test-id="component-field">
       {renderElement()}
+      <ErrorList errors={props.errors} />
     </div>
   );
 };
 
 ComponentField.propTypes = {
+  errors: PropTypes.array,
   schemas: PropTypes.array,
   hydratedAssets: PropTypes.array,
   hydratedEntries: PropTypes.array,
@@ -194,6 +197,7 @@ ComponentField.propTypes = {
   useConfigObjects: PropTypes.bool
 };
 ComponentField.defaultProps = {
+  errors: [],
   hydratedAssets: [],
   hydratedEntries: [],
   schemas: [],

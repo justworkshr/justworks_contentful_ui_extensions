@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ErrorList from '../ErrorList';
 
-import { FieldGroup, RadioButtonField, RadioButton } from '@contentful/forma-36-react-components';
+import { FieldGroup, RadioButtonField } from '@contentful/forma-36-react-components';
 
 const RadioGroup = props => {
   const getLabel = value => {
@@ -21,7 +22,7 @@ const RadioGroup = props => {
   return (
     <FieldGroup className="radio-group">
       {props.options.map(option => {
-        const id = `${props.propKey}-radio--${option}`;
+        const id = `${props.propKey}-radio--${option}--${Date.now()}`;
         return (
           <RadioButtonField
             key={id}
@@ -31,20 +32,24 @@ const RadioGroup = props => {
             name={id}
             value={String(option)}
             checked={props.value === option}
-            onChange={e => props.onChange(coerceValue(e.target.value))}></RadioButtonField>
+            onChange={e => props.onChange(coerceValue(e.target.value))}
+          />
         );
       })}
+      <ErrorList errors={props.errors} />
     </FieldGroup>
   );
 };
 
 RadioGroup.propTypes = {
+  errors: PropTypes.array,
   onChange: PropTypes.func,
   options: PropTypes.array,
   propKey: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 RadioGroup.defaultProps = {
+  errors: [],
   options: []
 };
 

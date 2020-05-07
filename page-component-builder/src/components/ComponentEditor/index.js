@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../constants';
 
@@ -25,6 +25,8 @@ import InternalMapping from '../../classes/InternalMapping';
 import './style.scss';
 
 const ComponentEditor = props => {
+  const [errors, setErrors] = useState({});
+
   const isShortTextField = property => {
     return (
       property.type === c.TEXT_PROPERTY &&
@@ -120,6 +122,8 @@ const ComponentEditor = props => {
 
   const updatePropertyValue = (propKey, value, timeout = true) => {
     props.internalMappingInstance.updateValue(propKey, value);
+    const errors = props.internalMappingInstance.errors;
+    setErrors(errors);
     props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout);
   };
 
@@ -238,6 +242,7 @@ const ComponentEditor = props => {
                 {isShortTextField(property) && (
                   <ShortTextField
                     onChange={value => updatePropertyValue(propKey, value, true)}
+                    errors={errors[propKey]}
                     value={value}
                   />
                 )}

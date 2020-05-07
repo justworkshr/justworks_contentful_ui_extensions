@@ -20,6 +20,7 @@ export const MULTI_COMPONENT_PROPERTY = 'multi-component';
 export const CONFIG_PROPERTY = 'config';
 export const MULTI_CONFIG_PROPERTY = 'multi-config';
 export const TEXT_PROPERTY = 'text';
+export const NUMBER_PROPERTY = 'number';
 export const BOOL_PROPERTY = 'bool';
 
 // EDITOR TYPES

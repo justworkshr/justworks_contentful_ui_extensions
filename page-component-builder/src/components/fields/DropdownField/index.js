@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ShortFieldText from '../ShortTextField';
 import { TextLink, FieldGroup, Option, Select } from '@contentful/forma-36-react-components';
+import ErrorList from '../ErrorList';
 
 const DropdownField = props => {
   const [useCustomText, toggleText] = useState(false);
@@ -63,11 +64,13 @@ const DropdownField = props => {
           })}
         </Select>
       )}
+      <ErrorList errors={props.errors} />
     </FieldGroup>
   );
 };
 
 DropdownField.propTypes = {
+  errors: PropTypes.array,
   onChange: PropTypes.func,
   options: PropTypes.array,
   propKey: PropTypes.string,
@@ -76,7 +79,8 @@ DropdownField.propTypes = {
   withCustomText: PropTypes.bool
 };
 DropdownField.defaultProps = {
-  options: []
+  options: [],
+  errors: []
 };
 
 export default DropdownField;

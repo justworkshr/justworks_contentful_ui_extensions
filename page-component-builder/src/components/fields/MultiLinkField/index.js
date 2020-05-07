@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import * as c from '../../../constants';
+import ErrorList from '../ErrorList';
 
 import {
   TextLink,
@@ -164,6 +165,7 @@ export const MultiLinkField = props => {
           </DropdownList>
         </Dropdown>
       </div>
+      <ErrorList errors={props.errors} />
     </div>
   );
 };
@@ -174,12 +176,14 @@ MultiLinkField.propTypes = {
   onChange: PropTypes.func,
   sdk: PropTypes.object,
   replaceHydratedEntry: PropTypes.func,
-  propKey: PropTypes.string
+  propKey: PropTypes.string,
+  errors: PropTypes.array
 };
 
 MultiLinkField.defaultProps = {
   contentTypes: [],
-  entries: []
+  entries: [],
+  errors: []
 };
 
 export default MultiLinkField;
