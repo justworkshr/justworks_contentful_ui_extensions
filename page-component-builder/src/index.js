@@ -115,13 +115,13 @@ export class PageComponentBuilder extends React.Component {
   };
 
   validateInternalMapping() {
-    const internalMappingInstance = new InternalMapping(
-      this.state.componentId,
-      this.parseInternalMapping().properties,
-      this.currentSchema(),
-      this.state.configObject
-    );
-    console.log(internalMappingInstance.errors);
+    // const internalMappingInstance = new InternalMapping(
+    //   this.state.componentId,
+    //   this.parseInternalMapping().properties,
+    //   this.currentSchema(),
+    //   this.state.configObject
+    // );
+    // console.log(internalMappingInstance.errors);
   }
 
   fetchSchemas = async () => {
@@ -286,7 +286,7 @@ export class PageComponentBuilder extends React.Component {
     });
   };
 
-  updateInternalMapping = (value, timeout = true) => {
+  updateInternalMapping = (value, timeout = true, errors = {}) => {
     this.setState({ internalMapping: value });
     clearTimeout(this.updateTimeout);
     if (timeout) {
@@ -296,6 +296,12 @@ export class PageComponentBuilder extends React.Component {
       }, 750);
     } else {
       this.props.sdk.entry.fields.internalMapping.setValue(value);
+    }
+
+    if (Object.keys(errors).length) {
+      this.props.sdk.entry.fields.isValid.setValue('No');
+    } else if (this.props.sdk.entry.fields.isValid.getValue() === 'No') {
+      this.props.sdk.entry.fields.isValid.setValue('Yes');
     }
   };
 

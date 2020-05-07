@@ -86,16 +86,17 @@ export const MultiComponentField = props => {
       .filter(f => f);
   };
 
-  const updateEntry = (entries = [], timeout = false) => {
+  const updateEntry = (entries = [], timeout = false, singletonErrors) => {
     if (entries.length) {
       const parsedEntries = parseEntries(entries);
 
       props.onChange(
         parsedEntries.filter(e => e),
-        timeout
+        timeout,
+        singletonErrors
       );
     } else {
-      props.onChange([], timeout);
+      props.onChange([], timeout, singletonErrors);
     }
 
     resetDrag();
@@ -145,11 +146,18 @@ export const MultiComponentField = props => {
     updateEntry(entries);
   };
 
-  const updateSingletonEntry = (value, timeout = false, index) => {
+  const updateSingletonEntry = (value, timeout = false, index, errors = {}) => {
+    if (Object.keys(errors).length) {
+      const errorMessage = 'Please correct all errors in this singleton.';
+      errors = { [props.propKey]: [errorMessage] };
+    } else {
+      errors = { [props.propKey]: [] };
+    }
+
     // pass internal mapping json as raw object
     const entries = props.value;
     entries[index] = JSON.parse(value);
-    updateEntry(entries, timeout);
+    updateEntry(entries, timeout, errors);
   };
 
   const handleCreateClick = async (componentId, presetObject = null) => {
@@ -230,7 +238,9 @@ export const MultiComponentField = props => {
               key={`${props.propKey}-entries--${index}`}
               sdk={props.sdk}
               schemas={props.schemas}
-              onChange={(value, timeout) => updateSingletonEntry(value, timeout, index)}
+              onChange={(value, timeout, errors) =>
+                updateSingletonEntry(value, timeout, index, errors)
+              }
               // hydratedAssets={props.hydratedAssets}
               hydratedEntries={props.hydratedEntries}
               replaceHydratedAsset={props.replaceHydratedAsset}

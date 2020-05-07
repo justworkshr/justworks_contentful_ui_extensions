@@ -16,13 +16,20 @@ const ComponentField = props => {
   const [linkModalOpen, toggleLinkModal] = useState(false);
   const [modalOptions, setModalOptions] = useState([]);
 
-  const updateEntry = (value, timeout = false) => {
-    props.onChange(value, timeout);
+  const updateEntry = (value, timeout = false, singletonErrors) => {
+    props.onChange(value, timeout, singletonErrors);
   };
 
-  const updateSingletonEntry = (value, timeout = false) => {
+  const updateSingletonEntry = (value, timeout = false, errors = {}) => {
+    // convert errors into single prop key message
+    if (Object.keys(errors).length) {
+      const errorMessage = 'Please correct all errors in this singleton.';
+      errors = { [props.propKey]: [errorMessage] };
+    } else {
+      errors = { [props.propKey]: [] };
+    }
     // pass internal mapping json as raw object
-    updateEntry(JSON.parse(value), timeout);
+    updateEntry(JSON.parse(value), timeout, errors);
   };
 
   const handleModalSubmit = entry => {
@@ -137,7 +144,7 @@ const ComponentField = props => {
           hydratedEntries={props.hydratedEntries}
           replaceHydratedAsset={props.replaceHydratedAsset}
           replaceHydratedEntry={props.replaceHydratedEntry}
-          onChange={updateSingletonEntry}
+          onChange={(value, timeout, errors) => updateSingletonEntry(value, timeout, errors)}
           internalMappingInstance={props.internalMappingInstance}
           handleRemoveClick={() => updateEntry(null)}
           indent={true}
@@ -194,7 +201,8 @@ ComponentField.propTypes = {
   isLoading: PropTypes.bool,
   onChange: PropTypes.func,
   sdk: PropTypes.object,
-  useConfigObjects: PropTypes.bool
+  useConfigObjects: PropTypes.bool,
+  propKey: PropTypes.string
 };
 ComponentField.defaultProps = {
   errors: [],

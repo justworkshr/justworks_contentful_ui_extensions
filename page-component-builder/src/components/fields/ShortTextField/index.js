@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { TextInput, Paragraph } from '@contentful/forma-36-react-components';
+import { TextInput } from '@contentful/forma-36-react-components';
 import ErrorList from '../ErrorList';
 
 const ShortTextField = props => {
@@ -11,7 +11,7 @@ const ShortTextField = props => {
         testId={props.testId}
         onChange={e => props.onChange(e.target.value)}
         value={props.value || ''}
-        error={props.errors.length}
+        error={!!props.errors.length}
       />
       <ErrorList errors={props.errors} />
     </div>

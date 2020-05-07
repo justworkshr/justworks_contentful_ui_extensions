@@ -4,7 +4,7 @@ import { EntryCard } from '@contentful/forma-36-react-components';
 import ComponentEditor from '../../ComponentEditor';
 import ActionDropdown from '../../elements/ActionDropdown';
 
-const Component = props => {
+const SingletonField = props => {
   const [singletonCardOpen, toggleSingletonCard] = useState(false);
 
   const contentTypeLabel = contentType => {
@@ -48,7 +48,9 @@ const Component = props => {
           <ComponentEditor
             sdk={props.sdk}
             schemas={props.schemas}
-            updateInternalMapping={props.onChange}
+            updateInternalMapping={(value, timeout, errors) =>
+              props.onChange(value, timeout, errors)
+            }
             hydratedAssets={props.hydratedAssets}
             hydratedEntries={props.hydratedEntries}
             replaceHydratedAsset={props.replaceHydratedAsset}
@@ -62,8 +64,7 @@ const Component = props => {
   );
 };
 
-Component.propTypes = {
-  errors: PropTypes.array,
+SingletonField.propTypes = {
   sdk: PropTypes.object,
   schema: PropTypes.object,
   schemas: PropTypes.array,
@@ -82,8 +83,6 @@ Component.propTypes = {
   index: PropTypes.number,
   indent: PropTypes.bool
 };
-Component.defaultProps = {
-  errors: []
-};
+SingletonField.defaultProps = {};
 
-export default Component;
+export default SingletonField;

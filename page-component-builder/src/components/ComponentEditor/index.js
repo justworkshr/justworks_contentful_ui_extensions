@@ -120,11 +120,12 @@ const ComponentEditor = props => {
     return property.type === c.MULTI_CONFIG_PROPERTY && !!property.related_to;
   };
 
-  const updatePropertyValue = (propKey, value, timeout = true) => {
+  const updatePropertyValue = (propKey, value, timeout = true, singletonErrors = {}) => {
     props.internalMappingInstance.updateValue(propKey, value);
-    const errors = props.internalMappingInstance.errors;
-    setErrors(errors);
-    props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout);
+    const newErrors = props.internalMappingInstance.errors;
+    const allErrors = { ...errors, ...newErrors, ...singletonErrors };
+    setErrors(allErrors);
+    props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout, allErrors);
   };
 
   const fetchHydratedAsset = value => {
@@ -146,6 +147,7 @@ const ComponentEditor = props => {
             asset={fetchHydratedAsset(value)}
             onChange={value => updatePropertyValue(propKey, value, false)}
             replaceHydratedAsset={props.replaceHydratedAsset}
+            errors={errors[propKey]}
           />
           <EntryField
             sdk={props.sdk}
@@ -154,6 +156,7 @@ const ComponentEditor = props => {
             onChange={value => updatePropertyValue(propKey, value, false)}
             replaceHydratedEntry={props.replaceHydratedEntry}
             isLoading={!!value && !fetchHydratedEntry(value)}
+            errors={errors[propKey]}
           />
         </div>
       );
@@ -164,6 +167,7 @@ const ComponentEditor = props => {
           asset={fetchHydratedAsset(value)}
           onChange={value => updatePropertyValue(propKey, value, false)}
           replaceHydratedAsset={props.replaceHydratedAsset}
+          errors={errors[propKey]}
         />
       );
     } else if (!value && isEntryLink(property)) {
@@ -175,6 +179,7 @@ const ComponentEditor = props => {
           onChange={value => updatePropertyValue(propKey, value, false)}
           replaceHydratedEntry={props.replaceHydratedEntry}
           isLoading={!!value && !fetchHydratedEntry(value)}
+          errors={errors[propKey]}
         />
       );
     } else if (value && value.sys && value.sys.linkType === c.ENTRY_LINK_TYPE) {
@@ -186,6 +191,7 @@ const ComponentEditor = props => {
           onChange={value => updatePropertyValue(propKey, value, false)}
           replaceHydratedEntry={props.replaceHydratedEntry}
           isLoading={!!value && !fetchHydratedEntry(value)}
+          errors={errors[propKey]}
         />
       );
     } else if (value && value.sys && value.sys.linkType === c.ASSET_LINK_TYPE) {
@@ -195,6 +201,7 @@ const ComponentEditor = props => {
           asset={fetchHydratedAsset(value)}
           onChange={value => updatePropertyValue(propKey, value, false)}
           replaceHydratedAsset={props.replaceHydratedAsset}
+          errors={errors[propKey]}
         />
       );
     }
@@ -257,6 +264,7 @@ const ComponentEditor = props => {
                     propKey={propKey}
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isBoolProperty(property) && (
@@ -265,6 +273,7 @@ const ComponentEditor = props => {
                     options={[true, false]}
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isDropdownTextField(property) && (
@@ -275,6 +284,7 @@ const ComponentEditor = props => {
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
                     withCustomText={false}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isDropdownWithCustomField(property) && (
@@ -285,6 +295,7 @@ const ComponentEditor = props => {
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
                     withCustomText={true}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isRadioTextField(property) && (
@@ -293,6 +304,7 @@ const ComponentEditor = props => {
                     options={property.options}
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
+                    errors={errors[propKey]}
                   />
                 )}
                 {/* in some cases, a field can link assets OR entries */}
@@ -308,12 +320,14 @@ const ComponentEditor = props => {
                     })}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isComponentProperty(property) && (
                   <ComponentField
                     sdk={props.sdk}
                     schemas={props.schemas}
+                    propKey={propKey}
                     hydratedAssets={props.hydratedAssets}
                     hydratedEntries={props.hydratedEntries}
                     replaceHydratedEntry={props.replaceHydratedEntry}
@@ -330,11 +344,12 @@ const ComponentEditor = props => {
                           )
                         : null
                     }
-                    onChange={(value, timeout = false) =>
-                      updatePropertyValue(propKey, value, timeout)
+                    onChange={(value, timeout = false, singletonErrors) =>
+                      updatePropertyValue(propKey, value, timeout, singletonErrors)
                     }
                     isLoading={!!value && !fetchHydratedEntry(value)}
                     useConfigObjects={property.type === c.CONFIG_PROPERTY}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isMultiComponentProperty(property) && (
@@ -346,17 +361,21 @@ const ComponentEditor = props => {
                     hydratedEntries={props.hydratedEntries}
                     schemas={props.schemas}
                     loadingEntries={props.loadingEntries}
-                    onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
+                    onChange={(value, timeout, singletonErrors) =>
+                      updatePropertyValue(propKey, value, timeout, singletonErrors)
+                    }
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     replaceHydratedAsset={props.replaceHydratedAsset}
                     useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
                     value={value}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isConfigProperty(property) && (
                   <ComponentField
                     sdk={props.sdk}
                     schemas={props.schemas}
+                    propKey={propKey}
                     hydratedAssets={props.hydratedAssets}
                     hydratedEntries={props.hydratedEntries}
                     replaceHydratedEntry={props.replaceHydratedEntry}
@@ -373,8 +392,8 @@ const ComponentEditor = props => {
                           )
                         : null
                     }
-                    onChange={(value, timeout = false) =>
-                      updatePropertyValue(propKey, value, timeout)
+                    onChange={(value, timeout = false, singletonErrors) =>
+                      updatePropertyValue(propKey, value, timeout, singletonErrors)
                     }
                     isLoading={
                       fetchHydratedEntry(value)
@@ -382,6 +401,7 @@ const ComponentEditor = props => {
                         : null
                     }
                     useConfigObjects={property.type === c.CONFIG_PROPERTY}
+                    errors={errors[propKey]}
                   />
                 )}
                 {isMultiConfigProperty(property) && (
@@ -393,10 +413,13 @@ const ComponentEditor = props => {
                     schemas={props.schemas}
                     hydratedEntries={props.hydratedEntries}
                     loadingEntries={props.loadingEntries}
-                    onChange={value => updatePropertyValue(propKey, value, false)}
+                    onChange={(value, timeout, singletonErrors) =>
+                      updatePropertyValue(propKey, value, timeout, singletonErrors)
+                    }
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
                     value={value}
+                    errors={errors[propKey]}
                   />
                 )}
                 <HelpText className="component-editor__hint f36-margin-top--xs">

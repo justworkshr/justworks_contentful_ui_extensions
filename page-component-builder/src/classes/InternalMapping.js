@@ -51,9 +51,7 @@ export default class InternalMapping {
   }
 
   validateRequired(propKey, property = {}, schemaProperty = {}) {
-    if (!this.schema.properties) return;
     const errorMessage = 'This field is required';
-    if (!schemaProperty.required) return;
     if (schemaProperty.required) {
       if (
         // multi-fields
@@ -70,15 +68,14 @@ export default class InternalMapping {
         if (property.value !== 0 && !property.value) return errorMessage;
       } else if (!property.value) {
         // all others
-        console.log(property);
         return errorMessage;
       }
     }
   }
 
   validateOptions(propKey, property = {}, schemaProperty = {}) {
-    if (!this.schema.properties) return;
-    if (!schemaProperty.options || !schemaProperty.options.length) return;
+    if (!property.value) return; // do not validate blanks
+    if (!schemaProperty.options || !schemaProperty.options.length) return; // do not validate non-optioned properties
 
     const errorMessage = `The value: '${
       property.value
