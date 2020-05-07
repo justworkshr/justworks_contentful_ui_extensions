@@ -1,8 +1,6 @@
 import React from 'react';
 import * as c from '../constants';
 
-import sinon from 'sinon';
-
 import { mount } from 'enzyme';
 
 export const mockSchema = (id = 'components/mock') => {
@@ -31,7 +29,8 @@ export const mockSchema = (id = 'components/mock') => {
         options: null,
         description: '',
         related_to: null,
-        hidden: true
+        hidden: true,
+        presets: [{ name: 'preset', component_id: 'components/preset', properties: { hi: 1 } }]
       },
       componentProp: {
         type: c.COMPONENT_PROPERTY,
@@ -39,7 +38,8 @@ export const mockSchema = (id = 'components/mock') => {
         options: ['components/a', 'components/b', 'components/c'],
         description: '',
         related_to: null,
-        hidden: true
+        hidden: true,
+        presets: [{ name: 'preset', component_id: 'components/preset', properties: { hi: 1 } }]
       }
     }
   };

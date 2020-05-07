@@ -142,7 +142,7 @@ describe('linksToFetch', () => {
 describe('newInternalMappingFromSchema', () => {
   it('creates a new internalMapping object with types and default values', () => {
     const schema = mockSchema();
-    const internalMapping = newInternalMappingFromSchema(schema, false);
+    const internalMapping = newInternalMappingFromSchema({ schema, configObject: false });
 
     expect(internalMapping.componentId).toEqual(schema.meta.id);
     expect(internalMapping.properties.classname.type).toEqual(schema.properties.classname.type);

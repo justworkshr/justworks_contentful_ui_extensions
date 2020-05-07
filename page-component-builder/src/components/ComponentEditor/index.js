@@ -195,6 +195,7 @@ const ComponentEditor = props => {
       );
     }
   };
+
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
@@ -216,6 +217,7 @@ const ComponentEditor = props => {
           .map(propKey => {
             const property = props.schema.properties[propKey];
             const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
+
             return (
               <div
                 key={`component-editor-field--${propKey}`}
@@ -225,7 +227,7 @@ const ComponentEditor = props => {
                   <FormLabel className="component-editor__field-label" required={property.required}>
                     {parse_underscore(propKey) || '<label missing>'}
                   </FormLabel>
-                  {!property.required && (
+                  {!property.required && property.type === c.TEXT_PROPERTY && (
                     <TextLink
                       className="f36-margin-left--xs"
                       onClick={() => updatePropertyValue(propKey, null, false)}>
@@ -327,6 +329,7 @@ const ComponentEditor = props => {
                       updatePropertyValue(propKey, value, timeout)
                     }
                     isLoading={!!value && !fetchHydratedEntry(value)}
+                    useConfigObjects={property.type === c.CONFIG_PROPERTY}
                   />
                 )}
                 {isMultiComponentProperty(property) && (
@@ -334,17 +337,14 @@ const ComponentEditor = props => {
                     sdk={props.sdk}
                     propKey={propKey}
                     options={property.options}
-                    hydratedEntries={(value || [])
-                      .map(entry => {
-                        return fetchHydratedEntry(entry);
-                      })
-                      .filter(e => e)}
+                    presets={property.presets}
+                    hydratedEntries={props.hydratedEntries}
                     schemas={props.schemas}
                     loadingEntries={props.loadingEntries}
                     onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
                     replaceHydratedAsset={props.replaceHydratedAsset}
-                    useConfigObjects={false}
+                    useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
                     value={value}
                   />
                 )}
@@ -376,7 +376,7 @@ const ComponentEditor = props => {
                         ? props.loadingEntries[(fetchHydratedEntry(value).sys || {}).id]
                         : null
                     }
-                    useConfigObjects={true}
+                    useConfigObjects={property.type === c.CONFIG_PROPERTY}
                   />
                 )}
                 {isMultiConfigProperty(property) && (
@@ -384,14 +384,13 @@ const ComponentEditor = props => {
                     sdk={props.sdk}
                     propKey={propKey}
                     options={[property.related_to]}
+                    presets={property.presets}
                     schemas={props.schemas}
-                    entries={(value || []).map(entry => {
-                      return fetchHydratedEntry(entry);
-                    })}
+                    hydratedEntries={props.hydratedEntries}
                     loadingEntries={props.loadingEntries}
                     onChange={value => updatePropertyValue(propKey, value, false)}
                     replaceHydratedEntry={props.replaceHydratedEntry}
-                    useConfigObjects={true}
+                    useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
                     value={value}
                   />
                 )}

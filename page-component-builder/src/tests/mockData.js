@@ -242,6 +242,15 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
+          },
+          in_results_pattern: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Is this part of the search results pattern?',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -413,6 +422,16 @@ export const mockSchemas = {
               'Internal toggle for amp forms rendered via iframe to let the form know its intended for an AMP page.',
             related_to: null,
             hidden: true
+          },
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the form submit button should include stylstic shadows and animated hover effects.',
+            related_to: null,
+            hidden: false
           },
           form_config: {
             type: 'config',
@@ -1472,6 +1491,16 @@ export const mockSchemas = {
             default: null,
             options: ['components/basic_lead_form'],
             description: 'The component which will appear in the modal.',
+            related_to: null,
+            hidden: false
+          },
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the modal button should include stylstic shadows and animated hover effects.',
             related_to: null,
             hidden: false
           }
@@ -2640,6 +2669,27 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -3967,6 +4017,16 @@ export const mockSchemas = {
               'Whether to connect the submit button to the text input inline or not. Otherwise, elements will stack.',
             related_to: null,
             hidden: false
+          },
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the form submit button should include stylstic shadows and animated hover effects.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -4068,6 +4128,28 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             hidden: false
+          },
+          action_icons: {
+            type: 'multi-component',
+            required: true,
+            hidden: false,
+            default: [],
+            options: ['components/icon_button', 'components/button_modal'],
+            presets: [
+              {
+                name: 'Icon Link',
+                component_id: 'components/icon_button',
+                properties: {
+                  href: '/',
+                  icon_size: 'md',
+                  icon_name: 'mail',
+                  color_token: 'variant'
+                }
+              }
+            ],
+            description:
+              'Link an icon component to appear in the row. Icons can perform different actions such as link, open modals, etc.',
+            related_to: null
           }
         }
       },
@@ -5655,6 +5737,90 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'patterns/article_content',
+          styleguide_path: '/styleguide/patterns%2Farticle_content',
+          title: 'Article Content Pattern',
+          description:
+            'Shared pattern for article content including fine print. Can be configured for various widths and has an optional grid layout provided to provide usage flexibility.',
+          editor_role: 'pattern',
+          tags: ['content', 'blog-post'],
+          extension_of: null,
+          snapshot: false
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'PatternsArticleContentComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          width: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['default', 'video-page'],
+            description: 'Custom content width. Default takes the width of its container.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          provide_grid: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description: 'Whether or not to place the content inside a single column grid.',
+            related_to: null,
+            hidden: true
+          },
+          content: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'markdown-editor',
+            hidden: false
+          },
+          theme_variant: {
+            type: 'text',
+            required: true,
+            default: 'page',
+            options: ['page', 'light', 'dark'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          content_spacing_size: {
+            type: 'text',
+            required: true,
+            default: 'xl',
+            options: ['xl', 'xxxxl'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'patterns/background_image_single_split',
           styleguide_path: '/styleguide/patterns%2Fbackground_image_single_split',
           description:
@@ -5896,8 +6062,8 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Fcomposable_lp_hero',
           title: 'Composable Lp Hero Pattern',
           description: 'Description of component.',
-          editor_role: 'component',
-          tags: [],
+          editor_role: 'pattern',
+          tags: ['hero'],
           extension_of: null,
           snapshot: false
         },
@@ -6783,15 +6949,6 @@ export const mockSchemas = {
             related_to: 'components/text_link',
             hidden: false
           },
-          include_social: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description: 'Whether social links should be included or not?',
-            related_to: null,
-            hidden: false
-          },
           title_typography_style: {
             type: 'text',
             required: false,
@@ -6812,6 +6969,24 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
+          include_social: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether social links should be included or not. Please add a resource when including social links to correctly generate the links.',
+            related_to: null,
+            hidden: false
+          },
+          resource: {
+            type: 'link',
+            required: false,
+            asset_types: [],
+            content_types: ['resourceWrapper', 'guide'],
+            description: 'Only required when this hero needs social icons to be available.',
+            related_to: null
+          },
           lead_text: {
             type: 'text',
             required: false,
@@ -6821,6 +6996,39 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'long-text-editor',
             hidden: false
+          }
+        }
+      },
+      {
+        meta: {
+          id: 'patterns/search_dropdown',
+          styleguide_path: '/styleguide/patterns%2Fsearch_dropdown',
+          title: 'Search Dropdown Pattern',
+          description: 'Description of component.',
+          editor_role: 'component',
+          tags: [],
+          extension_of: null
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'PatternsSearchDropdownComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
           }
         }
       },

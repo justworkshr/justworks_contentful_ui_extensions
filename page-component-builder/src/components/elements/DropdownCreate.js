@@ -51,6 +51,18 @@ class DropdownCreate extends React.Component {
           onClick={() => this.setState(oldState => ({ dropdownOpen: !oldState.dropdownOpen }))}
           isOpen={this.state.dropdownOpen}>
           <DropdownList>
+            {!!this.props.presets.length && <DropdownListItem isTitle>Presets</DropdownListItem>}
+            {!!this.props.presets.length &&
+              this.props.presets.map((preset, index) => {
+                return (
+                  <DropdownListItem
+                    testId={`dropdown-preset-type--${preset.name}`}
+                    key={`component-preset--${index}`}
+                    onClick={() => this.props.handleCreateClick(preset.component_id, preset)}>
+                    {preset.name}
+                  </DropdownListItem>
+                );
+              })}
             <DropdownListItem isTitle>Options</DropdownListItem>
             {this.props.options.map((option, index) => {
               return (
@@ -71,6 +83,7 @@ class DropdownCreate extends React.Component {
 
 DropdownCreate.propTypes = {
   options: PropTypes.array,
+  presets: PropTypes.array,
   handleCreateClick: PropTypes.func,
   toggleText: PropTypes.string,
   testId: PropTypes.string
@@ -78,6 +91,7 @@ DropdownCreate.propTypes = {
 
 DropdownCreate.defaultProps = {
   options: [],
+  presets: [],
   toggleText: 'Create entry',
   testId: 'dropdown-create'
 };

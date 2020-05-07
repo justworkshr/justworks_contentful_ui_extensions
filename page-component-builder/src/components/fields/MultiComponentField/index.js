@@ -118,9 +118,13 @@ export const MultiComponentField = props => {
     updateEntry(entries);
   };
 
-  const handleCreateSingletonClick = componentId => {
+  const handleCreateSingletonClick = (componentId, presetObject = null) => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
-    const componentInternalMapping = newInternalMappingFromSchema(schema, false);
+    const componentInternalMapping = newInternalMappingFromSchema({
+      schema,
+      presetObject,
+      configObject: false
+    });
     const entries = [...props.value, JSON.parse(componentInternalMapping.asJSON())];
 
     updateEntry(entries);
@@ -144,7 +148,10 @@ export const MultiComponentField = props => {
         'en-US': props.useConfigObjects
       },
       internalMapping: {
-        'en-US': newInternalMappingFromSchema(schema, props.useConfigObjects).asJSON()
+        'en-US': newInternalMappingFromSchema({
+          schema,
+          configObject: props.useConfigObjects
+        }).asJSON()
       }
     });
 
@@ -194,6 +201,7 @@ export const MultiComponentField = props => {
           );
         } else if (linkOrSingleton.componentId) {
           // singleton
+
           const schema = props.schemas.find(s => s.meta.id === linkOrSingleton.componentId);
           return (
             <SingletonField
@@ -247,9 +255,14 @@ export const MultiComponentField = props => {
             handleCreateClick={handleCreateSingletonClick}
             toggleText="Create singleton"
             options={props.options}
+            presets={props.presets}
           />
         )}
-        <DropdownCreate handleCreateClick={handleCreateClick} options={props.options} />
+        <DropdownCreate
+          handleCreateClick={handleCreateClick}
+          options={props.options}
+          presets={props.presets}
+        />
         <DropdownLink handleLinkClick={handleLinkClick} options={props.options} />
       </div>
     </div>
@@ -258,6 +271,7 @@ export const MultiComponentField = props => {
 
 MultiComponentField.propTypes = {
   options: PropTypes.array,
+  presets: PropTypes.array,
   hydratedEntries: PropTypes.array,
   loadingEntries: PropTypes.object,
   onChange: PropTypes.func,
@@ -272,6 +286,7 @@ MultiComponentField.propTypes = {
 
 MultiComponentField.defaultProps = {
   options: [],
+  presets: [],
   hydratedEntries: [],
   schemas: [],
   useConfigObjects: false,

@@ -45,7 +45,10 @@ const ComponentField = props => {
         'en-US': props.useConfigObjects
       },
       internalMapping: {
-        'en-US': newInternalMappingFromSchema(schema, props.useConfigObjects).asJSON()
+        'en-US': newInternalMappingFromSchema({
+          schema,
+          configObject: props.useConfigObjects
+        }).asJSON()
       }
     });
 
@@ -60,7 +63,7 @@ const ComponentField = props => {
 
   const handleCreateSingletonClick = componentId => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
-    const componentInternalMapping = newInternalMappingFromSchema(schema, false);
+    const componentInternalMapping = newInternalMappingFromSchema({ schema, configObject: false });
     updateEntry(componentInternalMapping);
   };
 
@@ -124,7 +127,6 @@ const ComponentField = props => {
       const schema = props.schemas.find(
         s => s.meta.id === props.internalMappingInstance.componentId
       );
-
       return (
         <SingletonField
           sdk={props.sdk}
@@ -157,15 +159,19 @@ const ComponentField = props => {
               handleCreateClick={handleCreateSingletonClick}
               toggleText="Create singleton"
               options={getOptions()}
+              presets={props.property.presets}
             />
           )}
-          <DropdownCreate handleCreateClick={handleCreateClick} options={getOptions()} />
+          <DropdownCreate
+            handleCreateClick={handleCreateClick}
+            options={getOptions()}
+            presets={props.property.presets}
+          />
           <DropdownLink handleLinkClick={handleLinkClick} options={getOptions()} />
         </div>
       );
     }
   };
-
   return (
     <div className="component-field" data-test-id="component-field">
       {renderElement()}

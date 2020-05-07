@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { EntryCard } from '@contentful/forma-36-react-components';
 import ComponentEditor from '../../ComponentEditor';
 import ActionDropdown from '../../elements/ActionDropdown';
-import { schemaTitle } from '../../../utilities/copyUtils';
 
 const Component = props => {
   const [singletonCardOpen, toggleSingletonCard] = useState(false);
@@ -30,7 +29,7 @@ const Component = props => {
           className="f36-margin-top--s f36-margin-bottom--m"
           testId="singleton-entry-card"
           loading={false}
-          title={schemaTitle(props.schema)}
+          title={(props.internalMappingInstance.properties.preset_name || {}).value}
           contentType={contentTypeLabel('Singleton')}
           description={props.schema.meta.description}
           size="default"

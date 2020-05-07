@@ -30,6 +30,11 @@ const HydratedEntryCard = props => {
     props.handleRemoveClick();
   };
 
+  const getTitle = () => {
+    if (props.entry.fields) return (props.entry.fields.name || {})['en-US'] || 'untitled';
+    return 'Loading...';
+  };
+
   return (
     <EntryCard
       loading={props.isLoading}
@@ -37,9 +42,7 @@ const HydratedEntryCard = props => {
       className={classnames('entry-card', props.className)}
       description={props.description}
       size={props.description ? 'default' : 'small'}
-      title={
-        props.entry.fields ? (props.entry.fields.name || {})['en-US'] || 'untitled' : 'Loading...'
-      }
+      title={getTitle()}
       contentType={props.contentType}
       status={getStatus(props.entry)}
       selected={props.selected}

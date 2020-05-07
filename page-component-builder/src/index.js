@@ -145,7 +145,7 @@ export class PageComponentBuilder extends React.Component {
   internalMappingFromComponentId = componentId => {
     const schema = this.state.schemaData.components.find(s => s.meta.id === componentId);
     const internalMapping = schema
-      ? newInternalMappingFromSchema(schema, this.state.configObject).asJSON()
+      ? newInternalMappingFromSchema({ schema, configObject: this.state.configObject }).asJSON()
       : JSON.stringify({});
 
     return internalMapping;
@@ -364,7 +364,8 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field">
+        <div className="component-editor__field d-none">
+          <FormLabel htmlFor="field-entries">Entries</FormLabel>
           <Textarea
             testId="field-entries"
             value={this.state.entries.map(e => e.sys.id).join(', ')}

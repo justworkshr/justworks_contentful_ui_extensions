@@ -15,15 +15,21 @@ const mockReplaceHydratedEntry = jest.fn(entity => entity);
 const mockContentType = 'mock-content-type';
 const mockComponentId = 'patterns/componentId';
 const mockComponentOption = 'components/a';
+const mockPresetId = 'components/preset';
 
 const renderComponent = ({
   hydratedEntries = [mockEntryResponse({ id: 1, contentType: mockContentType })],
   internalMappingInstance = null, // singleton data
   sdk = mockSdk(),
   options = [mockComponentOption],
+  presets = [],
   value = [mockEntryResponse({ id: 1, contentType: mockContentType })]
 } = {}) => {
-  const schemas = mockSchemas({}, [mockSchema(mockComponentId), mockSchema(mockComponentOption)]);
+  const schemas = mockSchemas({}, [
+    mockSchema(mockComponentId),
+    mockSchema(mockComponentOption),
+    mockSchema(mockPresetId)
+  ]);
   return render(
     <MultiComponentField
       sdk={sdk}
@@ -34,6 +40,7 @@ const renderComponent = ({
       isLoading={false}
       onChange={mockOnChange}
       options={options}
+      presets={presets}
       replaceHydratedEntry={mockReplaceHydratedEntry}
     />
   );
@@ -166,6 +173,9 @@ describe('actions', () => {
     await expect(mockOnChange.mock.calls[0][0]).toMatchObject([
       { sys: { id: mockComponentOption } }
     ]);
+
+    // action remains
+    expect(queryByTestId('dropdown-link')).toBeTruthy();
   });
 
   it('edits an entry', async () => {
@@ -247,6 +257,38 @@ describe('actions', () => {
       {
         componentId: mockComponentOption,
         properties: {}
+      }
+    ]);
+  });
+
+  it('creates a singleton preset', async () => {
+    const sdk = mockSdk();
+    const { queryByTestId } = renderComponent({
+      sdk: sdk,
+      hydratedEntries: [],
+      presets: [{ name: 'preset', component_id: mockPresetId, properties: {} }],
+      value: []
+    });
+
+    const createDropdown = queryByTestId('dropdown-create-singleton');
+    expect(createDropdown).toBeTruthy();
+
+    // click create dropdown
+    fireEvent.click(createDropdown.querySelector('button'));
+    // debug();
+    const createButton = queryByTestId(`dropdown-preset-type--preset`);
+    expect(createButton).toBeTruthy();
+
+    // click create type button
+    await fireEvent.click(createButton.querySelector('button'));
+
+    await expect(mockOnChange.mock.calls).toHaveLength(1);
+    await expect(mockOnChange.mock.calls[0][0]).toMatchObject([
+      {
+        componentId: mockPresetId,
+        properties: {
+          preset_name: {}
+        }
       }
     ]);
   });
