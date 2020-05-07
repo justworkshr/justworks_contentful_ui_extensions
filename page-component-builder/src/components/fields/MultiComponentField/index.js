@@ -120,9 +120,9 @@ export const MultiComponentField = props => {
       if (navigation.navigated) {
         props.replaceHydratedEntry(navigation.entity);
       }
-    } catch (e) {
+    } catch (error) {
       // entity deleted
-      const index = props.value.findIndex(e => e.sys.id === entry.sys.id);
+      const index = props.value.findIndex(e => (e.sys || {}).id === entry.sys.id);
       handleRemoveClick(index);
     }
   };
@@ -151,10 +151,20 @@ export const MultiComponentField = props => {
     updateEntry(entries, timeout);
   };
 
-  const handleCreateClick = async componentId => {
+  const handleCreateClick = async (componentId, presetObject = null) => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
 
+    const name = presetObject ? presetObject.name : '';
+    const internalMapping = newInternalMappingFromSchema({
+      schema,
+      presetObject,
+      configObject: props.useConfigObjects
+    }).asJSON();
+
     const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
+      name: {
+        'en-US': name
+      },
       componentId: {
         'en-US': componentId
       },
@@ -162,10 +172,7 @@ export const MultiComponentField = props => {
         'en-US': props.useConfigObjects
       },
       internalMapping: {
-        'en-US': newInternalMappingFromSchema({
-          schema,
-          configObject: props.useConfigObjects
-        }).asJSON()
+        'en-US': internalMapping
       }
     });
 
