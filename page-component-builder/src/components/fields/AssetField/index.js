@@ -79,7 +79,7 @@ const AssetField = props => {
 };
 
 AssetField.propTypes = {
-  errors: [],
+  errors: PropTypes.array,
   sdk: PropTypes.object,
   asset: PropTypes.object,
   onChange: PropTypes.func,

@@ -28,8 +28,11 @@ const DropdownField = props => {
   };
 
   const getOptions = () => {
-    let options = props.options;
-    if (!props.required && !options.includes('')) {
+    let options = [...props.options];
+
+    if (!options.includes(props.value)) {
+      options.unshift(props.value);
+    } else if (!props.required && !options.includes('')) {
       // add blank value unless required
       options.unshift('');
     }
@@ -46,7 +49,7 @@ const DropdownField = props => {
         </TextLink>
       )}
       {useCustomText && (
-        <ShortFieldText onChange={e => props.onChange(e.target.value)} value={props.value} />
+        <ShortFieldText onChange={value => props.onChange(value)} value={props.value} />
       )}
       {!useCustomText && (
         <Select
@@ -57,7 +60,7 @@ const DropdownField = props => {
           onChange={e => props.onChange(coerceValue(e.target.value))}>
           {getOptions().map((option, index) => {
             return (
-              <Option key={`${props.propKey}-select-option-${option || index}`} value={option}>
+              <Option key={`${props.propKey}-select-option-${option}`} value={option}>
                 {getLabel(option)}
               </Option>
             );

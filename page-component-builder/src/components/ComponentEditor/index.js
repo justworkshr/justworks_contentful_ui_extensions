@@ -228,14 +228,18 @@ const ComponentEditor = props => {
           .map(propKey => {
             const property = props.schema.properties[propKey];
             const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
-
+            const id = `editor-field--${propKey}`;
             return (
               <div
+                id={id}
                 key={`component-editor-field--${propKey}`}
-                data-test-id="editor-field"
+                data-test-id={id}
                 className="component-editor__field f36-margin-bottom--l">
                 <div className="component-editor__field-heading">
-                  <FormLabel className="component-editor__field-label" required={property.required}>
+                  <FormLabel
+                    className="component-editor__field-label"
+                    required={property.required}
+                    htmlFor={id}>
                     {parse_underscore(propKey) || '<label missing>'}
                   </FormLabel>
                   {!property.required && property.type === c.TEXT_PROPERTY && (
@@ -443,7 +447,7 @@ ComponentEditor.propTypes = {
   updateInternalMapping: PropTypes.func,
   replaceHydratedEntry: PropTypes.func,
   replaceHydratedAsset: PropTypes.func,
-  schema: PropTypes.object,
+  schema: PropTypes.object, // schema of current component
   title: PropTypes.string
 };
 ComponentEditor.defaultProps = {

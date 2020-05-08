@@ -5,7 +5,6 @@ import Axios from 'axios';
 
 import { mockSchemas } from './tests/mockData';
 
-import EntryField from './components/fields/EntryField';
 import ComponentPalette from './components/ComponentPalette';
 import ComponentEditor from './components/ComponentEditor';
 
@@ -15,10 +14,6 @@ import {
   FormLabel,
   TextInput,
   Textarea,
-  Button,
-  Modal,
-  FieldGroup,
-  RadioButtonField,
   Form
 } from '@contentful/forma-36-react-components';
 
@@ -28,12 +23,8 @@ import { init, locations } from 'contentful-ui-extensions-sdk';
 import * as c from './constants';
 
 import InternalMapping from './classes/InternalMapping';
-import {
-  constructLink,
-  extractEntries,
-  linksToFetch,
-  newInternalMappingFromSchema
-} from './utilities';
+import { extractEntries, linksToFetch, newInternalMappingFromSchema } from './utilities';
+
 import { schemaTitle } from './utilities/copyUtils';
 
 import '@contentful/forma-36-react-components/dist/styles.css';

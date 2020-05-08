@@ -89,7 +89,12 @@ export default class InternalMapping {
       // multi component
     } else if (schemaProperty.type === c.MULTI_CONFIG_PROPERTY) {
       // multi config
-    } else if (!schemaProperty.options.includes(property.value)) return errorMessage;
+    } else if (
+      schemaProperty.editor_type !== c.DROPDOWN_WITH_CUSTOM_EDITOR &&
+      !schemaProperty.options.includes(property.value)
+    )
+      // all else except for dropdown w/ custom
+      return errorMessage;
   }
 
   asJSON() {

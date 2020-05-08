@@ -96,7 +96,7 @@ export const linksToFetch = (hydratedEntries = [], allLinks = []) => {
 
 export const newInternalMappingFromSchema = ({
   schema = {},
-  presetObject = null, // {}
+  presetObject = null, // {} for loading a internalMapping from a preset
   configObject = false
 } = {}) => {
   const internalMapping = new InternalMapping(schema.meta.id, {}, schema, configObject);

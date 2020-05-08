@@ -3,7 +3,7 @@ import * as c from '../../constants';
 
 import ComponentField from '../../components/fields/ComponentField';
 
-import { render, cleanup, fireEvent, configure, waitForElement } from '@testing-library/react';
+import { render, cleanup, fireEvent, configure } from '@testing-library/react';
 import { mockEntryResponse, mockSchemas, mockSchema, mockSdk } from '../mockUtils';
 
 configure({

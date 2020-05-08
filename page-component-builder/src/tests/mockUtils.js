@@ -24,21 +24,21 @@ export const mockSchema = (id = 'components/mock') => {
       },
       prop1: {
         type: c.TEXT_PROPERTY,
-        required: false,
+        editor_type: c.SHORT_TEXT_EDITOR,
+        required: true,
         default: 'prop1Value',
         options: null,
         description: '',
         related_to: null,
-        hidden: true,
-        presets: [{ name: 'preset', component_id: 'components/preset', properties: { hi: 1 } }]
+        hidden: false
       },
       componentProp: {
         type: c.COMPONENT_PROPERTY,
-        required: false,
+        required: true,
         options: ['components/a', 'components/b', 'components/c'],
         description: '',
         related_to: null,
-        hidden: true,
+        hidden: false,
         presets: [{ name: 'preset', component_id: 'components/preset', properties: { hi: 1 } }]
       }
     }
