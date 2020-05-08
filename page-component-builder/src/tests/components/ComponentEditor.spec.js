@@ -22,6 +22,8 @@ const mockUpdateInternalMapping = jest.fn(value => value);
 
 const testSchemaId = 'patterns/1';
 const testSchema = mockSchema(testSchemaId);
+const singletonSchemaId = 'components/1';
+const singletonSchema = mockSchema(singletonSchemaId);
 
 const renderComponent = ({
   sdk = mockSdk(),
@@ -30,7 +32,7 @@ const renderComponent = ({
   internalMappingInstance = null, // component data
   schema = {}
 } = {}) => {
-  const schemas = mockSchemas({}, [testSchema]);
+  const schemas = mockSchemas({}, [testSchema, singletonSchema]);
 
   return render(
     <ComponentEditor
@@ -52,10 +54,10 @@ describe('validation', () => {
 
   afterEach(cleanup);
 
-  it('validates required', () => {
+  it('validates text required', () => {
     const internalMappingInstance = newInternalMappingFromSchema({ schema: testSchema });
 
-    const { debug, getByTestId } = renderComponent({
+    const { getByTestId } = renderComponent({
       entry: {},
       schema: testSchema,
       internalMappingInstance
@@ -68,9 +70,9 @@ describe('validation', () => {
     expect(errorList).toBeTruthy();
     expect(errorList.textContent).toEqual('');
 
-    // field renders w/ required
     const input = within(prop1Field).queryByTestId('short-text-field');
     expect(input).toBeTruthy();
+    expect(prop1Field.textContent).toContain('required');
 
     // change field to blank
     fireEvent.change(input, {
@@ -85,6 +87,48 @@ describe('validation', () => {
     expect(mockUpdateInternalMapping.mock.calls).toHaveLength(1);
     expect(mockUpdateInternalMapping.mock.calls[0][2]).toMatchObject({
       prop1: [errorMessage]
+    });
+  });
+
+  it('validates singleton required', () => {
+    const internalMappingInstance = newInternalMappingFromSchema({ schema: testSchema });
+    const singletonInstance = newInternalMappingFromSchema({ schema: singletonSchema }).asObject();
+    internalMappingInstance.addProperty('componentProp', c.COMPONENT_PROPERTY, singletonInstance);
+
+    const { debug, getByTestId } = renderComponent({
+      entry: {},
+      schema: testSchema,
+      internalMappingInstance
+    });
+
+    const componentPropField = getByTestId('editor-field--componentProp');
+    const errorList = within(componentPropField).queryByTestId('error-list');
+
+    // no errors at start
+    expect(errorList).toBeTruthy();
+    expect(errorList.textContent).toEqual('');
+
+    // open singleton card
+    const singletonCard = within(componentPropField).queryByTestId('singleton-entry-card');
+    fireEvent.click(singletonCard);
+
+    // field renders w/ required
+    const input = within(componentPropField).queryByTestId('short-text-field');
+    expect(input).toBeTruthy();
+
+    // change field to blank
+    fireEvent.change(input, {
+      target: { value: '' }
+    });
+
+    // error message appears
+    const errorMessage = 'Please correct all errors in this singleton.';
+    expect(errorList.textContent).toEqual(errorMessage);
+
+    // onChange calls with errors
+    expect(mockUpdateInternalMapping.mock.calls).toHaveLength(1);
+    expect(mockUpdateInternalMapping.mock.calls[0][2]).toMatchObject({
+      componentProp: [errorMessage]
     });
   });
 });

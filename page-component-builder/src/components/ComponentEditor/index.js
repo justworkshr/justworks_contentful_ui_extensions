@@ -229,6 +229,7 @@ const ComponentEditor = props => {
             const property = props.schema.properties[propKey];
             const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
             const id = `editor-field--${propKey}`;
+
             return (
               <div
                 id={id}

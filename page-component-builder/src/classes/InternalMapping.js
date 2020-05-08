@@ -98,10 +98,14 @@ export default class InternalMapping {
   }
 
   asJSON() {
-    return JSON.stringify({
+    return JSON.stringify(this.asObject());
+  }
+
+  asObject() {
+    return {
       componentId: this.componentId,
       properties: this.properties
-    });
+    };
   }
 
   addProperty(propertyKey, type, value) {
