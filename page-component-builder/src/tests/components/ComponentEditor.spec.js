@@ -95,7 +95,7 @@ describe('validation', () => {
     const singletonInstance = newInternalMappingFromSchema({ schema: singletonSchema }).asObject();
     internalMappingInstance.addProperty('componentProp', c.COMPONENT_PROPERTY, singletonInstance);
 
-    const { debug, getByTestId } = renderComponent({
+    const { getByTestId } = renderComponent({
       entry: {},
       schema: testSchema,
       internalMappingInstance

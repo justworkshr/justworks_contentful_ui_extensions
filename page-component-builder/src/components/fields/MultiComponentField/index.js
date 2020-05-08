@@ -195,6 +195,10 @@ export const MultiComponentField = props => {
     }
   };
 
+  const isSingleton = linkOrSingleton => {
+    return linkOrSingleton.componentId;
+  };
+
   const renderEntryCards = () => {
     return props.value
       .filter(e => e)
@@ -229,7 +233,7 @@ export const MultiComponentField = props => {
               entry={entry}
             />
           );
-        } else if (linkOrSingleton.componentId) {
+        } else if (isSingleton(linkOrSingleton)) {
           // singleton
 
           const schema = props.schemas.find(s => s.meta.id === linkOrSingleton.componentId);

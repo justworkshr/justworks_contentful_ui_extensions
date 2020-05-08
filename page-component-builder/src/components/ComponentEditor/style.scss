@@ -7,6 +7,10 @@
     &:focus-within {
       border-color: #4a90e2;
     }
+
+    &.with-error {
+      border-color: #d9453f;
+    }
   }
 
   & &__field-label {

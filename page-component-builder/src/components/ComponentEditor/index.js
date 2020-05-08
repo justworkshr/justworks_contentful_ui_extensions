@@ -123,7 +123,8 @@ const ComponentEditor = props => {
   const updatePropertyValue = (propKey, value, timeout = true, singletonErrors = {}) => {
     props.internalMappingInstance.updateValue(propKey, value);
     const newErrors = props.internalMappingInstance.errors;
-    const allErrors = { ...errors, ...newErrors, ...singletonErrors };
+    const allErrors = { ...newErrors, ...singletonErrors };
+
     setErrors(allErrors);
     props.updateInternalMapping(props.internalMappingInstance.asJSON(), timeout, allErrors);
   };
@@ -235,7 +236,9 @@ const ComponentEditor = props => {
                 id={id}
                 key={`component-editor-field--${propKey}`}
                 data-test-id={id}
-                className="component-editor__field f36-margin-bottom--l">
+                className={`component-editor__field f36-margin-bottom--l ${
+                  errors[propKey] && errors[propKey].length ? 'with-error' : ''
+                }`}>
                 <div className="component-editor__field-heading">
                   <FormLabel
                     className="component-editor__field-label"

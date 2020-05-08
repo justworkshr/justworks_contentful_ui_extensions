@@ -95,6 +95,15 @@ export class PageComponentBuilder extends React.Component {
     await this.syncEntriesAssets();
     this.fetchSchemas();
     this.onInternalMappingChange(this.state.internalMapping);
+
+    const internalMappingInstance = new InternalMapping(
+      this.state.componentId,
+      this.parseInternalMapping().properties,
+      this.currentSchema(),
+      this.state.configObject
+    );
+
+    this.validateInternalMapping(internalMappingInstance.errors);
   };
 
   syncEntriesAssets = async () => {
@@ -105,14 +114,12 @@ export class PageComponentBuilder extends React.Component {
     await this.onAssetsChangeHandler(newAssets);
   };
 
-  validateInternalMapping() {
-    // const internalMappingInstance = new InternalMapping(
-    //   this.state.componentId,
-    //   this.parseInternalMapping().properties,
-    //   this.currentSchema(),
-    //   this.state.configObject
-    // );
-    // console.log(internalMappingInstance.errors);
+  validateInternalMapping(errors = {}) {
+    if (Object.keys(errors).length) {
+      this.props.sdk.entry.fields.isValid.setValue('No');
+    } else if (this.props.sdk.entry.fields.isValid.getValue() === 'No') {
+      this.props.sdk.entry.fields.isValid.setValue('Yes');
+    }
   }
 
   fetchSchemas = async () => {
@@ -289,11 +296,7 @@ export class PageComponentBuilder extends React.Component {
       this.props.sdk.entry.fields.internalMapping.setValue(value);
     }
 
-    if (Object.keys(errors).length) {
-      this.props.sdk.entry.fields.isValid.setValue('No');
-    } else if (this.props.sdk.entry.fields.isValid.getValue() === 'No') {
-      this.props.sdk.entry.fields.isValid.setValue('Yes');
-    }
+    this.validateInternalMapping(errors);
   };
 
   onIsValidChangeHandler = event => {

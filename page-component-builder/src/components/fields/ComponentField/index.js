@@ -119,6 +119,10 @@ const ComponentField = props => {
     return `${contentType} | ${(schema.meta || {}).title || (schema.meta || {}).id}`;
   };
 
+  const isSingleton = () => {
+    return !!props.internalMappingInstance;
+  };
+
   const renderElement = () => {
     if (props.entry.fields) {
       return (
@@ -131,7 +135,7 @@ const ComponentField = props => {
           handleRemoveClick={() => updateEntry(null)}
         />
       );
-    } else if (props.internalMappingInstance) {
+    } else if (isSingleton()) {
       const schema = props.schemas.find(
         s => s.meta.id === props.internalMappingInstance.componentId
       );

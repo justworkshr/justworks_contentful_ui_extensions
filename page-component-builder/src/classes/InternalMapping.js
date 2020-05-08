@@ -30,6 +30,7 @@ export default class InternalMapping {
 
       const schemaProperty = this.schema.properties[propKey];
       if (!schemaProperty) return;
+      if (schemaProperty.hidden) return; // no hidden validations
       errors[propKey].push(
         this.validateRequired(propKey, this.properties[propKey], schemaProperty)
       );
@@ -81,7 +82,7 @@ export default class InternalMapping {
       property.value
     }' is not allowed. Please select from: ${schemaProperty.options.join(' | ')}`;
 
-    if (schemaProperty === c.COMPONENT_PROPERTY) {
+    if (schemaProperty.type === c.COMPONENT_PROPERTY) {
       // single component
     } else if (schemaProperty.type === c.CONFIG_PROPERTY) {
       // single config
