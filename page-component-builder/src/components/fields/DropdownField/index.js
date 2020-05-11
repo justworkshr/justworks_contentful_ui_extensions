@@ -11,7 +11,7 @@ const DropdownField = props => {
     // coerce booleans
     if (value === true) return 'True';
     if (value === false) return 'False';
-
+    if (!value) return '';
     // remove token tags if present
     value = value
       .replace('{{', '')
