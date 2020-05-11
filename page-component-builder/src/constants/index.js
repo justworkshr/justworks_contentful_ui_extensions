@@ -29,6 +29,7 @@ export const SHORT_TEXT_EDITOR = 'short-text-editor';
 export const LONG_TEXT_EDITOR = 'long-text-editor';
 export const MARKDOWN_EDITOR = 'markdown-editor';
 export const COLOR_EDITOR = 'color-editor';
+export const RADIO_EDITOR = 'radio-editor';
 export const DROPDOWN_EDITOR = 'dropdown-editor';
 export const DROPDOWN_WITH_CUSTOM_EDITOR = 'dropdown-with-custom-editor';
 

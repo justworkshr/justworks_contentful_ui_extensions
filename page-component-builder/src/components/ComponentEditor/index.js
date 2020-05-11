@@ -58,7 +58,7 @@ const ComponentEditor = props => {
   const isRadioTextField = property => {
     return (
       property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.SHORT_TEXT_EDITOR &&
+      property.editor_type === c.RADIO_EDITOR &&
       property.options &&
       !!property.options.length
     );
@@ -67,7 +67,7 @@ const ComponentEditor = props => {
   const isDropdownTextField = property => {
     return (
       property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.DROPDOWN_EDITOR &&
+      property.editor_type === c.SHORT_TEXT_EDITOR &&
       property.options &&
       !!property.options.length
     );
@@ -276,11 +276,13 @@ const ComponentEditor = props => {
                   />
                 )}
                 {isBoolProperty(property) && (
-                  <RadioGroup
+                  <DropdownField
                     propKey={propKey}
-                    options={[true, false]}
+                    required={property.required}
+                    options={property.options}
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     value={value}
+                    withCustomText={false}
                     errors={errors[propKey]}
                   />
                 )}
