@@ -13,7 +13,7 @@ const DropdownField = props => {
     if (value === false) return 'False';
     if (!value) return '';
     // remove token tags if present
-    value = value
+    value = String(value)
       .replace('{{', '')
       .replace('}}', '')
       .trim();

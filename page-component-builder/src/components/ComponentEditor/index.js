@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import * as c from '../../constants';
 
-import { HelpText, TextLink, Subheading, FormLabel } from '@contentful/forma-36-react-components';
+import {
+  HelpText,
+  TextLink,
+  Paragraph,
+  Subheading,
+  FormLabel
+} from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
 import LongTextField from '../fields/LongTextField';
@@ -36,7 +42,7 @@ const ComponentEditor = props => {
   };
 
   const isNumberField = property => {
-    return property.type === c.NUMBER_PROPERTY && !(property.options && property.options.length);
+    return property.type === c.NUMBER_PROPERTY && !property.options;
   };
 
   const isLongTextField = property => {
@@ -70,8 +76,8 @@ const ComponentEditor = props => {
 
   const isDropdownTextField = property => {
     return (
-      property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.SHORT_TEXT_EDITOR &&
+      ((property.type === c.TEXT_PROPERTY && property.editor_type === c.SHORT_TEXT_EDITOR) ||
+        property.type === c.NUMBER_PROPERTY) &&
       property.options &&
       !!property.options.length
     );
@@ -215,16 +221,19 @@ const ComponentEditor = props => {
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
-        <Subheading>{props.title}</Subheading>
-        {props.schema.meta && (
-          <HelpText>
-            <TextLink
-              target="_blank"
-              href={`https://justworks-staging-v2.herokuapp.com${props.schema.meta.styleguide_path}`}>
-              Styleguide link
-            </TextLink>
-          </HelpText>
-        )}
+        <Subheading>
+          {props.title}{' '}
+          {props.schema.meta && (
+            <HelpText className="d-inline-block">
+              <TextLink
+                target="_blank"
+                href={`https://justworks-staging-v2.herokuapp.com${props.schema.meta.styleguide_path}`}>
+                Styleguide link
+              </TextLink>
+            </HelpText>
+          )}
+        </Subheading>
+        <Paragraph>{props.schema.meta.description}</Paragraph>
       </div>
 
       <div className="component-editor__fields">

@@ -4,19 +4,14 @@ export const mockSchemas = {
       component: [
         'uncategorized',
         'form',
-        'grid',
         'media',
-        'spacing',
         'text',
         'action',
         'card',
         'collection',
         'nav',
-        'cta',
         'hero',
-        'mixed-media',
-        'content',
-        'list'
+        'modular'
       ],
       content: ['guide', 'resource-wrapper', 'blog-post', 'video', 'image', 'event'],
       location: ['landing-page', 'resource-center', 'marketing-site', 'guidepost', 'events-page']
@@ -26,6 +21,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/adaptive_carousel',
           styleguide_path: '/styleguide/components%2Fadaptive_carousel',
+          title: 'Carousel',
           description:
             'A carousel which is configurable to display any number of elements at each breakpoint.',
           editor_role: 'component',
@@ -52,12 +48,22 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
+          provide_grid: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether or not to provide a single-column grid component around the carousel. Most carousels fit within a pattern grid already.',
+            related_to: null,
+            hidden: true
+          },
           loop: {
             type: 'bool',
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: 'Should the carousel loop back to start when it reaches the end?',
             related_to: null,
             hidden: false
           },
@@ -66,7 +72,7 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: 'Should the carousel autoplay without a user clicking the arrows?',
             related_to: null,
             hidden: false
           },
@@ -75,50 +81,57 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description:
+              'Should the carousel be draggable with the mouse or require arrow clicks only?',
             related_to: null,
-            hidden: false
-          },
-          sm_max: {
-            type: 'number',
-            required: false,
-            default: 1,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          md_max: {
-            type: 'number',
-            required: false,
-            default: 2,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          lg_max: {
-            type: 'number',
-            required: false,
-            default: 3,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          xl_max: {
-            type: 'number',
-            required: false,
-            default: 3,
-            description: null,
-            related_to: null,
-            hidden: false
+            hidden: true
           },
           slide_by: {
             type: 'text',
             required: true,
             default: 'single',
             options: ['single', 'page'],
-            description: 'number of items to scroll by each time',
+            description:
+              'The scrolling behavior -- single scrolls by 1, page scrolls by all the items on the page.',
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: false
+          },
+          sm_max: {
+            type: 'number',
+            required: true,
+            default: 1,
+            options: null,
+            description: 'The number of items to show at the SM (mobile) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          md_max: {
+            type: 'number',
+            required: true,
+            default: 2,
+            options: null,
+            description: 'The number of items to show at the MD (portrait tablet) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          lg_max: {
+            type: 'number',
+            required: true,
+            default: 3,
+            options: null,
+            description:
+              'The number of items to show at the LG (landscape tablet / desktop) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          xl_max: {
+            type: 'number',
+            required: true,
+            default: 3,
+            options: null,
+            description: 'The number of items to show at the XL (desktop) breakpoint',
+            related_to: null,
             hidden: false
           },
           items: {
@@ -128,7 +141,7 @@ export const mockSchemas = {
             default: [],
             options: ['components/basic_text_nav_card'],
             presets: [],
-            description: null,
+            description: 'The carousel item components.',
             related_to: null
           }
         }
@@ -137,6 +150,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/adaptive_column_grid',
           styleguide_path: '/styleguide/components%2Fadaptive_column_grid',
+          title: 'Column Grid',
           description:
             'An adaptive grid that automatically wraps its items. Maximum columns per row can set to 2, 3, or 4. Supports wrapping rows by filling the entire row with any leftovers evenly. Wraps align to the left and top of the row.',
           editor_role: 'component',
@@ -163,35 +177,40 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          xl_max: {
+          sm_max: {
             type: 'number',
-            required: false,
-            default: 4,
-            description: 'The max number of columns per row before triggering a wrap.',
-            related_to: null,
-            hidden: false
-          },
-          lg_max: {
-            type: 'number',
-            required: false,
-            default: 4,
-            description: 'The max number of columns per row before triggering a wrap.',
+            required: true,
+            default: 1,
+            options: [1, 2],
+            description: 'The number of items to show at the SM (mobile) breakpoint',
             related_to: null,
             hidden: false
           },
           md_max: {
             type: 'number',
-            required: false,
+            required: true,
             default: 2,
-            description: 'The max number of columns per row before triggering a wrap.',
+            options: [1, 2],
+            description: 'The number of items to show at the MD (portrait tablet) breakpoint',
             related_to: null,
             hidden: false
           },
-          sm_max: {
+          lg_max: {
             type: 'number',
-            required: false,
-            default: 1,
-            description: 'The max number of columns per row before triggering a wrap.',
+            required: true,
+            default: 4,
+            options: [1, 2, 3, 4],
+            description:
+              'The number of items to show at the LG (landscape tablet / desktop) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          xl_max: {
+            type: 'number',
+            required: true,
+            default: 4,
+            options: [1, 2, 3, 4],
+            description: 'The number of items to show at the XL (desktop) breakpoint',
             related_to: null,
             hidden: false
           },
@@ -207,7 +226,7 @@ export const mockSchemas = {
               'components/heading_body_text'
             ],
             presets: [],
-            description: null,
+            description: 'The column components.',
             related_to: null
           }
         }
@@ -249,7 +268,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/author_headshot_meta',
           styleguide_path: '/styleguide/components%2Fauthor_headshot_meta',
-          description: 'Description of component.',
+          title: 'Author Headshot',
+          description:
+            'Specialized component to display a static circled image next to muted text containing an author name and 2 meta items.',
           editor_role: 'component',
           tags: ['media'],
           extension_of: null
@@ -281,14 +302,15 @@ export const mockSchemas = {
             asset_types: ['image'],
             content_types: [],
             description: 'Author photo',
-            related_to: null
+            related_to: null,
+            hidden: false
           },
           author_name: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: "The author's name",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -298,7 +320,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'The first meta text before the dot.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -308,7 +330,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'The second meta text after the dor.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -319,7 +341,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/basic_lead_form',
           styleguide_path: '/styleguide/components%2Fbasic_lead_form',
-          description: 'A single page lead form which can support multiple input groups.',
+          title: 'Basic Lead Form',
+          description: 'A single page lead form which can support multiple input pages and groups.',
           editor_role: 'component',
           tags: ['form'],
           snapshot: true
@@ -345,12 +368,13 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          background_color_token: {
+          surface_color_token: {
             type: 'text',
-            required: false,
-            default: 'surface-variant',
-            options: ['surface', 'surface-variant'],
-            description: null,
+            required: true,
+            default: 'variant',
+            options: ['default', 'variant'],
+            description:
+              'Select the surface color token to use. All surface colors remain fixed regardless of the current light/dark variant.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -360,7 +384,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: 'Text above the form.',
+            description: 'The title above the entire form.',
             related_to: 'elements/heading',
             editor_type: 'short-text-editor',
             hidden: false
@@ -370,19 +394,9 @@ export const mockSchemas = {
             required: true,
             default: 'Submit',
             options: null,
-            description: null,
+            description: 'What the submit button should say.',
             related_to: 'components/cta_button',
             editor_type: 'short-text-editor',
-            hidden: false
-          },
-          footer_content: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'markdown-editor',
             hidden: false
           },
           post_submit_component: {
@@ -390,7 +404,8 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/headed_list'],
-            description: null,
+            description:
+              'The component that replaces the form after its submitted. If none provided, a default "Thank you" message will appear.',
             related_to: null,
             hidden: false
           },
@@ -414,6 +429,16 @@ export const mockSchemas = {
             related_to: null,
             hidden: true
           },
+          footer_content: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description: 'Content beneath the form such as a privacy policy link or fine print.',
+            related_to: null,
+            editor_type: 'markdown-editor',
+            hidden: false
+          },
           form_config: {
             type: 'config',
             required: false,
@@ -428,8 +453,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/basic_text_nav_card',
           styleguide_path: '/styleguide/components%2Fbasic_text_nav_card',
-          description:
-            'A surface card with hover state which acts as a nav link and has a color override property.',
+          title: 'Basic Text Nav Card',
+          description: 'A card which acts as a nav link and has a color override property.',
           editor_role: 'component',
           tags: ['card']
         },
@@ -454,32 +479,32 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          heading_label_text: {
+          overline_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Text for the overline.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
-          heading_text: {
+          title_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Title text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
-          paragraph_text: {
+          body_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Body text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -513,7 +538,8 @@ export const mockSchemas = {
               '{{ terms-of-use }}',
               '{{ privacy-policy }}'
             ],
-            description: null,
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
@@ -523,7 +549,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'What the bottom CTA should say.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -544,7 +570,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/breadcrumb_text',
           styleguide_path: '/styleguide/components%2Fbreadcrumb_text',
-          description: 'Description of component.',
+          title: 'Breadcrumbs',
+          description: 'A collection of inline links styled with a / between them.',
           editor_role: 'component',
           tags: ['text', 'collection'],
           extension_of: null
@@ -575,7 +602,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -584,7 +611,7 @@ export const mockSchemas = {
             type: 'multi-config',
             required: false,
             default: [],
-            description: null,
+            description: 'The link components.',
             related_to: 'components/text_link',
             hidden: false
           }
@@ -594,7 +621,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/button_modal',
           styleguide_path: '/styleguide/components%2Fbutton_modal',
-          description: 'A button component connected to a generic modal component.',
+          title: 'Button Modal',
+          description: 'A button component which pops open a modal component when clicked.',
           editor_role: 'component',
           tags: ['action'],
           extension_of: null
@@ -629,6 +657,25 @@ export const mockSchemas = {
               'ID attribute if required for targetting between modal and button (like w/ AMP).',
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: true
+          },
+          modal_align_top: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether or not the modal should align to the top rather than center.',
+            related_to: null,
+            hidden: false
+          },
+          include_close_button: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether or not the default close icon should appear on the top right of the container. This may be necessary because modal components come with their own close button.',
+            related_to: null,
             hidden: false
           },
           modal_component: {
@@ -649,26 +696,7 @@ export const mockSchemas = {
               'components/icon_button',
               'components/utility_button'
             ],
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          modal_align_top: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Whether or not the modal should align to the top rather than center.',
-            related_to: null,
-            hidden: false
-          },
-          include_close_button: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description:
-              'Whether or not the default close icon should appear on the top right of the container.',
+            description: 'The button component',
             related_to: null,
             hidden: false
           }
@@ -678,6 +706,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/card_resource_showcase_section',
           styleguide_path: '/styleguide/components%2Fcard_resource_showcase_section',
+          title: 'Resource Showcase Section',
           description:
             'A page content section for resources with an opinionated layout. The "large-single" preset displays a maximum of 4 items and the "inline-all" displays a maximum of 6.',
           editor_role: 'component',
@@ -709,7 +738,8 @@ export const mockSchemas = {
             required: false,
             default: 'large-single',
             options: ['large-single', 'inline-all'],
-            description: null,
+            description:
+              "The configuration of the cards. 'Large single' will display a single large card on the left and the remaining 3 are inline on the right (this pattern repeats). 'Inline-all' will display small inline cards for each entry.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -718,7 +748,8 @@ export const mockSchemas = {
             type: 'number',
             required: false,
             default: 4,
-            description: null,
+            options: null,
+            description: 'The max number of cards to show. Excess cards will remain hidden.',
             related_to: null,
             hidden: false
           },
@@ -728,7 +759,8 @@ export const mockSchemas = {
             default: [],
             asset_types: [],
             content_types: ['resourceWrapper'],
-            description: null,
+            description:
+              'The resource entries which will supply the cards. Please ensure each resource has an entry with a meta entry attached.',
             related_to: null
           },
           action_component: {
@@ -736,7 +768,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/cta_button', 'components/button_modal'],
-            description: null,
+            description: 'Optional CTA component at the bottom.',
             related_to: null,
             hidden: false
           }
@@ -746,8 +778,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/celebrated_list_item',
           styleguide_path: '/styleguide/components%2Fcelebrated_list_item',
+          title: 'Celebrated List Item',
           description:
-            'A text group with an icon to be used with within 3 or 4 columns. Currently uses decorative icon assets.',
+            'A text group with a static circled image asset on top to be used with within 3 or 4 columns.',
           editor_role: 'component',
           tags: ['text', 'media']
         },
@@ -780,24 +813,24 @@ export const mockSchemas = {
             description: 'Optional in place of using actual contentful asset.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
+            hidden: true
           },
-          heading_text: {
+          title_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'The title text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
-          paragraph_text: {
+          body_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'The body text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -807,8 +840,9 @@ export const mockSchemas = {
             required: false,
             asset_types: ['image'],
             content_types: [],
-            description: null,
-            related_to: null
+            description: 'The image asset to display as a static circled image',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -816,6 +850,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/company_logo',
           styleguide_path: '/styleguide/components%2Fcompany_logo',
+          title: 'Company Brand Logo',
           description: 'A component for the property logo.',
           editor_role: 'component',
           tags: ['media']
@@ -870,7 +905,8 @@ export const mockSchemas = {
               '{{ terms-of-use }}',
               '{{ privacy-policy }}'
             ],
-            description: 'Optional url to turn the logo into a link.',
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
@@ -880,7 +916,8 @@ export const mockSchemas = {
             required: true,
             default: 'justworks-logo',
             options: ['justworks-logo', 'justworks-x-connect-your-care'],
-            description: null,
+            description:
+              'Select from the predefined list of logos we have (new logos need to be passed to development for processing w/ theme system).',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -890,7 +927,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['variant', 'accent-1', 'accent-2'],
-            description: null,
+            description: 'The theme token to apply to the logo.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -908,10 +945,10 @@ export const mockSchemas = {
           },
           stack_size: {
             type: 'text',
-            required: true,
+            required: false,
             default: null,
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Spacing token for the amount of spacing beneath the element.',
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -922,9 +959,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/composable_text',
           styleguide_path: '/styleguide/components%2Fcomposable_text',
-          title: 'Composable Text Component',
+          title: 'Composable Text',
           description:
-            'A component which allows the author to fully control which text elements and styles they wish to add.',
+            'A component which allows the author to fully control which text elements and styles they wish to add. Text elements stack.',
           editor_role: 'component',
           tags: ['text'],
           extension_of: null
@@ -973,6 +1010,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/configurable_card',
           styleguide_path: '/styleguide/components%2Fconfigurable_card',
+          title: 'Configurable Card',
           description:
             'A card component which can be configured to hide certain elements or rearrange itself across breakpoints.',
           editor_role: 'component',
@@ -998,120 +1036,6 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
-          },
-          xl_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          lg_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          md_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          sm_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          label_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          title_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          description_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          meta_1_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          meta_2_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
           },
           href: {
             type: 'text',
@@ -1142,9 +1066,124 @@ export const mockSchemas = {
               '{{ terms-of-use }}',
               '{{ privacy-policy }}'
             ],
-            description: null,
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
+            hidden: false
+          },
+          xl_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the SM (mobile) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          lg_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the MD (portrait tablet) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          md_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the LG (landscape tablet / desktop) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          sm_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the XL (desktop) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          label_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The text for the overline',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          title_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The title text',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          description_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The description / body text.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          meta_1_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The text for the first meta item.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          meta_2_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The text for the second meta item (after the dot).',
+            related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           image_url: {
@@ -1152,18 +1191,19 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Optional image url to instead of a contentful asset.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
+            hidden: true
           },
           image_asset: {
             type: 'link',
             required: false,
             asset_types: ['image'],
             content_types: [],
-            description: 'Overrides image_url and provides other essential metadata like "alt".',
-            related_to: null
+            description: 'Image asset for the card image.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -1171,6 +1211,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/configurable_resource_card',
           styleguide_path: '/styleguide/components%2Fconfigurable_resource_card',
+          title: 'Configurable Resource Card',
           description:
             'A module which transforms contentful entries into a configurable card component.',
           editor_role: 'component',
@@ -1209,7 +1250,7 @@ export const mockSchemas = {
               'inline-no-description',
               'text-only'
             ],
-            description: null,
+            description: 'The card style at this the SM (mobile) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1225,7 +1266,7 @@ export const mockSchemas = {
               'inline-no-description',
               'text-only'
             ],
-            description: null,
+            description: 'The card style at this the MD (portrait tablet) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1241,7 +1282,7 @@ export const mockSchemas = {
               'inline-no-description',
               'text-only'
             ],
-            description: null,
+            description: 'The card style at this the LG (landscape tablet / desktop) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1257,7 +1298,7 @@ export const mockSchemas = {
               'inline-no-description',
               'text-only'
             ],
-            description: null,
+            description: 'The card style at this the XL (desktop) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1267,8 +1308,9 @@ export const mockSchemas = {
             required: false,
             asset_types: [],
             content_types: ['resourceWrapper'],
-            description: null,
-            related_to: null
+            description: 'Please ensure the resource is linked to an entry with a meta object.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -1321,7 +1363,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: "The title above the box's content.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1340,7 +1382,7 @@ export const mockSchemas = {
             type: 'multi-config',
             required: false,
             default: [],
-            description: null,
+            description: 'The link components for each contact.',
             related_to: 'components/text_link',
             hidden: false
           }
@@ -1350,9 +1392,10 @@ export const mockSchemas = {
         meta: {
           id: 'components/conversion_modal_content',
           styleguide_path: '/styleguide/components%2Fconversion_modal_content',
+          title: 'Conversion Modal Content',
           description: 'A component with text content and a cta button with popup modal.',
           editor_role: 'component',
-          tags: ['cta', 'action'],
+          tags: ['action', 'action'],
           extension_of: null
         },
         properties: {
@@ -1381,7 +1424,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Overline text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1391,7 +1434,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Title text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1401,7 +1444,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Body text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1411,7 +1454,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'CTA text',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1421,7 +1464,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: ['primary', 'secondary', 'tertiary'],
-            description: null,
+            description: 'The CTA intent color.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1462,7 +1505,7 @@ export const mockSchemas = {
               'twitter',
               'youtube'
             ],
-            description: null,
+            description: 'CTA icon (if any)',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1482,6 +1525,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/cta_button',
           styleguide_path: '/styleguide/components%2Fcta_button',
+          title: 'CTA Button',
           description:
             'A themed CTA button with 3 intent level options. Each button can be adapted with an icon and sized.',
           editor_role: 'component',
@@ -1513,7 +1557,7 @@ export const mockSchemas = {
             required: true,
             default: 'primary',
             options: ['primary', 'secondary', 'tertiary'],
-            description: null,
+            description: 'Button intent color.',
             related_to: 'foundations/theme_colors',
             editor_type: 'short-text-editor',
             hidden: false
@@ -1523,7 +1567,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'sm', 'legacy-nav'],
-            description: null,
+            description: 'Button size (default or small)',
             related_to: 'foundations/inset_shapes',
             editor_type: 'short-text-editor',
             hidden: false
@@ -1533,7 +1577,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: "The button's text.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1574,8 +1618,9 @@ export const mockSchemas = {
               'twitter',
               'youtube'
             ],
-            description: 'May select any available icon.',
-            related_to: 'elements/icon',
+            description:
+              'List of icons - please submit new icons to development for theme integration.',
+            related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
@@ -1608,20 +1653,10 @@ export const mockSchemas = {
               '{{ terms-of-use }}',
               '{{ privacy-policy }}'
             ],
-            description: 'Only needed if the button is a link to somewhere.',
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            hidden: false
-          },
-          target: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description:
-              'If button is a link, overrides default external/internal new-tab behavior',
-            related_to: null,
-            editor_type: 'short-text-editor',
             hidden: false
           },
           animated_shadows: {
@@ -1633,6 +1668,17 @@ export const mockSchemas = {
               'Whether this button should include stylstic shadows and animated hover effects.',
             related_to: null,
             hidden: false
+          },
+          target: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'If button is a link, overrides default external/internal new-tab behavior',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
           },
           connect_left: {
             type: 'bool',
@@ -1680,6 +1726,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/dropdown_curated_guide_lists',
           styleguide_path: '/styleguide/components%2Fdropdown_curated_guide_lists',
+          title: 'Dropdown Guide List',
           description:
             'A specific interface to add multiple CuratedGuideList into a selectable dropdown component.',
           editor_role: 'component',
@@ -1711,7 +1758,9 @@ export const mockSchemas = {
             type: 'number',
             required: false,
             default: 4,
-            description: null,
+            options: null,
+            description:
+              'The max number of entries from each guide to show. Excess will be hidden.',
             related_to: null,
             hidden: false
           },
@@ -1721,15 +1770,17 @@ export const mockSchemas = {
             default: [],
             asset_types: [],
             content_types: ['guide'],
-            description: null,
+            description:
+              'Each guide will display a list of its associated entries. Please ensure each guide has a meta object.',
             related_to: null
           },
           preview_type: {
             type: 'text',
-            required: false,
-            default: '',
-            options: ['mock', 'most-recent', 'first-list', 'second-list'],
-            description: null,
+            required: true,
+            default: 'most-recent',
+            options: ['most-recent', 'first-list', 'second-list'],
+            description:
+              "Configures which entries to display from each guide. 'Most recent' displays the most recent entries.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1739,7 +1790,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'The CTA text that each guide CTA shoud have.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1749,7 +1800,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: ['primary', 'secondary', 'tertiary'],
-            description: null,
+            description: 'The CTA intent style that each guide CTA should have.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1760,6 +1811,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/dropdown_selectables/component',
           styleguide_path: '/styleguide/components%2Fdropdown_selectables%2Fcomponent',
+          title: 'Dropdown Component Display',
           description:
             'A component which takes a list of options and a list of components and allows the user to select the component via dropdown.',
           editor_role: 'component',
@@ -1789,21 +1841,22 @@ export const mockSchemas = {
           },
           dropdown_options: {
             type: 'multi-text',
-            required: false,
+            required: true,
             default: [],
             options: null,
-            description: null,
+            description: 'The list of text options for the dropdown.',
             related_to: null,
             hidden: false
           },
           components: {
             type: 'multi-component',
-            required: false,
+            required: true,
             hidden: false,
             default: [],
             options: [],
             presets: [],
-            description: null,
+            description:
+              'The components associated with each text option. Should match the length and order of options manually.',
             related_to: null
           }
         }
@@ -1812,7 +1865,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/featured_video_resource_showcase',
           styleguide_path: '/styleguide/components%2Ffeatured_video_resource_showcase',
-          description: 'Description of component.',
+          title: 'Featured Video Showcase',
+          description:
+            'A presentation of videos which shows a "current" and a "next" video. Auto-scrolls when video completes.',
           editor_role: 'component',
           tags: ['collection'],
           extension_of: null
@@ -1844,7 +1899,8 @@ export const mockSchemas = {
             default: [],
             asset_types: [],
             content_types: ['video', 'resourceWrapper'],
-            description: null,
+            description:
+              'The video entries to populate this showcase with. Please ensure each video has a meta object.',
             related_to: null
           }
         }
@@ -1853,7 +1909,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/footer_link_collection',
           styleguide_path: '/styleguide/components%2Ffooter_link_collection',
-          description: 'Description of component.',
+          title: 'Footer Link Collection',
+          description:
+            'A footer section which renders a column of vertical links and optional fine print markdown.',
           editor_role: 'component',
           tags: ['nav'],
           extension_of: null
@@ -1884,45 +1942,7 @@ export const mockSchemas = {
             required: false,
             default: 'left',
             options: ['left', 'center'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          title_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          markdown: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'markdown-editor',
-            hidden: false
-          },
-          links: {
-            type: 'multi-config',
-            required: false,
-            default: [],
-            description: null,
-            related_to: 'components/text_link',
-            hidden: false
-          },
-          link_theme_token: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['variant', 'accent-1'],
-            description: null,
+            description: 'The text alignment.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1932,9 +1952,48 @@ export const mockSchemas = {
             required: false,
             default: 'sm',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
+            description: 'The vertical spacing for the links.',
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: false
+          },
+          link_theme_token: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['variant', 'accent-1'],
+            description: 'The color token for the links.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          title_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Title text',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          markdown: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description:
+              'Optional free-text section for adding fine print or other text beneath the links.',
+            related_to: null,
+            editor_type: 'markdown-editor',
+            hidden: false
+          },
+          links: {
+            type: 'multi-config',
+            required: false,
+            default: [],
+            description: 'The list of links to include, stacks vertically.',
+            related_to: 'components/text_link',
             hidden: false
           }
         }
@@ -1943,7 +2002,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/footer_three_column_section',
           styleguide_path: '/styleguide/components%2Ffooter_three_column_section',
-          title: 'Footer Three Column Section Component',
+          title: 'Footer Three Column Section',
           description:
             'A footer section built specifically for the newsletter subscribe form from legacy pages.',
           editor_role: 'component',
@@ -1977,7 +2036,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/footer_link_collection'],
-            description: null,
+            description: 'Component for the left.',
             related_to: null,
             hidden: false
           },
@@ -1986,7 +2045,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/single_text_inline_form'],
-            description: null,
+            description: 'Component forx the center.',
             related_to: null,
             hidden: false
           },
@@ -1995,7 +2054,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/social_icon_row'],
-            description: null,
+            description: 'Component for the right.',
             related_to: null,
             hidden: false
           }
@@ -2005,8 +2064,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/form_input_group',
           styleguide_path: '/styleguide/components%2Fform_input_group',
+          title: 'Input Group',
           description:
-            'Input groups provide optional lead text above a variable set of labeled inputs. They allow you to group input sections together by category.',
+            'Input groups provide optional lead text above a group of labeled inputs. They allow you to group input sections together by category.',
           editor_role: 'component',
           tags: ['form']
         },
@@ -2048,7 +2108,7 @@ export const mockSchemas = {
             default: [],
             options: ['components/labeled_text_input', 'components/labeled_select_input'],
             presets: [],
-            description: 'A collection of input groups',
+            description: 'A collection of labeled form inputs',
             related_to: null
           }
         }
@@ -2057,7 +2117,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/form_page',
           styleguide_path: '/styleguide/components%2Fform_page',
-          description: 'Description of component.',
+          title: 'Form Page',
+          description:
+            'When multiple form pages are present in a form, the form will allow users to fill out 1 page at a time.',
           editor_role: 'component',
           tags: ['form'],
           extension_of: null
@@ -2099,6 +2161,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/full_background_image',
           styleguide_path: '/styleguide/components%2Ffull_background_image',
+          title: 'Full Background Image',
           description:
             'The background image component attaches itself to its parent container and grows with the height of the container. It maintains its original aspect ratio as the container grows and remains focused on the center of the image.',
           editor_role: 'singleton',
@@ -2170,8 +2233,9 @@ export const mockSchemas = {
             type: 'number',
             required: false,
             default: 2400,
+            options: null,
             description:
-              'The max-width of the image when requesting from the image api. For load-speed optimization, please use a module-optimized width.',
+              'The max-width of the image when requesting from the image api. For load-speed optimization, please use a page / module-specific width.',
             related_to: 'elements/image',
             hidden: true
           },
@@ -2181,7 +2245,8 @@ export const mockSchemas = {
             asset_types: ['image'],
             content_types: [],
             description: null,
-            related_to: null
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -2189,10 +2254,11 @@ export const mockSchemas = {
         meta: {
           id: 'components/guide_carousel',
           styleguide_path: '/styleguide/components%2Fguide_carousel',
-          description: 'Description of component.',
+          title: 'Guide Carousel',
+          description: 'An adaptive carousel specifically for guide entries to populate.',
           editor_role: 'component',
           tags: ['collection'],
-          extension_of: 'components/single_column_carousel'
+          extension_of: 'components/adaptive_carousel'
         },
         properties: {
           classname: {
@@ -2220,7 +2286,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/cta_button', 'components/button_modal'],
-            description: null,
+            description: 'The CTA component to use.',
             related_to: null,
             hidden: false
           },
@@ -2230,7 +2296,7 @@ export const mockSchemas = {
             default: [],
             asset_types: [],
             content_types: ['guide'],
-            description: null,
+            description: 'Please ensure each guide has a meta object.',
             related_to: null
           }
         }
@@ -2239,9 +2305,10 @@ export const mockSchemas = {
         meta: {
           id: 'components/guide_list_grid',
           styleguide_path: '/styleguide/components%2Fguide_list_grid',
+          title: 'Guide List Grid',
           description:
-            'A direct interface for loading a CuratedGuideList into the split resource grid. Associated by defualt to a CTA button link to the guide page. Otherwise, a custom action component can be passed in and replace it.',
-          editor_role: 'component',
+            'A direct interface for loading a guide list into the split resource grid. Associated by defualt to a CTA button link to the guide page. Otherwise, a custom action component can be passed in and replace it.',
+          editor_role: 'hidden',
           tags: ['collection'],
           extension_of: 'components/card_resource_showcase_section'
         },
@@ -2270,7 +2337,8 @@ export const mockSchemas = {
             type: 'number',
             required: false,
             default: 4,
-            description: null,
+            options: null,
+            description: 'The max entries from each guide to show. Excess will be hidden.',
             related_to: null,
             hidden: false
           },
@@ -2280,14 +2348,15 @@ export const mockSchemas = {
             asset_types: [],
             content_types: ['guide'],
             description: null,
-            related_to: null
+            related_to: null,
+            hidden: false
           },
           cta_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: 'Default CTA button text',
+            description: 'The CTA button text to display for each guide CTA.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2297,7 +2366,18 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: ['primary', 'secondary', 'tertiary'],
-            description: 'Default CTA button intent style.',
+            description: 'the CTA intent style to use for each guide CTA.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          list_type: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['mock', 'most-recent', 'first-list', 'second-list'],
+            description:
+              "The type of entries to use from each guide. 'Most recent' will display all the most recent entries.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2311,18 +2391,9 @@ export const mockSchemas = {
               'components/cta_button',
               'components/utility_button'
             ],
-            description: 'A completely custom action component which overrides default CTA button.',
+            description:
+              'An optional, custom action component which overrides the default guide CTA button.',
             related_to: null,
-            hidden: false
-          },
-          list_type: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['mock', 'most-recent', 'first-list', 'second-list'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2331,6 +2402,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/headed_list',
           styleguide_path: '/styleguide/components%2Fheaded_list',
+          title: 'Headed List',
           description:
             'A heading element above a paragraph list. Can support markdown and custom list bullets.',
           editor_role: 'component',
@@ -2357,22 +2429,12 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          heading_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: 'elements/heading',
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
           size: {
             type: 'text',
             required: true,
             default: 'lg',
             options: ['lg', 'sm'],
-            description: null,
+            description: 'Body text size.',
             related_to: 'elements/paragraph_text',
             editor_type: 'short-text-editor',
             hidden: false
@@ -2382,8 +2444,18 @@ export const mockSchemas = {
             required: true,
             default: 'disc',
             options: ['disc', 'square', 'circle', 'checkmark', 'checkmark-circle-filled'],
-            description: null,
+            description: 'Select the bullet style.',
             related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          heading_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Title text',
+            related_to: 'elements/heading',
             editor_type: 'short-text-editor',
             hidden: false
           },
@@ -2392,7 +2464,7 @@ export const mockSchemas = {
             required: true,
             default: null,
             options: null,
-            description: null,
+            description: 'Markdown for the list items. (Use a dash - for each item)',
             related_to: 'elements/markdown_list',
             editor_type: 'markdown-editor',
             hidden: false
@@ -2403,6 +2475,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/heading_body_text',
           styleguide_path: '/styleguide/components%2Fheading_body_text',
+          title: 'Headed Body Text',
           description: 'A heading element above a body text element. Can support markdown.',
           editor_role: 'component',
           tags: ['text']
@@ -2428,16 +2501,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          heading_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
           heading_typography_style: {
             type: 'text',
             required: false,
@@ -2451,7 +2514,7 @@ export const mockSchemas = {
               'heading--sm',
               'heading--xxs'
             ],
-            description: null,
+            description: 'Typography element for the title.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2461,7 +2524,7 @@ export const mockSchemas = {
             required: false,
             default: 'md',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
+            description: 'Spacing beneath the title.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2471,27 +2534,17 @@ export const mockSchemas = {
             required: false,
             default: 'h2',
             options: ['h2', 'h3', 'h4', 'h5', 'h6', 'p'],
-            description: null,
+            description: 'Title HTML element.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
-          },
-          body_text: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'markdown-editor',
-            hidden: false
           },
           body_typography_style: {
             type: 'text',
             required: false,
             default: 'paragraph--lg',
             options: ['lead--lg', 'lead--md', 'paragraph--lg', 'paragraph--sm'],
-            description: null,
+            description: 'Typography style for the body.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2501,7 +2554,7 @@ export const mockSchemas = {
             required: false,
             default: 'md',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
+            description: 'Spacing beneath the body.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2511,10 +2564,30 @@ export const mockSchemas = {
             required: false,
             default: 'p',
             options: ['p', 'markdown'],
-            description: null,
+            description: 'Body HTML element.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
+          },
+          heading_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Title text',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          body_text: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description: 'Body text',
+            related_to: null,
+            editor_type: 'markdown-editor',
+            hidden: false
           }
         }
       },
@@ -2522,6 +2595,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/icon_button',
           styleguide_path: '/styleguide/components%2Ficon_button',
+          title: 'Icon Button',
           description: 'A button element without text, only a large icon.',
           editor_role: 'component',
           tags: ['media', 'action']
@@ -2549,7 +2623,7 @@ export const mockSchemas = {
           },
           icon_name: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'plus',
             options: [
               'arrow-right',
@@ -2583,7 +2657,8 @@ export const mockSchemas = {
               'twitter',
               'youtube'
             ],
-            description: null,
+            description:
+              'List of icons - please submit new icons to development for theme integration.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2593,7 +2668,7 @@ export const mockSchemas = {
             required: false,
             default: 'md',
             options: ['xxl', 'xl', 'lg', 'md', 'sm'],
-            description: null,
+            description: "Icon's size.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2607,7 +2682,7 @@ export const mockSchemas = {
               'AMP directive if serving as an action component to other components like lightboxes.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
+            hidden: true
           },
           href: {
             type: 'text',
@@ -2638,7 +2713,8 @@ export const mockSchemas = {
               '{{ terms-of-use }}',
               '{{ privacy-policy }}'
             ],
-            description: null,
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
@@ -2650,7 +2726,7 @@ export const mockSchemas = {
           id: 'components/iframe_reader',
           styleguide_path: '/styleguide/components%2Fiframe_reader',
           title: 'Iframe Reader Component',
-          description: 'Description of component.',
+          description: 'An iframe for downloadable PDF assets to be displayed on-page.',
           editor_role: 'component',
           tags: [],
           extension_of: null
@@ -2681,7 +2757,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: 'The iframe source url',
+            description: 'The iframe source url. Should be a fully qualified URL (https://...)',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2692,8 +2768,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/key_term_cta',
           styleguide_path: '/styleguide/components%2Fkey_term_cta',
+          title: 'Key Term CTA',
           description: 'Description of component.',
-          editor_role: 'component',
+          editor_role: 'hidden',
           tags: ['text', 'action'],
           extension_of: null
         },
@@ -2773,6 +2850,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/labeled_select_input',
           styleguide_path: '/styleguide/components%2Flabeled_select_input',
+          title: 'Labeled Select Dropdown',
           description: 'A dropdown element beneath a system label.',
           editor_role: 'component',
           tags: ['form']
@@ -2803,7 +2881,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Label text',
             related_to: 'elements/form_label',
             editor_type: 'short-text-editor',
             hidden: false
@@ -2813,7 +2891,7 @@ export const mockSchemas = {
             required: false,
             default: 'default',
             options: ['default', 'sm'],
-            description: null,
+            description: 'Input size (default or small)',
             related_to: 'elements/select',
             editor_type: 'short-text-editor',
             hidden: false
@@ -2823,7 +2901,7 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: 'Whether this input should be marked as required or not.',
             related_to: 'elements/form_label',
             hidden: false
           },
@@ -2832,7 +2910,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -2841,7 +2919,7 @@ export const mockSchemas = {
             type: 'config',
             required: false,
             default: {},
-            description: null,
+            description: 'The input configuration for this styled component.',
             related_to: 'elements/select',
             hidden: false
           }
@@ -2851,6 +2929,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/labeled_text_input',
           styleguide_path: '/styleguide/components%2Flabeled_text_input',
+          title: 'Labeled Text Input',
           description: 'A text input element beneath a system label.',
           editor_role: 'component',
           tags: ['form']
@@ -2876,13 +2955,13 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          label_text: {
+          stack_size: {
             type: 'text',
             required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: 'elements/form_label',
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
@@ -2891,37 +2970,9 @@ export const mockSchemas = {
             required: false,
             default: 'default',
             options: ['default', 'sm'],
-            description: null,
+            description: 'The input size (default or small)',
             related_to: 'elements/text_input',
             editor_type: 'short-text-editor',
-            hidden: false
-          },
-          value: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'Value of the input, if preset',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          stack_size: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          input_config: {
-            type: 'config',
-            required: false,
-            default: {},
-            description: null,
-            related_to: 'elements/text_input',
             hidden: false
           },
           connect_right: {
@@ -2934,14 +2985,32 @@ export const mockSchemas = {
             related_to: null,
             hidden: false
           },
-          validation_type: {
+          value: {
             type: 'text',
             required: false,
             default: '',
-            options: ['email', 'phone', 'password'],
+            options: null,
+            description: 'The default value of the input.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          label_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The label text',
+            related_to: 'elements/form_label',
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          input_config: {
+            type: 'config',
+            required: false,
+            default: {},
             description: null,
             related_to: 'elements/text_input',
-            editor_type: 'short-text-editor',
             hidden: false
           }
         }
@@ -2950,6 +3019,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/limiting_small_item_row',
           styleguide_path: '/styleguide/components%2Flimiting_small_item_row',
+          title: 'Small Item Limiting Row',
           description:
             'A grid of small items which can be configured to only show a specific number of items per breakpoint. All items are centered.',
           editor_role: 'component',
@@ -2976,6 +3046,43 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
+          sm_max: {
+            type: 'number',
+            required: true,
+            default: 3,
+            options: null,
+            description: 'The number of items to show at the SM (mobile) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          md_max: {
+            type: 'number',
+            required: true,
+            default: 8,
+            options: null,
+            description: 'The number of items to show at the MD (portrait tablet) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          lg_max: {
+            type: 'number',
+            required: true,
+            default: 10,
+            options: null,
+            description:
+              'The number of items to show at the LG (landscape tablet / desktop) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          xl_max: {
+            type: 'number',
+            required: true,
+            default: 12,
+            options: null,
+            description: 'The number of items to show at the XL (desktop) breakpoint',
+            related_to: null,
+            hidden: false
+          },
           items: {
             type: 'multi-component',
             required: false,
@@ -2983,40 +3090,8 @@ export const mockSchemas = {
             default: [],
             options: ['components/pill', 'components/search_term_pill'],
             presets: [],
-            description: null,
+            description: 'The components to display.',
             related_to: null
-          },
-          xl_max: {
-            type: 'number',
-            required: false,
-            default: 12,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          lg_max: {
-            type: 'number',
-            required: false,
-            default: 10,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          md_max: {
-            type: 'number',
-            required: false,
-            default: 8,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          sm_max: {
-            type: 'number',
-            required: false,
-            default: 3,
-            description: null,
-            related_to: null,
-            hidden: false
           }
         }
       },
@@ -3024,7 +3099,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/mobile_nav_link_section',
           styleguide_path: '/styleguide/components%2Fmobile_nav_link_section',
-          description: 'Description of component.',
+          title: 'Mobile Nav Link Section',
+          description: 'A collection of links specifically for the mobile nav popup modal.',
           editor_role: 'component',
           tags: ['nav'],
           extension_of: null
@@ -3054,7 +3130,7 @@ export const mockSchemas = {
             type: 'config',
             required: false,
             default: {},
-            description: null,
+            description: 'Title text',
             related_to: 'components/text_link',
             hidden: false
           },
@@ -3062,7 +3138,7 @@ export const mockSchemas = {
             type: 'multi-config',
             required: false,
             default: [],
-            description: null,
+            description: 'Collection of links',
             related_to: 'components/text_link',
             hidden: false
           }
@@ -3072,7 +3148,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/mobile_nav_modal',
           styleguide_path: '/styleguide/components%2Fmobile_nav_modal',
-          description: 'Description of component.',
+          title: 'Mobile Nav Modal',
+          description: 'Component for the mobile navigation menu popup',
           editor_role: 'component',
           tags: ['nav'],
           extension_of: null
@@ -3105,7 +3182,7 @@ export const mockSchemas = {
             default: [],
             options: ['components/mobile_nav_link_section'],
             presets: [],
-            description: null,
+            description: 'Collection of link sections for the modal.',
             related_to: null
           },
           bottom_ctas: {
@@ -3115,7 +3192,7 @@ export const mockSchemas = {
             default: [],
             options: ['components/text_link', 'components/cta_button'],
             presets: [],
-            description: null,
+            description: 'Collection of CTAs for the bottom of the modal.',
             related_to: null
           }
         }
@@ -3124,8 +3201,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/nav_dropdown',
           styleguide_path: '/styleguide/components%2Fnav_dropdown',
+          title: 'Desktop Nav Dropdown',
           description:
-            'A themed navigation dropdown for desktop navs. If any of the links or the title link paths match the current url path, the title gets highlighted.',
+            'The navigation dropdown menu for desktop navs. Opens on hover. If any of the links or the title link paths match the current url path, the title gets highlighted.',
           editor_role: 'component',
           tags: ['nav']
         },
@@ -3154,7 +3232,7 @@ export const mockSchemas = {
             type: 'config',
             required: false,
             default: {},
-            description: null,
+            description: 'The title link.',
             related_to: 'components/text_link',
             hidden: false
           },
@@ -3162,7 +3240,7 @@ export const mockSchemas = {
             type: 'multi-config',
             required: false,
             default: [],
-            description: null,
+            description: 'The collection of links inside the menu.',
             related_to: 'components/text_link',
             hidden: false
           }
@@ -3172,6 +3250,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/pill',
           styleguide_path: '/styleguide/components%2Fpill',
+          title: 'Pill',
           description: 'A configurable link pill with optional icon and color variants.',
           editor_role: 'component',
           tags: ['action']
@@ -3196,6 +3275,41 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
+          },
+          href: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: [
+              '{{ homepage }}',
+              '{{ features-overview }}',
+              '{{ features-benefits }}',
+              '{{ features-payroll }}',
+              '{{ features-hr }}',
+              '{{ features-compliance }}',
+              '{{ features-support }}',
+              '{{ pricing }}',
+              '{{ about-company }}',
+              '{{ about-team }}',
+              '{{ about-values }}',
+              '{{ careers }}',
+              '{{ press }}',
+              '{{ our-customers }}',
+              '{{ resource-center }}',
+              '{{ blog }}',
+              '{{ partners }}',
+              '{{ referrals }}',
+              '{{ help-center }}',
+              '{{ login }}',
+              '{{ get-started }}',
+              '{{ terms-of-use }}',
+              '{{ privacy-policy }}'
+            ],
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
+            related_to: null,
+            editor_type: 'dropdown-with-custom-editor',
+            hidden: false
           },
           icon_name: {
             type: 'text',
@@ -3233,53 +3347,10 @@ export const mockSchemas = {
               'twitter',
               'youtube'
             ],
-            description: null,
-            related_to: 'elements/icon',
+            description:
+              'List of icons - please submit new icons to development for theme integration.',
+            related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
-          },
-          pill_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: 'elements/system_text',
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          href: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: [
-              '{{ homepage }}',
-              '{{ features-overview }}',
-              '{{ features-benefits }}',
-              '{{ features-payroll }}',
-              '{{ features-hr }}',
-              '{{ features-compliance }}',
-              '{{ features-support }}',
-              '{{ pricing }}',
-              '{{ about-company }}',
-              '{{ about-team }}',
-              '{{ about-values }}',
-              '{{ careers }}',
-              '{{ press }}',
-              '{{ our-customers }}',
-              '{{ resource-center }}',
-              '{{ blog }}',
-              '{{ partners }}',
-              '{{ referrals }}',
-              '{{ help-center }}',
-              '{{ login }}',
-              '{{ get-started }}',
-              '{{ terms-of-use }}',
-              '{{ privacy-policy }}'
-            ],
-            description: null,
-            related_to: 'elements/link',
-            editor_type: 'dropdown-with-custom-editor',
             hidden: false
           },
           icon_variant: {
@@ -3311,6 +3382,16 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
+          },
+          pill_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: 'elements/system_text',
+            editor_type: 'short-text-editor',
+            hidden: false
           }
         }
       },
@@ -3318,8 +3399,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/resource_search_result',
           styleguide_path: '/styleguide/components%2Fresource_search_result',
+          title: 'Resource Search Result',
           description: 'Description of component.',
-          editor_role: 'component',
+          editor_role: 'hidden',
           tags: ['card'],
           extension_of: null
         },
@@ -3349,8 +3431,9 @@ export const mockSchemas = {
             required: false,
             asset_types: [],
             content_types: ['blogPost'],
-            description: null,
-            related_to: null
+            description: 'The entry to display. Please ensure it has a meta object.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -3358,6 +3441,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/responsive_image',
           styleguide_path: '/styleguide/components%2Fresponsive_image',
+          title: 'Responsive Image',
           description:
             'An image element inside of a responsive container which preserves the original aspect ratio of the image when resized.',
           editor_role: 'singleton',
@@ -3389,7 +3473,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'An external image URL to use.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
@@ -3429,6 +3513,7 @@ export const mockSchemas = {
             type: 'number',
             required: false,
             default: 1600,
+            options: null,
             description:
               'The max-width of the image when requesting from the image api. For load-speed optimization, please use a module-optimized width.',
             related_to: 'elements/image',
@@ -3439,8 +3524,10 @@ export const mockSchemas = {
             required: false,
             asset_types: ['image'],
             content_types: [],
-            description: 'Overrides image_url and alt properties.',
-            related_to: null
+            description:
+              'The contentful asset containing the image. Please ensure the image has a description for accessibility purposes.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -3448,6 +3535,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/responsive_video',
           styleguide_path: '/styleguide/components%2Fresponsive_video',
+          title: 'Responsive Video',
           description: 'A responsive container for a video + placeholder image combo..',
           editor_role: 'component',
           tags: ['media']
@@ -3475,10 +3563,41 @@ export const mockSchemas = {
           },
           icon_name: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'play-circle-filled',
-            options: ['play', 'play-circle-outline', 'play-circle-filled'],
-            description: null,
+            options: [
+              'arrow-right',
+              'calendar-circle-filled',
+              'caret-left-circle-filled',
+              'caret-right-circle-filled',
+              'checkmark',
+              'checkmark-circle-filled',
+              'chevron-down',
+              'close-circle-outline',
+              'download',
+              'facebook',
+              'globe-circle-filled',
+              'hamburger-menu',
+              'hashtag-circle-filled',
+              'instagram',
+              'linked-in',
+              'mail',
+              'mail-outline',
+              'menu-close',
+              'minus',
+              'phone',
+              'play',
+              'play-circle-filled',
+              'play-circle-outline',
+              'play-youtube-circle-filled',
+              'plus',
+              'search-circle-filled',
+              'sms',
+              'speech-bubble-outline',
+              'twitter',
+              'youtube'
+            ],
+            description: 'The play button icon.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -3491,15 +3610,7 @@ export const mockSchemas = {
             description:
               'Whether or not to load this video using the controlled YouTube API wrapper. This is usually only necessary when the video is in an autoplaying carousel of other videos.',
             related_to: null,
-            hidden: false
-          },
-          video_entry: {
-            type: 'link',
-            required: false,
-            asset_types: ['video'],
-            content_types: ['video', 'resourceWrapper'],
-            description: 'Overrides video_url.',
-            related_to: null
+            hidden: true
           },
           image_asset: {
             type: 'link',
@@ -3508,7 +3619,18 @@ export const mockSchemas = {
             content_types: [],
             description:
               'Alternate field for image. Overrides the image pulled from a video entry.',
-            related_to: null
+            related_to: null,
+            hidden: true
+          },
+          video_entry: {
+            type: 'link',
+            required: false,
+            asset_types: ['video'],
+            content_types: ['video', 'resourceWrapper'],
+            description:
+              'The video asset to display in this component. Please ensure the video has a meta entry w/ meta_image.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -3516,8 +3638,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/search_bar',
           styleguide_path: '/styleguide/components%2Fsearch_bar',
+          title: 'Search Bar',
           description: 'A text input with a search icon element.',
-          editor_role: 'component',
+          editor_role: 'hidden',
           tags: ['form']
         },
         properties: {
@@ -3567,6 +3690,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/search_term_grid',
           styleguide_path: '/styleguide/components%2Fsearch_term_grid',
+          title: 'Search Term Grid',
           description:
             'A centered grid exclusively for search-term pills. Uses a pre-configured limiting grid.',
           editor_role: 'component',
@@ -3593,46 +3717,51 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          heading_text: {
-            type: 'text',
-            required: false,
-            default: '',
+          sm_max: {
+            type: 'number',
+            required: true,
+            default: 4,
             options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          xl_max: {
-            type: 'number',
-            required: false,
-            default: 10,
-            description: 'The number of terms to show at the XL breakpoint.',
-            related_to: null,
-            hidden: false
-          },
-          lg_max: {
-            type: 'number',
-            required: false,
-            default: 8,
-            description: 'The number of terms to show at the LG breakpoint.',
+            description: 'The number of items to show at the SM (mobile) breakpoint',
             related_to: null,
             hidden: false
           },
           md_max: {
             type: 'number',
-            required: false,
+            required: true,
             default: 7,
-            description: 'The number of terms to show at the MD breakpoint.',
+            options: null,
+            description: 'The number of items to show at the MD (portrait tablet) breakpoint',
             related_to: null,
             hidden: false
           },
-          sm_max: {
+          lg_max: {
             type: 'number',
-            required: false,
-            default: 4,
-            description: 'The number of terms to show at the SM breakpoint.',
+            required: true,
+            default: 8,
+            options: null,
+            description:
+              'The number of items to show at the LG (landscape tablet / desktop) breakpoint',
             related_to: null,
+            hidden: false
+          },
+          xl_max: {
+            type: 'number',
+            required: true,
+            default: 10,
+            options: null,
+            description: 'The number of items to show at the XL (desktop) breakpoint',
+            related_to: null,
+            hidden: false
+          },
+          heading_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Title text',
+            related_to: null,
+            editor_type: 'short-text-editor',
             hidden: false
           },
           search_terms: {
@@ -3642,7 +3771,7 @@ export const mockSchemas = {
             default: [],
             options: ['components/search_term_pill'],
             presets: [],
-            description: null,
+            description: 'Collection of search pills.',
             related_to: 'components/limiting_small_item_row'
           }
         }
@@ -3651,8 +3780,9 @@ export const mockSchemas = {
         meta: {
           id: 'components/search_term_pill',
           styleguide_path: '/styleguide/components%2Fsearch_term_pill',
+          title: 'Search Term Pill',
           description:
-            'A pill specifically configured for presenting search-term styles. The search-term is automatically converted into a link on our site.',
+            "A pill specifically configured for presenting search-term styles. The search-term is automatically converted into a link for our site's search page.",
           editor_role: 'component',
           extension_of: 'components/pill',
           tags: ['action']
@@ -3683,7 +3813,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'seasonal'],
-            description: null,
+            description: 'Seasonal styles use a different icon and color.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -3703,120 +3833,10 @@ export const mockSchemas = {
       },
       {
         meta: {
-          id: 'components/single_column_carousel',
-          styleguide_path: '/styleguide/components%2Fsingle_column_carousel',
-          description: 'Extension of Adaptive Carousel with a single grid column wrapper.',
-          editor_role: 'component',
-          extension_of: 'components/adaptive_carousel',
-          tags: ['collection']
-        },
-        properties: {
-          classname: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'CSS class name(s) for the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          c_id: {
-            type: 'text',
-            required: false,
-            default: 'ComponentsSingleColumnCarouselComponent',
-            options: null,
-            description: 'Internal testing ID.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          autoplay: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          mouse_drag: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          loop: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          sm_max: {
-            type: 'number',
-            required: false,
-            default: 1,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          md_max: {
-            type: 'number',
-            required: false,
-            default: 2,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          lg_max: {
-            type: 'number',
-            required: false,
-            default: 3,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          xl_max: {
-            type: 'number',
-            required: false,
-            default: 3,
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          slide_by: {
-            type: 'text',
-            required: false,
-            default: 'single',
-            options: ['single', 'page'],
-            description: 'number of items to scroll by each time',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          items: {
-            type: 'multi-component',
-            required: false,
-            hidden: false,
-            default: [],
-            options: ['components/basic_text_nav_card'],
-            presets: [],
-            description: null,
-            related_to: null
-          }
-        }
-      },
-      {
-        meta: {
           id: 'components/single_grid_column',
           styleguide_path: '/styleguide/components%2Fsingle_grid_column',
-          description: 'Description of component.',
+          title: 'Single Grid Column',
+          description: 'A single column within a grid row + container.',
           editor_role: 'component',
           extension_of: null,
           tags: ['grid']
@@ -3867,6 +3887,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/single_text_inline_form',
           styleguide_path: '/styleguide/components%2Fsingle_text_inline_form',
+          title: 'Single Text Inline Form',
           description:
             'A single text form element with a button inlined side by side. Best used in split columns.',
           editor_role: 'component',
@@ -3917,7 +3938,7 @@ export const mockSchemas = {
             required: true,
             default: 'primary',
             options: ['primary', 'secondary', 'tertiary'],
-            description: null,
+            description: 'Submit button intent style.',
             related_to: 'components/cta_button',
             editor_type: 'short-text-editor',
             hidden: false
@@ -3927,27 +3948,18 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Submit button text.',
             related_to: 'components/cta_button',
             editor_type: 'short-text-editor',
             hidden: false
           },
-          hidden_fields: {
-            type: 'multi-component',
-            required: false,
-            hidden: false,
-            default: [],
-            options: ['elements/text_input'],
-            presets: [],
-            description: null,
-            related_to: null
-          },
-          post_submit_component: {
-            type: 'component',
-            required: false,
-            default: null,
-            options: ['components/headed_list'],
-            description: null,
+          connected_button: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether to stylistically connect the submit button to the text input inline or not. Otherwise, elements will stack.',
             related_to: null,
             hidden: false
           },
@@ -3959,13 +3971,23 @@ export const mockSchemas = {
             related_to: 'elements/form',
             hidden: false
           },
-          connected_button: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
+          hidden_fields: {
+            type: 'multi-component',
+            required: false,
+            hidden: false,
+            default: [],
+            options: ['elements/text_input'],
+            presets: [],
+            description: 'Hidden fields for passing essential pardot data.',
+            related_to: null
+          },
+          post_submit_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/headed_list'],
             description:
-              'Whether to connect the submit button to the text input inline or not. Otherwise, elements will stack.',
+              'The component that replaces the form after its submitted. If none provided, a default "Thank you" message will appear.',
             related_to: null,
             hidden: false
           }
@@ -3975,7 +3997,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/social_icon_row',
           styleguide_path: '/styleguide/components%2Fsocial_icon_row',
-          description: 'Description of component.',
+          title: 'Social Icon Row',
+          description: 'A row of social icons and links.',
           editor_role: 'component',
           tags: ['action', 'collection'],
           extension_of: null
@@ -4006,17 +4029,17 @@ export const mockSchemas = {
             required: false,
             default: 'md',
             options: ['xxl', 'xl', 'lg', 'md', 'sm'],
-            description: null,
+            description: 'Icon size',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
           theme_token: {
             type: 'text',
-            required: false,
-            default: '',
+            required: true,
+            default: 'variant',
             options: ['variant'],
-            description: null,
+            description: 'Color token for the icons.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4057,7 +4080,7 @@ export const mockSchemas = {
               'twitter',
               'youtube'
             ],
-            description: null,
+            description: 'The name of each icon.',
             related_to: null,
             hidden: false
           },
@@ -4066,7 +4089,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             options: null,
-            description: null,
+            description: 'The corresponding URL for each icon.',
             related_to: null,
             hidden: false
           }
@@ -4076,8 +4099,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/split_form_inputs',
           styleguide_path: '/styleguide/components%2Fsplit_form_inputs',
-          title: 'Split Form Inputs Component',
-          description: 'Description of component.',
+          title: 'Split Form Inputs',
+          description: 'Two text input fields split onto the same line. Ex: First Name / Last Name',
           editor_role: 'component',
           tags: [],
           extension_of: null
@@ -4108,7 +4131,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/labeled_text_input'],
-            description: null,
+            description: 'The left input.',
             related_to: null,
             hidden: false
           },
@@ -4117,7 +4140,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/labeled_text_input'],
-            description: null,
+            description: 'The right input.',
             related_to: null,
             hidden: false
           }
@@ -4127,6 +4150,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/stacked_hero_text',
           styleguide_path: '/styleguide/components%2Fstacked_hero_text',
+          title: 'Stacked Hero Text',
           description:
             'A common hero text pattern with a heading label, display text, and lead text. Configurable alignment.',
           editor_role: 'singleton',
@@ -4209,7 +4233,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/text_link',
           styleguide_path: '/styleguide/components%2Ftext_link',
-          description: 'A base link.',
+          title: 'Text Link',
+          description: 'An HTML text link with configurable properties.',
           editor_role: 'component',
           tags: ['action'],
           config_template: ['href', 'link_text']
@@ -4265,45 +4290,19 @@ export const mockSchemas = {
               '{{ privacy-policy }}'
             ],
             description:
-              'The link path. If internal, starts with `/`. If external, starts with `https://`',
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
           },
-          link_text: {
+          stack_size: {
             type: 'text',
             required: false,
-            default: '',
-            options: null,
-            description: 'Pass configure as a text link. Overrides blocks.',
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
-          },
-          style: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'Inline style',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          data: {
-            type: 'json',
-            required: false,
-            default: {},
-            description: 'HTML dataset info applied to content_tag',
-            related_to: null,
-            hidden: true
-          },
-          link_config: {
-            type: 'config',
-            required: false,
-            default: {},
-            description: 'Use a config object to provide data.',
-            related_to: 'components/text_link',
             hidden: false
           },
           color_token: {
@@ -4311,7 +4310,7 @@ export const mockSchemas = {
             required: false,
             default: 'text-link',
             options: ['text-link', 'variant', 'accent-1', 'accent-2'],
-            description: null,
+            description: 'The color token to use.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4328,20 +4327,46 @@ export const mockSchemas = {
               'paragraph--lg',
               'lead--md'
             ],
-            description: null,
+            description: 'The typography type of the link.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
-          stack_size: {
+          style: {
             type: 'text',
             required: false,
-            default: null,
-            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: null,
+            default: '',
+            options: null,
+            description: 'Links stack by default. True will make these links inline.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: true
+          },
+          data: {
+            type: 'json',
+            required: false,
+            default: {},
+            description: 'HTML dataset info applied to content_tag',
+            related_to: null,
+            hidden: true
+          },
+          link_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Pass configure as a text link. Overrides blocks.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
+          },
+          link_config: {
+            type: 'config',
+            required: false,
+            default: {},
+            description: 'Use a config object to provide data.',
+            related_to: 'components/text_link',
+            hidden: true
           }
         }
       },
@@ -4349,6 +4374,7 @@ export const mockSchemas = {
         meta: {
           id: 'components/utility_button',
           styleguide_path: '/styleguide/components%2Futility_button',
+          title: 'Utility Button',
           description:
             'A frameless button with themed color behavior and an icon on either the left or right side.',
           editor_role: 'component',
@@ -4375,20 +4401,45 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          size: {
+          href: {
             type: 'text',
-            required: true,
-            default: 'default',
-            options: ['default', 'sm'],
-            description: null,
-            related_to: 'foundations/inset_shapes',
-            editor_type: 'short-text-editor',
+            required: false,
+            default: '',
+            options: [
+              '{{ homepage }}',
+              '{{ features-overview }}',
+              '{{ features-benefits }}',
+              '{{ features-payroll }}',
+              '{{ features-hr }}',
+              '{{ features-compliance }}',
+              '{{ features-support }}',
+              '{{ pricing }}',
+              '{{ about-company }}',
+              '{{ about-team }}',
+              '{{ about-values }}',
+              '{{ careers }}',
+              '{{ press }}',
+              '{{ our-customers }}',
+              '{{ resource-center }}',
+              '{{ blog }}',
+              '{{ partners }}',
+              '{{ referrals }}',
+              '{{ help-center }}',
+              '{{ login }}',
+              '{{ get-started }}',
+              '{{ terms-of-use }}',
+              '{{ privacy-policy }}'
+            ],
+            description:
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
+            related_to: null,
+            editor_type: 'dropdown-with-custom-editor',
             hidden: false
           },
           icon_name: {
             type: 'text',
             required: false,
-            default: '',
+            default: null,
             options: [
               'arrow-right',
               'calendar-circle-filled',
@@ -4421,8 +4472,9 @@ export const mockSchemas = {
               'twitter',
               'youtube'
             ],
-            description: 'May select any available icon.',
-            related_to: 'elements/icon',
+            description:
+              'List of icons - please submit new icons to development for theme integration.',
+            related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
@@ -4431,8 +4483,18 @@ export const mockSchemas = {
             required: true,
             default: 'left',
             options: ['left', 'right'],
-            description: null,
+            description: 'Which side of the button the icon should appear on.',
             related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          size: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'sm'],
+            description: "The button's size (default or small)",
+            related_to: 'foundations/inset_shapes',
             editor_type: 'short-text-editor',
             hidden: false
           },
@@ -4441,43 +4503,9 @@ export const mockSchemas = {
             required: true,
             default: 'variant',
             options: ['variant', 'text-link'],
-            description: null,
+            description: "The button's color token.",
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
-          },
-          href: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: [
-              '{{ homepage }}',
-              '{{ features-overview }}',
-              '{{ features-benefits }}',
-              '{{ features-payroll }}',
-              '{{ features-hr }}',
-              '{{ features-compliance }}',
-              '{{ features-support }}',
-              '{{ pricing }}',
-              '{{ about-company }}',
-              '{{ about-team }}',
-              '{{ about-values }}',
-              '{{ careers }}',
-              '{{ press }}',
-              '{{ our-customers }}',
-              '{{ resource-center }}',
-              '{{ blog }}',
-              '{{ partners }}',
-              '{{ referrals }}',
-              '{{ help-center }}',
-              '{{ login }}',
-              '{{ get-started }}',
-              '{{ terms-of-use }}',
-              '{{ privacy-policy }}'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'dropdown-with-custom-editor',
             hidden: false
           },
           button_text: {
@@ -4485,7 +4513,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: "The button's text",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4496,11 +4524,11 @@ export const mockSchemas = {
         meta: {
           id: 'components/webinar_event_list_item',
           styleguide_path: '/styleguide/components%2Fwebinar_event_list_item',
-          title: 'Webinar Event List Item Component',
+          title: 'Webinar Event List Item',
           description:
             'List item for a webinar event, including a link to the webinar recording video when the date is passed.',
           editor_role: 'component',
-          tags: ['list', 'event', 'events-page'],
+          tags: ['collection', 'event', 'events-page'],
           extension_of: null
         },
         properties: {
@@ -4529,8 +4557,10 @@ export const mockSchemas = {
             required: false,
             asset_types: [],
             content_types: ['event'],
-            description: null,
-            related_to: null
+            description:
+              'The event contentful entry. The event status will determine the CTA text. The component will automatically render the date or any passed-event notifications.',
+            related_to: null,
+            hidden: false
           }
         }
       },
@@ -4538,6 +4568,8 @@ export const mockSchemas = {
         meta: {
           id: 'elements/display_text',
           styleguide_path: '/styleguide/elements%2Fdisplay_text',
+          title: 'Display Text',
+          description: 'Typography element.',
           tags: ['text'],
           editor_role: 'component'
         },
@@ -4605,10 +4637,10 @@ export const mockSchemas = {
           },
           stack_size: {
             type: 'text',
-            required: true,
+            required: false,
             default: 'lg',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Spacing token for the amount of spacing beneath the element.',
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4616,7 +4648,7 @@ export const mockSchemas = {
           alignment: {
             type: 'text',
             required: false,
-            default: 'left',
+            default: '',
             options: ['left', 'center'],
             description: null,
             related_to: null,
@@ -4648,6 +4680,7 @@ export const mockSchemas = {
         meta: {
           id: 'elements/form',
           styleguide_path: '/styleguide/elements%2Fform',
+          title: 'Base Form',
           description: 'A base form element which can be configured to submit to any endpoint.',
           editor_role: 'config-object',
           tags: ['form'],
@@ -4758,6 +4791,8 @@ export const mockSchemas = {
         meta: {
           id: 'elements/heading',
           styleguide_path: '/styleguide/elements%2Fheading',
+          title: 'Heading Text',
+          description: 'Typography element.',
           tags: ['text'],
           editor_role: 'component'
         },
@@ -4825,10 +4860,10 @@ export const mockSchemas = {
           },
           stack_size: {
             type: 'text',
-            required: true,
+            required: false,
             default: null,
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Spacing token for the amount of spacing beneath the element.',
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -4836,7 +4871,7 @@ export const mockSchemas = {
           alignment: {
             type: 'text',
             required: false,
-            default: 'left',
+            default: '',
             options: ['left', 'center'],
             description: null,
             related_to: null,
@@ -4879,6 +4914,8 @@ export const mockSchemas = {
         meta: {
           id: 'elements/lead_text',
           styleguide_path: '/styleguide/elements%2Flead_text',
+          title: 'Lead Text',
+          description: 'Typography element.',
           tags: ['text'],
           editor_role: 'component'
         },
@@ -4947,7 +4984,7 @@ export const mockSchemas = {
           alignment: {
             type: 'text',
             required: false,
-            default: 'left',
+            default: '',
             options: ['left', 'center'],
             description: null,
             related_to: null,
@@ -4956,10 +4993,10 @@ export const mockSchemas = {
           },
           stack_size: {
             type: 'text',
-            required: true,
+            required: false,
             default: 'lg',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Spacing token for the amount of spacing beneath the element.',
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5045,7 +5082,7 @@ export const mockSchemas = {
               '{{ privacy-policy }}'
             ],
             description:
-              'The link path. If internal, starts with `/`. If external, starts with `https://`',
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
@@ -5155,6 +5192,8 @@ export const mockSchemas = {
         meta: {
           id: 'elements/paragraph_text',
           styleguide_path: '/styleguide/elements%2Fparagraph_text',
+          title: 'Paragraph Text',
+          description: 'Typography element.',
           tags: ['text'],
           editor_role: 'component'
         },
@@ -5223,9 +5262,9 @@ export const mockSchemas = {
           stack_size: {
             type: 'text',
             required: false,
-            default: '',
+            default: null,
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Spacing token for the amount of spacing beneath the element.',
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5233,7 +5272,7 @@ export const mockSchemas = {
           alignment: {
             type: 'text',
             required: false,
-            default: 'left',
+            default: '',
             options: ['left', 'center'],
             description: null,
             related_to: null,
@@ -5397,6 +5436,8 @@ export const mockSchemas = {
         meta: {
           id: 'elements/system_text',
           styleguide_path: '/styleguide/elements%2Fsystem_text',
+          title: 'System Text',
+          description: 'Typography element.',
           tags: ['text'],
           editor_role: 'component'
         },
@@ -5433,10 +5474,10 @@ export const mockSchemas = {
           },
           stack_size: {
             type: 'text',
-            required: true,
+            required: false,
             default: null,
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Spacing token for the amount of spacing beneath the element.',
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5627,8 +5668,8 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Falgolia_search_results',
           title: 'Algolia Search Results Pattern',
           description: 'Description of component.',
-          editor_role: 'component',
-          tags: [],
+          editor_role: 'hidden',
+          tags: ['collection', 'resource-center'],
           extension_of: null
         },
         properties: {
@@ -5724,7 +5765,8 @@ export const mockSchemas = {
             asset_types: ['image'],
             content_types: [],
             description: 'The background image asset',
-            related_to: 'components/full_background_image'
+            related_to: 'components/full_background_image',
+            hidden: false
           },
           split_component: {
             type: 'component',
@@ -5750,9 +5792,10 @@ export const mockSchemas = {
           id: 'patterns/bordered_content_cta_box',
           styleguide_path: '/styleguide/patterns%2Fbordered_content_cta_box',
           title: 'Bordered CTA Content Box',
-          description: 'Description of component.',
+          description:
+            'A bordered box containing a text component on the left and a button or form on the right.',
           editor_role: 'pattern',
-          tags: ['cta', 'form', 'action'],
+          tags: ['action', 'form', 'action'],
           extension_of: null
         },
         properties: {
@@ -5840,7 +5883,7 @@ export const mockSchemas = {
           description:
             'A Bordered CTA Content Box specifically for the BlogCTA Content Type. When gated, a pre-built form pops up for the user to submit their information before downloading. Gated currently only works for BlogCTAs with Files, not URLS.',
           editor_role: 'pattern',
-          tags: ['cta', 'cta-module'],
+          tags: ['action', 'cta-module'],
           extension_of: 'patterns/bordered_content_cta_box'
         },
         properties: {
@@ -5891,7 +5934,8 @@ export const mockSchemas = {
             content_types: ['blogCta'],
             description:
               "Requires a BlogCta entry with a file attachment. The 'Text' field in this entry will determine the CTA text.",
-            related_to: null
+            related_to: null,
+            hidden: false
           },
           resource_gated: {
             type: 'bool',
@@ -5920,9 +5964,9 @@ export const mockSchemas = {
           id: 'patterns/composable_lp_hero',
           styleguide_path: '/styleguide/patterns%2Fcomposable_lp_hero',
           title: 'Composable Lp Hero Pattern',
-          description: 'Description of component.',
-          editor_role: 'component',
-          tags: [],
+          description: 'A centered hero containing text elements only.',
+          editor_role: 'pattern',
+          tags: ['hero', 'modular'],
           extension_of: null,
           snapshot: false
         },
@@ -5975,6 +6019,16 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description:
               'Select the amount of spacing to apply to the top and bottom of this page section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6039,7 +6093,7 @@ export const mockSchemas = {
           description:
             'A pattern containing 2 components side by side. If an image is on the right side, it wraps to the top on mobile.',
           editor_role: 'pattern',
-          tags: ['mixed-media', 'image', 'video', 'text', 'form']
+          tags: ['modular', 'image', 'video', 'text', 'form']
         },
         properties: {
           classname: {
@@ -6183,9 +6237,10 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/filterable_search_results',
           styleguide_path: '/styleguide/patterns%2Ffilterable_search_results',
-          description: 'Description of component.',
+          title: 'Filterable Search Results',
+          description: 'A list of resources returned from a search.',
           editor_role: 'hidden',
-          tags: ['card', 'resource-center', 'resource-wrapper'],
+          tags: ['collection', 'resource-center', 'resource-wrapper'],
           extension_of: null
         },
         properties: {
@@ -6238,7 +6293,7 @@ export const mockSchemas = {
           description:
             'A section for repeating-item components such as logos, short text collections, etc. Supports multiple layouts such as carousels and grids. Optional CTA at the bottom.',
           editor_role: 'pattern',
-          tags: ['collection', 'mixed-media'],
+          tags: ['collection'],
           extension_of: null
         },
         properties: {
@@ -6269,6 +6324,16 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description:
               "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          background_color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'variant'],
+            description: 'Select the background color token to use within the light/dark variants.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6335,13 +6400,22 @@ export const mockSchemas = {
           },
           title_section_alignment: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'left',
             options: ['left', 'center'],
             description:
-              'Aligns the text section to the left or center of the section. Individual text elements may still need to be aligned correctly.',
+              'Aligns the title section to the left or center of the page. Individual text elements may still need to be aligned correctly.',
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: false
+          },
+          divider: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Should a dividing line be added at the bottom?',
+            related_to: null,
             hidden: false
           },
           cta_component: {
@@ -6349,16 +6423,23 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/cta_button', 'components/button_modal'],
-            description: null,
+            description: 'CTA button component for the bottom of the section.',
             related_to: null,
             hidden: false
           },
-          grid_component: {
+          content_component: {
             type: 'component',
-            required: false,
+            required: true,
             default: null,
-            options: ['components/adaptive_column_grid', 'components/single_column_carousel'],
-            description: null,
+            options: [
+              'components/guide_carousel',
+              'components/adaptive_carousel',
+              'components/dropdown_curated_guide_lists',
+              'components/featured_video_resource_showcase',
+              'components/card_resource_showcase_section',
+              'components/adaptive_column_grid'
+            ],
+            description: 'The presentation layout \u0026 style for this pattern.',
             related_to: null,
             hidden: false
           }
@@ -6368,9 +6449,10 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/hero_double_stack',
           styleguide_path: '/styleguide/patterns%2Fhero_double_stack',
+          title: 'Double Stack hero',
           description:
             'A hero pattern comprised of a text stack and a configurable zone for another pattern beneath it.',
-          editor_role: 'pattern',
+          editor_role: 'hidden',
           tags: ['hero', 'landing-page']
         },
         properties: {
@@ -6459,6 +6541,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/navigation_bar',
           styleguide_path: '/styleguide/patterns%2Fnavigation_bar',
+          title: 'Navigation Bar',
           description:
             'A navigation bar with zones on the left and right for any number and configuration of nav components.',
           editor_role: 'pattern',
@@ -6500,7 +6583,8 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description:
+              'Whether or not the nav should stick to the top of the screen when scrolling.',
             related_to: null,
             hidden: false
           },
@@ -6519,7 +6603,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/company_logo'],
-            description: null,
+            description: 'Specific field for a centered logo.',
             related_to: null,
             hidden: false
           },
@@ -6535,7 +6619,7 @@ export const mockSchemas = {
               'components/cta_button'
             ],
             presets: [],
-            description: null,
+            description: 'For components on the left side of the navbar.',
             related_to: null
           },
           right_items: {
@@ -6550,7 +6634,7 @@ export const mockSchemas = {
               'components/algolia_search_bar'
             ],
             presets: [],
-            description: null,
+            description: 'For components on the right side of the navbar.',
             related_to: null
           },
           right_items_mobile: {
@@ -6561,7 +6645,7 @@ export const mockSchemas = {
             options: ['components/text_link', 'components/cta_button', 'components/nav_dropdown'],
             presets: [],
             description:
-              "Only use this for swapping a different element in at mobile view, such as the very specific 'Get Started' button changing to 'Start' in the mobile nav.",
+              "Only use this in a mobile navbar for swapping a different element in at mobile view, such as the very specific 'Get Started' button changing to 'Start' at the SM breakpoint. Items appearing at MD breakpoint go into regular 'right items' property.",
             related_to: null
           },
           top_items: {
@@ -6579,6 +6663,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/navigation_footer',
           styleguide_path: '/styleguide/patterns%2Fnavigation_footer',
+          title: 'Navigation Footer',
           description: 'Description of component.',
           editor_role: 'pattern',
           tags: ['nav'],
@@ -6621,7 +6706,7 @@ export const mockSchemas = {
             default: [],
             options: ['components/footer_link_collection'],
             presets: [],
-            description: 'All of the link collections at the top of the footer.',
+            description: 'Collection of components for the top of the footer.',
             related_to: null
           },
           bottom_section: {
@@ -6638,7 +6723,8 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: null,
-            description: null,
+            description:
+              'Markdown formatted text at the very bottom of the footer. Use {{ current_year }} token to automatically insert the current year.',
             related_to: null,
             editor_type: 'markdown-editor',
             hidden: false
@@ -6648,7 +6734,8 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: ['components/social_icon_row'],
-            description: 'These go inside the fine print section only.',
+            description:
+              'These go inside the fine print section on desktop footers. Otherwise, they go at the top of the footer on mobile footers.',
             related_to: null,
             hidden: false
           }
@@ -6658,10 +6745,11 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/resource_article',
           styleguide_path: '/styleguide/patterns%2Fresource_article',
+          title: 'Resource Article',
           description:
             'The full article experience composed from a resource content type. Includes the hero, table of contents, content, and progress bar.',
-          editor_role: 'pattern',
-          tags: ['mixed-media', 'resource-center', 'resource-wrapper'],
+          editor_role: 'hidden',
+          tags: ['text', 'resource-center', 'resource-wrapper'],
           extension_of: null
         },
         properties: {
@@ -6692,7 +6780,8 @@ export const mockSchemas = {
             content_types: ['resourceWrapper'],
             description:
               'Add the resource to include category \u0026 glossary information into the hero and table of contents. Optional.',
-            related_to: null
+            related_to: null,
+            hidden: false
           },
           article: {
             type: 'link',
@@ -6700,113 +6789,6 @@ export const mockSchemas = {
             asset_types: [],
             content_types: ['blogPost'],
             description: 'Should work with any blog article entry.',
-            related_to: null
-          }
-        }
-      },
-      {
-        meta: {
-          id: 'patterns/resource_content_section',
-          styleguide_path: '/styleguide/patterns%2Fresource_content_section',
-          description:
-            'A page content section with a left-aligned heading section and a component zone beneath it with optional CTA button.',
-          editor_role: 'pattern',
-          tags: ['mixed-media', 'resource-center']
-        },
-        properties: {
-          classname: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'CSS class name(s) for the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          c_id: {
-            type: 'text',
-            required: false,
-            default: 'PatternsResourceContentSectionComponent',
-            options: null,
-            description: 'Internal testing ID.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          theme_variant: {
-            type: 'text',
-            required: true,
-            default: 'page',
-            options: ['page', 'light', 'dark'],
-            description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          content_spacing_size: {
-            type: 'text',
-            required: true,
-            default: 'xl',
-            options: ['xl', 'xxxxl'],
-            description:
-              'Select the amount of spacing to apply to the top and bottom of this page section.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          heading_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          lead_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'long-text-editor',
-            hidden: false
-          },
-          divider: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Should a dividing line be added at the bottom?',
-            related_to: null,
-            hidden: false
-          },
-          content_module: {
-            type: 'component',
-            required: true,
-            default: null,
-            options: [
-              'components/single_column_carousel',
-              'components/guide_carousel',
-              'components/dropdown_curated_guide_lists',
-              'components/featured_video_resource_showcase',
-              'components/card_resource_showcase_section',
-              'components/adaptive_column_grid'
-            ],
-            description: null,
-            related_to: null,
-            hidden: false
-          },
-          action_component: {
-            type: 'component',
-            required: false,
-            default: null,
-            options: ['components/cta_button', 'components/button_modal'],
-            description: null,
             related_to: null,
             hidden: false
           }
@@ -6816,7 +6798,8 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/resource_hero',
           styleguide_path: '/styleguide/patterns%2Fresource_hero',
-          description: 'Description of component.',
+          title: 'Resource Hero',
+          description: 'A left aligned hero with breadcrumbs and social icons.',
           editor_role: 'pattern',
           tags: ['hero', 'resource-center'],
           extension_of: null
@@ -6851,6 +6834,36 @@ export const mockSchemas = {
               "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: false
+          },
+          background_color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'variant'],
+            description: 'Select the background color token to use within the light/dark variants.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          content_spacing_size: {
+            type: 'text',
+            required: true,
+            default: 'xl',
+            options: ['xl', 'xxxxl'],
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          divider: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Should a dividing line be added at the bottom?',
+            related_to: null,
             hidden: false
           },
           breadcrumb_links: {
@@ -6906,6 +6919,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/search_hero',
           styleguide_path: '/styleguide/patterns%2Fsearch_hero',
+          title: 'Search Hero',
           description:
             'A hero section which contains text, a search bar, and a search-term grid. When the search bar is the only component selected, it adds extra spacing for a standalone variation of this pattern.',
           editor_role: 'pattern',
@@ -6943,12 +6957,33 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
-          label_text: {
+          background_color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'variant'],
+            description: 'Select the background color token to use within the light/dark variants.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          content_spacing_size: {
+            type: 'text',
+            required: true,
+            default: 'xl',
+            options: ['xl', 'xxxxl'],
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          overline_text: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Text for the overline',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6958,7 +6993,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: 'Text for the title',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6968,7 +7003,7 @@ export const mockSchemas = {
             required: true,
             default: 'primary',
             options: ['primary', 'secondary'],
-            description: null,
+            description: 'The font size of the title',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6978,16 +7013,16 @@ export const mockSchemas = {
             required: true,
             default: null,
             options: ['components/search_bar'],
-            description: null,
+            description: 'The search bar component.',
             related_to: null,
             hidden: false
           },
-          stack_component: {
+          bottom_component: {
             type: 'component',
             required: false,
             default: null,
             options: ['components/search_term_grid'],
-            description: null,
+            description: 'The component at the bottom.',
             related_to: null,
             hidden: false
           }
@@ -6997,6 +7032,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/short_landing_page_hero',
           styleguide_path: '/styleguide/patterns%2Fshort_landing_page_hero',
+          title: 'Short Landing Page Hero',
           description:
             'A hero section with several configuration options including a short form, button, background image, and a marketing component.',
           editor_role: 'pattern',
@@ -7133,8 +7169,8 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/video_theatre',
           styleguide_path: '/styleguide/patterns%2Fvideo_theatre',
-          title: 'Video Theatre Pattern',
-          description: 'A standalone page section for displaying a video.',
+          title: 'Video Theatre',
+          description: 'A standalone page section for displaying a centered video.',
           editor_role: 'pattern',
           tags: ['media'],
           extension_of: null
@@ -7166,7 +7202,8 @@ export const mockSchemas = {
             asset_types: [],
             content_types: ['video'],
             description: null,
-            related_to: null
+            related_to: null,
+            hidden: false
           },
           theme_variant: {
             type: 'text',
@@ -7175,6 +7212,16 @@ export const mockSchemas = {
             options: ['page', 'light', 'dark'],
             description:
               "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          background_color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'variant'],
+            description: 'Select the background color token to use within the light/dark variants.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7196,11 +7243,11 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/webinar_event_list',
           styleguide_path: '/styleguide/patterns%2Fwebinar_event_list',
-          title: 'Webinar Event List Pattern',
+          title: 'Webinar Event List',
           description:
             'A list of events which can be configured to load events by category and display all, current, or past events only.',
-          editor_role: 'component',
-          tags: ['list', 'content', 'event', 'events-page'],
+          editor_role: 'pattern',
+          tags: ['collection', 'event', 'events-page'],
           extension_of: null,
           snapshot: true
         },
@@ -7315,7 +7362,8 @@ export const mockSchemas = {
         meta: {
           id: 'components/text_link',
           styleguide_path: '/styleguide/components%2Ftext_link',
-          description: 'A base link.',
+          title: 'Text Link',
+          description: 'An HTML text link with configurable properties.',
           editor_role: 'component',
           tags: ['action'],
           config_template: ['href', 'link_text']
@@ -7351,7 +7399,7 @@ export const mockSchemas = {
               '{{ privacy-policy }}'
             ],
             description:
-              'The link path. If internal, starts with `/`. If external, starts with `https://`',
+              "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
@@ -7372,6 +7420,7 @@ export const mockSchemas = {
         meta: {
           id: 'elements/form',
           styleguide_path: '/styleguide/elements%2Fform',
+          title: 'Base Form',
           description: 'A base form element which can be configured to submit to any endpoint.',
           editor_role: 'config-object',
           tags: ['form'],

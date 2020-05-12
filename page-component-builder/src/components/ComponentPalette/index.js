@@ -23,8 +23,10 @@ const ComponentPalette = props => {
   const filterBySearch = schemas => {
     return searchText
       ? schemas.filter(schema => {
-          const titleText = schema.meta.title ? schema.meta.title : schema.meta.id;
-          return titleText.includes(searchText);
+          const titleText = schema.meta.title
+            ? schema.meta.title.toLowerCase()
+            : schema.meta.id.toLowerCase();
+          return titleText.includes(searchText.toLowerCase());
         })
       : schemas;
   };
@@ -35,12 +37,12 @@ const ComponentPalette = props => {
       : schemas;
   };
 
-  const filterByPattern = schemas => {
+  const patternSchemas = schemas => {
     return schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
   };
 
   const filterSchemas = schemas => {
-    return filterBySearch(filterByTag(filterByPattern(schemas)));
+    return filterBySearch(filterByTag(patternSchemas(schemas)));
   };
 
   const handleTagClick = value => {
@@ -49,6 +51,12 @@ const ComponentPalette = props => {
     } else {
       setSelectedTags([...selectedTags, value]);
     }
+  };
+
+  const tagsInUse = tags => {
+    return tags.filter(tag =>
+      patternSchemas(props.schemas).some(component => component.meta.tags.includes(tag))
+    );
   };
 
   const handleSchemaClick = value => {
@@ -85,7 +93,7 @@ const ComponentPalette = props => {
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Component Tags</SectionHeading>
               {props.tags.component &&
-                props.tags.component.map((tag, index) => {
+                tagsInUse(props.tags.component).map((tag, index) => {
                   return (
                     <ToggleButton
                       key={`component-tag--${index}`}
@@ -101,7 +109,7 @@ const ComponentPalette = props => {
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Content Tags</SectionHeading>
               {props.tags.content &&
-                props.tags.content.map((tag, index) => {
+                tagsInUse(props.tags.content).map((tag, index) => {
                   return (
                     <ToggleButton
                       key={`content-tag--${index}`}
@@ -118,7 +126,7 @@ const ComponentPalette = props => {
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Location Tags</SectionHeading>
               {props.tags.location &&
-                props.tags.location.map((tag, index) => {
+                tagsInUse(props.tags.location).map((tag, index) => {
                   return (
                     <ToggleButton
                       key={`location-tag--${index}`}
