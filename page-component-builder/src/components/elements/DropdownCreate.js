@@ -40,6 +40,17 @@ class DropdownCreate extends React.Component {
     });
   }
 
+  getLabel(component_id) {
+    if (!this.props.schemas.length) return component_id;
+    const schema = this.props.schemas.find(schema => schema.meta.id === component_id);
+
+    if (schema) {
+      return schema.meta.title;
+    } else {
+      return component_id;
+    }
+  }
+
   render() {
     return (
       <span className="click-wrapper" data-uuid={this.uuid}>
@@ -70,7 +81,7 @@ class DropdownCreate extends React.Component {
                   testId={`dropdown-create-type--${option}`}
                   key={`component-option--${index}`}
                   onClick={() => this.props.handleCreateClick(option)}>
-                  {option}
+                  {this.getLabel(option)}
                 </DropdownListItem>
               );
             })}
@@ -83,6 +94,7 @@ class DropdownCreate extends React.Component {
 
 DropdownCreate.propTypes = {
   options: PropTypes.array,
+  schemas: PropTypes.array,
   presets: PropTypes.array,
   handleCreateClick: PropTypes.func,
   toggleText: PropTypes.string,
@@ -92,6 +104,7 @@ DropdownCreate.propTypes = {
 DropdownCreate.defaultProps = {
   options: [],
   presets: [],
+  schemas: [],
   toggleText: 'Create entry',
   testId: 'dropdown-create'
 };

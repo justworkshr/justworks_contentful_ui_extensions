@@ -172,14 +172,20 @@ const ComponentField = props => {
               toggleText="Create singleton"
               options={getOptions()}
               presets={props.property.presets}
+              schemas={props.schemas}
             />
           )}
           <DropdownCreate
+            schemas={props.schemas}
             handleCreateClick={handleCreateClick}
             options={getOptions()}
             presets={props.property.presets}
           />
-          <DropdownLink handleLinkClick={handleLinkClick} options={getOptions()} />
+          <DropdownLink
+            handleLinkClick={handleLinkClick}
+            options={getOptions()}
+            schemas={props.schemas}
+          />
         </div>
       );
     }

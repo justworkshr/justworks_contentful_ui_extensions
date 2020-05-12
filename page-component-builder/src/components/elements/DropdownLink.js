@@ -40,6 +40,17 @@ class DropdownLink extends React.Component {
     });
   }
 
+  getLabel(component_id) {
+    if (!this.props.schemas.length) return component_id;
+    const schema = this.props.schemas.find(schema => schema.meta.id === component_id);
+
+    if (schema) {
+      return schema.meta.title;
+    } else {
+      return component_id;
+    }
+  }
+
   render() {
     return (
       <span className="click-wrapper" data-uuid={this.uuid}>
@@ -58,7 +69,7 @@ class DropdownLink extends React.Component {
                   testId={`dropdown-link-type--${option}`}
                   key={`component-option--${index}`}
                   onClick={() => this.props.handleLinkClick(option)}>
-                  {option}
+                  {this.getLabel(option)}
                 </DropdownListItem>
               );
             })}
@@ -73,13 +84,15 @@ DropdownLink.propTypes = {
   options: PropTypes.array,
   handleLinkClick: PropTypes.func,
   toggleText: PropTypes.string,
-  testId: PropTypes.string
+  testId: PropTypes.string,
+  schemas: PropTypes.array
 };
 
 DropdownLink.defaultProps = {
   options: [],
   toggleText: 'Link entry',
-  testId: 'dropdown-link'
+  testId: 'dropdown-link',
+  schemas: []
 };
 
 export default DropdownLink;

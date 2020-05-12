@@ -292,14 +292,20 @@ export const MultiComponentField = props => {
             toggleText="Create singleton"
             options={props.options}
             presets={props.presets}
+            schemas={props.schemas}
           />
         )}
         <DropdownCreate
           handleCreateClick={handleCreateClick}
           options={props.options}
           presets={props.presets}
+          schemas={props.schemas}
         />
-        <DropdownLink handleLinkClick={handleLinkClick} options={props.options} />
+        <DropdownLink
+          handleLinkClick={handleLinkClick}
+          options={props.options}
+          schemas={props.schemas}
+        />
       </div>
       <ErrorList errors={props.errors} />
     </div>
