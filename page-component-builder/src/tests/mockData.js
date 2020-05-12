@@ -6695,7 +6695,8 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description:
+              'Whether or not this entry appears on mobile (SM, MD) breakpoints or otherwise appears on desktop (LG, XL).',
             related_to: null,
             hidden: false
           },
@@ -7196,15 +7197,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          video_entry: {
-            type: 'link',
-            required: false,
-            asset_types: [],
-            content_types: ['video'],
-            description: null,
-            related_to: null,
-            hidden: false
-          },
           theme_variant: {
             type: 'text',
             required: true,
@@ -7235,6 +7227,15 @@ export const mockSchemas = {
               'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
+            hidden: false
+          },
+          video_entry: {
+            type: 'link',
+            required: false,
+            asset_types: [],
+            content_types: ['video'],
+            description: null,
+            related_to: null,
             hidden: false
           }
         }
