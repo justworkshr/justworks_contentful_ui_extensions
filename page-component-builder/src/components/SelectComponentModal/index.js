@@ -13,6 +13,7 @@ const SelectComponentModal = props => {
   const [inputValue, setInputValue] = useState('');
   const [matchingEntries, setMatchingEntries] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [searchTimeout, setSearchTimeout] = useState([]);
 
   const onClose = () => {
     setCompleted(false);
@@ -22,21 +23,37 @@ const SelectComponentModal = props => {
     props.handleClose();
   };
 
-  const performQuery = async () => {
+  const handleInputChange = async value => {
+    setMatchingEntries([]);
+    setInputValue(value);
+
+    clearSearchTimeout();
+    setSearchTimeout(setTimeout(async () => await performQuery(value), 250));
+  };
+
+  const clearSearchTimeout = () => {
+    clearTimeout(searchTimeout);
+    setSearchTimeout(null);
+  };
+
+  const performQuery = async (searchText = '') => {
     setCompleted(false);
     setLoading(true);
+
     const response = await props.sdk.space.getEntries({
       content_type: c.CONTENT_TYPE_VIEW_COMPONENT,
       'fields.componentId[in]': props.options.join(','),
-      'fields.configObject': props.useConfigObjects
+      'fields.configObject': props.useConfigObjects,
+      'fields.name[match]': searchText
     });
+
     setMatchingEntries(response.items);
     setLoading(false);
     setCompleted(true);
   };
 
-  if (props.isShown && !isCompleted && !isLoading) {
-    performQuery();
+  if (props.isShown && !isCompleted && !isLoading && !inputValue) {
+    performQuery(inputValue);
     setCompleted(false);
   }
 
@@ -74,7 +91,7 @@ const SelectComponentModal = props => {
           className="f36-margin-bottom--m"
           type="text"
           width="full"
-          onChange={e => setInputValue(e.target.value)}
+          onChange={e => handleInputChange(e.target.value)}
           value={inputValue}
         />
       </div>

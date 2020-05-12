@@ -1,15 +1,26 @@
 .select-component-modal {
   position: relative;
+  min-height: 560px;
 
   &__top {
     background-color: white;
     position: sticky;
-    top: 0;
+    top: -2rem;
+    padding-top: 2rem;
     z-index: 1;
 
     p {
       margin-top: 0;
     }
+  }
+
+  &__actions {
+    background-color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    position: sticky;
+    bottom: -2rem;
+    z-index: 1;
   }
   // height: 90vh;
   // overflow: hidden;
