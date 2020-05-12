@@ -123,7 +123,7 @@ export const mockSchemas = {
           },
           items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/basic_text_nav_card'],
@@ -197,7 +197,7 @@ export const mockSchemas = {
           },
           items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -242,15 +242,6 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
-          },
-          in_results_pattern: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Is this part of the search results pattern?',
-            related_to: null,
-            hidden: false
           }
         }
       },
@@ -405,7 +396,7 @@ export const mockSchemas = {
           },
           form_pages: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/form_page'],
@@ -422,16 +413,6 @@ export const mockSchemas = {
               'Internal toggle for amp forms rendered via iframe to let the form know its intended for an AMP page.',
             related_to: null,
             hidden: true
-          },
-          animated_shadows: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether the form submit button should include stylstic shadows and animated hover effects.',
-            related_to: null,
-            hidden: false
           },
           form_config: {
             type: 'config',
@@ -971,7 +952,7 @@ export const mockSchemas = {
           },
           text_components: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -1329,7 +1310,8 @@ export const mockSchemas = {
             required: true,
             default: 'variant',
             options: ['default', 'variant'],
-            description: null,
+            description:
+              'Select the surface color token to use. All surface colors remain fixed regardless of the current light/dark variant.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -1491,16 +1473,6 @@ export const mockSchemas = {
             default: null,
             options: ['components/basic_lead_form'],
             description: 'The component which will appear in the modal.',
-            related_to: null,
-            hidden: false
-          },
-          animated_shadows: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether the modal button should include stylstic shadows and animated hover effects.',
             related_to: null,
             hidden: false
           }
@@ -1826,7 +1798,7 @@ export const mockSchemas = {
           },
           components: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [],
@@ -2071,7 +2043,7 @@ export const mockSchemas = {
           },
           input_fields: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/labeled_text_input', 'components/labeled_select_input'],
@@ -2113,7 +2085,7 @@ export const mockSchemas = {
           },
           form_input_groups: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/form_input_group'],
@@ -2670,27 +2642,6 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
             hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: [
-              'default',
-              'variant',
-              'accent-1',
-              'accent-2',
-              'muted',
-              'default--light',
-              'variant--light',
-              'accent-1--light',
-              'accent-2--light',
-              'muted--light'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
           }
         }
       },
@@ -3027,7 +2978,7 @@ export const mockSchemas = {
           },
           items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/pill', 'components/search_term_pill'],
@@ -3149,7 +3100,7 @@ export const mockSchemas = {
           },
           sections: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/mobile_nav_link_section'],
@@ -3159,7 +3110,7 @@ export const mockSchemas = {
           },
           bottom_ctas: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/text_link', 'components/cta_button'],
@@ -3686,7 +3637,7 @@ export const mockSchemas = {
           },
           search_terms: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/search_term_pill'],
@@ -3851,7 +3802,7 @@ export const mockSchemas = {
           },
           items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/basic_text_nav_card'],
@@ -3983,7 +3934,7 @@ export const mockSchemas = {
           },
           hidden_fields: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['elements/text_input'],
@@ -4015,16 +3966,6 @@ export const mockSchemas = {
             default: false,
             description:
               'Whether to connect the submit button to the text input inline or not. Otherwise, elements will stack.',
-            related_to: null,
-            hidden: false
-          },
-          animated_shadows: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether the form submit button should include stylstic shadows and animated hover effects.',
             related_to: null,
             hidden: false
           }
@@ -4128,28 +4069,6 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             hidden: false
-          },
-          action_icons: {
-            type: 'multi-component',
-            required: true,
-            hidden: false,
-            default: [],
-            options: ['components/icon_button', 'components/button_modal'],
-            presets: [
-              {
-                name: 'Icon Link',
-                component_id: 'components/icon_button',
-                properties: {
-                  href: '/',
-                  icon_size: 'md',
-                  icon_name: 'mail',
-                  color_token: 'variant'
-                }
-              }
-            ],
-            description:
-              'Link an icon component to appear in the row. Icons can perform different actions such as link, open modals, etc.',
-            related_to: null
           }
         }
       },
@@ -5737,92 +5656,9 @@ export const mockSchemas = {
       },
       {
         meta: {
-          id: 'patterns/article_content',
-          styleguide_path: '/styleguide/patterns%2Farticle_content',
-          title: 'Article Content Pattern',
-          description:
-            'Shared pattern for article content including fine print. Can be configured for various widths and has an optional grid layout provided to provide usage flexibility.',
-          editor_role: 'pattern',
-          tags: ['content', 'blog-post'],
-          extension_of: null,
-          snapshot: false
-        },
-        properties: {
-          classname: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'CSS class name(s) for the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          c_id: {
-            type: 'text',
-            required: false,
-            default: 'PatternsArticleContentComponent',
-            options: null,
-            description: 'Internal testing ID.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          width: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['default', 'video-page'],
-            description: 'Custom content width. Default takes the width of its container.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          provide_grid: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description: 'Whether or not to place the content inside a single column grid.',
-            related_to: null,
-            hidden: true
-          },
-          content: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'markdown-editor',
-            hidden: false
-          },
-          theme_variant: {
-            type: 'text',
-            required: true,
-            default: 'page',
-            options: ['page', 'light', 'dark'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          content_spacing_size: {
-            type: 'text',
-            required: true,
-            default: 'xl',
-            options: ['xl', 'xxxxl'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          }
-        }
-      },
-      {
-        meta: {
           id: 'patterns/background_image_single_split',
           styleguide_path: '/styleguide/patterns%2Fbackground_image_single_split',
+          title: 'Background Image Single Content Section',
           description:
             'Page content containing a full background image and a single left or right slot for a marketing component.',
           editor_role: 'pattern',
@@ -5854,7 +5690,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5862,9 +5699,10 @@ export const mockSchemas = {
           content_spacing_size: {
             type: 'text',
             required: true,
-            default: 'xl',
+            default: 'xxxxl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5874,7 +5712,8 @@ export const mockSchemas = {
             required: true,
             default: 'right',
             options: ['left', 'right'],
-            description: null,
+            description:
+              'Whether the single content section should align to the left or the right of this section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5884,7 +5723,7 @@ export const mockSchemas = {
             required: true,
             asset_types: ['image'],
             content_types: [],
-            description: 'Background image',
+            description: 'The background image asset',
             related_to: 'components/full_background_image'
           },
           split_component: {
@@ -5892,9 +5731,13 @@ export const mockSchemas = {
             required: true,
             default: null,
             options: [
+              'components/contact_box',
               'components/headed_list',
+              'components/responsive_image',
               'components/heading_body_text',
-              'components/basic_lead_form'
+              'components/basic_lead_form',
+              'components/responsive_video',
+              'components/conversion_modal_content'
             ],
             description: null,
             related_to: null,
@@ -5906,6 +5749,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/bordered_content_cta_box',
           styleguide_path: '/styleguide/patterns%2Fbordered_content_cta_box',
+          title: 'Bordered CTA Content Box',
           description: 'Description of component.',
           editor_role: 'pattern',
           tags: ['cta', 'form', 'action'],
@@ -5937,7 +5781,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5947,7 +5792,8 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5990,8 +5836,9 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/bordered_cta_entry_box',
           styleguide_path: '/styleguide/patterns%2Fbordered_cta_entry_box',
+          title: 'Bordered BlogCTA Box',
           description:
-            'A direct interface for the BlogCta content type with a bordered content cta box.',
+            'A Bordered CTA Content Box specifically for the BlogCTA Content Type. When gated, a pre-built form pops up for the user to submit their information before downloading. Gated currently only works for BlogCTAs with Files, not URLS.',
           editor_role: 'pattern',
           tags: ['cta', 'cta-module'],
           extension_of: 'patterns/bordered_content_cta_box'
@@ -6017,13 +5864,16 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          cta_entry: {
-            type: 'link',
-            required: false,
-            asset_types: [],
-            content_types: ['blogCta'],
-            description: null,
-            related_to: null
+          content_spacing_size: {
+            type: 'text',
+            required: true,
+            default: 'xl',
+            options: ['xl', 'xxxxl'],
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
           },
           provide_grid: {
             type: 'bool',
@@ -6033,6 +5883,15 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             hidden: true
+          },
+          cta_entry: {
+            type: 'link',
+            required: true,
+            asset_types: [],
+            content_types: ['blogCta'],
+            description:
+              "Requires a BlogCta entry with a file attachment. The 'Text' field in this entry will determine the CTA text.",
+            related_to: null
           },
           resource_gated: {
             type: 'bool',
@@ -6062,8 +5921,8 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Fcomposable_lp_hero',
           title: 'Composable Lp Hero Pattern',
           description: 'Description of component.',
-          editor_role: 'pattern',
-          tags: ['hero'],
+          editor_role: 'component',
+          tags: [],
           extension_of: null,
           snapshot: false
         },
@@ -6093,7 +5952,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6103,7 +5963,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: null,
+            description: 'Select the background color token to use within the light/dark variants.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6113,14 +5973,15 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
           hero_components: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -6174,6 +6035,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/content_split',
           styleguide_path: '/styleguide/patterns%2Fcontent_split',
+          title: 'Split Content Section',
           description:
             'A pattern containing 2 components side by side. If an image is on the right side, it wraps to the top on mobile.',
           editor_role: 'pattern',
@@ -6205,7 +6067,18 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          background_color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'variant'],
+            description: 'Select the background color token to use within the light/dark variants.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6215,24 +6088,26 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
-          content_alignment: {
+          vertical_alignment: {
             type: 'text',
             required: false,
             default: 'center',
             options: ['center', 'top', 'stretch'],
-            description: null,
+            description:
+              'Whether the vertical alignment of the content should be centered, top, or stretched.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
           title_components: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -6359,7 +6234,9 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/grid_presentation',
           styleguide_path: '/styleguide/patterns%2Fgrid_presentation',
-          description: 'Description of component.',
+          title: 'Presentation Section',
+          description:
+            'A section for repeating-item components such as logos, short text collections, etc. Supports multiple layouts such as carousels and grids. Optional CTA at the bottom.',
           editor_role: 'pattern',
           tags: ['collection', 'mixed-media'],
           extension_of: null
@@ -6385,42 +6262,13 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: true
           },
-          overline_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          heading_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          body_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'long-text-editor',
-            hidden: false
-          },
           theme_variant: {
             type: 'text',
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6430,7 +6278,68 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
+          title_components: {
+            type: 'multi-component',
+            required: false,
+            hidden: false,
+            default: [],
+            options: [
+              'elements/display_text',
+              'elements/heading',
+              'elements/lead_text',
+              'elements/paragraph_text'
+            ],
+            presets: [
+              {
+                name: 'Overline',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'left',
+                  size: 'xxs',
+                  stack_size: 'lg',
+                  color_token: 'default',
+                  text: 'Overline Text'
+                }
+              },
+              {
+                name: 'Title',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'left',
+                  size: 'xl',
+                  stack_size: 'md',
+                  color_token: 'variant',
+                  text: 'Title Text'
+                }
+              },
+              {
+                name: 'Body',
+                component_id: 'elements/lead_text',
+                properties: {
+                  alignment: 'left',
+                  size: 'md',
+                  stack_size: 'xl',
+                  color_token: 'default',
+                  text: 'Body Text'
+                }
+              }
+            ],
+            description: 'Optional, composable section for the title elements you wish to add.',
+            related_to: null
+          },
+          title_section_alignment: {
+            type: 'text',
+            required: false,
+            default: 'left',
+            options: ['left', 'center'],
+            description:
+              'Aligns the text section to the left or center of the section. Individual text elements may still need to be aligned correctly.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6616,7 +6525,7 @@ export const mockSchemas = {
           },
           left_items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -6631,7 +6540,7 @@ export const mockSchemas = {
           },
           right_items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -6646,7 +6555,7 @@ export const mockSchemas = {
           },
           right_items_mobile: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: true,
             default: [],
             options: ['components/text_link', 'components/cta_button', 'components/nav_dropdown'],
@@ -6707,7 +6616,7 @@ export const mockSchemas = {
           },
           column_components: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: ['components/footer_link_collection'],
@@ -6830,7 +6739,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6840,7 +6750,8 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6936,7 +6847,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -6947,6 +6859,15 @@ export const mockSchemas = {
             default: [],
             description: null,
             related_to: 'components/text_link',
+            hidden: false
+          },
+          include_social: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description: 'Whether social links should be included or not?',
+            related_to: null,
             hidden: false
           },
           title_typography_style: {
@@ -6969,24 +6890,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
-          include_social: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description:
-              'Whether social links should be included or not. Please add a resource when including social links to correctly generate the links.',
-            related_to: null,
-            hidden: false
-          },
-          resource: {
-            type: 'link',
-            required: false,
-            asset_types: [],
-            content_types: ['resourceWrapper', 'guide'],
-            description: 'Only required when this hero needs social icons to be available.',
-            related_to: null
-          },
           lead_text: {
             type: 'text',
             required: false,
@@ -6996,39 +6899,6 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'long-text-editor',
             hidden: false
-          }
-        }
-      },
-      {
-        meta: {
-          id: 'patterns/search_dropdown',
-          styleguide_path: '/styleguide/patterns%2Fsearch_dropdown',
-          title: 'Search Dropdown Pattern',
-          description: 'Description of component.',
-          editor_role: 'component',
-          tags: [],
-          extension_of: null
-        },
-        properties: {
-          classname: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'CSS class name(s) for the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
-          },
-          c_id: {
-            type: 'text',
-            required: false,
-            default: 'PatternsSearchDropdownComponent',
-            options: null,
-            description: 'Internal testing ID.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: true
           }
         }
       },
@@ -7067,7 +6937,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7157,7 +7028,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7167,14 +7039,15 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
           },
           text_components: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -7242,7 +7115,7 @@ export const mockSchemas = {
           },
           action_items: {
             type: 'multi-component',
-            required: true,
+            required: false,
             hidden: false,
             default: [],
             options: [
@@ -7300,7 +7173,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7310,7 +7184,8 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7355,7 +7230,8 @@ export const mockSchemas = {
             required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7365,7 +7241,8 @@ export const mockSchemas = {
             required: true,
             default: 'xl',
             options: ['xl', 'xxxxl'],
-            description: null,
+            description:
+              'Select the amount of spacing to apply to the top and bottom of this page section.',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false

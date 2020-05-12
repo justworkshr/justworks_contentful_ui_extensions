@@ -9,6 +9,7 @@ const ShortTextField = props => {
     <div>
       <TextInput
         testId={props.testId}
+        type={props.type}
         onChange={e => props.onChange(e.target.value)}
         value={props.value || ''}
         error={!!props.errors.length}
@@ -22,10 +23,12 @@ ShortTextField.propTypes = {
   errors: PropTypes.array,
   onChange: PropTypes.func,
   testId: PropTypes.string,
+  type: PropTypes.string,
   value: PropTypes.string
 };
 ShortTextField.defaultProps = {
   testId: 'short-text-field',
+  type: 'text',
   value: '',
   errors: []
 };

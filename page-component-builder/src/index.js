@@ -378,7 +378,7 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field">
+        <div className="component-editor__field d-none">
           <FormLabel htmlFor="field-entries">Entries</FormLabel>
           <Textarea
             testId="field-entries"
@@ -395,7 +395,7 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field">
+        <div className="component-editor__field d-none">
           <FormLabel htmlFor="field-internalMapping">Internal Mapping</FormLabel>
           <Textarea
             id="field-internalMapping"

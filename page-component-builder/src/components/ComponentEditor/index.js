@@ -35,6 +35,10 @@ const ComponentEditor = props => {
     );
   };
 
+  const isNumberField = property => {
+    return property.type === c.NUMBER_PROPERTY && !(property.options && property.options.length);
+  };
+
   const isLongTextField = property => {
     return (
       property.type === c.TEXT_PROPERTY &&
@@ -258,6 +262,15 @@ const ComponentEditor = props => {
                   <ShortTextField
                     onChange={value => updatePropertyValue(propKey, value, true)}
                     errors={errors[propKey]}
+                    type="text"
+                    value={value}
+                  />
+                )}
+                {isNumberField(property) && (
+                  <ShortTextField
+                    onChange={value => updatePropertyValue(propKey, value, true)}
+                    errors={errors[propKey]}
+                    type="number"
                     value={value}
                   />
                 )}
