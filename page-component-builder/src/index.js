@@ -14,7 +14,8 @@ import {
   FormLabel,
   TextInput,
   Textarea,
-  Form
+  Form,
+  Icon
 } from '@contentful/forma-36-react-components';
 
 import RadioGroup from './components/fields/RadioGroup';
@@ -366,7 +367,12 @@ export class PageComponentBuilder extends React.Component {
             />
           )}
         </div>
-
+        {this.state.configObject && (
+          <div className="component-editor__field d-flex-row-center-start">
+            <Icon icon="Settings" className="f36-margin-right--xs" />
+            <Paragraph>This is a configuration entry.</Paragraph>
+          </div>
+        )}
         <div className="component-editor__field d-none">
           <FormLabel htmlFor="field-configObject">Config Object</FormLabel>
           <RadioGroup

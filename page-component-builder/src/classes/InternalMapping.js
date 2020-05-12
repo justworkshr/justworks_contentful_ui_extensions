@@ -125,7 +125,7 @@ export default class InternalMapping {
 
   updateValue(propertyKey, value) {
     if (!this.properties[propertyKey]) {
-      this.addProperty(propertyKey, this.schema[propertyKey].type, value);
+      this.addProperty(propertyKey, this.schema.properties[propertyKey].type, value);
     } else {
       this.properties[propertyKey].value = value;
     }

@@ -2119,7 +2119,7 @@ export const mockSchemas = {
           },
           input_fields: {
             type: 'multi-component',
-            required: false,
+            required: true,
             hidden: false,
             default: [],
             options: ['components/labeled_text_input', 'components/labeled_select_input'],
@@ -2160,6 +2160,16 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: true
+          },
+          form_page_title: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The (optional) title for this form page.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
           },
           form_input_groups: {
             type: 'multi-component',
@@ -2950,7 +2960,7 @@ export const mockSchemas = {
           id: 'components/labeled_text_input',
           styleguide_path: '/styleguide/components%2Flabeled_text_input',
           title: 'Labeled Text Input',
-          description: 'A text input element beneath a system label.',
+          description: 'The styled elements of a form input (label, placeholder, etc)',
           editor_role: 'component',
           tags: ['form']
         },
@@ -3025,11 +3035,21 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             hidden: false
           },
+          placeholder: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The placeholder text',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            hidden: false
+          },
           input_config: {
             type: 'config',
             required: false,
             default: {},
-            description: null,
+            description: 'The input configuration for this styled component.',
             related_to: 'elements/text_input',
             hidden: false
           }
@@ -4775,7 +4795,7 @@ export const mockSchemas = {
             description: 'Please select if this is a specific lead form.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
+            hidden: true
           },
           redirect_url: {
             type: 'text',
@@ -5392,6 +5412,7 @@ export const mockSchemas = {
           id: 'elements/select',
           styleguide_path: '/styleguide/elements%2Fselect',
           editor_role: 'singleton',
+          title: 'Select Dropdown',
           tags: ['form'],
           config_template: ['name', 'options', 'default_option']
         },
@@ -5431,7 +5452,7 @@ export const mockSchemas = {
             required: false,
             default: 'default',
             options: ['default', 'sm'],
-            description: null,
+            description: 'The input size (default, small)',
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5441,7 +5462,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: "The input name (must match pardot's 'External Field' ID).",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5464,7 +5485,7 @@ export const mockSchemas = {
             description:
               "Select options in hash format: {label: 'label', value: 'value', selected: false}",
             related_to: null,
-            hidden: false
+            hidden: true
           }
         }
       },
@@ -5575,8 +5596,9 @@ export const mockSchemas = {
           id: 'elements/text_input',
           styleguide_path: '/styleguide/elements%2Ftext_input',
           editor_role: 'singleton',
+          title: 'Text Input',
           tags: ['form'],
-          config_template: ['placeholder', 'type', 'name', 'required', 'validation_type']
+          config_template: ['type', 'name', 'required', 'validation_type']
         },
         properties: {
           classname: {
@@ -5629,11 +5651,10 @@ export const mockSchemas = {
           },
           name: {
             type: 'text',
-            required: true,
+            required: false,
             default: '',
             options: null,
-            description:
-              'The form element named. Required for accessibility and form endpoint integrations.',
+            description: "The input name (must match pardot's 'External Field' ID.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -5663,7 +5684,7 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: 'Whether or not this input is required before submission.',
             related_to: null,
             hidden: false
           },
@@ -7504,7 +7525,7 @@ export const mockSchemas = {
             description: 'Please select if this is a specific lead form.',
             related_to: null,
             editor_type: 'short-text-editor',
-            hidden: false
+            hidden: true
           },
           redirect_url: {
             type: 'text',
@@ -7533,6 +7554,7 @@ export const mockSchemas = {
           id: 'elements/select',
           styleguide_path: '/styleguide/elements%2Fselect',
           editor_role: 'singleton',
+          title: 'Select Dropdown',
           tags: ['form'],
           config_template: ['name', 'options', 'default_option']
         },
@@ -7542,7 +7564,7 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description: "The input name (must match pardot's 'External Field' ID).",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7565,7 +7587,7 @@ export const mockSchemas = {
             description:
               "Select options in hash format: {label: 'label', value: 'value', selected: false}",
             related_to: null,
-            hidden: false
+            hidden: true
           }
         }
       },
@@ -7574,8 +7596,9 @@ export const mockSchemas = {
           id: 'elements/text_input',
           styleguide_path: '/styleguide/elements%2Ftext_input',
           editor_role: 'singleton',
+          title: 'Text Input',
           tags: ['form'],
-          config_template: ['placeholder', 'type', 'name', 'required', 'validation_type']
+          config_template: ['type', 'name', 'required', 'validation_type']
         },
         properties: {
           type: {
@@ -7590,21 +7613,10 @@ export const mockSchemas = {
           },
           name: {
             type: 'text',
-            required: true,
-            default: '',
-            options: null,
-            description:
-              'The form element named. Required for accessibility and form endpoint integrations.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            hidden: false
-          },
-          placeholder: {
-            type: 'text',
             required: false,
             default: '',
             options: null,
-            description: 'Input placeholder text',
+            description: "The input name (must match pardot's 'External Field' ID.",
             related_to: null,
             editor_type: 'short-text-editor',
             hidden: false
@@ -7614,7 +7626,7 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: 'Whether or not this input is required before submission.',
             related_to: null,
             hidden: false
           },
