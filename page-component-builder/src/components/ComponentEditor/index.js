@@ -33,6 +33,7 @@ import EditorSections from '../EditorSections';
 
 const ComponentEditor = props => {
   const [errors, setErrors] = useState({});
+  const [openFields, setOpenFields] = useState([]);
 
   const isShortTextField = property => {
     return (
@@ -219,6 +220,19 @@ const ComponentEditor = props => {
     }
   };
 
+  const onOpen = propKey => {
+    console.log(propKey);
+    const arr = [...openFields];
+    arr.push(propKey);
+    setOpenFields(arr);
+  };
+
+  const onClose = propKey => {
+    const index = openFields.indexOf(propKey);
+    const arr = [...openFields];
+    setOpenFields([...arr.slice(0, index), ...arr.slice(index + 1)]);
+  };
+
   const renderPropertyField = propKey => {
     const property = props.schema.properties[propKey];
     const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
@@ -230,8 +244,8 @@ const ComponentEditor = props => {
         key={`component-editor-field--${propKey}`}
         data-test-id={id}
         className={`component-editor__field f36-margin-bottom--l ${
-          errors[propKey] && errors[propKey].length ? 'with-error' : ''
-        }`}>
+          openFields.includes(propKey) ? 'field-open' : ''
+        } ${errors[propKey] && errors[propKey].length ? 'with-error' : ''}`}>
         <div className="component-editor__field-heading">
           <FormLabel
             className="component-editor__field-label"
@@ -357,6 +371,8 @@ const ComponentEditor = props => {
             isLoading={!!value && !fetchHydratedEntry(value)}
             useConfigObjects={property.type === c.CONFIG_PROPERTY}
             errors={errors[propKey]}
+            onOpen={() => onOpen(propKey)}
+            onClose={() => onClose(propKey)}
           />
         )}
         {isMultiComponentProperty(property) && (
@@ -376,6 +392,8 @@ const ComponentEditor = props => {
             useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
             value={value}
             errors={errors[propKey]}
+            onOpen={() => onOpen(propKey)}
+            onClose={() => onClose(propKey)}
           />
         )}
         {isConfigProperty(property) && (
@@ -404,6 +422,8 @@ const ComponentEditor = props => {
             }
             useConfigObjects={property.type === c.CONFIG_PROPERTY}
             errors={errors[propKey]}
+            onOpen={() => onOpen(propKey)}
+            onClose={() => onClose(propKey)}
           />
         )}
         {isMultiConfigProperty(property) && (
@@ -422,6 +442,8 @@ const ComponentEditor = props => {
             useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
             value={value}
             errors={errors[propKey]}
+            onOpen={() => onOpen(propKey)}
+            onClose={() => onClose(propKey)}
           />
         )}
         <HelpText className="component-editor__hint f36-margin-top--xs">

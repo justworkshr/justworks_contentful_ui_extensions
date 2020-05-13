@@ -69,9 +69,13 @@ const ComponentField = props => {
     }
   };
 
-  const handleCreateSingletonClick = componentId => {
+  const handleCreateSingletonClick = (componentId, presetObject = null) => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
-    const componentInternalMapping = newInternalMappingFromSchema({ schema, configObject: false });
+    const componentInternalMapping = newInternalMappingFromSchema({
+      schema,
+      presetObject,
+      configObject: false
+    });
     updateEntry(componentInternalMapping);
   };
 
@@ -151,7 +155,9 @@ const ComponentField = props => {
           onChange={(value, timeout, errors) => updateSingletonEntry(value, timeout, errors)}
           internalMappingInstance={props.internalMappingInstance}
           handleRemoveClick={() => updateEntry(null)}
-          indent={true}
+          indent={false}
+          onOpen={props.onOpen}
+          onClose={props.onClose}
         />
       );
     } else {
@@ -212,7 +218,9 @@ ComponentField.propTypes = {
   onChange: PropTypes.func,
   sdk: PropTypes.object,
   useConfigObjects: PropTypes.bool,
-  propKey: PropTypes.string
+  propKey: PropTypes.string,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
 };
 ComponentField.defaultProps = {
   errors: [],

@@ -13,6 +13,10 @@
     }
   }
 
+  .field-open {
+    border-left-color: #4a90e2; // #0c141c; // #192532 // #263545
+  }
+
   & &__field-label {
     color: #8091a5;
     font-weight: normal;

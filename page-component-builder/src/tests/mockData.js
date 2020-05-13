@@ -56,9 +56,9 @@ export const mockSchemas = {
             options: [true, false],
             default: true,
             description:
-              'Whether or not to provide a single-column grid component around the carousel. Most carousels fit within a pattern grid already.',
+              'Includes a single-column grid structure by default. Disable this in order to render as a gridless component.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'style',
             hidden: true
           },
           loop: {
@@ -68,7 +68,7 @@ export const mockSchemas = {
             default: false,
             description: 'Should the carousel loop back to start when it reaches the end?',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           autoplay: {
@@ -78,7 +78,7 @@ export const mockSchemas = {
             default: false,
             description: 'Should the carousel autoplay without a user clicking the arrows?',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           mouse_drag: {
@@ -89,7 +89,7 @@ export const mockSchemas = {
             description:
               'Should the carousel be draggable with the mouse or require arrow clicks only?',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           slide_by: {
@@ -101,7 +101,7 @@ export const mockSchemas = {
               'The scrolling behavior -- single scrolls by 1, page scrolls by all the items on the page.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           sm_max: {
@@ -409,6 +409,29 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          amp_page: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Internal toggle for amp forms rendered via iframe to let the form know its intended for an AMP page.',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: true
+          },
+          form_location: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'Put a specific page location (footer, body, hero, etc) here for Google Analytics tracking dimensions.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
           top_text: {
             type: 'text',
             required: false,
@@ -431,17 +454,6 @@ export const mockSchemas = {
             editor_category: null,
             hidden: false
           },
-          post_submit_component: {
-            type: 'component',
-            required: false,
-            default: null,
-            options: ['components/headed_list'],
-            description:
-              'The component that replaces the form after its submitted. If none provided, a default "Thank you" message will appear.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
           form_pages: {
             type: 'multi-component',
             required: false,
@@ -453,17 +465,6 @@ export const mockSchemas = {
             related_to: null,
             editor_category: null
           },
-          amp_page: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Internal toggle for amp forms rendered via iframe to let the form know its intended for an AMP page.',
-            related_to: null,
-            editor_category: null,
-            hidden: true
-          },
           footer_content: {
             type: 'text',
             required: false,
@@ -472,6 +473,17 @@ export const mockSchemas = {
             description: 'Content beneath the form such as a privacy policy link or fine print.',
             related_to: null,
             editor_type: 'markdown-editor',
+            editor_category: null,
+            hidden: false
+          },
+          post_submit_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: ['components/headed_list'],
+            description:
+              'The component that replaces the form after its submitted. If none provided, a default "Thank you" message will appear.',
+            related_to: null,
             editor_category: null,
             hidden: false
           },
@@ -517,6 +529,17 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: true
+          },
+          color_override: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description: 'Hex value -- color value overrides card cap color.',
+            related_to: null,
+            editor_type: 'color-editor',
+            editor_category: 'style',
+            hidden: false
           },
           overline_text: {
             type: 'text',
@@ -599,17 +622,6 @@ export const mockSchemas = {
             description: 'What the bottom CTA should say.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          color_override: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: null,
-            description: 'Hex value -- color value overrides card cap color.',
-            related_to: null,
-            editor_type: 'color-editor',
             editor_category: null,
             hidden: false
           }
@@ -703,6 +715,16 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          modal_align_top: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether or not the modal should align to the top rather than center.',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
           id: {
             type: 'text',
             required: false,
@@ -712,18 +734,8 @@ export const mockSchemas = {
               'ID attribute if required for targetting between modal and button (like w/ AMP).',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
-          },
-          modal_align_top: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Whether or not the modal should align to the top rather than center.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
           },
           include_close_button: {
             type: 'bool',
@@ -733,7 +745,7 @@ export const mockSchemas = {
             description:
               'Whether or not the default close icon should appear on the top right of the container. This may be necessary because modal components come with their own close button.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           modal_component: {
@@ -804,7 +816,7 @@ export const mockSchemas = {
               "The configuration of the cards. 'Large single' will display a single large card on the left and the remaining 3 are inline on the right (this pattern repeats). 'Inline-all' will display small inline cards for each entry.",
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           max_items: {
@@ -814,7 +826,7 @@ export const mockSchemas = {
             options: null,
             description: 'The max number of cards to show. Excess cards will remain hidden.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           items: {
@@ -950,6 +962,40 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['variant', 'accent-1', 'accent-2'],
+            description: 'The theme token to apply to the logo.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          height: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['lg', 'xl', 'xxl'],
+            description:
+              'Setting the individual logo height will result in the width automatically scaling to preserve its aspect ratio. This is recommended for non-grid based logos.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           href: {
             type: 'text',
             required: false,
@@ -1000,40 +1046,6 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: true,
-            default: 'default',
-            options: ['variant', 'accent-1', 'accent-2'],
-            description: 'The theme token to apply to the logo.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          height: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['lg', 'xl', 'xxl'],
-            description:
-              'Setting the individual logo height will result in the width automatically scaling to preserve its aspect ratio. This is recommended for non-grid based logos.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          stack_size: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Additional spacing beneath the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: 'style',
             hidden: false
           }
         }
@@ -1125,6 +1137,74 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          xl_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the SM (mobile) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
+          lg_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the MD (portrait tablet) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
+          md_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the LG (landscape tablet / desktop) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
+          sm_config: {
+            type: 'text',
+            required: false,
+            default: 'card',
+            options: [
+              'card',
+              'card-no-description',
+              'inline',
+              'inline-no-description',
+              'text-only'
+            ],
+            description: 'The card style at this the XL (desktop) breakpoint.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
           href: {
             type: 'text',
             required: false,
@@ -1162,74 +1242,6 @@ export const mockSchemas = {
               "If the link is external, provide a full URL (https://example.com). If internal, only provide the path ('/internal/link')",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: null,
-            hidden: false
-          },
-          xl_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: 'The card style at this the SM (mobile) breakpoint.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          lg_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: 'The card style at this the MD (portrait tablet) breakpoint.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          md_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: 'The card style at this the LG (landscape tablet / desktop) breakpoint.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          sm_config: {
-            type: 'text',
-            required: false,
-            default: 'card',
-            options: [
-              'card',
-              'card-no-description',
-              'inline',
-              'inline-no-description',
-              'text-only'
-            ],
-            description: 'The card style at this the XL (desktop) breakpoint.',
-            related_to: null,
-            editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
           },
@@ -1359,7 +1371,7 @@ export const mockSchemas = {
             description: 'The card style at this the SM (mobile) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           lg_config: {
@@ -1376,7 +1388,7 @@ export const mockSchemas = {
             description: 'The card style at this the MD (portrait tablet) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           md_config: {
@@ -1393,7 +1405,7 @@ export const mockSchemas = {
             description: 'The card style at this the LG (landscape tablet / desktop) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           sm_config: {
@@ -1410,7 +1422,7 @@ export const mockSchemas = {
             description: 'The card style at this the XL (desktop) breakpoint.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           resource: {
@@ -1538,6 +1550,17 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          cta_intent: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['primary', 'secondary', 'tertiary'],
+            description: 'The CTA intent color.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           overline_text: {
             type: 'text',
             required: false,
@@ -1577,17 +1600,6 @@ export const mockSchemas = {
             default: '',
             options: null,
             description: 'CTA text',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          cta_intent: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['primary', 'secondary', 'tertiary'],
-            description: 'The CTA intent color.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -1680,7 +1692,7 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          intent: {
+          cta_intent: {
             type: 'text',
             required: true,
             default: 'primary',
@@ -1688,7 +1700,7 @@ export const mockSchemas = {
             description: 'Button intent color.',
             related_to: 'foundations/theme_colors',
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           size: {
@@ -1699,19 +1711,75 @@ export const mockSchemas = {
             description: 'Button size (default or small)',
             related_to: 'foundations/inset_shapes',
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
-          button_text: {
+          animated_shadows: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether this button should include stylstic shadows and animated hover effects.',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          connect_left: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether to style this button as if it were connected to something at the left.',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          target: {
             type: 'text',
             required: false,
             default: '',
             options: null,
-            description: "The button's text.",
+            description:
+              'If button is a link, overrides default external/internal new-tab behavior',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
+            editor_category: 'advanced',
+            hidden: true
+          },
+          type: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'HTML input type',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          on: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'AMP directive if serving as an action component to other components like lightboxes.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          disabled: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: "Manually set the button's disabled state.",
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: true
           },
           icon_name: {
             type: 'text',
@@ -1796,72 +1864,16 @@ export const mockSchemas = {
             editor_category: null,
             hidden: false
           },
-          animated_shadows: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether this button should include stylstic shadows and animated hover effects.',
+          button_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: "The button's text.",
             related_to: null,
+            editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
-          },
-          target: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description:
-              'If button is a link, overrides default external/internal new-tab behavior',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          connect_left: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether to style this button as if it were connected to something at the left.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          type: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'HTML input type',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          on: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description:
-              'AMP directive if serving as an action component to other components like lightboxes.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          disabled: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: "Manually set the button's disabled state.",
-            related_to: null,
-            editor_category: null,
-            hidden: true
           }
         }
       },
@@ -1899,27 +1911,16 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          max_items: {
-            type: 'number',
-            required: false,
-            default: 4,
-            options: null,
-            description:
-              'The max number of entries from each guide to show. Excess will be hidden.',
-            related_to: null,
-            editor_category: null,
+          cta_intent: {
+            type: 'text',
+            required: true,
+            default: 'primary',
+            options: ['primary', 'secondary', 'tertiary'],
+            description: 'Button intent color.',
+            related_to: 'foundations/theme_colors',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
             hidden: false
-          },
-          guides: {
-            type: 'multi-link',
-            required: false,
-            default: [],
-            asset_types: [],
-            content_types: ['guide'],
-            description:
-              'Each guide will display a list of its associated entries. Please ensure each guide has a meta object.',
-            related_to: null,
-            editor_category: null
           },
           preview_type: {
             type: 'text',
@@ -1930,7 +1931,18 @@ export const mockSchemas = {
               "Configures which entries to display from each guide. 'Most recent' displays the most recent entries.",
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          max_items: {
+            type: 'number',
+            required: false,
+            default: 4,
+            options: null,
+            description:
+              'The max number of entries from each guide to show. Excess will be hidden.',
+            related_to: null,
+            editor_category: 'advanced',
             hidden: false
           },
           cta_text: {
@@ -1944,16 +1956,16 @@ export const mockSchemas = {
             editor_category: null,
             hidden: false
           },
-          cta_intent: {
-            type: 'text',
+          guides: {
+            type: 'multi-link',
             required: false,
-            default: '',
-            options: ['primary', 'secondary', 'tertiary'],
-            description: 'The CTA intent style that each guide CTA should have.',
+            default: [],
+            asset_types: [],
+            content_types: ['guide'],
+            description:
+              'Each guide will display a list of its associated entries. Please ensure each guide has a meta object.',
             related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
+            editor_category: null
           }
         }
       },
@@ -2101,10 +2113,10 @@ export const mockSchemas = {
             required: true,
             default: 'left',
             options: ['left', 'center'],
-            description: 'The text alignment.',
+            description: 'Text or component alignment.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           link_stack_size: {
@@ -2115,7 +2127,7 @@ export const mockSchemas = {
             description: 'The vertical spacing for the links.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           link_theme_token: {
@@ -2126,7 +2138,7 @@ export const mockSchemas = {
             description: 'The color token for the links.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           title_text: {
@@ -2378,15 +2390,26 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          image_url: {
+          format: {
             type: 'text',
             required: false,
-            default: '',
+            default: 'png',
             options: null,
-            description: null,
+            description: 'Format request for the contentful image API',
             related_to: 'elements/image',
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
+            hidden: true
+          },
+          lazy: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether the image should load when the user scrolls over it. Set to true for page-speed. Set to false for above-fold images like heroes.',
+            related_to: 'elements/image',
+            editor_category: 'advanced',
             hidden: true
           },
           alt: {
@@ -2398,29 +2421,7 @@ export const mockSchemas = {
               "Text for accessibility \u0026 screen-readers. When using contentful, use the 'description' property of the asset for this.",
             related_to: 'elements/image',
             editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          format: {
-            type: 'text',
-            required: false,
-            default: 'png',
-            options: null,
-            description: null,
-            related_to: 'elements/image',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          lazy: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description:
-              'Whether the image should load when the user scrolls over it. Set to true for page-speed. Set to false for above-fold images like heroes.',
-            related_to: 'elements/image',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           load_width: {
@@ -2431,7 +2432,18 @@ export const mockSchemas = {
             description:
               'The max-width of the image when requesting from the image api. For load-speed optimization, please use a page / module-specific width.',
             related_to: 'elements/image',
-            editor_category: null,
+            editor_category: 'advanced',
+            hidden: true
+          },
+          image_url: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: 'elements/image',
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
             hidden: true
           },
           image_asset: {
@@ -2535,6 +2547,17 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          cta_intent: {
+            type: 'text',
+            required: true,
+            default: 'primary',
+            options: ['primary', 'secondary', 'tertiary'],
+            description: 'Button intent color.',
+            related_to: 'foundations/theme_colors',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           max_items: {
             type: 'number',
             required: false,
@@ -2542,7 +2565,19 @@ export const mockSchemas = {
             options: null,
             description: 'The max entries from each guide to show. Excess will be hidden.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
+          list_type: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['mock', 'most-recent', 'first-list', 'second-list'],
+            description:
+              "The type of entries to use from each guide. 'Most recent' will display all the most recent entries.",
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
             hidden: false
           },
           guide: {
@@ -2561,29 +2596,6 @@ export const mockSchemas = {
             default: '',
             options: null,
             description: 'The CTA button text to display for each guide CTA.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          cta_intent: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['primary', 'secondary', 'tertiary'],
-            description: 'the CTA intent style to use for each guide CTA.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          list_type: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['mock', 'most-recent', 'first-list', 'second-list'],
-            description:
-              "The type of entries to use from each guide. 'Most recent' will display all the most recent entries.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -2647,7 +2659,7 @@ export const mockSchemas = {
             description: 'Body text size.',
             related_to: 'elements/paragraph_text',
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           bullet_style: {
@@ -2658,7 +2670,7 @@ export const mockSchemas = {
             description: 'Select the bullet style.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           heading_text: {
@@ -2733,7 +2745,7 @@ export const mockSchemas = {
             description: 'Typography element for the title.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           heading_stack_size: {
@@ -2744,19 +2756,8 @@ export const mockSchemas = {
             description: 'Spacing beneath the title.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
-          },
-          heading_element: {
-            type: 'text',
-            required: false,
-            default: 'h2',
-            options: ['h2', 'h3', 'h4', 'h5', 'h6', 'p'],
-            description: 'Title HTML element.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
           },
           body_typography_style: {
             type: 'text',
@@ -2766,7 +2767,7 @@ export const mockSchemas = {
             description: 'Typography style for the body.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           body_stack_size: {
@@ -2777,8 +2778,19 @@ export const mockSchemas = {
             description: 'Spacing beneath the body.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
+          },
+          heading_element: {
+            type: 'text',
+            required: false,
+            default: 'h2',
+            options: ['h2', 'h3', 'h4', 'h5', 'h6', 'p'],
+            description: 'Title HTML element.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
           },
           body_element: {
             type: 'text',
@@ -2788,7 +2800,7 @@ export const mockSchemas = {
             description: 'Body HTML element.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           heading_text: {
@@ -2847,6 +2859,29 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          icon_size: {
+            type: 'text',
+            required: false,
+            default: 'md',
+            options: ['xxl', 'xl', 'lg', 'md', 'sm'],
+            description: "Icon's size.",
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          on: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'AMP directive if serving as an action component to other components like lightboxes.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
           icon_name: {
             type: 'text',
             required: true,
@@ -2889,29 +2924,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
-          },
-          icon_size: {
-            type: 'text',
-            required: false,
-            default: 'md',
-            options: ['xxl', 'xl', 'lg', 'md', 'sm'],
-            description: "Icon's size.",
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          on: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description:
-              'AMP directive if serving as an action component to other components like lightboxes.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
           },
           href: {
             type: 'text',
@@ -2961,7 +2973,7 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/components%2Fiframe_reader',
           title: 'Iframe Reader Component',
           description: 'An iframe for downloadable PDF assets to be displayed on-page.',
-          editor_role: 'component',
+          editor_role: 'hidden',
           tags: [],
           extension_of: null
         },
@@ -3122,15 +3134,15 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          label_text: {
+          stack_size: {
             type: 'text',
             required: false,
-            default: '',
-            options: null,
-            description: 'Label text',
-            related_to: 'elements/form_label',
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           size: {
@@ -3141,7 +3153,7 @@ export const mockSchemas = {
             description: 'Input size (default or small)',
             related_to: 'elements/select',
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           required: {
@@ -3151,18 +3163,18 @@ export const mockSchemas = {
             default: false,
             description: 'Whether this input should be marked as required or not.',
             related_to: 'elements/form_label',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
-          stack_size: {
+          label_text: {
             type: 'text',
             required: false,
-            default: null,
-            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Additional spacing beneath the component.',
-            related_to: null,
+            default: '',
+            options: null,
+            description: 'Label text',
+            related_to: 'elements/form_label',
             editor_type: 'short-text-editor',
-            editor_category: 'style',
+            editor_category: null,
             hidden: false
           },
           input_config: {
@@ -3227,7 +3239,7 @@ export const mockSchemas = {
             description: 'The input size (default or small)',
             related_to: 'elements/text_input',
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           connect_right: {
@@ -3238,7 +3250,7 @@ export const mockSchemas = {
             description:
               'Whether or not to style this input as if connected to something (probably a button) to the right.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           value: {
@@ -3567,6 +3579,39 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          icon_variant: {
+            type: 'text',
+            required: true,
+            default: 'variant',
+            options: ['variant', 'accent-1', 'accent-2'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          pill_variant: {
+            type: 'text',
+            required: true,
+            default: 'surface-variant',
+            options: ['outlined', 'surface-variant'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          size: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'sm'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           href: {
             type: 'text',
             required: false,
@@ -3645,39 +3690,6 @@ export const mockSchemas = {
             ],
             description:
               'List of icons - please submit new icons to development for theme integration.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          icon_variant: {
-            type: 'text',
-            required: true,
-            default: 'variant',
-            options: ['variant', 'accent-1', 'accent-2'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          pill_variant: {
-            type: 'text',
-            required: true,
-            default: 'surface-variant',
-            options: ['outlined', 'surface-variant'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          size: {
-            type: 'text',
-            required: true,
-            default: 'default',
-            options: ['default', 'sm'],
-            description: null,
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -3782,7 +3794,29 @@ export const mockSchemas = {
             description: 'An external image URL to use.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
+            hidden: true
+          },
+          format: {
+            type: 'text',
+            required: false,
+            default: 'png',
+            options: null,
+            description: 'Format request for the contentful image API',
+            related_to: 'elements/image',
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          lazy: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether the image should load when the user scrolls over it. Set to true for page-speed. Set to false for above-fold images like heroes.',
+            related_to: 'elements/image',
+            editor_category: 'advanced',
             hidden: true
           },
           alt: {
@@ -3794,40 +3828,18 @@ export const mockSchemas = {
               "Text for accessibility \u0026 screen-readers. When using contentful, use the 'description' property of the asset for this.",
             related_to: 'elements/image',
             editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          format: {
-            type: 'text',
-            required: false,
-            default: 'png',
-            options: null,
-            description: null,
-            related_to: 'elements/image',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          lazy: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description:
-              'Whether the image should load when the user scrolls over it. Set to true for page-speed. Set to false for above-fold images like heroes.',
-            related_to: 'elements/image',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           load_width: {
             type: 'number',
             required: false,
-            default: 1600,
+            default: 1200,
             options: null,
             description:
-              'The max-width of the image when requesting from the image api. For load-speed optimization, please use a module-optimized width.',
+              'The max-width of the image when requesting from the image api. For load-speed optimization, please use a page / module-specific width.',
             related_to: 'elements/image',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           image_asset: {
@@ -3875,6 +3887,17 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          controlled_youtube: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether or not to load this video using the controlled YouTube API wrapper. This is usually only necessary when the video is in an autoplaying carousel of other videos.',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: true
+          },
           icon_name: {
             type: 'text',
             required: true,
@@ -3916,17 +3939,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
-          },
-          controlled_youtube: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether or not to load this video using the controlled YouTube API wrapper. This is usually only necessary when the video is in an autoplaying carousel of other videos.',
-            related_to: null,
-            editor_category: null,
-            hidden: true
           },
           image_asset: {
             type: 'link',
@@ -4148,7 +4160,7 @@ export const mockSchemas = {
             description: 'Seasonal styles use a different icon and color.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           search_term: {
@@ -4206,7 +4218,7 @@ export const mockSchemas = {
             description: 'optional content vertical spacing.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           disabled: {
@@ -4214,9 +4226,9 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: false,
-            description: null,
+            description: 'Disables the grid and instead renders the gridless content.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           }
         }
@@ -4254,6 +4266,28 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          cta_intent: {
+            type: 'text',
+            required: true,
+            default: 'primary',
+            options: ['primary', 'secondary', 'tertiary'],
+            description: 'Button intent color.',
+            related_to: 'foundations/theme_colors',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          connected_button: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether to stylistically connect the submit button to the text input inline or not. Otherwise, elements will stack.',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
           size: {
             type: 'text',
             required: true,
@@ -4262,7 +4296,7 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           input_component: {
@@ -4272,18 +4306,19 @@ export const mockSchemas = {
             options: ['components/labeled_text_input'],
             description: null,
             related_to: null,
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
-          button_intent: {
+          form_location: {
             type: 'text',
-            required: true,
-            default: 'primary',
-            options: ['primary', 'secondary', 'tertiary'],
-            description: 'Submit button intent style.',
-            related_to: 'components/cta_button',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'Put a specific page location (footer, body, hero, etc) here for Google Analytics tracking dimensions.',
+            related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           button_text: {
@@ -4297,26 +4332,6 @@ export const mockSchemas = {
             editor_category: null,
             hidden: false
           },
-          connected_button: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether to stylistically connect the submit button to the text input inline or not. Otherwise, elements will stack.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          form_config: {
-            type: 'config',
-            required: false,
-            default: {},
-            description: 'Data object for configuring a form element.',
-            related_to: 'elements/form',
-            editor_category: null,
-            hidden: false
-          },
           hidden_fields: {
             type: 'multi-component',
             required: false,
@@ -4327,6 +4342,15 @@ export const mockSchemas = {
             description: 'Hidden fields for passing essential pardot data.',
             related_to: null,
             editor_category: null
+          },
+          form_config: {
+            type: 'config',
+            required: false,
+            default: {},
+            description: 'Data object for configuring a form element.',
+            related_to: 'elements/form',
+            editor_category: null,
+            hidden: false
           },
           post_submit_component: {
             type: 'component',
@@ -4382,7 +4406,7 @@ export const mockSchemas = {
             description: 'Icon size',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           theme_token: {
@@ -4393,7 +4417,7 @@ export const mockSchemas = {
             description: 'Color token for the icons.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           icon_names: {
@@ -4537,6 +4561,17 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          alignment: {
+            type: 'text',
+            required: true,
+            default: 'left',
+            options: ['left', 'center'],
+            description: 'Text or component alignment.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           label_text: {
             type: 'text',
             required: false,
@@ -4565,17 +4600,6 @@ export const mockSchemas = {
             default: 'secondary',
             options: ['primary', 'secondary'],
             description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          alignment: {
-            type: 'text',
-            required: true,
-            default: 'left',
-            options: ['left', 'center'],
-            description: 'Text alignment for all elements.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -4627,6 +4651,77 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'text-link',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: 'The color token to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          typography_style: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: [
+              'system--sm',
+              'system--md',
+              'system--lg',
+              'paragraph--sm',
+              'paragraph--lg',
+              'lead--md'
+            ],
+            description: 'The typography type of the link.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          style: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Custom CSS',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: true
+          },
+          data: {
+            type: 'json',
+            required: false,
+            default: {},
+            description: 'HTML dataset info applied to content_tag',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: true
+          },
           href: {
             type: 'text',
             required: false,
@@ -4666,66 +4761,6 @@ export const mockSchemas = {
             editor_type: 'dropdown-with-custom-editor',
             editor_category: null,
             hidden: false
-          },
-          stack_size: {
-            type: 'text',
-            required: false,
-            default: null,
-            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
-            description: 'Additional spacing beneath the component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: 'style',
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: false,
-            default: 'text-link',
-            options: ['text-link', 'variant', 'accent-1', 'accent-2'],
-            description: 'The color token to use.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          typography_style: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: [
-              'system--sm',
-              'system--md',
-              'system--lg',
-              'paragraph--sm',
-              'paragraph--lg',
-              'lead--md'
-            ],
-            description: 'The typography type of the link.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          style: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'Links stack by default. True will make these links inline.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
-          data: {
-            type: 'json',
-            required: false,
-            default: {},
-            description: 'HTML dataset info applied to content_tag',
-            related_to: null,
-            editor_category: null,
-            hidden: true
           },
           link_text: {
             type: 'text',
@@ -4781,6 +4816,39 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: true
+          },
+          icon_side: {
+            type: 'text',
+            required: true,
+            default: 'left',
+            options: ['left', 'right'],
+            description: 'Which side of the button the icon should appear on.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          size: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['default', 'sm'],
+            description: "The button's size (default or small)",
+            related_to: 'foundations/inset_shapes',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'variant',
+            options: ['variant', 'text-link'],
+            description: 'The color token to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
           },
           href: {
             type: 'text',
@@ -4860,39 +4928,6 @@ export const mockSchemas = {
             ],
             description:
               'List of icons - please submit new icons to development for theme integration.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          icon_side: {
-            type: 'text',
-            required: true,
-            default: 'left',
-            options: ['left', 'right'],
-            description: 'Which side of the button the icon should appear on.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          size: {
-            type: 'text',
-            required: true,
-            default: 'default',
-            options: ['default', 'sm'],
-            description: "The button's size (default or small)",
-            related_to: 'foundations/inset_shapes',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: true,
-            default: 'variant',
-            options: ['variant', 'text-link'],
-            description: "The button's color token.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -4990,48 +5025,15 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'The copy.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          size: {
+          alignment: {
             type: 'text',
             required: true,
-            default: 'primary',
-            options: ['primary', 'secondary'],
-            description: null,
-            related_to: 'foundations/typography_base',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: false,
-            default: 'default',
-            options: [
-              'default',
-              'variant',
-              'accent-1',
-              'accent-2',
-              'muted',
-              'default--light',
-              'variant--light',
-              'accent-1--light',
-              'accent-2--light',
-              'muted--light'
-            ],
-            description: null,
+            default: null,
+            options: ['left', 'center'],
+            description: 'Text or component alignment.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           stack_size: {
@@ -5045,15 +5047,37 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
-          alignment: {
+          size: {
             type: 'text',
-            required: false,
-            default: '',
-            options: ['left', 'center'],
+            required: true,
+            default: 'primary',
+            options: ['primary', 'secondary'],
             description: null,
+            related_to: 'foundations/typography_base',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: 'The color token to use.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           element: {
@@ -5064,7 +5088,7 @@ export const mockSchemas = {
             description: 'Specifies the HTML element used.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           editable: {
@@ -5074,8 +5098,19 @@ export const mockSchemas = {
             default: false,
             description: null,
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
+          },
+          text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The copy.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
           }
         }
       },
@@ -5127,7 +5162,19 @@ export const mockSchemas = {
             description: 'The name to use for tracking subissions in google analytics.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
+          form_location: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'Put a specific page location (footer, body, hero, etc) here for Google Analytics tracking dimensions.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
             hidden: false
           },
           form_endpoint: {
@@ -5139,7 +5186,7 @@ export const mockSchemas = {
               'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           pardot_endpoint: {
@@ -5151,7 +5198,7 @@ export const mockSchemas = {
               'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           submit_actions: {
@@ -5162,7 +5209,7 @@ export const mockSchemas = {
             description: 'Please select if this is a specific lead form.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           redirect_url: {
@@ -5174,7 +5221,7 @@ export const mockSchemas = {
               'The link (such as a thank-you page) to redirect after form submission. Takes precedence over post-submit component.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           open_new_tab: {
@@ -5184,8 +5231,19 @@ export const mockSchemas = {
             default: false,
             description: 'Whether or not the redirect_url should open in a new tab.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
+          },
+          amp_page: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Internal toggle for amp forms rendered via iframe to let the form javascript know its intended for an AMP page, which effects its behavior slightly.',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: true
           },
           post_submit_component: {
             type: 'component',
@@ -5197,17 +5255,6 @@ export const mockSchemas = {
             related_to: null,
             editor_category: null,
             hidden: false
-          },
-          amp_page: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Internal toggle for amp forms rendered via iframe to let the form javascript know its intended for an AMP page, which effects its behavior slightly.',
-            related_to: null,
-            editor_category: null,
-            hidden: true
           }
         }
       },
@@ -5243,48 +5290,15 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'The copy',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          size: {
+          alignment: {
             type: 'text',
             required: true,
-            default: 'xl',
-            options: ['xl', 'lg', 'md', 'sm', 'xxs'],
-            description: 'Defines font size',
-            related_to: 'foundations/typography_base',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: false,
-            default: 'default',
-            options: [
-              'default',
-              'variant',
-              'accent-1',
-              'accent-2',
-              'muted',
-              'default--light',
-              'variant--light',
-              'accent-1--light',
-              'accent-2--light',
-              'muted--light'
-            ],
-            description: null,
+            default: null,
+            options: ['left', 'center'],
+            description: 'Text or component alignment.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           stack_size: {
@@ -5298,15 +5312,37 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
-          alignment: {
+          size: {
             type: 'text',
-            required: false,
-            default: '',
-            options: ['left', 'center'],
-            description: null,
+            required: true,
+            default: 'xl',
+            options: ['xl', 'lg', 'md', 'sm', 'xxs'],
+            description: 'Defines font size',
+            related_to: 'foundations/typography_base',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: 'The color token to use.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           element: {
@@ -5317,7 +5353,7 @@ export const mockSchemas = {
             description: 'Specifies the HTML element used.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           anchor_id: {
@@ -5329,7 +5365,7 @@ export const mockSchemas = {
               'The #anchor tag which can allow a user to jump scroll to this heading or section. (Do not include the #).',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           editable: {
@@ -5339,8 +5375,19 @@ export const mockSchemas = {
             default: false,
             description: null,
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
+          },
+          text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The copy',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
           }
         }
       },
@@ -5376,59 +5423,15 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          size: {
-            type: 'text',
-            required: true,
-            default: 'lg',
-            options: ['lg', 'md'],
-            description: null,
-            related_to: 'foundations/typography_base',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: false,
-            default: 'default',
-            options: [
-              'default',
-              'variant',
-              'accent-1',
-              'accent-2',
-              'muted',
-              'default--light',
-              'variant--light',
-              'accent-1--light',
-              'accent-2--light',
-              'muted--light'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
           alignment: {
             type: 'text',
-            required: false,
-            default: '',
+            required: true,
+            default: null,
             options: ['left', 'center'],
-            description: null,
+            description: 'Text or component alignment.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           stack_size: {
@@ -5442,6 +5445,39 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          size: {
+            type: 'text',
+            required: true,
+            default: 'lg',
+            options: ['lg', 'md'],
+            description: null,
+            related_to: 'foundations/typography_base',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: 'The color token to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           element: {
             type: 'text',
             required: true,
@@ -5450,7 +5486,7 @@ export const mockSchemas = {
             description: 'Specifies the HTML element used.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           editable: {
@@ -5460,8 +5496,19 @@ export const mockSchemas = {
             default: false,
             description: null,
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
+          },
+          text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
           }
         }
       },
@@ -5496,6 +5543,37 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: true
+          },
+          style: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Inline style',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          target: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Overrides default external/internal new-tab behavior',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
+          data: {
+            type: 'json',
+            required: false,
+            default: {},
+            description: 'HTML dataset info applied to content_tag',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: false
           },
           href: {
             type: 'text',
@@ -5536,37 +5614,6 @@ export const mockSchemas = {
             editor_type: 'dropdown-with-custom-editor',
             editor_category: null,
             hidden: false
-          },
-          target: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'Overrides default external/internal new-tab behavior',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          data: {
-            type: 'json',
-            required: false,
-            default: {},
-            description: 'HTML dataset info applied to content_tag',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          style: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'Inline style',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
           }
         }
       },
@@ -5602,6 +5649,17 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          align_top: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether the modal content should be aligned to the top instead of center.',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
           id: {
             type: 'text',
             required: false,
@@ -5610,17 +5668,7 @@ export const mockSchemas = {
             description: 'ID attribute if needed for targeting.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          modal_component: {
-            type: 'component',
-            required: false,
-            default: null,
-            options: [],
-            description: 'Renders any component inside the modal.',
-            related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           include_close_button: {
@@ -5631,16 +5679,15 @@ export const mockSchemas = {
             description:
               'Whether or not the default close icon should appear on the top right of the container.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
-          align_top: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether the modal content should be aligned to the top instead of center.',
+          modal_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: [],
+            description: 'Renders any component inside the modal.',
             related_to: null,
             editor_category: null,
             hidden: false
@@ -5679,50 +5726,6 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'Will parse strings or markdown.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          size: {
-            type: 'text',
-            required: true,
-            default: 'lg',
-            options: ['lg', 'sm'],
-            description: null,
-            related_to: 'foundations/typography_base',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          color_token: {
-            type: 'text',
-            required: false,
-            default: 'default',
-            options: [
-              'default',
-              'variant',
-              'accent-1',
-              'accent-2',
-              'muted',
-              'default--light',
-              'variant--light',
-              'accent-1--light',
-              'accent-2--light',
-              'muted--light'
-            ],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
           stack_size: {
             type: 'text',
             required: false,
@@ -5736,13 +5739,46 @@ export const mockSchemas = {
           },
           alignment: {
             type: 'text',
-            required: false,
-            default: '',
+            required: true,
+            default: null,
             options: ['left', 'center'],
-            description: null,
+            description: 'Text or component alignment.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          size: {
+            type: 'text',
+            required: true,
+            default: 'lg',
+            options: ['lg', 'sm'],
+            description: null,
+            related_to: 'foundations/typography_base',
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          color_token: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: [
+              'default',
+              'variant',
+              'accent-1',
+              'accent-2',
+              'muted',
+              'default--light',
+              'variant--light',
+              'accent-1--light',
+              'accent-2--light',
+              'muted--light'
+            ],
+            description: 'The color token to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
             hidden: false
           },
           element: {
@@ -5753,7 +5789,7 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           editable: {
@@ -5763,8 +5799,19 @@ export const mockSchemas = {
             default: false,
             description: null,
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
+          },
+          text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The copy (text or markdown)',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
           }
         }
       },
@@ -5844,17 +5891,6 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          select_classname: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'CSS class name(s) for the select element.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: true
-          },
           c_id: {
             type: 'text',
             required: false,
@@ -5874,8 +5910,19 @@ export const mockSchemas = {
             description: 'The input size (default, small)',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
+          },
+          select_classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the select element.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
           },
           name: {
             type: 'text',
@@ -5897,7 +5944,7 @@ export const mockSchemas = {
             description: "The input name (must match pardot's 'External Field' ID.",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           default_option: {
@@ -5956,17 +6003,6 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          size: {
-            type: 'text',
-            required: true,
-            default: 'lg',
-            options: ['lg', 'md', 'sm'],
-            description: null,
-            related_to: 'foundations/typography_base',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
           stack_size: {
             type: 'text',
             required: false,
@@ -5978,31 +6014,20 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
-          element: {
+          size: {
             type: 'text',
             required: true,
-            default: 'span',
-            options: ['span', 'label', 'div', 'markdown'],
+            default: 'lg',
+            options: ['lg', 'md', 'sm'],
             description: null,
-            related_to: null,
+            related_to: 'foundations/typography_base',
             editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: 'The copy',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           color_token: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'default',
             options: [
               'default',
@@ -6016,10 +6041,21 @@ export const mockSchemas = {
               'accent-2--light',
               'muted--light'
             ],
+            description: 'The color token to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          element: {
+            type: 'text',
+            required: true,
+            default: 'span',
+            options: ['span', 'label', 'div', 'markdown'],
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           editable: {
@@ -6029,6 +6065,17 @@ export const mockSchemas = {
             default: false,
             description: null,
             related_to: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
+          text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'The copy',
+            related_to: null,
+            editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
           }
@@ -6074,16 +6121,28 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
-          input_config: {
-            type: 'config',
-            required: false,
-            default: {},
-            description: 'Use a config object to provide data.',
-            related_to: 'elements/text_input',
-            editor_category: null,
+          connect_right: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Whether or not to style this input as if connected to something (probably a button) to the right.',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          required: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether or not this input is required before submission.',
+            related_to: null,
+            editor_category: 'advanced',
             hidden: false
           },
           type: {
@@ -6094,7 +6153,18 @@ export const mockSchemas = {
             description: 'Text input type.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
+          validation_type: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['email', 'phone', 'password'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
             hidden: false
           },
           name: {
@@ -6117,8 +6187,18 @@ export const mockSchemas = {
             description: "The input name (must match pardot's 'External Field' ID.",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
+          },
+          autofocus: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: null,
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: true
           },
           placeholder: {
             type: 'text',
@@ -6128,6 +6208,15 @@ export const mockSchemas = {
             description: 'Input placeholder text',
             related_to: null,
             editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
+          },
+          input_config: {
+            type: 'config',
+            required: false,
+            default: {},
+            description: 'Use a config object to provide data.',
+            related_to: 'elements/text_input',
             editor_category: null,
             hidden: false
           },
@@ -6141,48 +6230,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
-          },
-          required: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Whether or not this input is required before submission.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          validation_type: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['email', 'phone', 'password'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          connect_right: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description:
-              'Whether or not to style this input as if connected to something (probably a button) to the right.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          autofocus: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: null,
-            related_to: null,
-            editor_category: null,
-            hidden: true
           }
         }
       },
@@ -6260,7 +6307,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6287,7 +6334,7 @@ export const mockSchemas = {
               'Whether the single content section should align to the left or the right of this section.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           background_image: {
@@ -6360,7 +6407,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6384,9 +6431,9 @@ export const mockSchemas = {
             options: [true, false],
             default: true,
             description:
-              'Includes a single-column grid structure by default. Disable that in order to render as a gridless component.',
+              'Includes a single-column grid structure by default. Disable this in order to render as a gridless component.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'style',
             hidden: true
           },
           content_component: {
@@ -6466,21 +6513,11 @@ export const mockSchemas = {
             required: true,
             options: [true, false],
             default: true,
-            description: null,
-            related_to: null,
-            editor_category: null,
-            hidden: true
-          },
-          cta_entry: {
-            type: 'link',
-            required: true,
-            asset_types: [],
-            content_types: ['blogCta'],
             description:
-              "Requires a BlogCta entry with a file attachment. The 'Text' field in this entry will determine the CTA text.",
+              'Includes a single-column grid structure by default. Disable this in order to render as a gridless component.',
             related_to: null,
-            editor_category: null,
-            hidden: false
+            editor_category: 'style',
+            hidden: true
           },
           resource_gated: {
             type: 'bool',
@@ -6489,6 +6526,17 @@ export const mockSchemas = {
             default: false,
             description:
               "Enables the lead form popup when CTA clicked. If already submitted, lead form won't appear again for the same user.",
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
+          cta_entry: {
+            type: 'link',
+            required: true,
+            asset_types: [],
+            content_types: ['blogCta'],
+            description:
+              "Requires a BlogCta entry with a file attachment. The 'Text' field in this entry will determine the CTA text.",
             related_to: null,
             editor_category: null,
             hidden: false
@@ -6546,7 +6594,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6557,7 +6605,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: 'Select the background color token to use within the light/dark variants.',
+            description: 'Select the background color token to use within the light/dark modes.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6678,7 +6726,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6689,7 +6737,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: 'Select the background color token to use within the light/dark variants.',
+            description: 'Select the background color token to use within the light/dark modes.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6707,6 +6755,18 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          title_section_alignment: {
+            type: 'text',
+            required: true,
+            default: 'center',
+            options: ['left', 'center'],
+            description:
+              'Aligns the title section to the left or center of the page. Individual text elements may still need to be aligned correctly.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           vertical_alignment: {
             type: 'text',
             required: false,
@@ -6716,7 +6776,7 @@ export const mockSchemas = {
               'Whether the vertical alignment of the content should be centered, top, or stretched.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           title_components: {
@@ -6892,7 +6952,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6903,7 +6963,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: 'Select the background color token to use within the light/dark variants.',
+            description: 'Select the background color token to use within the light/dark modes.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6919,6 +6979,28 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
+            hidden: false
+          },
+          title_section_alignment: {
+            type: 'text',
+            required: true,
+            default: 'left',
+            options: ['left', 'center'],
+            description:
+              'Aligns the title section to the left or center of the page. Individual text elements may still need to be aligned correctly.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          divider: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Should a dividing line be added at the bottom?',
+            related_to: null,
+            editor_category: null,
             hidden: false
           },
           title_components: {
@@ -6970,28 +7052,6 @@ export const mockSchemas = {
             description: 'Optional, composable section for the title elements you wish to add.',
             related_to: null,
             editor_category: null
-          },
-          title_section_alignment: {
-            type: 'text',
-            required: true,
-            default: 'left',
-            options: ['left', 'center'],
-            description:
-              'Aligns the title section to the left or center of the page. Individual text elements may still need to be aligned correctly.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          divider: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Should a dividing line be added at the bottom?',
-            related_to: null,
-            editor_category: null,
-            hidden: false
           },
           cta_component: {
             type: 'component',
@@ -7057,13 +7117,25 @@ export const mockSchemas = {
           },
           theme_variant: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          display_size: {
+            type: 'text',
+            required: true,
+            default: 'secondary',
+            options: ['primary', 'secondary'],
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           heading_label_text: {
@@ -7084,17 +7156,6 @@ export const mockSchemas = {
             options: null,
             description: null,
             related_to: 'elements/display_text',
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          display_size: {
-            type: 'text',
-            required: true,
-            default: 'secondary',
-            options: ['primary', 'secondary'],
-            description: null,
-            related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
@@ -7157,13 +7218,14 @@ export const mockSchemas = {
           },
           theme_variant: {
             type: 'text',
-            required: false,
+            required: true,
             default: 'page',
             options: ['page', 'light', 'dark'],
-            description: null,
+            description:
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           sticky: {
@@ -7174,7 +7236,7 @@ export const mockSchemas = {
             description:
               'Whether or not the nav should stick to the top of the screen when scrolling.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'style',
             hidden: false
           },
           is_mobile: {
@@ -7185,7 +7247,7 @@ export const mockSchemas = {
             description:
               "Select 'true' if this navbar should only appear on mobile + tablet (sm \u0026 md) sizes. Otherwise this navbar will only appear on landscape tablet + desktop (lg + xl) sizes.",
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           center_logo: {
@@ -7295,7 +7357,7 @@ export const mockSchemas = {
             description:
               'Whether or not this entry appears on mobile (SM, MD) breakpoints or otherwise appears on desktop (LG, XL).',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           column_components: {
@@ -7440,7 +7502,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7451,7 +7513,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: 'Select the background color token to use within the light/dark variants.',
+            description: 'Select the background color token to use within the light/dark modes.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7467,6 +7529,27 @@ export const mockSchemas = {
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
+            hidden: false
+          },
+          title_typography_style: {
+            type: 'text',
+            required: false,
+            default: 'display--primary',
+            options: ['display--primary', 'display--secondary', 'heading--xl', 'heading--lg'],
+            description: 'Which typography style to use for the title.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          include_social: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description: 'Whether social links should be included or not?',
+            related_to: null,
+            editor_category: 'advanced',
             hidden: false
           },
           divider: {
@@ -7485,27 +7568,6 @@ export const mockSchemas = {
             default: [],
             description: null,
             related_to: 'components/text_link',
-            editor_category: null,
-            hidden: false
-          },
-          include_social: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: true,
-            description: 'Whether social links should be included or not?',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          title_typography_style: {
-            type: 'text',
-            required: false,
-            default: 'display--primary',
-            options: ['display--primary', 'display--secondary', 'heading--xl', 'heading--lg'],
-            description: 'Which typography style to use for the title.',
-            related_to: null,
-            editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
           },
@@ -7572,7 +7634,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7583,7 +7645,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: 'Select the background color token to use within the light/dark variants.',
+            description: 'Select the background color token to use within the light/dark modes.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7596,6 +7658,17 @@ export const mockSchemas = {
             options: ['xl', 'xxxxl'],
             description:
               'Select the amount of spacing to apply to the top and bottom of this page section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          display_size: {
+            type: 'text',
+            required: true,
+            default: 'primary',
+            options: ['primary', 'secondary'],
+            description: 'The font size of the title',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7618,17 +7691,6 @@ export const mockSchemas = {
             default: '',
             options: null,
             description: 'Text for the title',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          display_size: {
-            type: 'text',
-            required: true,
-            default: 'primary',
-            options: ['primary', 'secondary'],
-            description: 'The font size of the title',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -7695,7 +7757,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7840,7 +7902,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7851,7 +7913,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'variant'],
-            description: 'Select the background color token to use within the light/dark variants.',
+            description: 'Select the background color token to use within the light/dark modes.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7922,7 +7984,7 @@ export const mockSchemas = {
             default: 'page',
             options: ['page', 'light', 'dark'],
             description:
-              "Select 'Page' if this pattern should match the page's light/dark variation setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
+              "Select 'Page' if this pattern should match the page's light/dark mode setting. Otherwise, override with 'light' or 'dark' specifically for this component.",
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -7940,28 +8002,6 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
-          title_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
-            hidden: false
-          },
-          body_text: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description: null,
-            related_to: null,
-            editor_type: 'long-text-editor',
-            editor_category: null,
-            hidden: false
-          },
           show_events: {
             type: 'text',
             required: true,
@@ -7970,7 +8010,7 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           event_category: {
@@ -7982,6 +8022,28 @@ export const mockSchemas = {
               "When selected, the component automatically fills with the category of your choosing. Otherwise, you can manually insert events within the 'events' property.",
             related_to: null,
             editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: false
+          },
+          title_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Text for the title of the section.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
+          },
+          body_text: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'Lead text beneath the title.',
+            related_to: null,
+            editor_type: 'long-text-editor',
             editor_category: null,
             hidden: false
           },
@@ -8100,7 +8162,7 @@ export const mockSchemas = {
             description: 'The name to use for tracking subissions in google analytics.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           form_endpoint: {
@@ -8112,7 +8174,7 @@ export const mockSchemas = {
               'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           pardot_endpoint: {
@@ -8124,7 +8186,7 @@ export const mockSchemas = {
               'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           submit_actions: {
@@ -8135,7 +8197,7 @@ export const mockSchemas = {
             description: 'Please select if this is a specific lead form.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: true
           },
           redirect_url: {
@@ -8147,7 +8209,7 @@ export const mockSchemas = {
               'The link (such as a thank-you page) to redirect after form submission. Takes precedence over post-submit component.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           open_new_tab: {
@@ -8157,7 +8219,7 @@ export const mockSchemas = {
             default: false,
             description: 'Whether or not the redirect_url should open in a new tab.',
             related_to: null,
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           }
         }
@@ -8192,7 +8254,7 @@ export const mockSchemas = {
             description: "The input name (must match pardot's 'External Field' ID.",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           },
           default_option: {
@@ -8229,6 +8291,16 @@ export const mockSchemas = {
           config_template: ['type', 'name', 'required', 'validation_type']
         },
         properties: {
+          required: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether or not this input is required before submission.',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
           type: {
             type: 'text',
             required: true,
@@ -8237,7 +8309,18 @@ export const mockSchemas = {
             description: 'Text input type.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
+          validation_type: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['email', 'phone', 'password'],
+            description: null,
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
             hidden: false
           },
           name: {
@@ -8260,28 +8343,7 @@ export const mockSchemas = {
             description: "The input name (must match pardot's 'External Field' ID.",
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: null,
-            hidden: false
-          },
-          required: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Whether or not this input is required before submission.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
-          },
-          validation_type: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['email', 'phone', 'password'],
-            description: null,
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: null,
+            editor_category: 'advanced',
             hidden: false
           }
         }

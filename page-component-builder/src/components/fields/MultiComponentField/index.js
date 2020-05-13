@@ -266,6 +266,8 @@ export const MultiComponentField = props => {
               onDragEnd={onDragEnd}
               index={index}
               indent={false}
+              onOpen={props.onOpen}
+              onClose={props.onClose}
             />
           );
         }
@@ -325,7 +327,9 @@ MultiComponentField.propTypes = {
   replaceHydratedEntry: PropTypes.func,
   propKey: PropTypes.string,
   useConfigObjects: PropTypes.bool,
-  value: PropTypes.array
+  value: PropTypes.array,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
 };
 
 MultiComponentField.defaultProps = {

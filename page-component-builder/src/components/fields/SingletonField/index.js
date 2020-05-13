@@ -19,6 +19,12 @@ const SingletonField = props => {
     return `${contentType} | ${(schema.meta || {}).title || (schema.meta || {}).id}`;
   };
 
+  const getTitle = () => {
+    return (
+      (props.internalMappingInstance.properties.preset_name || {}).value || props.schema.meta.title
+    );
+  };
+
   return (
     <div className="component-field-singleton" data-test-id="component-field-singleton">
       <div
@@ -29,12 +35,20 @@ const SingletonField = props => {
           className="f36-margin-top--s f36-margin-bottom--m"
           testId="singleton-entry-card"
           loading={false}
-          title={(props.internalMappingInstance.properties.preset_name || {}).value}
+          title={getTitle()}
           contentType={contentTypeLabel('Singleton')}
           description={props.schema.meta.description}
           size="default"
           statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
-          onClick={() => toggleSingletonCard(!singletonCardOpen)}
+          onClick={() => {
+            if (singletonCardOpen) {
+              toggleSingletonCard(false);
+              props.onClose();
+            } else {
+              toggleSingletonCard(true);
+              props.onOpen();
+            }
+          }}
           dropdownListElements={<ActionDropdown handleRemoveClick={props.handleRemoveClick} />}
           draggable={props.draggable}
           withDragHandle={props.draggable}
@@ -57,6 +71,7 @@ const SingletonField = props => {
             replaceHydratedEntry={props.replaceHydratedEntry}
             internalMappingInstance={props.internalMappingInstance}
             schema={props.schema}
+            isOpen={singletonCardOpen}
           />
         )}
       </div>
@@ -81,7 +96,9 @@ SingletonField.propTypes = {
   onDragOver: PropTypes.func,
   onDragEnd: PropTypes.func,
   index: PropTypes.number,
-  indent: PropTypes.bool
+  indent: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func
 };
 SingletonField.defaultProps = {};
 
