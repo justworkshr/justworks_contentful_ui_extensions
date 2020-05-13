@@ -29,6 +29,7 @@ import { parse_underscore } from '../../utilities/copyUtils';
 import InternalMapping from '../../classes/InternalMapping';
 
 import './style.scss';
+import EditorSections from '../EditorSections';
 
 const ComponentEditor = props => {
   const [errors, setErrors] = useState({});
@@ -218,6 +219,251 @@ const ComponentEditor = props => {
     }
   };
 
+  const renderPropertyField = propKey => {
+    const property = props.schema.properties[propKey];
+    const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
+    const id = `editor-field--${propKey}`;
+
+    return (
+      <div
+        id={id}
+        key={`component-editor-field--${propKey}`}
+        data-test-id={id}
+        className={`component-editor__field f36-margin-bottom--l ${
+          errors[propKey] && errors[propKey].length ? 'with-error' : ''
+        }`}>
+        <div className="component-editor__field-heading">
+          <FormLabel
+            className="component-editor__field-label"
+            required={property.required}
+            htmlFor={id}>
+            {parse_underscore(propKey) || '<label missing>'}
+          </FormLabel>
+          {!property.required && property.type === c.TEXT_PROPERTY && (
+            <TextLink
+              className="f36-margin-left--xs"
+              onClick={() => updatePropertyValue(propKey, null, false)}>
+              Clear
+            </TextLink>
+          )}
+        </div>
+        {isShortTextField(property) && (
+          <ShortTextField
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            errors={errors[propKey]}
+            type="text"
+            value={value}
+          />
+        )}
+        {isNumberField(property) && (
+          <ShortTextField
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            errors={errors[propKey]}
+            type="number"
+            value={value}
+          />
+        )}
+        {isLongTextField(property) && (
+          <LongTextField
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            value={value}
+          />
+        )}
+        {isMarkdownTextField(property) && (
+          <MarkdownField
+            propKey={propKey}
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            value={value}
+            errors={errors[propKey]}
+          />
+        )}
+        {isBoolProperty(property) && (
+          <DropdownField
+            propKey={propKey}
+            required={property.required}
+            options={property.options}
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            value={value}
+            withCustomText={false}
+            errors={errors[propKey]}
+          />
+        )}
+        {isDropdownTextField(property) && (
+          <DropdownField
+            propKey={propKey}
+            required={property.required}
+            options={property.options}
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            value={value}
+            withCustomText={false}
+            errors={errors[propKey]}
+          />
+        )}
+        {isDropdownWithCustomField(property) && (
+          <DropdownField
+            propKey={propKey}
+            required={property.required}
+            options={property.options}
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            value={value}
+            withCustomText={true}
+            errors={errors[propKey]}
+          />
+        )}
+        {isRadioTextField(property) && (
+          <RadioGroup
+            propKey={propKey}
+            options={property.options}
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            value={value}
+            errors={errors[propKey]}
+          />
+        )}
+        {/* in some cases, a field can link assets OR entries */}
+        {(isEntryLink(property) || isAssetLink(property)) &&
+          renderLinkableField(propKey, property, value)}
+        {isMultiLinkProperty(property) && (
+          <MultiLinkField
+            sdk={props.sdk}
+            propKey={propKey}
+            contentTypes={property.content_types}
+            entries={(value || []).map(entry => {
+              return fetchHydratedEntry(entry);
+            })}
+            onChange={value => updatePropertyValue(propKey, value, false)}
+            replaceHydratedEntry={props.replaceHydratedEntry}
+            errors={errors[propKey]}
+          />
+        )}
+        {isComponentProperty(property) && (
+          <ComponentField
+            sdk={props.sdk}
+            schemas={props.schemas}
+            propKey={propKey}
+            hydratedAssets={props.hydratedAssets}
+            hydratedEntries={props.hydratedEntries}
+            replaceHydratedEntry={props.replaceHydratedEntry}
+            replaceHydratedAsset={props.replaceHydratedAsset}
+            property={property}
+            entry={fetchHydratedEntry(value)}
+            internalMappingInstance={
+              isComponentPropertySingleton(value)
+                ? new InternalMapping(value.componentId, value.properties, props.schema, false)
+                : null
+            }
+            onChange={(value, timeout = false, singletonErrors) =>
+              updatePropertyValue(propKey, value, timeout, singletonErrors)
+            }
+            isLoading={!!value && !fetchHydratedEntry(value)}
+            useConfigObjects={property.type === c.CONFIG_PROPERTY}
+            errors={errors[propKey]}
+          />
+        )}
+        {isMultiComponentProperty(property) && (
+          <MultiComponentField
+            sdk={props.sdk}
+            propKey={propKey}
+            options={property.options}
+            presets={property.presets}
+            hydratedEntries={props.hydratedEntries}
+            schemas={props.schemas}
+            loadingEntries={props.loadingEntries}
+            onChange={(value, timeout, singletonErrors) =>
+              updatePropertyValue(propKey, value, timeout, singletonErrors)
+            }
+            replaceHydratedEntry={props.replaceHydratedEntry}
+            replaceHydratedAsset={props.replaceHydratedAsset}
+            useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
+            value={value}
+            errors={errors[propKey]}
+          />
+        )}
+        {isConfigProperty(property) && (
+          <ComponentField
+            sdk={props.sdk}
+            schemas={props.schemas}
+            propKey={propKey}
+            hydratedAssets={props.hydratedAssets}
+            hydratedEntries={props.hydratedEntries}
+            replaceHydratedEntry={props.replaceHydratedEntry}
+            replaceHydratedAsset={props.replaceHydratedAsset}
+            property={property}
+            entry={fetchHydratedEntry(value)}
+            internalMappingInstance={
+              isComponentPropertySingleton(value)
+                ? new InternalMapping(value.componentId, value.properties, props.schema, true)
+                : null
+            }
+            onChange={(value, timeout = false, singletonErrors) =>
+              updatePropertyValue(propKey, value, timeout, singletonErrors)
+            }
+            isLoading={
+              fetchHydratedEntry(value)
+                ? props.loadingEntries[(fetchHydratedEntry(value).sys || {}).id]
+                : null
+            }
+            useConfigObjects={property.type === c.CONFIG_PROPERTY}
+            errors={errors[propKey]}
+          />
+        )}
+        {isMultiConfigProperty(property) && (
+          <MultiComponentField
+            sdk={props.sdk}
+            propKey={propKey}
+            options={[property.related_to]}
+            presets={property.presets}
+            schemas={props.schemas}
+            hydratedEntries={props.hydratedEntries}
+            loadingEntries={props.loadingEntries}
+            onChange={(value, timeout, singletonErrors) =>
+              updatePropertyValue(propKey, value, timeout, singletonErrors)
+            }
+            replaceHydratedEntry={props.replaceHydratedEntry}
+            useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
+            value={value}
+            errors={errors[propKey]}
+          />
+        )}
+        <HelpText className="component-editor__hint f36-margin-top--xs">
+          {property.description || 'help text'}
+        </HelpText>
+      </div>
+    );
+  };
+
+  const styleProperties = properties => {
+    return Object.keys(properties).reduce((accumulator, propKey) => {
+      if (props.schema.properties[propKey].editor_category === c.STYLE_CATEGORY) {
+        accumulator[propKey] = properties[propKey];
+      }
+
+      return accumulator;
+    }, {});
+  };
+
+  const advancedProperties = properties => {
+    return Object.keys(properties).reduce((accumulator, propKey) => {
+      if (props.schema.properties[propKey].editor_category === c.ADVANCED_CATEGORY) {
+        accumulator[propKey] = properties[propKey];
+      }
+
+      return accumulator;
+    }, {});
+  };
+
+  const defaultProperties = properties => {
+    return Object.keys(properties).reduce((accumulator, propKey) => {
+      if (
+        props.schema.properties[propKey].editor_category !== c.STYLE_CATEGORY &&
+        props.schema.properties[propKey].editor_category !== c.ADVANCED_CATEGORY
+      ) {
+        accumulator[propKey] = properties[propKey];
+      }
+
+      return accumulator;
+    }, {});
+  };
+
   return (
     <div className="component-editor">
       <div className="f36-margin-bottom--l">
@@ -237,229 +483,26 @@ const ComponentEditor = props => {
       </div>
 
       <div className="component-editor__fields">
-        {Object.keys(props.schema.properties)
-          .filter(propKey => !props.schema.properties[propKey].hidden)
-          .map(propKey => {
-            const property = props.schema.properties[propKey];
-            const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
-            const id = `editor-field--${propKey}`;
+        {/* style properties */}
 
-            return (
-              <div
-                id={id}
-                key={`component-editor-field--${propKey}`}
-                data-test-id={id}
-                className={`component-editor__field f36-margin-bottom--l ${
-                  errors[propKey] && errors[propKey].length ? 'with-error' : ''
-                }`}>
-                <div className="component-editor__field-heading">
-                  <FormLabel
-                    className="component-editor__field-label"
-                    required={property.required}
-                    htmlFor={id}>
-                    {parse_underscore(propKey) || '<label missing>'}
-                  </FormLabel>
-                  {!property.required && property.type === c.TEXT_PROPERTY && (
-                    <TextLink
-                      className="f36-margin-left--xs"
-                      onClick={() => updatePropertyValue(propKey, null, false)}>
-                      Clear
-                    </TextLink>
-                  )}
-                </div>
-                {isShortTextField(property) && (
-                  <ShortTextField
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    errors={errors[propKey]}
-                    type="text"
-                    value={value}
-                  />
-                )}
-                {isNumberField(property) && (
-                  <ShortTextField
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    errors={errors[propKey]}
-                    type="number"
-                    value={value}
-                  />
-                )}
-                {isLongTextField(property) && (
-                  <LongTextField
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    value={value}
-                  />
-                )}
-                {isMarkdownTextField(property) && (
-                  <MarkdownField
-                    propKey={propKey}
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    value={value}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isBoolProperty(property) && (
-                  <DropdownField
-                    propKey={propKey}
-                    required={property.required}
-                    options={property.options}
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    value={value}
-                    withCustomText={false}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isDropdownTextField(property) && (
-                  <DropdownField
-                    propKey={propKey}
-                    required={property.required}
-                    options={property.options}
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    value={value}
-                    withCustomText={false}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isDropdownWithCustomField(property) && (
-                  <DropdownField
-                    propKey={propKey}
-                    required={property.required}
-                    options={property.options}
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    value={value}
-                    withCustomText={true}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isRadioTextField(property) && (
-                  <RadioGroup
-                    propKey={propKey}
-                    options={property.options}
-                    onChange={value => updatePropertyValue(propKey, value, true)}
-                    value={value}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {/* in some cases, a field can link assets OR entries */}
-                {(isEntryLink(property) || isAssetLink(property)) &&
-                  renderLinkableField(propKey, property, value)}
-                {isMultiLinkProperty(property) && (
-                  <MultiLinkField
-                    sdk={props.sdk}
-                    propKey={propKey}
-                    contentTypes={property.content_types}
-                    entries={(value || []).map(entry => {
-                      return fetchHydratedEntry(entry);
-                    })}
-                    onChange={value => updatePropertyValue(propKey, value, false)}
-                    replaceHydratedEntry={props.replaceHydratedEntry}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isComponentProperty(property) && (
-                  <ComponentField
-                    sdk={props.sdk}
-                    schemas={props.schemas}
-                    propKey={propKey}
-                    hydratedAssets={props.hydratedAssets}
-                    hydratedEntries={props.hydratedEntries}
-                    replaceHydratedEntry={props.replaceHydratedEntry}
-                    replaceHydratedAsset={props.replaceHydratedAsset}
-                    property={property}
-                    entry={fetchHydratedEntry(value)}
-                    internalMappingInstance={
-                      isComponentPropertySingleton(value)
-                        ? new InternalMapping(
-                            value.componentId,
-                            value.properties,
-                            props.schema,
-                            false
-                          )
-                        : null
-                    }
-                    onChange={(value, timeout = false, singletonErrors) =>
-                      updatePropertyValue(propKey, value, timeout, singletonErrors)
-                    }
-                    isLoading={!!value && !fetchHydratedEntry(value)}
-                    useConfigObjects={property.type === c.CONFIG_PROPERTY}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isMultiComponentProperty(property) && (
-                  <MultiComponentField
-                    sdk={props.sdk}
-                    propKey={propKey}
-                    options={property.options}
-                    presets={property.presets}
-                    hydratedEntries={props.hydratedEntries}
-                    schemas={props.schemas}
-                    loadingEntries={props.loadingEntries}
-                    onChange={(value, timeout, singletonErrors) =>
-                      updatePropertyValue(propKey, value, timeout, singletonErrors)
-                    }
-                    replaceHydratedEntry={props.replaceHydratedEntry}
-                    replaceHydratedAsset={props.replaceHydratedAsset}
-                    useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
-                    value={value}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isConfigProperty(property) && (
-                  <ComponentField
-                    sdk={props.sdk}
-                    schemas={props.schemas}
-                    propKey={propKey}
-                    hydratedAssets={props.hydratedAssets}
-                    hydratedEntries={props.hydratedEntries}
-                    replaceHydratedEntry={props.replaceHydratedEntry}
-                    replaceHydratedAsset={props.replaceHydratedAsset}
-                    property={property}
-                    entry={fetchHydratedEntry(value)}
-                    internalMappingInstance={
-                      isComponentPropertySingleton(value)
-                        ? new InternalMapping(
-                            value.componentId,
-                            value.properties,
-                            props.schema,
-                            true
-                          )
-                        : null
-                    }
-                    onChange={(value, timeout = false, singletonErrors) =>
-                      updatePropertyValue(propKey, value, timeout, singletonErrors)
-                    }
-                    isLoading={
-                      fetchHydratedEntry(value)
-                        ? props.loadingEntries[(fetchHydratedEntry(value).sys || {}).id]
-                        : null
-                    }
-                    useConfigObjects={property.type === c.CONFIG_PROPERTY}
-                    errors={errors[propKey]}
-                  />
-                )}
-                {isMultiConfigProperty(property) && (
-                  <MultiComponentField
-                    sdk={props.sdk}
-                    propKey={propKey}
-                    options={[property.related_to]}
-                    presets={property.presets}
-                    schemas={props.schemas}
-                    hydratedEntries={props.hydratedEntries}
-                    loadingEntries={props.loadingEntries}
-                    onChange={(value, timeout, singletonErrors) =>
-                      updatePropertyValue(propKey, value, timeout, singletonErrors)
-                    }
-                    replaceHydratedEntry={props.replaceHydratedEntry}
-                    useConfigObjects={property.type === c.MULTI_CONFIG_PROPERTY}
-                    value={value}
-                    errors={errors[propKey]}
-                  />
-                )}
-                <HelpText className="component-editor__hint f36-margin-top--xs">
-                  {property.description || 'help text'}
-                </HelpText>
-              </div>
-            );
-          })}
+        <EditorSections
+          selectedTab="DEFAULT"
+          styleFields={Object.keys(styleProperties(props.schema.properties))
+            .filter(propKey => !props.schema.properties[propKey].hidden)
+            .map(propKey => {
+              return renderPropertyField(propKey);
+            })}
+          advancedFields={Object.keys(advancedProperties(props.schema.properties))
+            .filter(propKey => !props.schema.properties[propKey].hidden)
+            .map(propKey => {
+              return renderPropertyField(propKey);
+            })}
+          defaultFields={Object.keys(defaultProperties(props.schema.properties))
+            .filter(propKey => !props.schema.properties[propKey].hidden)
+            .map(propKey => {
+              return renderPropertyField(propKey);
+            })}
+        />
       </div>
     </div>
   );

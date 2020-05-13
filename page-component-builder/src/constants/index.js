@@ -12,6 +12,11 @@ export const PATTERN_ROLE = 'pattern';
 export const COMPONENT_ROLE = 'component';
 export const SINGLETON_ROLE = 'singleton';
 
+// PROPERTY CATEGORIES
+
+export const STYLE_CATEGORY = 'style';
+export const ADVANCED_CATEGORY = 'advanced';
+
 // PROPERTY TYPES
 export const LINK_PROPERTY = 'link';
 export const MULTI_LINK_PROPERTY = 'multi-link';

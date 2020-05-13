@@ -1,0 +1,7 @@
+.editor-section {
+  [aria-disabled='true'] {
+    color: lightgray;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
