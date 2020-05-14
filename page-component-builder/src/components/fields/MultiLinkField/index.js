@@ -32,22 +32,45 @@ export const MultiLinkField = props => {
 
   const onDragEnd = e => {
     e.preventDefault();
+
+    // flip by index
+    const links = orderedLinks();
+    props.onChange(links.map(entry => constructLink(entry)));
+    resetDrag();
+  };
+
+  const orderedLinks = () => {
     // checks if a dragged and a draggedOver exist and ensures dragged isn't same as draggedOver
     if (
       (dragged !== 0 && !dragged) ||
       (draggedOver !== 0 && !draggedOver) ||
       dragged === draggedOver
     ) {
-      return resetDrag();
+      resetDrag();
+      return props.entries;
     }
 
-    // flip by index
+    // sorts links
     const links = props.entries;
     const draggedEntry = props.entries[dragged];
-    links[dragged] = links[draggedOver];
+    // links[dragged] = links[draggedOver];
+
+    if (dragged > draggedOver) {
+      // dragged higher in the list, pushes things down
+
+      for (let i = dragged; i > draggedOver; i--) {
+        links[i] = links[i - 1];
+      }
+    } else if (dragged < draggedOver) {
+      // dragged lower in the list, pulls things up
+
+      for (let i = dragged; i < draggedOver; i++) {
+        links[i] = links[i + 1];
+      }
+    }
     links[draggedOver] = draggedEntry;
-    props.onChange(links.map(entry => constructLink(entry)));
-    resetDrag();
+
+    return links;
   };
 
   const resetDrag = () => {
@@ -104,20 +127,25 @@ export const MultiLinkField = props => {
     }
   };
 
+  const draggedOverClass = index => {
+    if (draggedOver < dragged && index >= draggedOver) return 'dragged-over--down';
+    if (draggedOver > dragged && index <= draggedOver) return 'dragged-over--up';
+  };
+
   const renderEntryCards = () => {
     return props.entries.map((entry, index) => {
       return (
         <HydratedEntryCard
           key={`${props.propKey}-entries--${index}`}
           index={index}
-          className="f36-margin-bottom--xs"
+          className={`f36-margin-bottom--xs ${draggedOverClass(index)}`}
           contentType={getContentType(entry)}
           isLoading={!(entry && entry.fields)}
           onClick={() => handleEditClick(entry)}
           handleEditClick={() => handleEditClick(entry)}
           handleRemoveClick={() => handleRemoveClick(entry)}
           draggable={true}
-          isDragActive={index === dragged || index === draggedOver}
+          isDragActive={index === dragged}
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDragEnd={onDragEnd}

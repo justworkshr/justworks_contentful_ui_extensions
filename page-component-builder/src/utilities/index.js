@@ -105,7 +105,7 @@ export const newInternalMappingFromSchema = ({
     let value;
 
     if (presetObject) {
-      value = presetObject.properties[propKey];
+      value = presetObject.properties[propKey] || property.default;
     } else {
       value = property.default;
     }

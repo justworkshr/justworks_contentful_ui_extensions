@@ -244,7 +244,7 @@ const ComponentEditor = props => {
         key={`component-editor-field--${propKey}`}
         data-test-id={id}
         className={`component-editor__field f36-margin-bottom--l ${
-          openFields.includes(propKey) ? 'field-open' : ''
+          openFields.includes(propKey) ? 'field-open f36-background-color--element-lightest' : ''
         } ${errors[propKey] && errors[propKey].length ? 'with-error' : ''}`}>
         <div className="component-editor__field-heading">
           <FormLabel

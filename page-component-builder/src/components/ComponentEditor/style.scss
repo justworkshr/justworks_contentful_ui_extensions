@@ -15,6 +15,9 @@
 
   .field-open {
     border-left-color: #4a90e2; // #0c141c; // #192532 // #263545
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-right: 8px;
   }
 
   & &__field-label {
@@ -25,5 +28,24 @@
 
   &__hint {
     font-style: italic;
+  }
+
+  [class*='EntryCard__EntryCard--drag-active'] {
+    background-color: white;
+    // opacity: 0;
+  }
+
+  .dragged-over--up,
+  .dragged-over--down {
+    // visibility: hidden;
+    transition: transform 0.3s ease-in;
+  }
+
+  .dragged-over--up {
+    transform: translateY(-60px);
+  }
+
+  .dragged-over--down {
+    transform: translateY(60px);
   }
 }

@@ -33,16 +33,23 @@ export const MultiComponentField = props => {
   const onDragEnd = e => {
     e.preventDefault();
 
+    const links = orderedLinks();
+    props.onChange(parseEntries(links));
+
+    resetDrag();
+  };
+
+  const orderedLinks = () => {
     // checks if a dragged and a draggedOver exist and ensures dragged isn't same as draggedOver
     if (
       (dragged !== 0 && !dragged) ||
       (draggedOver !== 0 && !draggedOver) ||
       dragged === draggedOver
     ) {
-      return resetDrag();
+      resetDrag();
+      return props.value;
     }
-
-    // flip by index
+    // sorts links
     const links = props.value;
     const draggedEntry = props.value[dragged];
     // links[dragged] = links[draggedOver];
@@ -62,10 +69,9 @@ export const MultiComponentField = props => {
     }
     links[draggedOver] = draggedEntry;
 
-    props.onChange(parseEntries(links));
-
-    resetDrag();
+    return links;
   };
+
   const resetDrag = () => {
     setDragged(undefined);
     setDraggedOver(undefined);
@@ -199,6 +205,11 @@ export const MultiComponentField = props => {
     return linkOrSingleton.componentId;
   };
 
+  const draggedOverClass = index => {
+    if (draggedOver < dragged && index >= draggedOver) return 'dragged-over--down';
+    if (draggedOver > dragged && index <= draggedOver) return 'dragged-over--up';
+  };
+
   const renderEntryCards = () => {
     return props.value
       .filter(e => e)
@@ -216,17 +227,17 @@ export const MultiComponentField = props => {
             <HydratedEntryCard
               key={`${props.propKey}-entries--${index}`}
               index={index}
-              className="f36-margin-bottom--xs"
+              className={`f36-margin-bottom--xs ${draggedOverClass(index)}`}
               contentType={`${
                 entry ? (entry.fields.componentId || {})['en-US'] : c.CONTENT_TYPE_VIEW_COMPONENT
               }`}
-              description={schema ? schema.meta.description : null}
+              // description={schema ? schema.meta.description : null}
               isLoading={props.loadingEntries[linkOrSingleton.sys.id]}
               onClick={() => handleEditClick(entry)}
               handleEditClick={() => handleEditClick(entry)}
               handleRemoveClick={() => handleRemoveClick(index)}
               draggable={true}
-              isDragActive={index === dragged || index === draggedOver}
+              isDragActive={index === dragged}
               onDragStart={onDragStart}
               onDragOver={onDragOver}
               onDragEnd={onDragEnd}
@@ -240,6 +251,7 @@ export const MultiComponentField = props => {
           return (
             <SingletonField
               key={`${props.propKey}-entries--${index}`}
+              className={`${draggedOverClass(index)}`}
               sdk={props.sdk}
               schemas={props.schemas}
               onChange={(value, timeout, errors) =>
@@ -260,7 +272,7 @@ export const MultiComponentField = props => {
               schema={schema}
               handleRemoveClick={() => handleRemoveClick(index)}
               draggable={true}
-              isDragActive={index === dragged || index === draggedOver}
+              isDragActive={index === dragged}
               onDragStart={onDragStart}
               onDragOver={onDragOver}
               onDragEnd={onDragEnd}

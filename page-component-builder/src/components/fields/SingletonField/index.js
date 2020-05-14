@@ -4,6 +4,8 @@ import { EntryCard } from '@contentful/forma-36-react-components';
 import ComponentEditor from '../../ComponentEditor';
 import ActionDropdown from '../../elements/ActionDropdown';
 
+import './style.scss';
+
 const SingletonField = props => {
   const [singletonCardOpen, toggleSingletonCard] = useState(false);
 
@@ -32,13 +34,13 @@ const SingletonField = props => {
           props.indent ? 'f36-padding-left--xl' : ''
         }`}>
         <EntryCard
-          className="f36-margin-top--s f36-margin-bottom--m"
+          className={`f36-margin-top--s f36-margin-bottom--m ${props.className}`}
           testId="singleton-entry-card"
           loading={false}
           title={getTitle()}
           contentType={contentTypeLabel('Singleton')}
-          description={props.schema.meta.description}
-          size="default"
+          // description={props.schema.meta.description}
+          size="sm"
           statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
           onClick={() => {
             if (singletonCardOpen) {
@@ -80,6 +82,7 @@ const SingletonField = props => {
 };
 
 SingletonField.propTypes = {
+  className: PropTypes.string,
   sdk: PropTypes.object,
   schema: PropTypes.object,
   schemas: PropTypes.array,
