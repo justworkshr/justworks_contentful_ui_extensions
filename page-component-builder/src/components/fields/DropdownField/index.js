@@ -37,7 +37,7 @@ const DropdownField = props => {
       options.unshift('');
     }
 
-    return options.sort();
+    return options; // sort in backend, not here.
   };
 
   const id = `${props.propKey}--select`;

@@ -216,13 +216,10 @@ export const MultiComponentField = props => {
       .map((linkOrSingleton, index) => {
         if (linkOrSingleton.sys) {
           // linked entry
-          let schema;
           const entry = props.hydratedEntries.find(
             e => ((e && e.sys) || {}).id === linkOrSingleton.sys.id
           );
-          if (entry) {
-            schema = props.schemas.find(s => s.meta.id === entry.fields.componentId['en-US']);
-          }
+
           return (
             <HydratedEntryCard
               key={`${props.propKey}-entries--${index}`}
