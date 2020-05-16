@@ -19,6 +19,7 @@ import DropdownField from '../fields/DropdownField';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
+import SubmitActionField from '../fields/SubmitActionField';
 
 import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
@@ -132,6 +133,10 @@ const ComponentEditor = props => {
     return property.type === c.MULTI_CONFIG_PROPERTY && !!property.related_to;
   };
 
+  const isSubmitActionProperty = property => {
+    return property.type === c.SUBMIT_ACTION_PROPERTY;
+  };
+
   const updatePropertyValue = (propKey, value, timeout = true, singletonErrors = {}) => {
     props.internalMappingInstance.updateValue(propKey, value);
     const newErrors = props.internalMappingInstance.errors;
@@ -221,7 +226,6 @@ const ComponentEditor = props => {
   };
 
   const onOpen = propKey => {
-    console.log(propKey);
     const arr = [...openFields];
     arr.push(propKey);
     setOpenFields(arr);
@@ -373,6 +377,7 @@ const ComponentEditor = props => {
             errors={errors[propKey]}
             onOpen={() => onOpen(propKey)}
             onClose={() => onClose(propKey)}
+            tokens={props.tokens}
           />
         )}
         {isMultiComponentProperty(property) && (
@@ -394,6 +399,7 @@ const ComponentEditor = props => {
             errors={errors[propKey]}
             onOpen={() => onOpen(propKey)}
             onClose={() => onClose(propKey)}
+            tokens={props.tokens}
           />
         )}
         {isConfigProperty(property) && (
@@ -424,6 +430,7 @@ const ComponentEditor = props => {
             errors={errors[propKey]}
             onOpen={() => onOpen(propKey)}
             onClose={() => onClose(propKey)}
+            tokens={props.tokens}
           />
         )}
         {isMultiConfigProperty(property) && (
@@ -444,6 +451,14 @@ const ComponentEditor = props => {
             errors={errors[propKey]}
             onOpen={() => onOpen(propKey)}
             onClose={() => onClose(propKey)}
+            tokens={props.tokens}
+          />
+        )}
+        {isSubmitActionProperty(property) && (
+          <SubmitActionField
+            onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
+            tokens={props.tokens}
+            value={value ? JSON.parse(value) : []}
           />
         )}
         <HelpText className="component-editor__hint f36-margin-top--xs">
@@ -541,7 +556,8 @@ ComponentEditor.propTypes = {
   replaceHydratedEntry: PropTypes.func,
   replaceHydratedAsset: PropTypes.func,
   schema: PropTypes.object, // schema of current component
-  title: PropTypes.string
+  title: PropTypes.string,
+  tokens: PropTypes.object
 };
 ComponentEditor.defaultProps = {
   hydratedAssets: [],
@@ -552,7 +568,8 @@ ComponentEditor.defaultProps = {
   schema: {
     properties: {},
     meta: {}
-  }
+  },
+  tokens: {}
 };
 
 export default ComponentEditor;

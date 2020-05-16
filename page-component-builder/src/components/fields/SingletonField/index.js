@@ -74,6 +74,7 @@ const SingletonField = props => {
             internalMappingInstance={props.internalMappingInstance}
             schema={props.schema}
             isOpen={singletonCardOpen}
+            tokens={props.tokens}
           />
         )}
       </div>
@@ -101,8 +102,12 @@ SingletonField.propTypes = {
   index: PropTypes.number,
   indent: PropTypes.bool,
   onOpen: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  tokens: PropTypes.object
 };
-SingletonField.defaultProps = {};
+SingletonField.defaultProps = {
+  tokens: {},
+  schemas: []
+};
 
 export default SingletonField;

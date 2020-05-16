@@ -1,5 +1,26 @@
 export const mockSchemas = {
   data: {
+    tokens: {
+      submit_events: ['grant_resource_gate_cookie'],
+      input_names: [
+        '{{ blog_default_hubspot_blog_subscription }}',
+        '{{ company }}',
+        '{{ current payroll provider }}',
+        '{{ email }}',
+        '{{ email_the_article_cta }}',
+        '{{ first name }}',
+        '{{ last name }}',
+        '{{ learn about justworks }}',
+        '{{ lifecycle stage }}',
+        '{{ most_recent_guide_download_name }}',
+        '{{ most_recent_guide_download_url }}',
+        '{{ number of employees }}',
+        '{{ page url }}',
+        '{{ phone }}',
+        '{{ wants healthcare }}'
+      ],
+      submit_action_types: ['redirect', 'event']
+    },
     tags: {
       component: [
         'uncategorized',
@@ -453,6 +474,14 @@ export const mockSchemas = {
             editor_category: 'advanced',
             hidden: false
           },
+          submit_actions: {
+            editor_category: 'advanced',
+            type: 'submit-action',
+            default: '[]',
+            required: false,
+            description:
+              'Conditional actions (such as redirects, special events) to perform after the user submits the form.'
+          },
           top_text: {
             type: 'text',
             required: false,
@@ -812,7 +841,7 @@ export const mockSchemas = {
           description:
             'A page content section for resources with an opinionated layout. The "large-single" preset displays a maximum of 4 items and the "inline-all" displays a maximum of 6.',
           editor_role: 'component',
-          tags: ['collection']
+          tags: ['collection', 'resource-wrapper', 'blog-post', 'video', 'e-book']
         },
         properties: {
           classname: {
@@ -864,7 +893,7 @@ export const mockSchemas = {
             required: false,
             default: [],
             asset_types: [],
-            content_types: ['resourceWrapper'],
+            content_types: ['resourceWrapper', 'blogPost', 'video', '1pI1DjDAXusMmIIU2u8UwI'],
             description:
               'The resource entries which will supply the cards. Please ensure each resource has an entry with a meta entry attached.',
             related_to: null,
@@ -1359,10 +1388,10 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/components%2Fconfigurable_resource_card',
           title: 'Configurable Resource Card',
           description:
-            'A module which transforms contentful entries into a configurable card component.',
+            'A module which transforms contentful resource wrappers OR entries into a configurable card component.',
           editor_role: 'component',
           extension_of: 'components/configurable_card',
-          tags: ['card']
+          tags: ['card', 'resource-wrapper', 'blog-post', 'video', 'e-book']
         },
         properties: {
           classname: {
@@ -1459,7 +1488,7 @@ export const mockSchemas = {
             type: 'link',
             required: false,
             asset_types: [],
-            content_types: ['resourceWrapper'],
+            content_types: ['resourceWrapper', 'blogPost', 'video', '1pI1DjDAXusMmIIU2u8UwI'],
             description: 'Please ensure the resource is linked to an entry with a meta object.',
             related_to: null,
             editor_category: null,
@@ -3167,6 +3196,94 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'components/labeled_checkbox',
+          styleguide_path: '/styleguide/components%2Flabeled_checkbox',
+          title: 'Labeled Checkbox Component',
+          description: 'A checkbox with a label.',
+          editor_role: 'component',
+          tags: ['form'],
+          extension_of: null,
+          snapshot: false
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsLabeledCheckboxComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: true
+          },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: 'md',
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          required: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether this input should be marked as required or not.',
+            related_to: 'elements/form_label',
+            editor_category: 'advanced',
+            hidden: false
+          },
+          input_id: {
+            type: 'text',
+            required: false,
+            default: 'be83824e-a8e9-43de-a3d0-c93b0fffa630',
+            options: null,
+            description: 'Randomly generated uuid for a form input to associate it with a label.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          label_text: {
+            type: 'text',
+            required: false,
+            default: 'Checkbox Label',
+            options: null,
+            description: 'The label to the right of the checkbox.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
+          },
+          input_config: {
+            type: 'config',
+            required: false,
+            default: {},
+            description: 'The input configuration for this styled component.',
+            related_to: 'elements/text_input',
+            editor_category: null,
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'components/labeled_select_input',
           styleguide_path: '/styleguide/components%2Flabeled_select_input',
           title: 'Labeled Select Dropdown',
@@ -3200,7 +3317,7 @@ export const mockSchemas = {
           stack_size: {
             type: 'text',
             required: false,
-            default: null,
+            default: 'md',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: 'Additional spacing beneath the component.',
             related_to: null,
@@ -3218,6 +3335,17 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: 'style',
             hidden: false
+          },
+          input_id: {
+            type: 'text',
+            required: false,
+            default: '7d46f1d7-1a23-4527-b9d6-4aa095801cf3',
+            options: null,
+            description: 'Randomly generated uuid for a form input to associate it with a label.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
           },
           required: {
             type: 'bool',
@@ -3286,7 +3414,7 @@ export const mockSchemas = {
           stack_size: {
             type: 'text',
             required: false,
-            default: null,
+            default: 'md',
             options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
             description: 'Additional spacing beneath the component.',
             related_to: null,
@@ -3314,6 +3442,27 @@ export const mockSchemas = {
               'Whether or not to style this input as if connected to something (probably a button) to the right.',
             related_to: null,
             editor_category: 'style',
+            hidden: false
+          },
+          input_id: {
+            type: 'text',
+            required: false,
+            default: '187c233f-7d66-4085-8598-8dd9bbc58019',
+            options: null,
+            description: 'Randomly generated uuid for a form input to associate it with a label.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          required: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether this input should be marked as required or not.',
+            related_to: 'elements/form_label',
+            editor_category: 'advanced',
             hidden: false
           },
           label_text: {
@@ -4356,7 +4505,7 @@ export const mockSchemas = {
             required: true,
             default: 'default',
             options: ['default', 'sm'],
-            description: null,
+            description: 'The size of the buttons and inputs (default / small)',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -4373,6 +4522,14 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: 'advanced',
             hidden: false
+          },
+          submit_actions: {
+            editor_category: 'advanced',
+            type: 'submit-action',
+            default: '[]',
+            required: false,
+            description:
+              'Conditional actions (such as redirects, special events) to perform after the user submits the form.'
           },
           input_component: {
             type: 'component',
@@ -4589,6 +4746,17 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: true
+          },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: 'md',
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
           },
           left_input: {
             type: 'component',
@@ -5210,9 +5378,8 @@ export const mockSchemas = {
             'form_endpoint',
             'pardot_endpoint',
             'form_name',
-            'submit_actions',
-            'redirect_url',
-            'open_new_tab'
+            'open_new_tab',
+            'redirect_url'
           ]
         },
         properties: {
@@ -5238,83 +5405,6 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
-          form_name: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['Blog Resource Download', 'Get The Guide', 'Newsletter Subscribe', 'test'],
-            description: 'The name to use for tracking subissions in google analytics.',
-            related_to: null,
-            editor_type: 'dropdown-with-custom-editor',
-            editor_category: 'advanced',
-            hidden: false
-          },
-          form_location: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['footer', 'hero', 'page body'],
-            description:
-              'Put a specific page location (footer, body, hero, etc) here for Google Analytics tracking dimensions.',
-            related_to: null,
-            editor_type: 'dropdown-with-custom-editor',
-            editor_category: 'advanced',
-            hidden: false
-          },
-          form_endpoint: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description:
-              'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: 'advanced',
-            hidden: false
-          },
-          pardot_endpoint: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: [
-              '{{ Email The Article }}',
-              '{{ Get Started }}',
-              '{{ Get The Guide }}',
-              '{{ Lead Form }}',
-              '{{ Newsletter Subscribe }}',
-              '{{ Resource Download }}'
-            ],
-            description:
-              'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
-            related_to: null,
-            editor_type: 'dropdown-with-custom-editor',
-            editor_category: 'advanced',
-            hidden: false
-          },
-          submit_actions: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['grant_resource_gate_cookie'],
-            description: 'Please select if this is a specific lead form.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: 'advanced',
-            hidden: true
-          },
-          redirect_url: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: null,
-            description:
-              'The link (such as a thank-you page) to redirect after form submission. Takes precedence over post-submit component.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: 'advanced',
-            hidden: false
-          },
           open_new_tab: {
             type: 'bool',
             required: true,
@@ -5336,6 +5426,14 @@ export const mockSchemas = {
             editor_category: 'advanced',
             hidden: true
           },
+          submit_actions: {
+            editor_category: 'advanced',
+            type: 'submit-action',
+            default: '[]',
+            required: false,
+            description:
+              'Conditional actions (such as redirects, special events) to perform after the user submits the form.'
+          },
           post_submit_component: {
             type: 'component',
             required: false,
@@ -5344,6 +5442,72 @@ export const mockSchemas = {
             description:
               'The component that should replace the form once a successful submission is made. Recommended if opening a redirect in a new tab or not providing any redirect.',
             related_to: null,
+            editor_category: null,
+            hidden: false
+          },
+          form_name: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['Blog Resource Download', 'Get The Guide', 'Newsletter Subscribe', 'test'],
+            description: 'The name to use for tracking subissions in google analytics.',
+            related_to: null,
+            editor_type: 'dropdown-with-custom-editor',
+            editor_category: null,
+            hidden: false
+          },
+          form_location: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: ['footer', 'hero', 'page body'],
+            description:
+              'Put a specific page location (footer, body, hero, etc) here for Google Analytics tracking dimensions.',
+            related_to: null,
+            editor_type: 'dropdown-with-custom-editor',
+            editor_category: null,
+            hidden: false
+          },
+          form_endpoint: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
+          },
+          pardot_endpoint: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: [
+              '{{ Email The Article }}',
+              '{{ Get Started }}',
+              '{{ Get The Guide }}',
+              '{{ Lead Form }}',
+              '{{ Newsletter Subscribe }}',
+              '{{ Resource Download }}'
+            ],
+            description:
+              'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
+            related_to: null,
+            editor_type: 'dropdown-with-custom-editor',
+            editor_category: null,
+            hidden: false
+          },
+          redirect_url: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              'The link (such as a thank-you page) to redirect after form submission. Add the token {{ form_fields }} to the end of the url to include the form fields in the redirect. (ex: "/thank-you {{ form_fields }}" will transform into /thank-you?email=..." ',
+            related_to: null,
+            editor_type: 'short-text-editor',
             editor_category: null,
             hidden: false
           }
@@ -5944,7 +6108,8 @@ export const mockSchemas = {
             required: false,
             default: '',
             options: null,
-            description: null,
+            description:
+              'The Javascript class name of the react component. All react components should be located in frontend/javascripts/components/...',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -6003,6 +6168,17 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: 'style',
             hidden: false
+          },
+          input_id: {
+            type: 'text',
+            required: false,
+            default: '41ceeb4f-09cd-40a0-8db5-e48b36cb2b17',
+            options: null,
+            description: 'Randomly generated uuid for a form input to associate it with a label.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
           },
           select_classname: {
             type: 'text',
@@ -6183,7 +6359,7 @@ export const mockSchemas = {
           editor_role: 'singleton',
           title: 'Text Input',
           tags: ['form'],
-          config_template: ['required', 'type', 'validation_type', 'name', 'default_value']
+          config_template: ['type', 'validation_type', 'name', 'default_value']
         },
         properties: {
           classname: {
@@ -6230,6 +6406,17 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          input_id: {
+            type: 'text',
+            required: false,
+            default: 'd1b88e66-a543-431a-9901-e19c579bf539',
+            options: null,
+            description: 'Randomly generated uuid for a form input to associate it with a label.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
           required: {
             type: 'bool',
             required: true,
@@ -6244,7 +6431,7 @@ export const mockSchemas = {
             type: 'text',
             required: true,
             default: 'text',
-            options: ['text', 'date', 'tel', 'email', 'password', 'hidden'],
+            options: ['text', 'date', 'tel', 'email', 'password', 'checkbox', 'hidden'],
             description: 'Text input type.',
             related_to: null,
             editor_type: 'short-text-editor',
@@ -6889,7 +7076,9 @@ export const mockSchemas = {
           description:
             'A pattern containing 2 components side by side. If an image is on the right side, it wraps to the top on mobile.',
           editor_role: 'pattern',
-          tags: ['modular', 'image', 'video', 'text', 'form']
+          tags: ['modular', 'image', 'video', 'text', 'form'],
+          extension_of: null,
+          snapshot: false
         },
         properties: {
           classname: {
@@ -8105,6 +8294,87 @@ export const mockSchemas = {
       },
       {
         meta: {
+          id: 'patterns/variant_container',
+          styleguide_path: '/styleguide/patterns%2Fvariant_container',
+          title: 'Experiment Test Pattern',
+          description:
+            'A component for setting up a/b tests on a single specific pattern on a single page. Accepts condition checks for the justworks cookie, lead-storage, url params, or url hash.',
+          editor_role: 'pattern',
+          tags: ['uncategorized'],
+          extension_of: null,
+          snapshot: true
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'PatternsVariantContainerComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: true
+          },
+          a_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: [],
+            description:
+              'The default component which always renders unless B or C conditions are met.',
+            related_to: null,
+            editor_category: null,
+            hidden: false
+          },
+          b_condition: {
+            type: 'experiment-condition',
+            default: '{}',
+            required: false,
+            description: 'The conditions which result in the B component replacing A.'
+          },
+          b_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: [],
+            description: 'The component which replaces A when the B condition is true.',
+            related_to: null,
+            editor_category: null,
+            hidden: false
+          },
+          c_condition: {
+            type: 'experiment-condition',
+            default: '{}',
+            required: false,
+            description: 'The conditions which result in the C component replacing A.'
+          },
+          c_component: {
+            type: 'component',
+            required: false,
+            default: null,
+            options: [],
+            description:
+              'The component which replaces A when the C condition is true. If both B and C are true, B will render.',
+            related_to: null,
+            editor_category: null,
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
           id: 'patterns/video_theatre',
           styleguide_path: '/styleguide/patterns%2Fvideo_theatre',
           title: 'Video Theatre',
@@ -8388,12 +8658,21 @@ export const mockSchemas = {
             'form_endpoint',
             'pardot_endpoint',
             'form_name',
-            'submit_actions',
-            'redirect_url',
-            'open_new_tab'
+            'open_new_tab',
+            'redirect_url'
           ]
         },
         properties: {
+          open_new_tab: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description: 'Whether or not the redirect_url should open in a new tab.',
+            related_to: null,
+            editor_category: 'advanced',
+            hidden: false
+          },
           form_name: {
             type: 'text',
             required: false,
@@ -8402,7 +8681,7 @@ export const mockSchemas = {
             description: 'The name to use for tracking subissions in google analytics.',
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: 'advanced',
+            editor_category: null,
             hidden: false
           },
           form_endpoint: {
@@ -8414,7 +8693,7 @@ export const mockSchemas = {
               'The (non-pardot) URL endpoint for where form submission should go. If pardot_endpoint present, submits here first then to pardot.',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: 'advanced',
+            editor_category: null,
             hidden: false
           },
           pardot_endpoint: {
@@ -8433,19 +8712,8 @@ export const mockSchemas = {
               'The form handler url if this form submits to pardot. If form_endpoint present, submits here last.',
             related_to: null,
             editor_type: 'dropdown-with-custom-editor',
-            editor_category: 'advanced',
+            editor_category: null,
             hidden: false
-          },
-          submit_actions: {
-            type: 'text',
-            required: false,
-            default: '',
-            options: ['grant_resource_gate_cookie'],
-            description: 'Please select if this is a specific lead form.',
-            related_to: null,
-            editor_type: 'short-text-editor',
-            editor_category: 'advanced',
-            hidden: true
           },
           redirect_url: {
             type: 'text',
@@ -8453,20 +8721,10 @@ export const mockSchemas = {
             default: '',
             options: null,
             description:
-              'The link (such as a thank-you page) to redirect after form submission. Takes precedence over post-submit component.',
+              'The link (such as a thank-you page) to redirect after form submission. Add the token {{ form_fields }} to the end of the url to include the form fields in the redirect. (ex: "/thank-you {{ form_fields }}" will transform into /thank-you?email=..." ',
             related_to: null,
             editor_type: 'short-text-editor',
-            editor_category: 'advanced',
-            hidden: false
-          },
-          open_new_tab: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Whether or not the redirect_url should open in a new tab.',
-            related_to: null,
-            editor_category: 'advanced',
+            editor_category: null,
             hidden: false
           }
         }
@@ -8539,24 +8797,14 @@ export const mockSchemas = {
           editor_role: 'singleton',
           title: 'Text Input',
           tags: ['form'],
-          config_template: ['required', 'type', 'validation_type', 'name', 'default_value']
+          config_template: ['type', 'validation_type', 'name', 'default_value']
         },
         properties: {
-          required: {
-            type: 'bool',
-            required: true,
-            options: [true, false],
-            default: false,
-            description: 'Whether or not this input is required before submission.',
-            related_to: null,
-            editor_category: 'advanced',
-            hidden: false
-          },
           type: {
             type: 'text',
             required: true,
             default: 'text',
-            options: ['text', 'date', 'tel', 'email', 'password', 'hidden'],
+            options: ['text', 'date', 'tel', 'email', 'password', 'checkbox', 'hidden'],
             description: 'Text input type.',
             related_to: null,
             editor_type: 'short-text-editor',

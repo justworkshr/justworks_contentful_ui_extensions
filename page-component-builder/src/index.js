@@ -401,7 +401,7 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field d-none">
+        <div className="component-editor__field d-">
           <FormLabel htmlFor="field-internalMapping">Internal Mapping</FormLabel>
           <Textarea
             id="field-internalMapping"
@@ -424,6 +424,7 @@ export class PageComponentBuilder extends React.Component {
         <ComponentEditor
           sdk={this.props.sdk}
           schemas={this.state.schemaData.components}
+          tokens={this.state.schemaData.tokens}
           updateInternalMapping={this.updateInternalMapping}
           hydratedAssets={this.state.hydratedAssets}
           hydratedEntries={this.state.hydratedEntries}

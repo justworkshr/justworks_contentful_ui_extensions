@@ -158,6 +158,7 @@ const ComponentField = props => {
           indent={false}
           onOpen={props.onOpen}
           onClose={props.onClose}
+          tokens={props.tokens}
         />
       );
     } else {
@@ -220,7 +221,8 @@ ComponentField.propTypes = {
   useConfigObjects: PropTypes.bool,
   propKey: PropTypes.string,
   onOpen: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  tokens: PropTypes.object
 };
 ComponentField.defaultProps = {
   errors: [],
@@ -231,7 +233,8 @@ ComponentField.defaultProps = {
   entry: {},
   internalMappingInstance: null,
   sdk: {},
-  useConfigObjects: false
+  useConfigObjects: false,
+  tokens: {}
 };
 
 export default ComponentField;

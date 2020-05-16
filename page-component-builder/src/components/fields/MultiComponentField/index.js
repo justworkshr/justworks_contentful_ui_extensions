@@ -277,6 +277,7 @@ export const MultiComponentField = props => {
               indent={false}
               onOpen={props.onOpen}
               onClose={props.onClose}
+              tokens={props.tokens}
             />
           );
         }
@@ -338,7 +339,8 @@ MultiComponentField.propTypes = {
   useConfigObjects: PropTypes.bool,
   value: PropTypes.array,
   onOpen: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  tokens: PropTypes.object
 };
 
 MultiComponentField.defaultProps = {
@@ -349,7 +351,8 @@ MultiComponentField.defaultProps = {
   schemas: [],
   useConfigObjects: false,
   loadingEntries: {},
-  value: []
+  value: [],
+  tokens: {}
 };
 
 export default MultiComponentField;

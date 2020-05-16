@@ -48,4 +48,41 @@
   .dragged-over--down {
     transform: translateY(60px);
   }
+
+  // logic
+  .logic-editor__card {
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .logic-editor__clear {
+    position: absolute;
+    top: 10px;
+    right: -30px;
+  }
+
+  .logic-editor__open,
+  .logic-editor__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .logic-editor__clear,
+  .logic-editor__close,
+  .logic-editor__open {
+    cursor: pointer;
+  }
+
+  .logic-editor__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .logic-editor__field {
+    display: inline-block;
+    min-width: 200px;
+    max-width: 200px;
+    margin-right: 10px;
+  }
 }

@@ -42,12 +42,7 @@ const DropdownField = props => {
 
   const id = `${props.propKey}--select`;
   return (
-    <FieldGroup className="select-field">
-      {props.withCustomText && (
-        <TextLink onClick={() => toggleText(!useCustomText)}>
-          {useCustomText ? 'Use dropdown selection' : 'Enter custom text'}
-        </TextLink>
-      )}
+    <div className="select-field">
       {useCustomText && (
         <ShortFieldText onChange={value => props.onChange(value)} value={props.value} />
       )}
@@ -67,8 +62,13 @@ const DropdownField = props => {
           })}
         </Select>
       )}
+      {props.withCustomText && (
+        <TextLink onClick={() => toggleText(!useCustomText)}>
+          {useCustomText ? 'Use dropdown selection' : 'Enter custom text'}
+        </TextLink>
+      )}
       <ErrorList errors={props.errors} />
-    </FieldGroup>
+    </div>
   );
 };
 
