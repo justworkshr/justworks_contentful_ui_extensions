@@ -8,6 +8,8 @@ import {
   DropdownListItem
 } from '@contentful/forma-36-react-components';
 
+import { getDropdownOptions } from '../../utilities';
+
 class DropdownLink extends React.Component {
   constructor(props) {
     super(props);
@@ -63,7 +65,7 @@ class DropdownLink extends React.Component {
           isOpen={this.state.dropdownOpen}>
           <DropdownList>
             <DropdownListItem isTitle>Options</DropdownListItem>
-            {this.props.options.map((option, index) => {
+            {getDropdownOptions(this.props.options, this.props.schemas).map((option, index) => {
               return (
                 <DropdownListItem
                   testId={`dropdown-link-type--${option}`}

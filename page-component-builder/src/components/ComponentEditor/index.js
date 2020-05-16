@@ -20,6 +20,7 @@ import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
 import SubmitActionField from '../fields/SubmitActionField';
+import ExperimentConditionField from '../fields/ExperimentConditionField';
 
 import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
@@ -135,6 +136,10 @@ const ComponentEditor = props => {
 
   const isSubmitActionProperty = property => {
     return property.type === c.SUBMIT_ACTION_PROPERTY;
+  };
+
+  const isExperimentConditionProperty = property => {
+    return property.type === c.EXPERIMENT_CONDITION_PROPERTY;
   };
 
   const updatePropertyValue = (propKey, value, timeout = true, singletonErrors = {}) => {
@@ -456,6 +461,13 @@ const ComponentEditor = props => {
         )}
         {isSubmitActionProperty(property) && (
           <SubmitActionField
+            onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
+            tokens={props.tokens}
+            value={value ? JSON.parse(value) : []}
+          />
+        )}
+        {isExperimentConditionProperty(property) && (
+          <ExperimentConditionField
             onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
             tokens={props.tokens}
             value={value ? JSON.parse(value) : []}

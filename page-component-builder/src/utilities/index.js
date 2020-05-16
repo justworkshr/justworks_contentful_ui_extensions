@@ -165,3 +165,13 @@ export const createAsset = async space => {
 
   return newAsset;
 };
+
+export const getDropdownOptions = (options, schemas) => {
+  if (options[0] === '{{ patterns }}') {
+    return schemas
+      .filter(schema => schema.meta.id.includes('patterns'))
+      .map(schema => schema.meta.id);
+  } else {
+    return options;
+  }
+};

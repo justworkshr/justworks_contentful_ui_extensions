@@ -8,6 +8,8 @@ import {
   DropdownListItem
 } from '@contentful/forma-36-react-components';
 
+import { getDropdownOptions } from '../../utilities';
+
 class DropdownCreate extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +77,7 @@ class DropdownCreate extends React.Component {
                 );
               })}
             <DropdownListItem isTitle>Options</DropdownListItem>
-            {this.props.options.map((option, index) => {
+            {getDropdownOptions(this.props.options, this.props.schemas).map((option, index) => {
               return (
                 <DropdownListItem
                   testId={`dropdown-create-type--${option}`}

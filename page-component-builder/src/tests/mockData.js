@@ -3252,7 +3252,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'be83824e-a8e9-43de-a3d0-c93b0fffa630',
+            default: '257b8c0f-7578-47d6-98e7-92ad0f06ab59',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3339,7 +3339,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '7d46f1d7-1a23-4527-b9d6-4aa095801cf3',
+            default: 'b4233eeb-8d0f-498e-b4a9-5e92a2755390',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3447,7 +3447,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '187c233f-7d66-4085-8598-8dd9bbc58019',
+            default: '14bacaee-dc97-4754-a350-5231b805f617',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6172,7 +6172,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '41ceeb4f-09cd-40a0-8db5-e48b36cb2b17',
+            default: '2e1ddffd-1133-4ee6-8281-31dc86226d8a',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6409,7 +6409,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'd1b88e66-a543-431a-9901-e19c579bf539',
+            default: '288e442b-0c00-497d-af35-7fdfed12ceba',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -8331,7 +8331,7 @@ export const mockSchemas = {
             type: 'component',
             required: false,
             default: null,
-            options: [],
+            options: ['{{ patterns }}'],
             description:
               'The default component which always renders unless B or C conditions are met.',
             related_to: null,
@@ -8340,7 +8340,7 @@ export const mockSchemas = {
           },
           b_condition: {
             type: 'experiment-condition',
-            default: '{}',
+            default: '{"object":"","attribute":"","condition":"","value":""}',
             required: false,
             description: 'The conditions which result in the B component replacing A.'
           },
@@ -8348,7 +8348,7 @@ export const mockSchemas = {
             type: 'component',
             required: false,
             default: null,
-            options: [],
+            options: ['{{ patterns }}'],
             description: 'The component which replaces A when the B condition is true.',
             related_to: null,
             editor_category: null,
@@ -8356,7 +8356,7 @@ export const mockSchemas = {
           },
           c_condition: {
             type: 'experiment-condition',
-            default: '{}',
+            default: '{"object":"","attribute":"","condition":"","value":""}',
             required: false,
             description: 'The conditions which result in the C component replacing A.'
           },
@@ -8364,7 +8364,7 @@ export const mockSchemas = {
             type: 'component',
             required: false,
             default: null,
-            options: [],
+            options: ['{{ patterns }}'],
             description:
               'The component which replaces A when the C condition is true. If both B and C are true, B will render.',
             related_to: null,
