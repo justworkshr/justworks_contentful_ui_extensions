@@ -6,6 +6,9 @@ import { FormLabel, TextLink, Card, HelpText, Icon } from '@contentful/forma-36-
 import ShortTextInput from '../ShortTextField';
 import DropdownField from '../DropdownField';
 
+const JUSTWORKS_COOKIE = '{{ justworks_cookie }} ';
+const LEAD_STORAGE = '{{ lead_storage }}';
+
 const SubmitActionField = props => {
   const [isOpen, setOpen] = useState(false);
 
@@ -17,7 +20,7 @@ const SubmitActionField = props => {
     return (
       <DropdownField
         onChange={value => handleObjectChange(value, action, index)}
-        options={['param', 'hash', '{{ justworks_cookie }}', '{{ lead_storage }}']}
+        options={['param', 'hash', JUSTWORKS_COOKIE, LEAD_STORAGE]}
         value={action.object}
       />
     );
@@ -27,10 +30,10 @@ const SubmitActionField = props => {
     const newValue = props.value;
     newValue.object = value;
 
-    if (value === 'hash') {
-      newValue.condition = undefined;
-      newValue.attribute = undefined;
-    }
+    newValue.condition = undefined;
+    newValue.attribute = undefined;
+    newValue.value = undefined;
+
     updateValue(newValue);
   };
 
@@ -64,7 +67,7 @@ const SubmitActionField = props => {
             <FormLabel>Object</FormLabel>
             {renderActionValueField(action)}
           </span>
-          {props.value.object !== 'hash' && (
+          {!(props.value.object === 'hash' || props.value.object === JUSTWORKS_COOKIE) && (
             <span className="logic-editor__field">
               <FormLabel>attribute</FormLabel>
               <DropdownField
@@ -75,7 +78,7 @@ const SubmitActionField = props => {
               />
             </span>
           )}
-          {props.value.object !== 'hash' && (
+          {!(props.value.object === 'hash' || props.value.object === JUSTWORKS_COOKIE) && (
             <span className="logic-editor__field">
               <FormLabel>comparison</FormLabel>
               <DropdownField
@@ -85,13 +88,15 @@ const SubmitActionField = props => {
               />
             </span>
           )}
-          <span className="logic-editor__field">
-            <FormLabel>value</FormLabel>
-            <ShortTextInput
-              onChange={value => handleValueChange(value)}
-              value={props.value.value}
-            />
-          </span>
+          {props.value.object !== JUSTWORKS_COOKIE && (
+            <span className="logic-editor__field">
+              <FormLabel>value</FormLabel>
+              <ShortTextInput
+                onChange={value => handleValueChange(value)}
+                value={props.value.value}
+              />
+            </span>
+          )}
         </div>
       </div>
     );
