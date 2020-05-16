@@ -3252,7 +3252,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'cdc86803-a37d-4932-ad32-c3083e1f1141',
+            default: 'a36dd438-e5a8-408b-b4a5-a2b041eaa441',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3339,7 +3339,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '71002644-1a29-4c5b-b9fb-2f804369689d',
+            default: '8f85107c-c9b9-45fb-a2f4-ce3ea524db52',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3447,7 +3447,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'f6b20a3d-e895-4cac-9497-2d6c6e866972',
+            default: 'dea3cf47-e87c-47a0-b5cf-62bd657b3ea9',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6172,7 +6172,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '2908c541-ab12-421a-94a2-86ef2cded3c5',
+            default: '3e419e2d-14c3-4bd3-ac5c-4f1b30b9633e',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6409,7 +6409,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '25ed23f3-c1cd-4569-8236-645b37d05af5',
+            default: '6cbb8bc3-40c9-4e73-8029-7c4f5437b994',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6512,7 +6512,7 @@ export const mockSchemas = {
             default: '',
             options: null,
             description:
-              'The default input value, if needed (like w/ hidden fields). Use {{ page_url }} to use the page url as a value.',
+              'The default input value which is prefilled when the page loads. Use {{ page_url }} to use the page url as a value.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,
@@ -6525,7 +6525,7 @@ export const mockSchemas = {
           id: 'patterns/algolia_search_results',
           styleguide_path: '/styleguide/patterns%2Falgolia_search_results',
           title: 'Algolia Search Results Pattern',
-          description: 'Description of component.',
+          description: 'The search filterable search results container.',
           editor_role: 'hidden',
           tags: ['collection', 'resource-center'],
           extension_of: null
@@ -6562,8 +6562,8 @@ export const mockSchemas = {
           title: 'Article Content Pattern',
           description:
             'Shared pattern for article content including fine print. Can be configured for various widths and has an optional grid layout provided to provide usage flexibility.',
-          editor_role: 'pattern',
-          tags: ['text', 'blog-post'],
+          editor_role: 'hidden',
+          tags: ['text', 'blog-post', 'resource-center'],
           extension_of: null,
           snapshot: false
         },
@@ -6657,7 +6657,7 @@ export const mockSchemas = {
           description:
             'Page content containing a full background image and a single left or right slot for a marketing component.',
           editor_role: 'pattern',
-          tags: ['media', 'image']
+          tags: ['media', 'image', 'landing-page']
         },
         properties: {
           classname: {
@@ -6756,7 +6756,7 @@ export const mockSchemas = {
           description:
             'A bordered box containing a text component on the left and a button or form on the right.',
           editor_role: 'pattern',
-          tags: ['action', 'form', 'action'],
+          tags: ['action', 'form'],
           extension_of: null
         },
         properties: {
@@ -6850,8 +6850,8 @@ export const mockSchemas = {
           title: 'Bordered BlogCTA Box',
           description:
             'A Bordered CTA Content Box specifically for the BlogCTA Content Type. When gated, a pre-built form pops up for the user to submit their information before downloading. Gated currently only works for BlogCTAs with Files, not URLS.',
-          editor_role: 'pattern',
-          tags: ['action', 'cta-module'],
+          editor_role: 'hidden',
+          tags: ['action', 'cta-module', 'resource-center'],
           extension_of: 'patterns/bordered_content_cta_box'
         },
         properties: {
@@ -6942,7 +6942,7 @@ export const mockSchemas = {
           title: 'Composable Lp Hero Pattern',
           description: 'A centered hero containing text elements only.',
           editor_role: 'pattern',
-          tags: ['hero', 'modular'],
+          tags: ['hero', 'modular', 'landing-page'],
           extension_of: null,
           snapshot: false
         },
@@ -7852,7 +7852,7 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Fresource_hero',
           title: 'Resource Hero',
           description: 'A left aligned hero with breadcrumbs and social icons.',
-          editor_role: 'pattern',
+          editor_role: 'hidden',
           tags: ['hero', 'resource-center'],
           extension_of: null
         },
@@ -7995,7 +7995,7 @@ export const mockSchemas = {
           styleguide_path: '/styleguide/patterns%2Fsearch_dropdown',
           title: 'Search Dropdown Pattern',
           description: 'Description of component.',
-          editor_role: 'component',
+          editor_role: 'hidden',
           tags: [],
           extension_of: null
         },
@@ -8296,7 +8296,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/variant_container',
           styleguide_path: '/styleguide/patterns%2Fvariant_container',
-          title: 'Experiment Test Pattern',
+          title: 'A/B Variant Container',
           description:
             'A component for setting up a/b tests on a single specific pattern on a single page. Accepts condition checks for the justworks cookie, lead-storage, url params, or url hash.',
           editor_role: 'pattern',
@@ -8855,7 +8855,7 @@ export const mockSchemas = {
             default: '',
             options: null,
             description:
-              'The default input value, if needed (like w/ hidden fields). Use {{ page_url }} to use the page url as a value.',
+              'The default input value which is prefilled when the page loads. Use {{ page_url }} to use the page url as a value.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: null,

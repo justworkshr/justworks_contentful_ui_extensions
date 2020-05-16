@@ -7,7 +7,8 @@ import {
   TextLink,
   Paragraph,
   Subheading,
-  FormLabel
+  FormLabel,
+  Icon
 } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
@@ -25,7 +26,28 @@ import ExperimentConditionField from '../fields/ExperimentConditionField';
 import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
 
-import { isComponentPropertySingleton } from '../../utilities/index';
+import {
+  isComponentPropertySingleton,
+  getFieldIcon,
+  isShortTextField,
+  isNumberField,
+  isLongTextField,
+  isMarkdownTextField,
+  isBoolProperty,
+  isRadioTextField,
+  isDropdownTextField,
+  isDropdownWithCustomField,
+  isAssetLinkProperty,
+  isEntryLinkProperty,
+  isMultiLinkProperty,
+  isComponentProperty,
+  isMultiComponentProperty,
+  isConfigProperty,
+  isMultiConfigProperty,
+  isSubmitActionProperty,
+  isExperimentConditionProperty
+} from '../../utilities/index';
+
 import { parse_underscore } from '../../utilities/copyUtils';
 
 import InternalMapping from '../../classes/InternalMapping';
@@ -36,111 +58,6 @@ import EditorSections from '../EditorSections';
 const ComponentEditor = props => {
   const [errors, setErrors] = useState({});
   const [openFields, setOpenFields] = useState([]);
-
-  const isShortTextField = property => {
-    return (
-      property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.SHORT_TEXT_EDITOR &&
-      !(property.options && property.options.length)
-    );
-  };
-
-  const isNumberField = property => {
-    return property.type === c.NUMBER_PROPERTY && !property.options;
-  };
-
-  const isLongTextField = property => {
-    return (
-      property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.LONG_TEXT_EDITOR &&
-      !(property.options && property.options.length)
-    );
-  };
-
-  const isMarkdownTextField = property => {
-    return (
-      property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.MARKDOWN_EDITOR &&
-      !(property.options && !!property.options.length)
-    );
-  };
-
-  const isBoolProperty = property => {
-    return property.type === c.BOOL_PROPERTY;
-  };
-
-  const isRadioTextField = property => {
-    return (
-      property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.RADIO_EDITOR &&
-      property.options &&
-      !!property.options.length
-    );
-  };
-
-  const isDropdownTextField = property => {
-    return (
-      ((property.type === c.TEXT_PROPERTY && property.editor_type === c.SHORT_TEXT_EDITOR) ||
-        property.type === c.NUMBER_PROPERTY) &&
-      property.options &&
-      !!property.options.length
-    );
-  };
-
-  const isDropdownWithCustomField = property => {
-    return (
-      property.type === c.TEXT_PROPERTY &&
-      property.editor_type === c.DROPDOWN_WITH_CUSTOM_EDITOR &&
-      property.options &&
-      !!property.options.length
-    );
-  };
-
-  const isAssetLink = property => {
-    return (
-      property.type === c.LINK_PROPERTY && property.asset_types && !!property.asset_types.length
-    );
-  };
-
-  const isEntryLink = property => {
-    return (
-      property.type === c.LINK_PROPERTY && property.content_types && !!property.content_types.length
-    );
-  };
-
-  const isMultiLinkProperty = property => {
-    return (
-      property.type === c.MULTI_LINK_PROPERTY &&
-      ((property.content_types && !!property.content_types.length) ||
-        (property.asset_types && !!property.asset_types.length))
-    );
-  };
-
-  const isComponentProperty = property => {
-    return property.type === c.COMPONENT_PROPERTY && property.options && !!property.options.length;
-  };
-
-  const isMultiComponentProperty = property => {
-    return (
-      property.type === c.MULTI_COMPONENT_PROPERTY && property.options && !!property.options.length
-    );
-  };
-
-  const isConfigProperty = property => {
-    return property.type === c.CONFIG_PROPERTY && !!property.related_to;
-  };
-
-  const isMultiConfigProperty = property => {
-    return property.type === c.MULTI_CONFIG_PROPERTY && !!property.related_to;
-  };
-
-  const isSubmitActionProperty = property => {
-    return property.type === c.SUBMIT_ACTION_PROPERTY;
-  };
-
-  const isExperimentConditionProperty = property => {
-    return property.type === c.EXPERIMENT_CONDITION_PROPERTY;
-  };
 
   const updatePropertyValue = (propKey, value, timeout = true, singletonErrors = {}) => {
     props.internalMappingInstance.updateValue(propKey, value);
@@ -162,7 +79,7 @@ const ComponentEditor = props => {
   };
 
   const renderLinkableField = (propKey, property, value) => {
-    if (!value && isAssetLink(property) && isEntryLink(property)) {
+    if (!value && isAssetLinkProperty(property) && isEntryLinkProperty(property)) {
       return (
         <div>
           <AssetField
@@ -183,7 +100,7 @@ const ComponentEditor = props => {
           />
         </div>
       );
-    } else if (!value && isAssetLink(property)) {
+    } else if (!value && isAssetLinkProperty(property)) {
       return (
         <AssetField
           sdk={props.sdk}
@@ -193,7 +110,7 @@ const ComponentEditor = props => {
           errors={errors[propKey]}
         />
       );
-    } else if (!value && isEntryLink(property)) {
+    } else if (!value && isEntryLinkProperty(property)) {
       return (
         <EntryField
           sdk={props.sdk}
@@ -256,6 +173,7 @@ const ComponentEditor = props => {
           openFields.includes(propKey) ? 'field-open f36-background-color--element-lightest' : ''
         } ${errors[propKey] && errors[propKey].length ? 'with-error' : ''}`}>
         <div className="component-editor__field-heading">
+          <Icon icon={getFieldIcon(property)} className="f36-margin-right--xs" />
           <FormLabel
             className="component-editor__field-label"
             required={property.required}
@@ -343,7 +261,7 @@ const ComponentEditor = props => {
           />
         )}
         {/* in some cases, a field can link assets OR entries */}
-        {(isEntryLink(property) || isAssetLink(property)) &&
+        {(isEntryLinkProperty(property) || isAssetLinkProperty(property)) &&
           renderLinkableField(propKey, property, value)}
         {isMultiLinkProperty(property) && (
           <MultiLinkField

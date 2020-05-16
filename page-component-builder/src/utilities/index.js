@@ -168,10 +168,171 @@ export const createAsset = async space => {
 
 export const getDropdownOptions = (options, schemas) => {
   if (options[0] === '{{ patterns }}') {
-    return schemas
+    options = schemas
       .filter(schema => schema.meta.id.includes('patterns'))
+      .filter(schema => schema.meta.id !== 'patterns/variant_container')
       .map(schema => schema.meta.id);
-  } else {
-    return options;
   }
+
+  return options.filter(
+    id => schemas.find(schema => schema.meta.id === id).meta.editor_role !== c.HIDDEN_ROLE
+  );
+};
+
+export const isShortTextField = property => {
+  return (
+    property.type === c.TEXT_PROPERTY &&
+    property.editor_type === c.SHORT_TEXT_EDITOR &&
+    !(property.options && property.options.length)
+  );
+};
+
+export const isNumberField = property => {
+  return property.type === c.NUMBER_PROPERTY && !property.options;
+};
+
+export const isLongTextField = property => {
+  return (
+    property.type === c.TEXT_PROPERTY &&
+    property.editor_type === c.LONG_TEXT_EDITOR &&
+    !(property.options && property.options.length)
+  );
+};
+
+export const isMarkdownTextField = property => {
+  return (
+    property.type === c.TEXT_PROPERTY &&
+    property.editor_type === c.MARKDOWN_EDITOR &&
+    !(property.options && !!property.options.length)
+  );
+};
+
+export const isBoolProperty = property => {
+  return property.type === c.BOOL_PROPERTY;
+};
+
+export const isRadioTextField = property => {
+  return (
+    property.type === c.TEXT_PROPERTY &&
+    property.editor_type === c.RADIO_EDITOR &&
+    property.options &&
+    !!property.options.length
+  );
+};
+
+export const isDropdownTextField = property => {
+  return (
+    ((property.type === c.TEXT_PROPERTY && property.editor_type === c.SHORT_TEXT_EDITOR) ||
+      property.type === c.NUMBER_PROPERTY) &&
+    property.options &&
+    !!property.options.length
+  );
+};
+
+export const isDropdownWithCustomField = property => {
+  return (
+    property.type === c.TEXT_PROPERTY &&
+    property.editor_type === c.DROPDOWN_WITH_CUSTOM_EDITOR &&
+    property.options &&
+    !!property.options.length
+  );
+};
+
+export const isAssetLinkProperty = property => {
+  return property.type === c.LINK_PROPERTY && property.asset_types && !!property.asset_types.length;
+};
+
+export const isEntryLinkProperty = property => {
+  return (
+    property.type === c.LINK_PROPERTY && property.content_types && !!property.content_types.length
+  );
+};
+
+export const isMultiLinkProperty = property => {
+  return (
+    property.type === c.MULTI_LINK_PROPERTY &&
+    ((property.content_types && !!property.content_types.length) ||
+      (property.asset_types && !!property.asset_types.length))
+  );
+};
+
+export const isComponentProperty = property => {
+  return property.type === c.COMPONENT_PROPERTY && property.options && !!property.options.length;
+};
+
+export const isMultiComponentProperty = property => {
+  return (
+    property.type === c.MULTI_COMPONENT_PROPERTY && property.options && !!property.options.length
+  );
+};
+
+export const isConfigProperty = property => {
+  return property.type === c.CONFIG_PROPERTY && !!property.related_to;
+};
+
+export const isMultiConfigProperty = property => {
+  return property.type === c.MULTI_CONFIG_PROPERTY && !!property.related_to;
+};
+
+export const isSubmitActionProperty = property => {
+  return property.type === c.SUBMIT_ACTION_PROPERTY;
+};
+
+export const isExperimentConditionProperty = property => {
+  return property.type === c.EXPERIMENT_CONDITION_PROPERTY;
+};
+
+export const getFieldIcon = property => {
+  if (isShortTextField(property)) {
+    return 'Text';
+  }
+  if (isNumberField(property)) {
+    return 'LooksOne';
+  }
+  if (isLongTextField(property)) {
+    return 'Text';
+  }
+  if (isMarkdownTextField(property)) {
+    return 'Text';
+  }
+  if (isBoolProperty(property)) {
+    return 'ListNumbered';
+  }
+  if (isRadioTextField(property)) {
+    return 'ListNumbered';
+  }
+  if (isDropdownTextField(property)) {
+    return 'ListNumbered';
+  }
+  if (isDropdownWithCustomField(property)) {
+    return 'ListNumbered';
+  }
+  if (isAssetLinkProperty(property)) {
+    return 'Asset';
+  }
+  if (isEntryLinkProperty(property)) {
+    return 'Entry';
+  }
+  if (isMultiLinkProperty(property)) {
+    return 'Copy';
+  }
+  if (isComponentProperty(property)) {
+    return 'Entry';
+  }
+  if (isMultiComponentProperty(property)) {
+    return 'Copy';
+  }
+  if (isConfigProperty(property)) {
+    return 'Folder';
+  }
+  if (isMultiConfigProperty(property)) {
+    return 'FolderCreate';
+  }
+  if (isSubmitActionProperty(property)) {
+    return 'Code';
+  }
+  if (isExperimentConditionProperty(property)) {
+    return 'Code';
+  }
+  return 'Edit';
 };

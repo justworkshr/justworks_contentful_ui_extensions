@@ -354,6 +354,7 @@ export class PageComponentBuilder extends React.Component {
             id="field-componentId"
             testId="field-componentId"
             className="f36-margin-bottom--m"
+            disabled={true}
             onChange={e => this.onComponentIdChangeHandler(e.target.value)}
             value={this.state.componentId}
           />
@@ -401,7 +402,7 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <div className="component-editor__field d-">
+        <div className="component-editor__field d-none">
           <FormLabel htmlFor="field-internalMapping">Internal Mapping</FormLabel>
           <Textarea
             id="field-internalMapping"
