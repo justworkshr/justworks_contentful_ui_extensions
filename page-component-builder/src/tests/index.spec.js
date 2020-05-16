@@ -21,7 +21,9 @@ import {
   mockAssetResponse,
   mockEntryResponse,
   mockLink,
-  mockSingletonProperty
+  mockSingletonProperty,
+  mockSubmitActionProperty,
+  mockExperimentProperty
 } from './mockUtils';
 
 configure({
@@ -90,14 +92,19 @@ describe('App', () => {
     expect(sdk.entry.fields.name.setValue).toHaveBeenCalledWith('new-name-value');
 
     await jest.useFakeTimers();
-    await wait(() =>
-      fireEvent.change(getByTestId('field-componentId'), {
-        target: { value: 'new-componentId-value' }
-      })
-    );
 
-    expect(sdk.entry.fields.componentId.setValue).toHaveBeenCalledWith('new-componentId-value');
-    expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith('{}'); // no schemas loaded so nil value passed
+    const componentIdElement = getByTestId('field-componentId');
+    componentIdElement.disabled = false;
+
+    // field is disabled now
+    // await wait(() =>
+    //   fireEvent.change(componentIdElement, {
+    //     target: { value: 'new-componentId-value' }
+    //   })
+    // );
+
+    // expect(sdk.entry.fields.componentId.setValue).toHaveBeenCalledWith('new-componentId-value');
+    // expect(sdk.entry.fields.internalMapping.setValue).toHaveBeenCalledWith('{}'); // no schemas loaded so nil value passed
 
     const value = '{ "meta": {}, "properties": {}}';
     await wait(() => {
@@ -601,6 +608,110 @@ describe('App', () => {
 
       expect(getByTestId('multi-component-field')).toBeTruthy();
       expect(getByTestId('multi-component-field--links').childNodes).toHaveLength(entries.length);
+    });
+  });
+
+  describe('submit action field', () => {
+    const createSchema = (componentId, propKey, type) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentSchemaProperty({
+            propKey,
+            type
+          })
+        })
+      ]);
+    };
+
+    it('should render a blank field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const internalMapping = mockInternalMapping(componentId, {});
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, c.SUBMIT_ACTION_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('submit-action-field').value).toBeUndefined();
+    });
+
+    it('should render a logic with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const value = [
+        {
+          value: 'hello'
+        }
+      ];
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockSubmitActionProperty(propKey, value)
+      });
+
+      const sdk = mockSdk();
+      const schemas = createSchema(componentId, propKey, c.SUBMIT_ACTION_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      // open card
+      fireEvent.click(getByTestId('logic-editor__card'));
+
+      expect(getByTestId('logic-field__value').value).toEqual('hello');
+    });
+  });
+
+  describe('experiment condition field', () => {
+    const createSchema = (componentId, propKey, type) => {
+      return mockSchemas({}, [
+        mockComponentSchema(componentId, {
+          ...mockComponentSchemaProperty({
+            propKey,
+            type
+          })
+        })
+      ]);
+    };
+
+    it('should render a blank field', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const internalMapping = mockInternalMapping(componentId, {});
+
+      const sdk = mockSdk();
+
+      const schemas = createSchema(componentId, propKey, c.EXPERIMENT_CONDITION_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({ sdk, schemas, componentId, internalMapping });
+
+      expect(getByTestId('experiment-condition-field').value).toBeUndefined();
+    });
+
+    it('should render a logic with value', async () => {
+      const componentId = 'mockComponent';
+      const propKey = 'prop1';
+      const value = {
+        object: 'hash',
+        value: 'hello'
+      };
+      const internalMapping = mockInternalMapping(componentId, {
+        ...mockExperimentProperty(propKey, value)
+      });
+
+      const sdk = mockSdk();
+      const schemas = createSchema(componentId, propKey, c.EXPERIMENT_CONDITION_PROPERTY);
+
+      const { getByTestId } = setupLoadedComponent({
+        sdk,
+        schemas,
+        componentId,
+        internalMapping
+      });
+
+      // open card
+      fireEvent.click(getByTestId('logic-editor__card'));
+
+      expect(getByTestId('logic-field__value').value).toEqual('hello');
     });
   });
 });

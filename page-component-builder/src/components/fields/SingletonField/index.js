@@ -40,7 +40,7 @@ const SingletonField = props => {
           title={getTitle()}
           contentType={contentTypeLabel('Singleton')}
           // description={props.schema.meta.description}
-          size="sm"
+          size="small"
           statusIcon={singletonCardOpen ? 'ChevronDown' : 'ChevronUp'}
           onClick={() => {
             if (singletonCardOpen) {
@@ -107,7 +107,8 @@ SingletonField.propTypes = {
 };
 SingletonField.defaultProps = {
   tokens: {},
-  schemas: []
+  schemas: [],
+  onOpen: () => {}
 };
 
 export default SingletonField;

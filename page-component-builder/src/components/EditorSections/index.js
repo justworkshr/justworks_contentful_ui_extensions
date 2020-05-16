@@ -14,30 +14,30 @@ const EditorSections = props => {
       <Tabs withDivider={true} className="f36-margin-bottom--l">
         <Tab
           id="DEFAULT"
-          disabled={!Object.keys(props.defaultFields).length}
+          disabled={!props.defaultFields.length}
           selected={selectedTab === 'DEFAULT'}
           onSelect={id => {
-            if (!Object.keys(props.defaultFields).length) return;
+            if (!props.defaultFields.length) return;
             setSelectedTab(id);
           }}>
           FIELDS
         </Tab>
         <Tab
           id={c.STYLE_CATEGORY}
-          disabled={!Object.keys(props.styleFields).length}
+          disabled={!props.styleFields.length}
           selected={selectedTab === c.STYLE_CATEGORY}
           onSelect={id => {
-            if (!Object.keys(props.styleFields).length) return;
+            if (!props.styleFields.length) return;
             setSelectedTab(id);
           }}>
           {c.STYLE_CATEGORY.toUpperCase()}
         </Tab>
         <Tab
           id={c.ADVANCED_CATEGORY}
-          disabled={!Object.keys(props.advancedFields).length}
+          disabled={!props.advancedFields.length}
           selected={selectedTab === c.ADVANCED_CATEGORY}
           onSelect={id => {
-            if (!Object.keys(props.advancedFields).length) return;
+            if (!props.advancedFields.length) return;
             setSelectedTab(id);
           }}>
           {c.ADVANCED_CATEGORY.toUpperCase()}
@@ -56,9 +56,9 @@ const EditorSections = props => {
 
 EditorSections.propTypes = {
   selectedTab: PropTypes.string,
-  styleFields: PropTypes.object,
-  advancedFields: PropTypes.object,
-  defaultFields: PropTypes.object
+  styleFields: PropTypes.array,
+  advancedFields: PropTypes.array,
+  defaultFields: PropTypes.array
 };
 EditorSections.defaultProps = {
   selectedTab: 'DEFAULT',

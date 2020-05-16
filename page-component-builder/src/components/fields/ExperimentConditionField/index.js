@@ -92,6 +92,7 @@ const SubmitActionField = props => {
             <span className="logic-editor__field">
               <FormLabel>value</FormLabel>
               <ShortTextInput
+                testId="logic-field__value"
                 onChange={value => handleValueChange(value)}
                 value={props.value.value}
               />
@@ -108,8 +109,11 @@ const SubmitActionField = props => {
       .value.condtion || ''} = ${props.value.value || ''}`.trim();
   };
   return (
-    <div className="submit-action-field">
-      <Card className="logic-editor__card" onClick={!isOpen ? () => setOpen(!isOpen) : null}>
+    <div className="experiment-condition-field" data-test-id="experiment-condition-field">
+      <Card
+        className="logic-editor__card"
+        testId="logic-editor__card"
+        onClick={!isOpen ? () => setOpen(!isOpen) : null}>
         {isOpen && (
           <Icon
             className="logic-editor__close"

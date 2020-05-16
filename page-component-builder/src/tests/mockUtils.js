@@ -197,6 +197,24 @@ export const mockTextProperty = (key, value) => {
   };
 };
 
+export const mockSubmitActionProperty = (key, value = []) => {
+  return {
+    [key]: {
+      type: c.SUBMIT_ACTION_PROPERTY,
+      value: JSON.stringify(value)
+    }
+  };
+};
+
+export const mockExperimentProperty = (key, value = {}) => {
+  return {
+    [key]: {
+      type: c.EXPERIMENT_CONDITION_PROPERTY,
+      value: JSON.stringify(value)
+    }
+  };
+};
+
 export const mockPrimaryEntry = ({
   name = undefined,
   componentId = undefined,

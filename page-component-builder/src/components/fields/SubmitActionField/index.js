@@ -155,6 +155,7 @@ const SubmitActionField = props => {
           <span className="logic-editor__field">
             <FormLabel>{optionalLabel('value', action)}</FormLabel>
             <ShortTextInput
+              testId="logic-field__value"
               onChange={value => handleValueChange(value, action, index)}
               value={action.value}
             />
@@ -170,12 +171,13 @@ const SubmitActionField = props => {
       ''} ${action.condtion || ''} = ${action.value || ''}`.trim();
   };
   return (
-    <div className="submit-action-field">
+    <div className="submit-action-field" data-test-id="submit-action-field">
       {props.value.map((action, index) => {
         return (
           <div key={`submit-action-field--${index}`}>
             <Card
               className="logic-editor__card"
+              testId="logic-editor__card"
               onClick={!openCards.includes(index) ? () => handleCardClick(index) : null}>
               {
                 <Icon

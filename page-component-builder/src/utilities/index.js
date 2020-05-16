@@ -174,9 +174,10 @@ export const getDropdownOptions = (options, schemas) => {
       .map(schema => schema.meta.id);
   }
 
-  return options.filter(
-    id => schemas.find(schema => schema.meta.id === id).meta.editor_role !== c.HIDDEN_ROLE
-  );
+  return options.filter(id => {
+    const optionSchema = schemas.find(schema => schema.meta.id === id);
+    return optionSchema ? optionSchema.meta.editor_role !== c.HIDDEN_ROLE : id;
+  });
 };
 
 export const isShortTextField = property => {
