@@ -166,8 +166,8 @@ const SubmitActionField = props => {
 
   const cardTitle = (action, index) => {
     if (!action.action && !action.action_value) return `New Action ${index + 1}`;
-    return `${action.action || ''} ${action.action_value || ''} ${action.field ||
-      ''} ${action.condtion || ''} ${action.value || ''}`.trim();
+    return `${action.action || ''} ${action.action_value || ''} if ${action.field ||
+      ''} ${action.condtion || ''} = ${action.value || ''}`.trim();
   };
   return (
     <div className="submit-action-field">
