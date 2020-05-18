@@ -353,11 +353,12 @@ export class PageComponentBuilder extends React.Component {
           <TextInput
             id="field-componentId"
             testId="field-componentId"
-            className="f36-margin-bottom--m"
+            className="f36-margin-bottom--m d-none"
             disabled={true}
             onChange={e => this.onComponentIdChangeHandler(e.target.value)}
             value={this.state.componentId}
           />
+          <TextInput disabled={true} value={schema ? schema.meta.title || schema.meta.id : ''} />
           {// Only allow palette when this entry isn't serving as a config object
           !this.state.configObject && (
             <ComponentPalette

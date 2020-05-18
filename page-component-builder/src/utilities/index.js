@@ -171,6 +171,7 @@ export const getDropdownOptions = (options, schemas) => {
     options = schemas
       .filter(schema => schema.meta.id.includes('patterns'))
       .filter(schema => schema.meta.id !== 'patterns/variant_container')
+      .filter(schema => !schema.meta.extension_of) // not an extension
       .map(schema => schema.meta.id);
   }
 
@@ -178,6 +179,23 @@ export const getDropdownOptions = (options, schemas) => {
     const optionSchema = schemas.find(schema => schema.meta.id === id);
     return optionSchema ? optionSchema.meta.editor_role !== c.HIDDEN_ROLE : id;
   });
+};
+
+export const getExtensions = (componentId, schemas) => {
+  return schemas
+    .filter(schema => schema.meta.editor_role !== c.HIDDEN_ROLE) // not hidden
+    .filter(schema => schema.meta.extension_of === componentId);
+};
+
+export const getLabel = (component_id, schemas) => {
+  if (!schemas.length) return component_id;
+  const schema = schemas.find(schema => schema.meta.id === component_id);
+
+  if (schema) {
+    return schema.meta.title;
+  } else {
+    return component_id;
+  }
 };
 
 export const isShortTextField = property => {

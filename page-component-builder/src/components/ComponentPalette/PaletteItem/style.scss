@@ -1,0 +1,10 @@
+.palette-item {
+  &__dropdown {
+    border: 1px solid #d3dce0;
+    border-top: none;
+    border-right: none;
+    padding: 0.875em;
+    margin-bottom: 10px;
+    margin-top: -10px;
+  }
+}

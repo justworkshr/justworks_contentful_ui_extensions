@@ -4,6 +4,7 @@ import * as c from '../../constants';
 
 import { Button, Modal, TextInput } from '@contentful/forma-36-react-components';
 import HydratedEntryCard from '../cards/HydratedEntryCard';
+import { getLabel } from '../../utilities';
 
 import './style.scss';
 
@@ -84,7 +85,8 @@ const SelectComponentModal = props => {
       size="large">
       <div className="select-component-modal__top f36-padding-bottom--m">
         <p>
-          Filtering by: <b>{props.options.join(', ')}</b>
+          Filtering by:{' '}
+          <b>{props.options.map(option => getLabel(option, props.schemas)).join(', ')}</b>
         </p>
         <p>Search for an entry:</p>
         <TextInput
@@ -139,12 +141,14 @@ SelectComponentModal.propTypes = {
   handleClose: PropTypes.func,
   isShown: PropTypes.bool,
   options: PropTypes.array,
-  useConfigObjects: PropTypes.bool
+  useConfigObjects: PropTypes.bool,
+  schemas: PropTypes.array
 };
 SelectComponentModal.defaultProps = {
   type: 'single',
   isShown: false,
-  options: []
+  options: [],
+  schemas: []
 };
 
 export default SelectComponentModal;

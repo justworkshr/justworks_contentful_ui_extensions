@@ -171,6 +171,7 @@ const ComponentField = props => {
             isShown={linkModalOpen}
             options={modalOptions}
             useConfigObjects={props.useConfigObjects}
+            schemas={props.schemas}
           />
           {!props.useConfigObjects && (
             <DropdownCreate

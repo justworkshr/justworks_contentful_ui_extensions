@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import * as c from '../../constants';
 import { schemaTitle } from '../../utilities/copyUtils';
 
+import PaletteItem from './PaletteItem';
+
 import {
   Button,
   Card,
@@ -38,7 +40,19 @@ const ComponentPalette = props => {
   };
 
   const patternSchemas = schemas => {
-    return schemas.filter(schema => schema.meta.editor_role === c.PATTERN_ROLE);
+    return schemas
+      .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE) // patterns only
+      .filter(schema => !schema.meta.extension_of) // non-extensions only
+      .sort((a, b) => {
+        // alphabetical sort
+        if (a.meta.title < b.meta.title) {
+          return -1;
+        }
+        if (a.meta.title > b.meta.title) {
+          return 1;
+        }
+        return 0;
+      });
   };
 
   const filterSchemas = schemas => {
@@ -145,14 +159,16 @@ const ComponentPalette = props => {
             data-test-id="component-palette-collection">
             {filterSchemas(props.schemas).map((schema, index) => {
               return (
-                <Card
+                <PaletteItem
                   key={`palette-schema--${index}`}
                   testId={`palette-card--${schema.meta.id}`}
                   className="component-palette__schema"
+                  extensions={props.schemas.filter(s => s.meta.extension_of === schema.meta.id)}
                   selected={schema.meta.id === props.componentId}
-                  onClick={() => handleSchemaClick(schema)}>
-                  {schemaTitle(schema)}
-                </Card>
+                  selectItem={handleSchemaClick}
+                  schema={schema}
+                  title={schemaTitle(schema)}
+                />
               );
             })}
           </div>

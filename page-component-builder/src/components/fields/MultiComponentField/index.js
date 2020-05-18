@@ -294,6 +294,7 @@ export const MultiComponentField = props => {
         options={modalOptions}
         useConfigObjects={props.useConfigObjects}
         type="multiple"
+        schemas={props.schemas}
       />
       <div data-test-id="multi-component-field--links">{renderEntryCards()}</div>
       <div data-test-id="action-row" className="link-row">

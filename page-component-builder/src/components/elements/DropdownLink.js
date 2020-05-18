@@ -8,7 +8,7 @@ import {
   DropdownListItem
 } from '@contentful/forma-36-react-components';
 
-import { getDropdownOptions } from '../../utilities';
+import { getDropdownOptions, getExtensions, getLabel } from '../../utilities';
 
 class DropdownLink extends React.Component {
   constructor(props) {
@@ -42,17 +42,6 @@ class DropdownLink extends React.Component {
     });
   }
 
-  getLabel(component_id) {
-    if (!this.props.schemas.length) return component_id;
-    const schema = this.props.schemas.find(schema => schema.meta.id === component_id);
-
-    if (schema) {
-      return schema.meta.title;
-    } else {
-      return component_id;
-    }
-  }
-
   render() {
     return (
       <span className="click-wrapper" data-uuid={this.uuid}>
@@ -66,14 +55,45 @@ class DropdownLink extends React.Component {
           <DropdownList>
             <DropdownListItem isTitle>Options</DropdownListItem>
             {getDropdownOptions(this.props.options, this.props.schemas).map((option, index) => {
-              return (
-                <DropdownListItem
-                  testId={`dropdown-link-type--${option}`}
-                  key={`component-option--${index}`}
-                  onClick={() => this.props.handleLinkClick(option)}>
-                  {this.getLabel(option)}
-                </DropdownListItem>
-              );
+              if (getExtensions(option, this.props.schemas).length) {
+                // extensions dropdown
+                return (
+                  <Dropdown
+                    key={`dropdown-link-menu-extension--${option}`}
+                    position="right"
+                    submenuToggleLabel={getLabel(option, this.props.schemas)}>
+                    <DropdownList>
+                      <DropdownListItem isTitle>Extensions</DropdownListItem>
+                      <DropdownListItem
+                        testId={`dropdown-link-extension--${option}`}
+                        key={`dropdown-link-extension--${option}`}
+                        onClick={() => this.props.handleLinkClick(option)}>
+                        {getLabel(option, this.props.schemas)}
+                      </DropdownListItem>
+                      {getExtensions(option, this.props.schemas).map(schema => {
+                        return (
+                          <DropdownListItem
+                            testId={`dropdown-link-option-extension--${schema.meta.id}`}
+                            key={`dropdown-link-option-extension--${schema.meta.id}`}
+                            onClick={() => this.props.handleLinkClick(schema.meta.id)}>
+                            {getLabel(schema.meta.id, this.props.schemas)}
+                          </DropdownListItem>
+                        );
+                      })}
+                    </DropdownList>
+                  </Dropdown>
+                );
+              } else {
+                // standard link
+                return (
+                  <DropdownListItem
+                    testId={`dropdown-link-type--${option}`}
+                    key={`dropdown-link-type--${option}`}
+                    onClick={() => this.props.handleLinkClick(option)}>
+                    {getLabel(option, this.props.schemas)}
+                  </DropdownListItem>
+                );
+              }
             })}
           </DropdownList>
         </Dropdown>
