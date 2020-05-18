@@ -21,7 +21,7 @@ https://www.contentful.com/developers/docs/references/content-delivery-api/
 npx @contentful/create-contentful-extension my-extension
 
 // Add extra packages needed for self-hosted builds
-npm i webpack webpack-cli babel-core babel-loader @babel/preset-env @babel/preset-react style-loader css-loader html-webpack-inline-source-plugin html-webpack-plugin sass-loader node-sass --save-dev
+yarn install webpack webpack-cli babel-core babel-loader @babel/preset-env @babel/preset-react style-loader css-loader html-webpack-inline-source-plugin html-webpack-plugin sass-loader node-sass --save-dev
 
 ```
 
@@ -84,7 +84,7 @@ module.exports = {
 
 ```
 // Configures the current space / environment for the extension and commands
-npm run configure
+yarn run configure
 
 ```
 
@@ -92,16 +92,26 @@ npm run configure
 
 ```
 // Deploy command if filsize is <= 512KB
-npm run deploy
+yarn run deploy
 
 // If filesize is > 512KB, add new commands in package.json
 
 "build:prod": "webpack --config webpack.config.js",
-"deploy:prod": "npm run build:prod && contentful extension update --force --src=https://justworks-contentful-extension.herokuapp.com?url=https://raw.githubusercontent.com/justworkshr/justworks_contentful_ui_extensions/master/<NAME OF EXTENSION DIR>/build/index.html",
+"deploy:prod": "yarn run build:prod && contentful extension update --force --src=https://justworks-contentful-extension.herokuapp.com?url=https://raw.githubusercontent.com/justworkshr/justworks_contentful_ui_extensions/master/<NAME OF EXTENSION DIR>/build/index.html",
 
-// then run
+// then to deploy run:
 
-npm run deploy:prod
+yarn run build:prod
+
+// (push to master on github first!)
+
+yarn run deploy:prod
 
 
 ```
+
+## Development
+
+- If an extension is live and currently in use, please do all developonent in the Sandbox environment.
+- To switch the space / environment, run `yarn run configure`
+- When development is complete, configure again to switch back to them Master environment and deploy.
