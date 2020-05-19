@@ -3325,7 +3325,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '99a5bff7-8b1f-4441-bfc8-290797b8ebae',
+            default: '57a48e29-7173-4b66-8459-250b1154c05c',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3412,7 +3412,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'fc0f51f9-fcc8-4310-bd81-1c4b21e0e539',
+            default: 'b47773d5-e851-4df7-9fee-dd45efa7a067',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3520,7 +3520,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'a47336d6-9247-4d3b-8c03-89e189566e70',
+            default: 'af8a2086-5815-4839-8ecd-f0a185570401',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6426,7 +6426,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '465e927a-bcf0-46cb-9dec-8d22a3a40cbf',
+            default: '72df4695-0785-4dda-9628-8890ff05f812',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6663,7 +6663,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '4345715f-0f20-456d-a6f1-ff27c810df98',
+            default: '4e22edb2-0f79-428a-a5f5-9188e18340e2',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -7490,9 +7490,22 @@ export const mockSchemas = {
             ],
             presets: [
               {
+                name: 'Overline',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'center',
+                  size: 'xxs',
+                  stack_size: 'lg',
+                  color_token: 'default',
+                  text: 'Overline Text',
+                  element: 'p'
+                }
+              },
+              {
                 name: 'Title',
                 component_id: 'elements/heading',
                 properties: {
+                  max_width: 'default',
                   alignment: 'center',
                   size: 'xl',
                   stack_size: 'md',
@@ -7504,6 +7517,7 @@ export const mockSchemas = {
                 name: 'Body',
                 component_id: 'elements/lead_text',
                 properties: {
+                  max_width: 'jumbo',
                   alignment: 'center',
                   size: 'md',
                   stack_size: 'xl',
