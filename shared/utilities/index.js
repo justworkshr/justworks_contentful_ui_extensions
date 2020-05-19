@@ -5,6 +5,10 @@ export const isComponentPropertySingleton = (value) => {
   return !!(value || {}).componentId;
 };
 
+export const isComponentPropertyLink = (value) => {
+  return !!(value || {}).sys;
+};
+
 export const constructLink = (entry) => {
   return {
     sys: {
