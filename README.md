@@ -113,5 +113,5 @@ yarn run deploy:prod
 ## Development
 
 - If an extension is live and currently in use, please do all developonent in the Sandbox environment.
-- To switch the space / environment, run `yarn run configure`
-- When development is complete, configure again to switch back to them Master environment and deploy.
+- To switch the space / environment, run `yarn run configure` and select sandbox
+- When development is complete, push the changes to the master branch on github and the "master` contentful environment will automatically use the new code.

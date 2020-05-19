@@ -37,6 +37,13 @@ const PaletteItem = props => {
               Styleguide Link
             </TextLink>
           </div>
+          <div>
+            <TextLink
+              href={`https://justworks-staging-v2.herokuapp.com/render-component?component=${props.schema.meta.id}&example=default`}
+              target="_blank">
+              Preview Link
+            </TextLink>
+          </div>
           <br />
           {!!props.extensions.length && (
             <div className="palette-item__extensions">
