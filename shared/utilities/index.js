@@ -1,6 +1,10 @@
 import * as c from "../constants";
 import InternalMapping from "../classes/InternalMapping";
 
+export const isComponentPropertySingleton = (value) => {
+  return !!(value || {}).componentId;
+};
+
 export const constructLink = (entry) => {
   return {
     sys: {

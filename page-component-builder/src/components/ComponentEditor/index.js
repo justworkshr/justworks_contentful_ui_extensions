@@ -28,7 +28,6 @@ import ComponentField from '../fields/ComponentField';
 import MultiComponentField from '../fields/MultiComponentField';
 
 import {
-  isComponentPropertySingleton,
   getFieldIcon,
   isShortTextField,
   isColorField,
@@ -49,6 +48,8 @@ import {
   isSubmitActionProperty,
   isExperimentConditionProperty
 } from '../../utilities/index';
+
+import { isComponentPropertySingleton } from '@shared/utilities/index.js';
 
 import { parse_underscore } from '../../utilities/copyUtils';
 
