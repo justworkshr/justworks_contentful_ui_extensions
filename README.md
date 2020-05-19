@@ -115,3 +115,7 @@ yarn run deploy:prod
 - If an extension is live and currently in use, please do all developonent in the Sandbox environment.
 - To switch the space / environment, run `yarn run configure` and select sandbox
 - When development is complete, push the changes to the master branch on github and the "master` contentful environment will automatically use the new code.
+
+## Imports
+
+- Each extension which uses Jest and the "@shared" import alias requires 2 babel files -- a `.babelrc` (for the contentful dev scripts) and a `babel.config.js` file (for jest). Please keep them synced for the time being until overrides to the contentful devs scripts can be made.

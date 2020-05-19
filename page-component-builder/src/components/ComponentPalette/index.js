@@ -35,7 +35,9 @@ const ComponentPalette = props => {
 
   const filterByTag = schemas => {
     return selectedTags.length
-      ? schemas.filter(schema => schema.meta.tags.some(tag => selectedTags.includes(tag)))
+      ? schemas.filter(schema =>
+          selectedTags.every(selectedTag => schema.meta.tags.includes(selectedTag))
+        )
       : schemas;
   };
 
@@ -87,7 +89,7 @@ const ComponentPalette = props => {
         className="component-palette__modal"
         isShown={isShown}
         onClose={() => toggleShown(false)}
-        title="Component Palette"
+        title="Pattern Library"
         size="zen"
         allowHeightOverflow={true}
         position="top"
