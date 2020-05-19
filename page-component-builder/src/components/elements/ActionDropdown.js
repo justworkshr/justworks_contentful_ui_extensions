@@ -16,6 +16,14 @@ const ActionDropdown = props => {
           Edit
         </DropdownListItem>
       )}
+      {props.convertToEntry && (
+        <DropdownListItem
+          testId="action-dropdown--edit"
+          className="entry-card__action--edit"
+          onClick={props.convertToEntry}>
+          Convert to entry
+        </DropdownListItem>
+      )}
       {props.handleRemoveClick && (
         <DropdownListItem
           testId="action-dropdown--remove"
@@ -30,7 +38,8 @@ const ActionDropdown = props => {
 
 ActionDropdown.propTypes = {
   handleEditClick: PropTypes.func,
-  handleRemoveClick: PropTypes.func
+  handleRemoveClick: PropTypes.func,
+  convertToEntry: PropTypes.func
 };
 ActionDropdown.defaultProps = {};
 

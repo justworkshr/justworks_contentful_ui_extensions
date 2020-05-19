@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import * as c from '../../../constants';
+
 import { EntryCard } from '@contentful/forma-36-react-components';
 import ComponentEditor from '../../ComponentEditor';
 import ActionDropdown from '../../elements/ActionDropdown';
+import { createEntry, constructLink } from '../../../utilities/index';
 
 import './style.scss';
 
@@ -19,6 +22,34 @@ const SingletonField = props => {
     if (!schema) return '';
 
     return `${contentType} | ${(schema.meta || {}).title || (schema.meta || {}).id}`;
+  };
+
+  const convertToEntry = async e => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const fields = {
+      componentId: {
+        'en-US': props.internalMappingInstance.componentId
+      },
+      internalMapping: {
+        'en-US': props.internalMappingInstance.asJSON()
+      },
+      entries: {
+        'en-US': props.internalMappingInstance.entries
+      },
+      assets: {
+        'en-US': props.internalMappingInstance.assets
+      }
+    };
+    const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, fields);
+
+    const navigator = await props.sdk.navigator.openEntry(newEntry.sys.id, {
+      slideIn: { waitForClose: true }
+    });
+
+    const newEntryLink = constructLink(newEntry);
+    props.onChange(JSON.stringify(newEntryLink));
   };
 
   const getTitle = () => {
@@ -51,7 +82,12 @@ const SingletonField = props => {
               props.onOpen();
             }
           }}
-          dropdownListElements={<ActionDropdown handleRemoveClick={props.handleRemoveClick} />}
+          dropdownListElements={
+            <ActionDropdown
+              convertToEntry={convertToEntry}
+              handleRemoveClick={props.handleRemoveClick}
+            />
+          }
           draggable={props.draggable}
           withDragHandle={props.draggable}
           isDragActive={props.isDragActive}

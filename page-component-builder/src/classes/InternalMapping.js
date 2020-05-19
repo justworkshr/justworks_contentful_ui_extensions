@@ -1,4 +1,5 @@
 import * as c from '../constants';
+import { extractEntries } from '../utilities/index';
 
 export default class InternalMapping {
   constructor(componentId, properties, schema = {}, configObject = false) {
@@ -18,6 +19,14 @@ export default class InternalMapping {
 
   get errors() {
     return this.validateProperties();
+  }
+
+  get entries() {
+    return extractEntries(this, c.ENTRY_LINK_TYPE) || [];
+  }
+
+  get assets() {
+    return extractEntries(this, c.ASSET_LINK_TYPE) || [];
   }
 
   validateProperties() {
