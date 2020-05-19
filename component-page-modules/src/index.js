@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { TextInput } from '@contentful/forma-36-react-components';
+import { TextInput, HelpText } from '@contentful/forma-36-react-components';
 import { init } from 'contentful-ui-extensions-sdk';
 
-import MultiComponentField from '../../page-component-builder/src/components/fields/MultiComponentField';
+import MultiComponentField from './components/MultiComponentField';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -40,10 +40,9 @@ export class App extends React.Component {
     this.setState({ value });
   };
 
-  onChange = e => {
-    const value = e.currentTarget.value;
+  onChange = (value = []) => {
     this.setState({ value });
-    if (value) {
+    if (value.length) {
       this.props.sdk.field.setValue(value);
     } else {
       this.props.sdk.field.removeValue();
@@ -52,7 +51,16 @@ export class App extends React.Component {
 
   render() {
     console.log(this.state.value);
-    return <MultiComponentField onChange={this.onChange} />;
+    return (
+      <div>
+        <MultiComponentField
+          sdk={this.props.sdk}
+          onChange={this.onChange}
+          value={this.state.value}
+        />
+        <HelpText>The page content</HelpText>
+      </div>
+    );
   }
 }
 

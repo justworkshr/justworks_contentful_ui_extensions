@@ -1,5 +1,5 @@
-import * as c from "@shared/constants";
-import InternalMapping from "@shared/classes/InternalMapping";
+import * as c from "../constants";
+import InternalMapping from "../classes/InternalMapping";
 
 export const constructLink = (entry) => {
   return {

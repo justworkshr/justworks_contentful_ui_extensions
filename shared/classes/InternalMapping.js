@@ -1,5 +1,5 @@
-import * as c from "@shared/constants";
-import { extractEntries } from "@shared/utilities";
+import * as c from "../constants";
+import { extractEntries } from "../utilities";
 
 export default class InternalMapping {
   constructor(componentId, properties, schema = {}, configObject = false) {
