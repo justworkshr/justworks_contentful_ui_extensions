@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import * as c from '../../../constants';
+import * as c from '@shared/constants';
 
 import { createEntry, constructLink, newInternalMappingFromSchema } from '../../../utilities/index';
 

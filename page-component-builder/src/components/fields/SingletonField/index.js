@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import * as c from '../../../constants';
+import * as c from '@shared/constants';
 
 import { EntryCard } from '@contentful/forma-36-react-components';
 import ComponentEditor from '../../ComponentEditor';
 import ActionDropdown from '../../elements/ActionDropdown';
-import { createEntry, constructLink } from '../../../utilities/index';
+import { constructLink, createEntry } from '@shared/utilities/index';
 
 import './style.scss';
 

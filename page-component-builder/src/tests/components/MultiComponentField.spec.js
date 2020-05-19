@@ -1,5 +1,5 @@
 import React from 'react';
-import * as c from '../../constants';
+import * as c from '@shared/constants';
 
 import MultiComponentField from '../../components/fields/MultiComponentField';
 

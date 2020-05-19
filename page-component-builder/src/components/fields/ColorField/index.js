@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { HelpText, TextLink, FormLabel, Tooltip } from '@contentful/forma-36-react-components';
 import ErrorList from '../ErrorList';
-import * as c from '../../../constants';
-
+import * as c from '@shared/constants';
 import './style.scss';
 
 const ColorField = props => {

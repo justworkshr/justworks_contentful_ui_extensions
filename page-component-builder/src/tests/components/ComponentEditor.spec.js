@@ -1,6 +1,8 @@
 import React from 'react';
-import * as c from '../../constants';
-import InternalMapping from '../../classes/InternalMapping';
+import * as c from '@shared/constants';
+
+import InternalMapping from '@shared/classes/InternalMapping';
+
 import { newInternalMappingFromSchema } from '../../utilities/index';
 
 import ComponentEditor from '../../components/ComponentEditor';

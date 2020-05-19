@@ -1,6 +1,5 @@
 import React from 'react';
-import * as c from '../constants';
-
+import * as c from '@shared/constants';
 import { mount } from 'enzyme';
 
 export const mockSchema = (id = 'components/mock') => {

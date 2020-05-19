@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import * as c from '../../constants';
-
+import * as c from '@shared/constants';
 import { Tabs, Tab, TabPanel } from '@contentful/forma-36-react-components';
 
 import './style.scss';

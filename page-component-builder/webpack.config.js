@@ -8,6 +8,12 @@ module.exports = {
   output: {
     path: __dirname + '/build'
   },
+  resolve: {
+    alias: {
+      '@shared': path.resolve(__dirname, '../shared/')
+    },
+    extensions: ['.jsx', '.js']
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',

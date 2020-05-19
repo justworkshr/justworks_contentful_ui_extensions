@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import * as c from '../../../constants';
+import * as c from '@shared/constants';
+
 import ErrorList from '../ErrorList';
 
 import {
@@ -12,7 +13,8 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
-import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
+import { getEntryContentTypeId } from '../../../utilities/index';
+import { constructLink, createEntry } from '@shared/utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 

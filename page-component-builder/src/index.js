@@ -21,10 +21,13 @@ import {
 import RadioGroup from './components/fields/RadioGroup';
 
 import { init, locations } from 'contentful-ui-extensions-sdk';
-import * as c from './constants';
+import * as c from '@shared/constants';
 
-import InternalMapping from './classes/InternalMapping';
-import { extractEntries, linksToFetch, newInternalMappingFromSchema } from './utilities';
+import InternalMapping from '@shared/classes/InternalMapping';
+
+import { linksToFetch } from './utilities';
+
+import { extractEntries, newInternalMappingFromSchema } from '@shared/utilities/index.js';
 
 import { schemaTitle } from './utilities/copyUtils';
 

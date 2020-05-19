@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import * as c from '../../../constants';
+import * as c from '@shared/constants';
+import InternalMapping from '@shared/classes/InternalMapping';
+import {
+  constructLink,
+  createEntry,
+  newInternalMappingFromSchema
+} from '@shared/utilities/index.js';
 
 import SelectComponentModal from '../../SelectComponentModal';
 import HydratedEntryCard from '../../cards/HydratedEntryCard';
 import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
 import SingletonField from '../SingletonField';
-import InternalMapping from '../../../classes/InternalMapping';
 import ErrorList from '../ErrorList';
-
-import { constructLink, createEntry, newInternalMappingFromSchema } from '../../../utilities/index';
-
-import 'react-mde/lib/styles/css/react-mde-all.css';
 
 export const MultiComponentField = props => {
   const [linkModalOpen, toggleLinkModal] = useState(false);

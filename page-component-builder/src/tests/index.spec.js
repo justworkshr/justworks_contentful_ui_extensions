@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageComponentBuilder } from '../index';
 
-import * as c from '../constants';
+import * as c from '@shared/constants';
 import { render, cleanup, fireEvent, configure, wait } from '@testing-library/react';
 import {
   mockSdk,

@@ -6,7 +6,8 @@ import DropdownCreate from '../../elements/DropdownCreate';
 import DropdownLink from '../../elements/DropdownLink';
 import ErrorList from '../ErrorList';
 
-import { constructLink, getEntryContentTypeId, createEntry } from '../../../utilities/index';
+import { getEntryContentTypeId } from '../../../utilities/index';
+import { constructLink, createEntry } from '@shared/utilities/index';
 
 import 'react-mde/lib/styles/css/react-mde-all.css';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import * as c from '../../constants';
+import * as c from '@shared/constants';
 
 import { Button, Modal, TextInput } from '@contentful/forma-36-react-components';
 import HydratedEntryCard from '../cards/HydratedEntryCard';

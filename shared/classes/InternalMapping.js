@@ -1,5 +1,5 @@
-import * as c from '../constants';
-import { extractEntries } from '../utilities/index';
+import * as c from "@shared/constants";
+import { extractEntries } from "@shared/utilities";
 
 export default class InternalMapping {
   constructor(componentId, properties, schema = {}, configObject = false) {
@@ -31,7 +31,7 @@ export default class InternalMapping {
 
   validateProperties() {
     const errors = {};
-    Object.keys(this.properties).forEach(propKey => {
+    Object.keys(this.properties).forEach((propKey) => {
       if (!this.schema.properties) return;
       if (!errors[propKey]) {
         errors[propKey] = [];
@@ -43,13 +43,15 @@ export default class InternalMapping {
       errors[propKey].push(
         this.validateRequired(propKey, this.properties[propKey], schemaProperty)
       );
-      errors[propKey].push(this.validateOptions(propKey, this.properties[propKey], schemaProperty));
+      errors[propKey].push(
+        this.validateOptions(propKey, this.properties[propKey], schemaProperty)
+      );
 
-      errors[propKey] = errors[propKey].filter(e => e);
+      errors[propKey] = errors[propKey].filter((e) => e);
     });
 
     // return errors only if a field has messages
-    const hasErrors = Object.keys(errors).some(field => {
+    const hasErrors = Object.keys(errors).some((field) => {
       return errors[field].length;
     });
 
@@ -61,7 +63,7 @@ export default class InternalMapping {
   }
 
   validateRequired(propKey, property = {}, schemaProperty = {}) {
-    const errorMessage = 'This field is required';
+    const errorMessage = "This field is required";
     if (schemaProperty.required) {
       if (
         // multi-fields
@@ -72,7 +74,8 @@ export default class InternalMapping {
         if (!(property.value || {}).length) return errorMessage;
       } else if (schemaProperty.type === c.BOOL_PROPERTY) {
         // bool properties
-        if (property.value !== false && property.value !== true) return errorMessage;
+        if (property.value !== false && property.value !== true)
+          return errorMessage;
       } else if (schemaProperty.type === c.NUMBER_PROPERTY) {
         // number properties
         if (property.value !== 0 && !property.value) return errorMessage;
@@ -89,7 +92,9 @@ export default class InternalMapping {
 
     const errorMessage = `The value: '${
       property.value
-    }' is not allowed. Please select from: ${schemaProperty.options.join(' | ')}`;
+    }' is not allowed. Please select from: ${schemaProperty.options.join(
+      " | "
+    )}`;
 
     if (schemaProperty.type === c.COMPONENT_PROPERTY) {
       // single component
@@ -114,7 +119,7 @@ export default class InternalMapping {
   asObject() {
     return {
       componentId: this.componentId,
-      properties: this.properties
+      properties: this.properties,
     };
   }
 
@@ -128,13 +133,17 @@ export default class InternalMapping {
       return;
     this.properties[propertyKey] = {
       type,
-      value
+      value,
     };
   }
 
   updateValue(propertyKey, value) {
     if (!this.properties[propertyKey]) {
-      this.addProperty(propertyKey, this.schema.properties[propertyKey].type, value);
+      this.addProperty(
+        propertyKey,
+        this.schema.properties[propertyKey].type,
+        value
+      );
     } else {
       this.properties[propertyKey].value = value;
     }
@@ -143,7 +152,7 @@ export default class InternalMapping {
   addLink(propertyKey, link) {
     this.properties[propertyKey] = {
       type: c.LINK_PROPERTY,
-      value: link
+      value: link,
     };
   }
 }

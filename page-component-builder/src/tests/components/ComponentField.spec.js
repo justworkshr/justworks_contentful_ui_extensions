@@ -1,6 +1,5 @@
 import React from 'react';
-import * as c from '../../constants';
-
+import * as c from '@shared/constants';
 import ComponentField from '../../components/fields/ComponentField';
 
 import { render, cleanup, fireEvent, configure } from '@testing-library/react';

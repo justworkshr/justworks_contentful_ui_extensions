@@ -1,0 +1,8 @@
+{
+  "id": "component-page-modules",
+  "name": "component-page-modules",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": [
+    "Entries"
+  ]
+}

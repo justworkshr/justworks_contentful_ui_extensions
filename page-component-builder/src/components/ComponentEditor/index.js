@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import * as c from '../../constants';
+import * as c from '@shared/constants';
 
 import {
   HelpText,
@@ -52,7 +52,7 @@ import {
 
 import { parse_underscore } from '../../utilities/copyUtils';
 
-import InternalMapping from '../../classes/InternalMapping';
+import InternalMapping from '@shared/classes/InternalMapping';
 
 import './style.scss';
 import EditorSections from '../EditorSections';

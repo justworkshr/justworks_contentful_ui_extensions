@@ -8,7 +8,7 @@ import {
   configure,
   waitForElementToBeRemoved
 } from '@testing-library/react';
-import * as c from '../../constants';
+import * as c from '@shared/constants';
 import { mockSchemas, mockComponentSchema } from '../mockUtils';
 
 configure({
