@@ -135,31 +135,37 @@ const SubmitActionField = props => {
             <FormLabel>{actionValueLabel(action)}</FormLabel>
             {renderActionValueField(action, index)}
           </span>
-          <span className="logic-editor__field">
-            <FormLabel>{optionalLabel('if field', action)}</FormLabel>
-            <DropdownField
-              withCustomText={true}
-              onChange={value => handleFieldChange(value, action, index)}
-              options={props.tokens.input_names}
-              value={action.field}
-            />
-          </span>
-          <span className="logic-editor__field">
-            <FormLabel>{optionalLabel('comparison', action)}</FormLabel>
-            <DropdownField
-              onChange={value => handleConditionChange(value, action, index)}
-              options={['equals', 'matches', 'gte', 'lte']}
-              value={action.condition}
-            />
-          </span>
-          <span className="logic-editor__field">
-            <FormLabel>{optionalLabel('value', action)}</FormLabel>
-            <ShortTextInput
-              testId="logic-field__value"
-              onChange={value => handleValueChange(value, action, index)}
-              value={action.value}
-            />
-          </span>
+          {action.action !== 'event' && (
+            <span className="logic-editor__field">
+              <FormLabel>{optionalLabel('if field', action)}</FormLabel>
+              <DropdownField
+                withCustomText={true}
+                onChange={value => handleFieldChange(value, action, index)}
+                options={props.tokens.input_names}
+                value={action.field}
+              />
+            </span>
+          )}
+          {action.action !== 'event' && (
+            <span className="logic-editor__field">
+              <FormLabel>{optionalLabel('comparison', action)}</FormLabel>
+              <DropdownField
+                onChange={value => handleConditionChange(value, action, index)}
+                options={['equals', 'matches', 'gte', 'lte']}
+                value={action.condition}
+              />
+            </span>
+          )}
+          {action.action !== 'event' && (
+            <span className="logic-editor__field">
+              <FormLabel>{optionalLabel('value', action)}</FormLabel>
+              <ShortTextInput
+                testId="logic-field__value"
+                onChange={value => handleValueChange(value, action, index)}
+                value={action.value}
+              />
+            </span>
+          )}
         </div>
       </div>
     );
@@ -167,8 +173,12 @@ const SubmitActionField = props => {
 
   const cardTitle = (action, index) => {
     if (!action.action && !action.action_value) return `New Action ${index + 1}`;
-    return `${action.action || ''} ${action.action_value || ''} if ${action.field ||
-      ''} ${action.condtion || ''} = ${action.value || ''}`.trim();
+    if (action.action === 'redirect') {
+      return `${action.action || ''} ${action.action_value || ''} if ${action.field ||
+        ''} ${action.condtion || ''} = ${action.value || ''}`.trim();
+    } else if (action.action === 'event') {
+      return `${action.action || ''} ${action.action_value || ''}`;
+    }
   };
   return (
     <div className="submit-action-field" data-test-id="submit-action-field">
