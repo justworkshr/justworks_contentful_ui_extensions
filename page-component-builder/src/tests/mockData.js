@@ -3325,7 +3325,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '50caeedb-1af9-4b2b-ac88-f78fbc6a34ff',
+            default: '99a5bff7-8b1f-4441-bfc8-290797b8ebae',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3412,7 +3412,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'debb41f5-e82a-4454-9101-8cd9eb660826',
+            default: 'fc0f51f9-fcc8-4310-bd81-1c4b21e0e539',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3520,7 +3520,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '75799124-7395-4ab1-9c71-7ece7fe6be11',
+            default: 'a47336d6-9247-4d3b-8c03-89e189566e70',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6426,7 +6426,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'b0f19bfe-b7dc-48a7-8467-ba3e0316dc0d',
+            default: '465e927a-bcf0-46cb-9dec-8d22a3a40cbf',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6663,7 +6663,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'e91a625c-1bf4-4b8d-bccb-86b67342d74b',
+            default: '4345715f-0f20-456d-a6f1-ff27c810df98',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
