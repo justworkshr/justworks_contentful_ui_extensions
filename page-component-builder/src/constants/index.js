@@ -44,3 +44,74 @@ export const DROPDOWN_WITH_CUSTOM_EDITOR = 'dropdown-with-custom-editor';
 // ASSET TYPES
 
 export const ASSET_TYPE_IMAGE = 'image';
+
+export const BRAND_COLORS = [
+  {
+    name: 'Brand Black',
+    hex: '#515151'
+  },
+  {
+    name: 'Brand White',
+    hex: '#ffffff'
+  },
+  {
+    name: 'Gray-50 (haze)',
+    hex: '#f4f7f9'
+  },
+  {
+    name: 'Gray-200',
+    hex: '#ecf1f5'
+  },
+  {
+    name: 'Gray-500 (timberwolf)',
+    hex: '#cdd6da'
+  },
+  {
+    name: 'Gray-600',
+    hex: '#748a93'
+  },
+  {
+    name: 'Gray-800 (concrete)',
+    hex: '#8199a3'
+  },
+  {
+    name: 'Big Stone',
+    hex: '#303640'
+  },
+  {
+    name: 'Denim',
+    hex: '#1a2c47'
+  },
+  {
+    name: 'Navy',
+    hex: '#243f69'
+  },
+  {
+    name: 'Cerulean',
+    hex: '#39B6E9'
+  },
+  {
+    name: 'Mist',
+    hex: '#ebf8fd'
+  },
+  {
+    name: 'Strawberry',
+    hex: '#ec5453'
+  },
+  {
+    name: 'Strawberry-400',
+    hex: '#f7bbba'
+  },
+  {
+    name: 'Strawberry-600',
+    hex: '#af4342'
+  },
+  {
+    name: 'Shamrock',
+    hex: '#37b375'
+  },
+  {
+    name: 'Goldenrod',
+    hex: '#b8b24f'
+  }
+];

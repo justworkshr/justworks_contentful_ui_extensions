@@ -986,6 +986,65 @@ export const mockSchemas = {
             related_to: null,
             editor_category: null,
             hidden: false
+          },
+          item_components: {
+            type: 'multi-component',
+            required: false,
+            hidden: false,
+            default: [],
+            options: [
+              'components/cta_button',
+              'components/button_modal',
+              'elements/display_text',
+              'elements/heading',
+              'elements/lead_text',
+              'elements/paragraph_text',
+              'components/company_logo'
+            ],
+            presets: [
+              {
+                name: 'Overline',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'left',
+                  size: 'xxs',
+                  stack_size: 'md',
+                  color_token: 'default',
+                  text: 'Overline Text',
+                  element: 'p'
+                }
+              },
+              {
+                name: 'Title (heading)',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'left',
+                  size: 'md',
+                  stack_size: 'md',
+                  color_token: 'variant',
+                  text: 'Title Text'
+                }
+              },
+              {
+                name: 'Body (paragraph)',
+                component_id: 'elements/paragraph_text',
+                properties: {
+                  alignment: 'left',
+                  size: 'sm',
+                  stack_size: null,
+                  color_token: 'default',
+                  text: 'Body Text'
+                }
+              },
+              {
+                name: 'CTA Button (secondary)',
+                component_id: 'components/cta_button',
+                properties: { cta_intent: 'secondary', button_text: 'Click' }
+              }
+            ],
+            description: 'Composable section for the elements you wish to add.',
+            related_to: null,
+            editor_category: null
           }
         }
       },
@@ -2460,6 +2519,28 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true
           },
+          include_overlay: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Should a translucent color be placed over the image to provide better contrast?',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          overlay_color: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description: "The overlay's base color. The color is transposed to 0.1 opacity.",
+            related_to: null,
+            editor_type: 'color-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           format: {
             type: 'text',
             required: false,
@@ -2560,16 +2641,6 @@ export const mockSchemas = {
             editor_type: 'short-text-editor',
             editor_category: null,
             hidden: true
-          },
-          action_component: {
-            type: 'component',
-            required: false,
-            default: null,
-            options: ['components/cta_button', 'components/button_modal'],
-            description: 'The CTA component to use.',
-            related_to: null,
-            editor_category: null,
-            hidden: false
           },
           guides: {
             type: 'multi-link',
@@ -3252,7 +3323,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'a36dd438-e5a8-408b-b4a5-a2b041eaa441',
+            default: 'c9e22dd5-aeb8-48cf-80d9-0934c29e0c4b',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3339,7 +3410,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '8f85107c-c9b9-45fb-a2f4-ce3ea524db52',
+            default: '74f51442-061d-4bd2-bdfb-9de92d233776',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -3447,7 +3518,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: 'dea3cf47-e87c-47a0-b5cf-62bd657b3ea9',
+            default: '5ae7cac3-9e43-416e-95b9-819ce28c57b1',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -4478,7 +4549,7 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
-          connected_button: {
+          connected_inline: {
             type: 'bool',
             required: true,
             options: [true, false],
@@ -4865,6 +4936,143 @@ export const mockSchemas = {
             description: 'Lead text copy.',
             related_to: null,
             editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: false
+          }
+        }
+      },
+      {
+        meta: {
+          id: 'components/static_image_thumbnail',
+          styleguide_path: '/styleguide/components%2Fstatic_image_thumbnail',
+          title: 'Static Image Thumbnail Component',
+          description:
+            'A small image thumbnail w/ a circular (or rectangular) frame. Best if used with square images.',
+          editor_role: 'component',
+          tags: [],
+          extension_of: null,
+          snapshot: false
+        },
+        properties: {
+          classname: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'CSS class name(s) for the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: true
+          },
+          c_id: {
+            type: 'text',
+            required: false,
+            default: 'ComponentsStaticImageThumbnailComponent',
+            options: null,
+            description: 'Internal testing ID.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: null,
+            hidden: true
+          },
+          image_url: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description: 'An external image URL to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: true
+          },
+          format: {
+            type: 'text',
+            required: false,
+            default: 'png',
+            options: null,
+            description: 'Format request for the contentful image API',
+            related_to: 'elements/image',
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          lazy: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: true,
+            description:
+              'Whether the image should load when the user scrolls over it. Set to true for page-speed. Set to false for above-fold images like heroes.',
+            related_to: 'elements/image',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          alt: {
+            type: 'text',
+            required: false,
+            default: '',
+            options: null,
+            description:
+              "Text for accessibility \u0026 screen-readers. When using contentful, use the 'description' property of the asset for this.",
+            related_to: 'elements/image',
+            editor_type: 'short-text-editor',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          load_width: {
+            type: 'number',
+            required: false,
+            default: 120,
+            options: null,
+            description:
+              'The max-width of the image when requesting from the image api. For load-speed optimization, please use a page / module-specific width.',
+            related_to: 'elements/image',
+            editor_category: 'advanced',
+            hidden: true
+          },
+          size: {
+            type: 'text',
+            required: true,
+            default: 'xxl',
+            options: ['lg', 'xl', 'xxl'],
+            description: 'The size (height/width) of the thumbnail',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          frame_style: {
+            type: 'text',
+            required: true,
+            default: 'circular',
+            options: ['circular', 'soft'],
+            description: 'The border radius style -- circular or rectangular w/ soft edges.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          stack_size: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: ['xs', 'sm', 'md', 'lg', 'xl', 'xxl', 'xxxl', 'xxxxl'],
+            description: 'Additional spacing beneath the component.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          image_asset: {
+            type: 'link',
+            required: false,
+            asset_types: ['image'],
+            content_types: [],
+            description:
+              'The contentful asset containing the image. Please ensure the image has a description for accessibility purposes. Please use a square image.',
+            related_to: null,
             editor_category: null,
             hidden: false
           }
@@ -5332,6 +5540,17 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          max_width: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['narrow', 'default', 'jumbo'],
+            description: 'The max width of the container.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           element: {
             type: 'text',
             required: true,
@@ -5600,6 +5819,17 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          max_width: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['narrow', 'default', 'jumbo'],
+            description: 'The max width of the container.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           element: {
             type: 'text',
             required: true,
@@ -5728,6 +5958,17 @@ export const mockSchemas = {
               'muted--light'
             ],
             description: 'The color token to use.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
+          max_width: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['narrow', 'default', 'jumbo'],
+            description: 'The max width of the container.',
             related_to: null,
             editor_type: 'short-text-editor',
             editor_category: 'style',
@@ -6036,6 +6277,17 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          max_width: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['narrow', 'default', 'jumbo'],
+            description: 'The max width of the container.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           element: {
             type: 'text',
             required: true,
@@ -6172,7 +6424,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '3e419e2d-14c3-4bd3-ac5c-4f1b30b9633e',
+            default: '6110a553-4d8e-48c6-b018-46dc4c94cef1',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6409,7 +6661,7 @@ export const mockSchemas = {
           input_id: {
             type: 'text',
             required: false,
-            default: '6cbb8bc3-40c9-4e73-8029-7c4f5437b994',
+            default: 'ad30b6ab-e85a-489d-bf9d-845e71612190',
             options: null,
             description: 'Randomly generated uuid for a form input to associate it with a label.',
             related_to: null,
@@ -6718,6 +6970,28 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          include_overlay: {
+            type: 'bool',
+            required: true,
+            options: [true, false],
+            default: false,
+            description:
+              'Should a translucent color be placed over the image to provide better contrast?',
+            related_to: null,
+            editor_category: 'style',
+            hidden: false
+          },
+          overlay_color: {
+            type: 'text',
+            required: false,
+            default: null,
+            options: null,
+            description: "The overlay's base color. The color is transposed to 0.1 opacity.",
+            related_to: null,
+            editor_type: 'color-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           background_image: {
             type: 'link',
             required: true,
@@ -6752,7 +7026,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/bordered_content_cta_box',
           styleguide_path: '/styleguide/patterns%2Fbordered_content_cta_box',
-          title: 'Bordered CTA Content Box',
+          title: 'Bordered CTA Box',
           description:
             'A bordered box containing a text component on the left and a button or form on the right.',
           editor_role: 'pattern',
@@ -6847,7 +7121,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/bordered_cta_entry_box',
           styleguide_path: '/styleguide/patterns%2Fbordered_cta_entry_box',
-          title: 'Bordered BlogCTA Box',
+          title: 'Bordered CTA Box (BlogCTA)',
           description:
             'A Bordered CTA Content Box specifically for the BlogCTA Content Type. When gated, a pre-built form pops up for the user to submit their information before downloading. Gated currently only works for BlogCTAs with Files, not URLS.',
           editor_role: 'hidden',
@@ -7015,12 +7289,25 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
+          max_width: {
+            type: 'text',
+            required: true,
+            default: 'default',
+            options: ['narrow', 'default', 'jumbo'],
+            description: 'The max width of the container.',
+            related_to: null,
+            editor_type: 'short-text-editor',
+            editor_category: 'style',
+            hidden: false
+          },
           hero_components: {
             type: 'multi-component',
             required: false,
             hidden: false,
             default: [],
             options: [
+              'components/single_text_inline_form',
+              'components/cta_button',
               'elements/display_text',
               'elements/heading',
               'elements/lead_text',
@@ -7036,11 +7323,12 @@ export const mockSchemas = {
                   size: 'xxs',
                   stack_size: 'lg',
                   color_token: 'default',
-                  text: 'Overline Text'
+                  text: 'Overline Text',
+                  element: 'p'
                 }
               },
               {
-                name: 'Title',
+                name: 'Title (display)',
                 component_id: 'elements/display_text',
                 properties: {
                   alignment: 'center',
@@ -7051,14 +7339,36 @@ export const mockSchemas = {
                 }
               },
               {
-                name: 'Body',
+                name: 'Title (heading)',
+                component_id: 'elements/heading',
+                properties: {
+                  alignment: 'center',
+                  size: 'xl',
+                  stack_size: 'md',
+                  color_token: 'variant',
+                  text: 'Title Text'
+                }
+              },
+              {
+                name: 'Body (lead)',
                 component_id: 'elements/lead_text',
                 properties: {
                   alignment: 'center',
                   size: 'md',
+                  max_width: 'jumbo',
                   stack_size: null,
                   color_token: 'default',
                   text: 'Body Text'
+                }
+              },
+              {
+                name: 'Short Form',
+                component_id: 'components/single_text_inline_form',
+                properties: {
+                  connected_inline: true,
+                  cta_intent: 'tertiary',
+                  button_text: 'Submit',
+                  size: 'default'
                 }
               }
             ],
@@ -7406,7 +7716,8 @@ export const mockSchemas = {
                   size: 'xxs',
                   stack_size: 'lg',
                   color_token: 'default',
-                  text: 'Overline Text'
+                  text: 'Overline Text',
+                  element: 'p'
                 }
               },
               {
@@ -8151,7 +8462,7 @@ export const mockSchemas = {
         meta: {
           id: 'patterns/short_landing_page_hero',
           styleguide_path: '/styleguide/patterns%2Fshort_landing_page_hero',
-          title: 'Short Landing Page Hero',
+          title: 'Split Landing Page Hero',
           description:
             'A hero section with several configuration options including a short form, button, background image, and a marketing component.',
           editor_role: 'pattern',
@@ -8204,12 +8515,15 @@ export const mockSchemas = {
             editor_category: 'style',
             hidden: false
           },
-          text_components: {
+          left_components: {
             type: 'multi-component',
             required: false,
             hidden: false,
             default: [],
             options: [
+              'components/single_text_inline_form',
+              'components/cta_button',
+              'components/button_modal',
               'elements/display_text',
               'elements/heading',
               'elements/lead_text',
@@ -8223,11 +8537,12 @@ export const mockSchemas = {
                   size: 'xxs',
                   stack_size: 'lg',
                   color_token: 'default',
-                  text: 'Overline Text'
+                  text: 'Overline Text',
+                  element: 'p'
                 }
               },
               {
-                name: 'Title',
+                name: 'Title (display)',
                 component_id: 'elements/display_text',
                 properties: {
                   size: 'secondary',
@@ -8237,7 +8552,17 @@ export const mockSchemas = {
                 }
               },
               {
-                name: 'Body',
+                name: 'Title (heading)',
+                component_id: 'elements/heading',
+                properties: {
+                  size: 'xl',
+                  stack_size: 'md',
+                  color_token: 'variant',
+                  text: 'Title Text'
+                }
+              },
+              {
+                name: 'Body (lead)',
                 component_id: 'elements/lead_text',
                 properties: {
                   size: 'md',
@@ -8247,7 +8572,7 @@ export const mockSchemas = {
                 }
               }
             ],
-            description: 'Fully composable text elements for the left side of this hero.',
+            description: 'Fully composable elements for the left side of this hero.',
             related_to: null,
             editor_category: null
           },
@@ -8274,21 +8599,6 @@ export const mockSchemas = {
             related_to: null,
             editor_category: null,
             hidden: false
-          },
-          action_items: {
-            type: 'multi-component',
-            required: false,
-            hidden: false,
-            default: [],
-            options: [
-              'components/single_text_inline_form',
-              'components/utility_button',
-              'components/cta_button'
-            ],
-            presets: [],
-            description: 'Composable action items (forms, buttons, etc) below the main hero text.',
-            related_to: null,
-            editor_category: null
           }
         }
       },

@@ -262,7 +262,7 @@ export const MultiComponentField = props => {
                 new InternalMapping(
                   linkOrSingleton.componentId,
                   linkOrSingleton.properties,
-                  schema,
+                  props.schemas.find(s => s.meta.id === linkOrSingleton.componentId),
                   props.useConfigObjects
                 )
               }

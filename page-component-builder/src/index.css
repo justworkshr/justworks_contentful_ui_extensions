@@ -19,11 +19,11 @@ div {
 }
 
 .d-none {
-  display: none;
+  display: none !important;
 }
 
 .d-inline-block {
-  display: inline-block;
+  display: inline-block !important;
 }
 
 .d-flex-row-center-start {

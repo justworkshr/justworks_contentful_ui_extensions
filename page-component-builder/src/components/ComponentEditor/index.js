@@ -14,6 +14,7 @@ import {
 import ShortTextField from '../fields/ShortTextField';
 import LongTextField from '../fields/LongTextField';
 import MarkdownField from '../fields/MarkdownField';
+import ColorField from '../fields/ColorField';
 
 import RadioGroup from '../fields/RadioGroup';
 import DropdownField from '../fields/DropdownField';
@@ -30,6 +31,7 @@ import {
   isComponentPropertySingleton,
   getFieldIcon,
   isShortTextField,
+  isColorField,
   isNumberField,
   isLongTextField,
   isMarkdownTextField,
@@ -196,6 +198,14 @@ const ComponentEditor = props => {
             value={value}
           />
         )}
+        {isColorField(property) && (
+          <ColorField
+            propKey={propKey}
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            errors={errors[propKey]}
+            value={value}
+          />
+        )}
         {isNumberField(property) && (
           <ShortTextField
             onChange={value => updatePropertyValue(propKey, value, true)}
@@ -289,7 +299,12 @@ const ComponentEditor = props => {
             entry={fetchHydratedEntry(value)}
             internalMappingInstance={
               isComponentPropertySingleton(value)
-                ? new InternalMapping(value.componentId, value.properties, props.schema, false)
+                ? new InternalMapping(
+                    value.componentId,
+                    value.properties,
+                    props.schemas.find(s => s.meta.id === value.componentId),
+                    false
+                  )
                 : null
             }
             onChange={(value, timeout = false, singletonErrors) =>
@@ -338,7 +353,12 @@ const ComponentEditor = props => {
             entry={fetchHydratedEntry(value)}
             internalMappingInstance={
               isComponentPropertySingleton(value)
-                ? new InternalMapping(value.componentId, value.properties, props.schema, true)
+                ? new InternalMapping(
+                    value.componentId,
+                    value.properties,
+                    props.schemas.find(s => s.meta.id === value.componentId),
+                    true
+                  )
                 : null
             }
             onChange={(value, timeout = false, singletonErrors) =>

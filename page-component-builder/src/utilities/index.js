@@ -206,6 +206,10 @@ export const isShortTextField = property => {
   );
 };
 
+export const isColorField = property => {
+  return property.type === c.TEXT_PROPERTY && property.editor_type === c.COLOR_EDITOR;
+};
+
 export const isNumberField = property => {
   return property.type === c.NUMBER_PROPERTY && !property.options;
 };

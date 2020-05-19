@@ -23,39 +23,39 @@
       </div>
       <div class="default-cp-color" data-value="#8199A3">
         <label>Concrete</label>
-        <div style="background-color: #8199A3;"></div>
+        <div style="background-color: #8199a3;"></div>
       </div>
       <div class="default-cp-color" data-value="#CDD6DA">
         <label>Timberwolf</label>
-        <div style="background-color: #CDD6DA;"></div>
+        <div style="background-color: #cdd6da;"></div>
       </div>
       <div class="default-cp-color" data-value="#EBF8FD">
         <label>Mist</label>
-        <div style="background-color: #EBF8FD;"></div>
+        <div style="background-color: #ebf8fd;"></div>
       </div>
       <div class="default-cp-color" data-value="#39B6E9">
         <label>Cerulean</label>
-        <div style="background-color: #39B6E9;"></div>
+        <div style="background-color: #39b6e9;"></div>
       </div>
       <div class="default-cp-color" data-value="#EC5453">
         <label>Strawberry</label>
-        <div style="background-color: #EC5453;"></div>
+        <div style="background-color: #ec5453;"></div>
       </div>
       <div class="default-cp-color" data-value="#243F69">
         <label>Navy</label>
-        <div style="background-color: #243F69;"></div>
+        <div style="background-color: #243f69;"></div>
       </div>
       <div class="default-cp-color" data-value="#2C7FA0">
         <label>Brand Blue 800</label>
-        <div style="background-color: #2C7FA0;"></div>
+        <div style="background-color: #2c7fa0;"></div>
       </div>
       <div class="default-cp-color" data-value="#A49E40">
         <label>Brand Yellow 600</label>
-        <div style="background-color: #A49E40;"></div>
+        <div style="background-color: #a49e40;"></div>
       </div>
       <div class="default-cp-color" data-value="#2F7D56">
         <label>Brand Green 700</label>
-        <div style="background-color: #2F7D56;"></div>
+        <div style="background-color: #2f7d56;"></div>
       </div>
     </div>
 
@@ -129,7 +129,7 @@
         window.addEventListener("onbeforeunload", onBeforeUnloadHandler);
         draftTextEl.addEventListener("input", keyboardInputHandler);
         colourPickerEl.addEventListener("change", updateField);
-        defaultColorEls.forEach(el => {
+        defaultColorEls.forEach((el) => {
           el.addEventListener("click", updateFieldFromButton);
         });
 
@@ -137,13 +137,13 @@
         if (publishedVersion) {
           // Load published value from CDA.
           loadPublishedValue(entry.getSys().id)
-            .then(function(entries) {
+            .then(function (entries) {
               publishedValue = entries.items[0].fields[fieldId][fieldLocale];
               draftTextEl.disabled = false;
               colourPickerEl.disabled = false;
               renderColour();
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.log(error);
             });
         } else {
@@ -169,7 +169,7 @@
           window.removeEventListener("onbeforeunload", onBeforeUnloadHandler);
           draftTextEl.removeEventListener("input", keyboardInputHandler);
           colourPickerEl.removeEventListener("change", updateField);
-          defaultColorEls.forEach(el => {
+          defaultColorEls.forEach((el) => {
             el.removeEventListener("click", updateFieldFromButton);
           });
           detachValueChanged();
