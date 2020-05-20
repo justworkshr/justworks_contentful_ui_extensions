@@ -1,7 +1,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const path = require('path');
 module.exports = {
   mode: 'production',
   entry: './src/index.js',
@@ -20,7 +20,7 @@ module.exports = {
       template: './src/index.html',
       inlineSource: '.(js|css)$'
     }),
-    new HtmlWebpackInlineSourcePlugin(),
+    new HtmlWebpackInlineSourcePlugin(HtmlWebpackPlugin),
     new MiniCssExtractPlugin({
       filename: 'style.css'
     })
