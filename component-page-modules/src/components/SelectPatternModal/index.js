@@ -2,19 +2,26 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import * as c from '@shared/constants';
 
-import { Button, Modal, TextInput } from '@contentful/forma-36-react-components';
-import HydratedEntryCard from '../cards/HydratedEntryCard';
-import { getLabel } from '@shared/utilities';
+import {
+  Button,
+  Modal,
+  ToggleButton,
+  TextInput,
+  EntryCard
+} from '@contentful/forma-36-react-components';
+// import HydratedEntryCard from '../cards/HydratedEntryCard';
+import { getLabel, getStatus } from '@shared/utilities';
 
 import './style.scss';
 
-const SelectComponentModal = props => {
+const SelectPatternModal = props => {
   const [isLoading, setLoading] = useState(false);
   const [isCompleted, setCompleted] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [matchingEntries, setMatchingEntries] = useState([]);
   const [selected, setSelected] = useState([]);
   const [searchTimeout, setSearchTimeout] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const onClose = () => {
     setCompleted(false);
@@ -43,8 +50,7 @@ const SelectComponentModal = props => {
 
     const response = await props.sdk.space.getEntries({
       content_type: c.CONTENT_TYPE_VIEW_COMPONENT,
-      'fields.componentId[in]': props.options.join(','),
-      'fields.configObject': props.useConfigObjects,
+      'fields.componentId[match]': 'patterns/',
       'fields.name[match]': searchText
     });
 
@@ -75,6 +81,22 @@ const SelectComponentModal = props => {
     }
   };
 
+  const handleTagClick = value => {
+    if (selectedTags.some(tag => tag === value)) {
+      setSelectedTags(selectedTags.filter(tag => tag !== value));
+    } else {
+      setSelectedTags([...selectedTags, value]);
+    }
+  };
+
+  const tagsInUse = tags => {
+    return tags.filter(tag =>
+      props.schemaData.components
+        .filter(s => s.meta.editor_role === c.PATTERN_ROLE)
+        .some(component => component.meta.tags.includes(tag))
+    );
+  };
+
   return (
     <Modal
       testId="select-component-modal"
@@ -96,21 +118,62 @@ const SelectComponentModal = props => {
           onChange={e => handleInputChange(e.target.value)}
           value={inputValue}
         />
+        <div className="tags">
+          <div className="tag-section f36-margin-bottom--l">
+            {tagsInUse(props.schemaData.tags['component']).map(tag => {
+              return (
+                <ToggleButton
+                  className="tag f36-margin-bottom--xs f36-margin-right--xs"
+                  isActive={selectedTags.some(t => t === tag)}
+                  onClick={() => handleTagClick(tag)}>
+                  {tag}
+                </ToggleButton>
+              );
+            })}
+          </div>
+          <div className="tag-section f36-margin-bottom--l">
+            {tagsInUse(props.schemaData.tags['location']).map(tag => {
+              return (
+                <ToggleButton
+                  className="tag f36-margin-bottom--xs f36-margin-right--xs"
+                  isActive={selectedTags.some(t => t === tag)}
+                  onClick={() => handleTagClick(tag)}>
+                  {tag}
+                </ToggleButton>
+              );
+            })}
+          </div>
+          {/* <div className="tag-section f36-margin-bottom--l">
+            {tagsInUse(props.schemaData.tags['content']).map(tag => {
+              return (
+                <ToggleButton
+                  className="tag f36-margin-bottom--xs f36-margin-right--xs"
+                  isActive={selectedTags.some(t => t === tag)}
+                  onClick={() => handleTagClick(tag)}>
+                  {tag}
+                </ToggleButton>
+              );
+            })}
+          </div> */}
+        </div>
       </div>
       <div className="select-component-modal__results">
         {matchingEntries
           .filter(e => !e.sys.archivedAt)
           .map((entry, index) => {
+            console.log(entry);
             return (
-              <HydratedEntryCard
+              <EntryCard
                 key={`modal-result--${index}`}
-                testId={`result-card--${index}`}
                 className="f36-margin-bottom--s"
                 contentType={entry.fields.componentId['en-US']}
                 entry={entry}
                 isLoading={false}
+                size="small"
                 onClick={() => getOnClickFunction()(entry)}
                 selected={selected.includes(entry)}
+                title={(entry.fields.name || {})['en-US']}
+                status={getStatus(entry)}
               />
             );
           })}
@@ -136,7 +199,7 @@ const SelectComponentModal = props => {
   );
 };
 
-SelectComponentModal.propTypes = {
+SelectPatternModal.propTypes = {
   sdk: PropTypes.object,
   type: PropTypes.oneOf(['single', 'multiple']),
   handleSubmit: PropTypes.func,
@@ -146,11 +209,11 @@ SelectComponentModal.propTypes = {
   useConfigObjects: PropTypes.bool,
   schemas: PropTypes.array
 };
-SelectComponentModal.defaultProps = {
+SelectPatternModal.defaultProps = {
   type: 'single',
   isShown: false,
   options: [],
   schemas: []
 };
 
-export default SelectComponentModal;
+export default SelectPatternModal;

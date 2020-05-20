@@ -9,6 +9,7 @@ import {
 import * as c from '@shared/constants';
 
 import { createEntry, constructLink, getStatus } from '@shared/utilities/index.js';
+import SelectPatternModal from '../SelectPatternModal';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
@@ -16,8 +17,16 @@ import '@contentful/forma-36-fcss/dist/styles.css';
 import './style.css';
 
 const MultiComponentField = props => {
+  const [linkModalOpen, toggleLinkModal] = useState(false);
+  const [modalOptions, setModalOptions] = useState([]);
+
   const [dragged, setDragged] = useState(undefined);
   const [draggedOver, setDraggedOver] = useState(undefined);
+
+  const handleModalSubmit = (modalValue = []) => {
+    const newValue = [...props.value, ...modalValue.map(l => constructLink(l))];
+    props.onChange(newValue);
+  };
 
   const onDragStart = index => {
     setDragged(index);
@@ -93,7 +102,7 @@ const MultiComponentField = props => {
   };
 
   const handleLink = () => {
-    return;
+    toggleLinkModal(true);
   };
 
   const handleEditClick = async index => {
@@ -117,49 +126,61 @@ const MultiComponentField = props => {
   };
 
   return (
-    <div className="multi-component-field">
+    <div className={`multi-component-field ${linkModalOpen ? 'full-height' : ''}`}>
+      <SelectPatternModal
+        sdk={props.sdk}
+        type="multiple"
+        handleClose={() => toggleLinkModal(false)}
+        handleSubmit={handleModalSubmit}
+        isShown={linkModalOpen}
+        options={['patterns/']}
+        schemaData={props.schemaData}
+      />
       <div data-test-id="multi-component-field--links">
         {!!props.hydratedEntries.length &&
-          props.value.map((e, index) => {
-            const entry = props.hydratedEntries.find(he => he.sys.id === e.sys.id);
-            return (
-              <EntryCard
-                key={`entry--${index}`}
-                className={`f36-margin-bottom--xs ${draggedOverClass(index)}`}
-                title={entry.fields.name['en-US'] || 'Loading...'}
-                loading={false}
-                contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
-                status={getStatus(props.entry)}
-                size="small"
-                onClick={() => handleEditClick(index)}
-                draggable={true}
-                withDragHandle={true}
-                isDragActive={index === dragged}
-                onMouseDown={() => onDragStart(index)}
-                onDragStart={() => onDragStart(index)}
-                onDragOver={() => onDragOver(index)}
-                onDragEnd={onDragEnd}
-                dropdownListElements={
-                  <DropdownList>
-                    <DropdownListItem isTitle>Actions</DropdownListItem>
-                    <DropdownListItem
-                      testId="action-dropdown--edit"
-                      className="entry-card__action--edit"
-                      onClick={() => handleEditClick(index)}>
-                      Edit
-                    </DropdownListItem>
+          props.value
+            .map((e, index) => {
+              const entry = props.hydratedEntries.find(he => he.sys.id === e.sys.id);
+              if (!entry) return null;
+              return (
+                <EntryCard
+                  key={`entry--${index}`}
+                  className={`f36-margin-bottom--xs ${draggedOverClass(index)}`}
+                  title={(entry.fields.name || {})['en-US']}
+                  loading={false}
+                  contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
+                  status={getStatus(entry)}
+                  size="small"
+                  onClick={() => handleEditClick(index)}
+                  draggable={true}
+                  withDragHandle={true}
+                  isDragActive={index === dragged}
+                  onMouseDown={() => onDragStart(index)}
+                  onDragStart={() => onDragStart(index)}
+                  onDragOver={() => onDragOver(index)}
+                  onDragEnd={onDragEnd}
+                  dropdownListElements={
+                    <DropdownList>
+                      <DropdownListItem isTitle>Actions</DropdownListItem>
+                      <DropdownListItem
+                        testId="action-dropdown--edit"
+                        className="entry-card__action--edit"
+                        onClick={() => handleEditClick(index)}>
+                        Edit
+                      </DropdownListItem>
 
-                    <DropdownListItem
-                      testId="action-dropdown--remove"
-                      className="entry-card__action--remove"
-                      onClick={() => handleRemoveClick(index)}>
-                      Remove
-                    </DropdownListItem>
-                  </DropdownList>
-                }
-              />
-            );
-          })}
+                      <DropdownListItem
+                        testId="action-dropdown--remove"
+                        className="entry-card__action--remove"
+                        onClick={() => handleRemoveClick(index)}>
+                        Remove
+                      </DropdownListItem>
+                    </DropdownList>
+                  }
+                />
+              );
+            })
+            .filter(e => e)}
       </div>
       <div className="action-row f36-margin-top--s">
         <TextLink className="f36-margin-right--xs" onClick={handleCreate}>
@@ -173,11 +194,16 @@ const MultiComponentField = props => {
 
 MultiComponentField.propTypes = {
   sdk: PropTypes.object,
+  schemaData: PropTypes.object,
   hydratedEntries: PropTypes.array,
   onChange: PropTypes.func,
   value: PropTypes.array
 };
 MultiComponentField.defaultProps = {
+  schemaData: {
+    tags: {},
+    components: []
+  },
   sdk: {},
   hydratedEntries: [],
   value: []

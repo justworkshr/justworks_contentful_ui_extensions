@@ -141,3 +141,14 @@ export const getStatus = (entry) => {
     return "draft";
   }
 };
+
+export const getLabel = (component_id, schemas) => {
+  if (!schemas.length) return component_id;
+  const schema = schemas.find((schema) => schema.meta.id === component_id);
+
+  if (schema) {
+    return schema.meta.title;
+  } else {
+    return component_id;
+  }
+};

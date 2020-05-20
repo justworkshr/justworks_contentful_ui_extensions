@@ -5,6 +5,7 @@ import { TextInput, HelpText } from '@contentful/forma-36-react-components';
 import { init } from 'contentful-ui-extensions-sdk';
 
 import MultiComponentField from './components/MultiComponentField';
+import { mockSchemas } from '@shared/__mocks__/mockData';
 
 import '@contentful/forma-36-react-components/dist/styles.css';
 import './index.css';
@@ -18,9 +19,11 @@ export class App extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       hydratedEntries: [],
-      value: props.sdk.field.getValue() || []
+      value: props.sdk.field.getValue() || [],
+      schemas: props.schemas
     };
 
     this.hydrateEntries = this.hydrateEntries.bind(this);
@@ -39,6 +42,25 @@ export class App extends React.Component {
       this.detachExternalChangeHandler();
     }
   }
+
+  fetchSchemas = async () => {
+    // const response = await Axios.get('https://justworks.com/components.json');
+
+    // props.schemaData for tests
+    const schemaData = this.props.schemas || mockSchemas.data;
+
+    this.setState(
+      {
+        schemaData
+      },
+      () => {
+        if (this.state.componentId && this.state.internalMapping == '{}') {
+          const internalMapping = this.internalMappingFromComponentId(this.state.componentId);
+          this.updateInternalMapping(internalMapping, false);
+        }
+      }
+    );
+  };
 
   hydrateEntries = async () => {
     const entries = await this.props.sdk.space.getEntries({
@@ -70,8 +92,9 @@ export class App extends React.Component {
     return (
       <div>
         <MultiComponentField
-          hydratedEntries={this.state.hydratedEntries}
           sdk={this.props.sdk}
+          hydratedEntries={this.state.hydratedEntries}
+          schemaData={this.state.schemas}
           onChange={this.onChange}
           value={this.state.value}
         />
@@ -82,7 +105,7 @@ export class App extends React.Component {
 }
 
 init(sdk => {
-  ReactDOM.render(<App sdk={sdk} />, document.getElementById('root'));
+  ReactDOM.render(<App sdk={sdk} schemas={mockSchemas.data} />, document.getElementById('root'));
 });
 
 /**

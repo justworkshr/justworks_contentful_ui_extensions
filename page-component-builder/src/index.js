@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { render } from 'react-dom';
 import Axios from 'axios';
 
-import { mockSchemas } from './tests/mockData';
+import { mockSchemas } from '@shared/__mocks__/mockData';
 
 import ComponentPalette from './components/ComponentPalette';
 import ComponentEditor from './components/ComponentEditor';

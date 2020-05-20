@@ -122,7 +122,7 @@ const ComponentPalette = props => {
                   );
                 })}
             </div>
-            <div className="f36-padding--s f36-background-color--element-light">
+            {/* <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Content Tags</SectionHeading>
               {props.tags.content &&
                 tagsInUse(props.tags.content).map((tag, index) => {
@@ -137,7 +137,7 @@ const ComponentPalette = props => {
                     </ToggleButton>
                   );
                 })}
-            </div>
+            </div> */}
 
             <div className="f36-padding--s f36-background-color--element-light">
               <SectionHeading className="f36-margin-bottom--s">Location Tags</SectionHeading>

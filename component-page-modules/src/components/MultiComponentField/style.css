@@ -2,6 +2,10 @@
   min-height: 160px;
 }
 
+.multi-component-field.full-height {
+  height: 1000px;
+}
+
 [class*='EntryCard__EntryCard--drag-active'] {
   background-color: white;
 }
