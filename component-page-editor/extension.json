@@ -1,0 +1,5 @@
+{
+  "id": "component-page-editor",
+  "name": "component-page-editor",
+  "srcdoc": "./build/index.html"
+}

@@ -1,0 +1,24 @@
+.multi-component-field {
+  min-height: 160px;
+}
+
+.multi-component-field.full-height {
+  height: 1000px;
+}
+
+[class*='EntryCard__EntryCard--drag-active'] {
+  background-color: white;
+}
+
+.dragged-over--up,
+.dragged-over--down {
+  transition: transform 0.3s ease-in;
+}
+
+.dragged-over--up {
+  transform: translateY(-60px);
+}
+
+.dragged-over--down {
+  transform: translateY(60px);
+}

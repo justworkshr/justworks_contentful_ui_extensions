@@ -21,7 +21,7 @@ https://www.contentful.com/developers/docs/references/content-delivery-api/
 npx @contentful/create-contentful-extension my-extension
 
 // Add extra packages needed for self-hosted builds
-yarn install webpack webpack-cli babel-core babel-loader @babel/preset-env @babel/preset-react style-loader css-loader html-webpack-inline-source-plugin html-webpack-plugin sass-loader node-sass --dev
+yarn add webpack webpack-cli babel-core babel-loader @babel/preset-env @babel/preset-react style-loader css-loader html-webpack-inline-source-plugin@1.0.0-beta.2 html-webpack-plugin sass-loader node-sass mini-css-extract-plugin --dev
 
 ```
 
