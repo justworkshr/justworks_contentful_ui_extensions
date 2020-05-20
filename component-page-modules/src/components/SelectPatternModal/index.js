@@ -97,6 +97,19 @@ const SelectPatternModal = props => {
     );
   };
 
+  const filterResultsByTag = (results = []) => {
+    if (selectedTags.length) {
+      return results.filter(e => {
+        const componentId = e.fields.componentId['en-US'];
+        const schema = props.schemaData.components.find(schema => schema.meta.id === componentId);
+
+        return selectedTags.every(tag => schema.meta.tags.includes(tag));
+      });
+    } else {
+      return results;
+    }
+  };
+
   return (
     <Modal
       testId="select-component-modal"
@@ -158,10 +171,9 @@ const SelectPatternModal = props => {
         </div>
       </div>
       <div className="select-component-modal__results">
-        {matchingEntries
+        {filterResultsByTag(matchingEntries)
           .filter(e => !e.sys.archivedAt)
           .map((entry, index) => {
-            console.log(entry);
             return (
               <EntryCard
                 key={`modal-result--${index}`}

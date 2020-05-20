@@ -358,7 +358,7 @@ export class PageComponentBuilder extends React.Component {
             testId="field-componentId"
             className="f36-margin-bottom--m d-none"
             disabled={true}
-            onChange={e => this.onComponentIdChangeHandler(e.target.value)}
+            onChange={e => this.onComponentIdChangeHandler(e.tar2.value)}
             value={this.state.componentId}
           />
           <TextInput disabled={true} value={schema ? schema.meta.title || schema.meta.id : ''} />

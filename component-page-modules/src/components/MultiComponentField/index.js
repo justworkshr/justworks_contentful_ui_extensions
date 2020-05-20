@@ -125,6 +125,16 @@ const MultiComponentField = props => {
     props.onChange(newValue);
   };
 
+  const getTitle = entry => {
+    const componentId = (entry.fields.componentId || {})['en-US'];
+    const schema = props.schemaData.components.find(schema => schema.meta.id === componentId);
+    if (schema) {
+      return schema.meta.title || schema.meta.id;
+    } else {
+      return '< unconfigured >';
+    }
+  };
+
   return (
     <div className={`multi-component-field ${linkModalOpen ? 'full-height' : ''}`}>
       <SelectPatternModal
@@ -148,7 +158,7 @@ const MultiComponentField = props => {
                   className={`f36-margin-bottom--xs ${draggedOverClass(index)}`}
                   title={(entry.fields.name || {})['en-US']}
                   loading={false}
-                  contentType={c.CONTENT_TYPE_VIEW_COMPONENT}
+                  contentType={getTitle(entry)}
                   status={getStatus(entry)}
                   size="small"
                   onClick={() => handleEditClick(index)}
