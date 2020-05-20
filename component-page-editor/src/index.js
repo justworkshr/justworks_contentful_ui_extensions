@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from 'react-dom';
+import * as c from '@shared/constants';
 
 import { mockSchemas } from '@shared/__mocks__/mockData';
 
@@ -15,7 +16,8 @@ import {
   Form,
   Select,
   Option,
-  HelpText
+  HelpText,
+  TextLink
 } from '@contentful/forma-36-react-components';
 import { init, locations } from 'contentful-ui-extensions-sdk';
 import '@contentful/forma-36-react-components/dist/styles.css';
@@ -207,6 +209,10 @@ export class App extends React.Component {
               );
             })}
         </Select>
+        <HelpText>
+          The preset site routing address. Format: https://justworks.com/( routing )/( path )
+        </HelpText>
+
         <SectionHeading className={!this.state.path && 'f36-color--negative'}>
           Path (required)
         </SectionHeading>
@@ -215,6 +221,23 @@ export class App extends React.Component {
           onChange={this.onPathChangeHandler}
           value={this.state.path}
         />
+        <HelpText>The last part of the URL.</HelpText>
+        <SectionHeading>Production URL</SectionHeading>
+        <TextLink
+          target="_blank"
+          href={`https://justworks.com${c.SITE_ROUTING[this.state.routing]}/${
+            this.state.path
+          }`}>{`https://justworks.com${c.SITE_ROUTING[this.state.routing]}/${
+          this.state.path
+        }`}</TextLink>
+        <SectionHeading>Staging URL</SectionHeading>
+        <TextLink
+          target="_blank"
+          href={`https://justworks-staging-v2.herokuapp.com${c.SITE_ROUTING[this.state.routing]}/${
+            this.state.path
+          }`}>{`https://justworks-staging-v2.herokuapp.com${c.SITE_ROUTING[this.state.routing]}/${
+          this.state.path
+        }`}</TextLink>
         <SectionHeading className={!this.state.theme && 'f36-color--negative'}>
           Theme (required)
         </SectionHeading>
@@ -229,6 +252,8 @@ export class App extends React.Component {
               );
             })}
         </Select>
+        <HelpText>The theme which affects color scheming and typography.</HelpText>
+
         <SectionHeading className={!this.state.themeVariant && 'f36-color--negative'}>
           Theme Variant (required)
         </SectionHeading>
@@ -243,7 +268,7 @@ export class App extends React.Component {
               );
             })}
         </Select>
-
+        <HelpText>The light / dark mode setting for the theme.</HelpText>
         <SectionHeading>Modules</SectionHeading>
         <MultiComponentField
           sdk={this.props.sdk}

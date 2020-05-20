@@ -47,6 +47,11 @@ export const DROPDOWN_WITH_CUSTOM_EDITOR = "dropdown-with-custom-editor";
 
 export const ASSET_TYPE_IMAGE = "image";
 
+export const SITE_ROUTING = {
+  Default: "",
+  "Landing Page": "/lp",
+};
+
 export const BRAND_COLORS = [
   {
     name: "Brand Black",
