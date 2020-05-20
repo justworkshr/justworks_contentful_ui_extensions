@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { EntryCard } from '@contentful/forma-36-react-components';
 import ActionDropdown from '../../elements/ActionDropdown';
 
-import { getStatus } from '../../../utilities/index';
+import { getStatus } from '@shared/utilities/index';
 import classnames from 'classnames';
 
 const renderMissingEntry = props => {

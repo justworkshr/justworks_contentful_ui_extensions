@@ -19,8 +19,11 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.sdk.field.getValue() || ''
+      hydratedEntries: [],
+      value: props.sdk.field.getValue() || []
     };
+
+    this.hydrateEntries = this.hydrateEntries.bind(this);
   }
 
   componentDidMount() {
@@ -28,6 +31,7 @@ export class App extends React.Component {
 
     // Handler for external field value changes (e.g. when multiple authors are working on the same entry).
     this.detachExternalChangeHandler = this.props.sdk.field.onValueChanged(this.onExternalChange);
+    this.hydrateEntries();
   }
 
   componentWillUnmount() {
@@ -36,24 +40,37 @@ export class App extends React.Component {
     }
   }
 
+  hydrateEntries = async () => {
+    const entries = await this.props.sdk.space.getEntries({
+      'sys.id[in]': this.state.value.map(l => l.sys.id).join(',')
+    });
+
+    this.setState({
+      hydratedEntries: entries.items
+    });
+  };
+
   onExternalChange = value => {
     this.setState({ value });
   };
 
   onChange = (value = []) => {
-    this.setState({ value });
-    if (value.length) {
-      this.props.sdk.field.setValue(value);
-    } else {
-      this.props.sdk.field.removeValue();
-    }
+    this.setState({ value }, () => {
+      if (value.length) {
+        this.props.sdk.field.setValue(value);
+      } else {
+        this.props.sdk.field.removeValue();
+      }
+
+      this.hydrateEntries();
+    });
   };
 
   render() {
-    console.log(this.state.value);
     return (
       <div>
         <MultiComponentField
+          hydratedEntries={this.state.hydratedEntries}
           sdk={this.props.sdk}
           onChange={this.onChange}
           value={this.state.value}
