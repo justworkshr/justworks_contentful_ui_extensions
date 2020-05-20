@@ -175,7 +175,7 @@ export class App extends React.Component {
   };
 
   render() {
-    console.log(this.props.sdk.entry.fields);
+    console.log(this.state.schemaData);
     return (
       <Form className="editor f36-margin--l">
         <DisplayText>Component Page</DisplayText>
@@ -222,22 +222,27 @@ export class App extends React.Component {
           value={this.state.path}
         />
         <HelpText>The last part of the URL.</HelpText>
-        <SectionHeading>Production URL</SectionHeading>
-        <TextLink
-          target="_blank"
-          href={`https://justworks.com${c.SITE_ROUTING[this.state.routing]}/${
-            this.state.path
-          }`}>{`https://justworks.com${c.SITE_ROUTING[this.state.routing]}/${
-          this.state.path
-        }`}</TextLink>
-        <SectionHeading>Staging URL</SectionHeading>
-        <TextLink
-          target="_blank"
-          href={`https://justworks-staging-v2.herokuapp.com${c.SITE_ROUTING[this.state.routing]}/${
-            this.state.path
-          }`}>{`https://justworks-staging-v2.herokuapp.com${c.SITE_ROUTING[this.state.routing]}/${
-          this.state.path
-        }`}</TextLink>
+        {this.state.schemaData.tokens && (
+          <div>
+            <SectionHeading>Production URL</SectionHeading>
+            <TextLink
+              target="_blank"
+              href={`https://justworks.com${
+                this.state.schemaData.tokens.routing[this.state.routing]
+              }${this.state.path}`}>{`https://justworks.com${
+              this.state.schemaData.tokens.routing[this.state.routing]
+            }${this.state.path}`}</TextLink>
+            <SectionHeading className="f36-margin-top--xs">Staging URL</SectionHeading>
+            <TextLink
+              target="_blank"
+              href={`https://justworks-staging-v2.herokuapp.com${
+                this.state.schemaData.tokens.routing[this.state.routing]
+              }${this.state.path}`}>{`https://justworks-staging-v2.herokuapp.com${
+              this.state.schemaData.tokens.routing[this.state.routing]
+            }${this.state.path}`}</TextLink>
+          </div>
+        )}
+
         <SectionHeading className={!this.state.theme && 'f36-color--negative'}>
           Theme (required)
         </SectionHeading>
