@@ -175,7 +175,6 @@ export class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.schemaData);
     return (
       <Form className="editor f36-margin--l">
         <DisplayText>Component Page</DisplayText>
