@@ -85,7 +85,7 @@ const MetaEntryField = props => {
           }
         />
       )}
-      {!props.value && (
+      {!props.hydratedEntry && (
         <div className="action-row">
           <TextLink className="f36-margin-right--xs" onClick={handleCreateClick}>
             Create meta
