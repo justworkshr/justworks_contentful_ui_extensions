@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "07dec3e3-0125-4317-b93d-76ede7ca0b2d",
+            default: "c2cccb53-2c2c-41ce-b7ef-bef71667e5ad",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "7ee9bd7a-7e5f-4a91-84b2-635469180348",
+            default: "953a4d0f-a8aa-4d04-96c2-bd16b5a81e1e",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "d85fb6e4-63a5-40d1-a7c1-f897b2a6adce",
+            default: "7f6a3158-76a9-475b-b71b-8cafeddaa0e0",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6215,11 +6215,11 @@ export const mockSchemas = {
           text: {
             type: "text",
             required: false,
-            default: "",
+            default: null,
             options: null,
-            description: null,
+            description: "The copy (text or markdown)",
             related_to: null,
-            editor_type: "long-text-editor",
+            editor_type: "markdown-editor",
             editor_category: null,
             hidden: false,
           },
@@ -6542,11 +6542,11 @@ export const mockSchemas = {
           text: {
             type: "text",
             required: false,
-            default: "",
+            default: null,
             options: null,
             description: "The copy (text or markdown)",
             related_to: null,
-            editor_type: "long-text-editor",
+            editor_type: "markdown-editor",
             editor_category: null,
             hidden: false,
           },
@@ -6654,7 +6654,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "cb54ec7d-7bc8-48ff-88fb-3ed6f90bf0b5",
+            default: "ef4c1085-c2b9-4c1e-a53a-13aa4b922742",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6906,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "a0283c50-6f2d-4fb7-80c9-a1d831ff5feb",
+            default: "aac0a7c2-eb29-4179-a2d0-a03878a90374",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -7972,7 +7972,7 @@ export const mockSchemas = {
               "components/author_headshot_meta",
             ],
             presets: [],
-            description: null,
+            description: "Stackable single-column components",
             related_to: null,
             editor_category: null,
           },
