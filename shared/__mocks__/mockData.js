@@ -21,7 +21,7 @@ export const mockSchemas = {
       ],
       submit_action_types: ["redirect", "event"],
       routing: {
-        Default: "",
+        Default: "/",
         "Landing Page": "/lp/",
         "Thank You": "/thank-you/",
         Comms: "/comms/",
@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "d6c04996-43a4-4628-8363-a67ded0e6026",
+            default: "8aa91c95-908d-4c76-9302-624cd8d47df3",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "7e638a12-25b3-455c-b9b3-3c1ee669e241",
+            default: "dc0c7d38-b6dc-4426-83e8-73cfde23e7af",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "ce0f4611-864f-4e1b-81d2-28fdd897a499",
+            default: "9c56e2cb-0b1d-419f-a090-177030810021",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6654,7 +6654,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "87b8d9fd-6793-418c-bcb0-97c40bf19549",
+            default: "30490447-3549-432b-9544-40b43add2233",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6906,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "faec8301-cc24-4cc8-98eb-32479bd08920",
+            default: "d5a53250-6a26-445b-9e3f-93762b80b5fe",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
