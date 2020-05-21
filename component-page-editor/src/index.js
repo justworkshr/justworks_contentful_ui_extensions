@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { render } from 'react-dom';
+import Axios from 'axios';
 import * as c from '@shared/constants';
 
 import { mockSchemas } from '@shared/__mocks__/mockData';
