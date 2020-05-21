@@ -385,7 +385,7 @@ export const mockSchemas = {
             description: "Where to focus the image if its a non-square format.",
             related_to: null,
             editor_type: "short-text-editor",
-            editor_category: null,
+            editor_category: "style",
             hidden: false,
           },
           name_color_token: {
@@ -407,7 +407,7 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: "short-text-editor",
-            editor_category: null,
+            editor_category: "style",
             hidden: false,
           },
           name_font_weight: {
@@ -418,7 +418,7 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: "short-text-editor",
-            editor_category: null,
+            editor_category: "style",
             hidden: false,
           },
           meta_color_token: {
@@ -440,7 +440,7 @@ export const mockSchemas = {
             description: null,
             related_to: null,
             editor_type: "short-text-editor",
-            editor_category: null,
+            editor_category: "style",
             hidden: false,
           },
           image_asset: {
@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "c2cccb53-2c2c-41ce-b7ef-bef71667e5ad",
+            default: "3aa9279f-3217-42cd-bd8b-92df26fbf923",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "953a4d0f-a8aa-4d04-96c2-bd16b5a81e1e",
+            default: "108717e8-5229-4714-9f13-d8398e853a2a",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "7f6a3158-76a9-475b-b71b-8cafeddaa0e0",
+            default: "bea195a0-fe76-4c40-a7fc-3ae44057a45e",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6654,7 +6654,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "ef4c1085-c2b9-4c1e-a53a-13aa4b922742",
+            default: "584960cf-b309-40ad-aec3-9acd1e807e69",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6906,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "aac0a7c2-eb29-4179-a2d0-a03878a90374",
+            default: "f997b36d-c555-4fff-a3f3-dceeaabfff6f",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -7716,6 +7716,17 @@ export const mockSchemas = {
             editor_category: "style",
             hidden: false,
           },
+          stack_size: {
+            type: "text",
+            required: false,
+            default: null,
+            options: ["xs", "sm", "md", "lg", "xl", "xxl", "xxxl", "xxxxl"],
+            description: "Additional spacing beneath the component.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
+          },
           title_section_alignment: {
             type: "text",
             required: true,
@@ -7894,6 +7905,17 @@ export const mockSchemas = {
             options: ["xl", "xxxxl"],
             description:
               "Select the amount of spacing to apply to the top and bottom of this page section.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
+          },
+          stack_size: {
+            type: "text",
+            required: false,
+            default: null,
+            options: ["xs", "sm", "md", "lg", "xl", "xxl", "xxxl", "xxxxl"],
+            description: "Additional spacing beneath the component.",
             related_to: null,
             editor_type: "short-text-editor",
             editor_category: "style",
@@ -8099,6 +8121,17 @@ export const mockSchemas = {
             options: ["xl", "xxxxl"],
             description:
               "Select the amount of spacing to apply to the top and bottom of this page section.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
+          },
+          stack_size: {
+            type: "text",
+            required: false,
+            default: null,
+            options: ["xs", "sm", "md", "lg", "xl", "xxl", "xxxl", "xxxxl"],
+            description: "Additional spacing beneath the component.",
             related_to: null,
             editor_type: "short-text-editor",
             editor_category: "style",
