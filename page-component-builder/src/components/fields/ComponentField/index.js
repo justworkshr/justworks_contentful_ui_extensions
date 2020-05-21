@@ -22,7 +22,7 @@ const ComponentField = props => {
 
   const updateSingletonEntry = (value, timeout = false, errors = {}) => {
     // convert errors into single prop key message
-    if (Object.keys(errors).length) {
+    if (Object.keys(errors).some(key => !!errors[key].length)) {
       const errorMessage = 'Please correct all errors in this singleton.';
       errors = { [props.propKey]: [errorMessage] };
     } else {

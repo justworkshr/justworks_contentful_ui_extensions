@@ -154,7 +154,8 @@ export const MultiComponentField = props => {
   };
 
   const updateSingletonEntry = (value, timeout = false, index, errors = {}) => {
-    if (Object.keys(errors).length) {
+    console.log(errors);
+    if (Object.keys(errors).some(key => !!errors[key].length)) {
       const errorMessage = 'Please correct all errors in this singleton.';
       errors = { [props.propKey]: [errorMessage] };
     } else {
