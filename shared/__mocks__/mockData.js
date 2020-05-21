@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "8aa91c95-908d-4c76-9302-624cd8d47df3",
+            default: "07dec3e3-0125-4317-b93d-76ede7ca0b2d",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "dc0c7d38-b6dc-4426-83e8-73cfde23e7af",
+            default: "7ee9bd7a-7e5f-4a91-84b2-635469180348",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "9c56e2cb-0b1d-419f-a090-177030810021",
+            default: "d85fb6e4-63a5-40d1-a7c1-f897b2a6adce",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6654,7 +6654,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "30490447-3549-432b-9544-40b43add2233",
+            default: "cb54ec7d-7bc8-48ff-88fb-3ed6f90bf0b5",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6906,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "d5a53250-6a26-445b-9e3f-93762b80b5fe",
+            default: "a0283c50-6f2d-4fb7-80c9-a1d831ff5feb",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -8423,7 +8423,7 @@ export const mockSchemas = {
           right_items_mobile: {
             type: "multi-component",
             required: false,
-            hidden: true,
+            hidden: false,
             default: [],
             options: [
               "components/text_link",
