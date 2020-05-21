@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "3aa9279f-3217-42cd-bd8b-92df26fbf923",
+            default: "3e9702f3-8e68-456c-8391-9441f3abe9ea",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "108717e8-5229-4714-9f13-d8398e853a2a",
+            default: "fa0686ae-a98e-410d-8711-c4f69203f024",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "bea195a0-fe76-4c40-a7fc-3ae44057a45e",
+            default: "2b25678d-e52d-4ea9-b420-16e4192c51b7",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6654,7 +6654,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "584960cf-b309-40ad-aec3-9acd1e807e69",
+            default: "832c7ff5-4a3f-4f1e-9d60-645d3a3b350b",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6906,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "f997b36d-c555-4fff-a3f3-dceeaabfff6f",
+            default: "464c85a2-cb32-4a37-a9e5-dae2c6cc8900",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
