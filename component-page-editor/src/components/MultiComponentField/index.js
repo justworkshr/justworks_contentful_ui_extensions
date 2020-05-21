@@ -92,13 +92,16 @@ const MultiComponentField = props => {
         'en-US': `${pageName} - Component`
       }
     });
+    const newValue = [...props.value, constructLink(newEntry)];
+    props.onChange(newValue);
 
-    props.sdk.navigator.openEntry(newEntry.sys.id, {
+    const navigator = await props.sdk.navigator.openEntry(newEntry.sys.id, {
       slideIn: { waitForClose: true }
     });
 
-    const newValue = [...props.value, constructLink(newEntry)];
-    props.onChange(newValue);
+    if (navigator.navigated) {
+      props.onChange([...props.value, constructLink(navigator.entity)]);
+    }
   };
 
   const handleLink = () => {

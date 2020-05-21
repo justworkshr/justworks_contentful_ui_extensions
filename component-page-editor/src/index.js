@@ -172,6 +172,7 @@ export class App extends React.Component {
   onModulesChangeHandler = value => {
     this.setState({ modules: value });
     this.props.sdk.entry.fields.modules.setValue(value);
+    this.hydrateEntries();
   };
 
   render() {
