@@ -1301,6 +1301,17 @@ export const mockSchemas = {
             editor_category: "style",
             hidden: false,
           },
+          max_width: {
+            type: "text",
+            required: false,
+            default: null,
+            options: ["narrow", "default", "wide", "jumbo"],
+            description: "The max width of the container.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
+          },
           text_components: {
             type: "multi-component",
             required: false,
@@ -3463,7 +3474,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "2a013d8e-f3a6-4035-85c7-59062a6bc9b9",
+            default: "c5bf5dc8-f185-42b4-9674-5d9c44961888",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3551,7 +3562,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "d76cfa3d-f4c5-412e-b6a5-d9a2008e9843",
+            default: "f0fb58a7-df86-4089-b2e2-ccdc661609a2",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3662,7 +3673,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "592b26b8-b23a-46cd-bb63-a2de409eaaff",
+            default: "1dbb4c5f-23fa-4949-b7ba-c2ee3234516e",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6654,7 +6665,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "7a4a628f-a881-4271-8fe0-0a7b9836a67a",
+            default: "b4b25d20-6215-47d4-84ad-5a33f5fd22a9",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6917,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "626bfdf7-d3bc-46fc-bef0-befc05c66e61",
+            default: "0b61df00-49d9-4ad8-82ff-918494932b71",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
