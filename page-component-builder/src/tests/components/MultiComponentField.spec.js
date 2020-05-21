@@ -34,6 +34,7 @@ const renderComponent = ({
     <MultiComponentField
       sdk={sdk}
       schemas={schemas.components}
+      hydratedAssets={props.hydratedAssets}
       hydratedEntries={hydratedEntries}
       value={value}
       internalMappingInstance={internalMappingInstance}

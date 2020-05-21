@@ -325,6 +325,7 @@ const ComponentEditor = props => {
             propKey={propKey}
             options={property.options}
             presets={property.presets}
+            hydratedAssets={props.hydratedAssets}
             hydratedEntries={props.hydratedEntries}
             schemas={props.schemas}
             loadingEntries={props.loadingEntries}
@@ -384,6 +385,7 @@ const ComponentEditor = props => {
             options={[property.related_to]}
             presets={property.presets}
             schemas={props.schemas}
+            hydratedAssets={props.hydratedAssets}
             hydratedEntries={props.hydratedEntries}
             loadingEntries={props.loadingEntries}
             onChange={(value, timeout, singletonErrors) =>

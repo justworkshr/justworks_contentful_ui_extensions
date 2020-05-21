@@ -256,7 +256,7 @@ export const MultiComponentField = props => {
               onChange={(value, timeout, errors) =>
                 updateSingletonEntry(value, timeout, index, errors)
               }
-              // hydratedAssets={props.hydratedAssets}
+              hydratedAssets={props.hydratedAssets}
               hydratedEntries={props.hydratedEntries}
               replaceHydratedAsset={props.replaceHydratedAsset}
               replaceHydratedEntry={props.replaceHydratedEntry}
@@ -332,6 +332,7 @@ MultiComponentField.propTypes = {
   options: PropTypes.array,
   presets: PropTypes.array,
   hydratedEntries: PropTypes.array,
+  hydratedAssets: PropTypes.array,
   loadingEntries: PropTypes.object,
   onChange: PropTypes.func,
   schemas: PropTypes.array,
@@ -351,6 +352,7 @@ MultiComponentField.defaultProps = {
   options: [],
   presets: [],
   hydratedEntries: [],
+  hydratedAssets: [],
   schemas: [],
   useConfigObjects: false,
   loadingEntries: {},
