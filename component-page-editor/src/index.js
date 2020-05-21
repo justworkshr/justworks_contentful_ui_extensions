@@ -51,7 +51,7 @@ export class App extends React.Component {
       path: props.sdk.entry.fields.path.getValue(),
       theme: props.sdk.entry.fields.theme.getValue(),
       themeVariant: props.sdk.entry.fields.themeVariant.getValue(),
-      modules: props.sdk.entry.fields.modules.getValue(),
+      modules: props.sdk.entry.fields.modules.getValue() || [],
 
       hydratedEntries: [],
       hydratedMeta: null
