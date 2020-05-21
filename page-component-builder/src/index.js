@@ -96,8 +96,8 @@ export class PageComponentBuilder extends React.Component {
   }
 
   componentDidMount = async () => {
+    await this.fetchSchemas();
     await this.syncEntriesAssets();
-    this.fetchSchemas();
     this.onInternalMappingChange(this.state.internalMapping);
 
     const internalMappingInstance = new InternalMapping(
@@ -127,10 +127,25 @@ export class PageComponentBuilder extends React.Component {
   }
 
   fetchSchemas = async () => {
-    // const response = await Axios.get('https://justworks.com/components.json');
+    const schemaHost = this.props.debug
+      ? 'http://localhost:3000'
+      : 'https://justworks-staging-v2.herokuapp.com';
 
-    // props.schemaData for tests
-    const schemaData = this.props.schemas || mockSchemas.data;
+    const auth = `Basic ${btoa('ju$t:w0rks')}`;
+    const response = await Axios.get(`${schemaHost}/components.json`, {
+      headers: { 'Content-Type': 'application/json', Authorization: auth }
+    }).catch(e => {
+      console.log(e);
+      this.props.sdk.notifier.error(`Could not load schemas: ${e.message}`);
+    });
+
+    let schemaData;
+    if (response) {
+      schemaData = response.data.data;
+    } else {
+      schemaData = mockSchemas.data;
+      this.props.sdk.notifier.success('Using mock schemas. Caution: data may be old.');
+    }
 
     this.setState(
       {
@@ -453,6 +468,7 @@ export class PageComponentBuilder extends React.Component {
 }
 
 init(sdk => {
+  const isDev = window.location.href.includes('localhost');
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
     render(
       <PageComponentBuilder
@@ -460,6 +476,7 @@ init(sdk => {
         hydratedEntries={null}
         schemas={null}
         sdk={sdk}
+        debug={isDev}
       />,
       document.getElementById('root')
     );

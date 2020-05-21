@@ -61,9 +61,10 @@ export class App extends React.Component {
     this.hydrateMeta = this.hydrateMeta.bind(this);
   }
 
-  componentDidMount() {
-    this.hydrateEntries();
-    this.hydrateMeta();
+  componentDidMount = async () => {
+    await this.fetchSchemas();
+    await this.hydrateEntries();
+    await this.hydrateMeta();
 
     // set default values
     if (!this.state.routing) {
@@ -88,13 +89,28 @@ export class App extends React.Component {
     if (!this.state.themeVariant) {
       this.onThemeVariantChangeHandler({ target: { value: 'light' } });
     }
-  }
+  };
 
   fetchSchemas = async () => {
-    // const response = await Axios.get('https://justworks.com/components.json');
+    const schemaHost = this.props.debug
+      ? 'http://localhost:3000'
+      : 'https://justworks-staging-v2.herokuapp.com';
 
-    // props.schemaData for tests
-    const schemaData = this.props.schemas || mockSchemas.data;
+    const auth = `Basic ${btoa('ju$t:w0rks')}`;
+    const response = await Axios.get(`${schemaHost}/components.json`, {
+      headers: { 'Content-Type': 'application/json', Authorization: auth }
+    }).catch(e => {
+      console.log(e);
+      this.props.sdk.notifier.error(`Could not load schemas: ${e.message}`);
+    });
+
+    let schemaData;
+    if (response) {
+      schemaData = response.data.data;
+    } else {
+      schemaData = mockSchemas.data;
+      this.props.sdk.notifier.success('Using mock schemas. Caution: data may be old.');
+    }
 
     this.setState(
       {
@@ -288,8 +304,13 @@ export class App extends React.Component {
 }
 
 init(sdk => {
+  const isDev = window.location.href.includes('localhost');
+
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {
-    render(<App sdk={sdk} schemas={mockSchemas.data} />, document.getElementById('root'));
+    render(
+      <App sdk={sdk} schemas={mockSchemas.data} debug={isDev} />,
+      document.getElementById('root')
+    );
   }
 });
 

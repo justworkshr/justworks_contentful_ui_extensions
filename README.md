@@ -110,6 +110,13 @@ yarn run deploy:prod
 
 ```
 
+## Setting up existing extension
+
+1. cd <extension dir>
+2. run `yarn install && yarn login && yarn configure` and select "the SANDBOX" environment
+3. run `yarn start` to setup the extension for dev in contentful's sandbox.
+4. run `yarn build:prod`, push to github master, then `yarn deploy:prod` to push changes live to `master` and `sandbox` contentful environments.
+
 ## Development
 
 - If an extension is live and currently in use, please do all developonent in the Sandbox environment.
