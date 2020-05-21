@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "3e9702f3-8e68-456c-8391-9441f3abe9ea",
+            default: "7980670b-8ab5-45c0-9095-9a60c962d96f",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "fa0686ae-a98e-410d-8711-c4f69203f024",
+            default: "2295e67c-d136-48f7-a3cb-9dec3ba9a80b",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "2b25678d-e52d-4ea9-b420-16e4192c51b7",
+            default: "dd5d4054-e5cf-49e8-8da9-427b0cbb4540",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -5696,7 +5696,7 @@ export const mockSchemas = {
             type: "text",
             required: false,
             default: null,
-            options: ["narrow", "default", "jumbo"],
+            options: ["narrow", "default", "wide", "jumbo"],
             description: "The max width of the container.",
             related_to: null,
             editor_type: "short-text-editor",
@@ -5983,7 +5983,7 @@ export const mockSchemas = {
             type: "text",
             required: false,
             default: null,
-            options: ["narrow", "default", "jumbo"],
+            options: ["narrow", "default", "wide", "jumbo"],
             description: "The max width of the container.",
             related_to: null,
             editor_type: "short-text-editor",
@@ -6139,7 +6139,7 @@ export const mockSchemas = {
             type: "text",
             required: false,
             default: null,
-            options: ["narrow", "default", "jumbo"],
+            options: ["narrow", "default", "wide", "jumbo"],
             description: "The max width of the container.",
             related_to: null,
             editor_type: "short-text-editor",
@@ -6466,7 +6466,7 @@ export const mockSchemas = {
             type: "text",
             required: false,
             default: null,
-            options: ["narrow", "default", "jumbo"],
+            options: ["narrow", "default", "wide", "jumbo"],
             description: "The max width of the container.",
             related_to: null,
             editor_type: "short-text-editor",
@@ -6654,7 +6654,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "832c7ff5-4a3f-4f1e-9d60-645d3a3b350b",
+            default: "00e8357b-94e0-4bf4-8bb2-bbb29f6d6313",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6906,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "464c85a2-cb32-4a37-a9e5-dae2c6cc8900",
+            default: "cbd4c4cf-f804-405f-a86d-6f88f87c0434",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -7556,7 +7556,7 @@ export const mockSchemas = {
             type: "text",
             required: false,
             default: null,
-            options: ["narrow", "default", "jumbo"],
+            options: ["narrow", "default", "wide", "jumbo"],
             description: "The max width of the container.",
             related_to: null,
             editor_type: "short-text-editor",
