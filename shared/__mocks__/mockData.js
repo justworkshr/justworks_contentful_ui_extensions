@@ -3477,7 +3477,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "7980670b-8ab5-45c0-9095-9a60c962d96f",
+            default: "93b3e97f-b53f-43a5-9991-ee9948b564c4",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3565,7 +3565,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "2295e67c-d136-48f7-a3cb-9dec3ba9a80b",
+            default: "2977ba0a-5482-458b-a4cd-4c93d6b7fb44",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3676,7 +3676,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "dd5d4054-e5cf-49e8-8da9-427b0cbb4540",
+            default: "f9fefa4b-3d31-414a-a931-25e0fed808e9",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6196,7 +6196,7 @@ export const mockSchemas = {
             required: true,
             default: "p",
             options: ["p", "markdown"],
-            description: "Specifies the HTML element used.",
+            description: "The HTML element to use or Markdown.",
             related_to: null,
             editor_type: "short-text-editor",
             editor_category: "advanced",
@@ -6217,7 +6217,8 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: null,
-            description: "The copy (text or markdown)",
+            description:
+              'The copy (text or markdown). Be sure to set Advanced \u003e Element: "Markdown" to render markdown.',
             related_to: null,
             editor_type: "markdown-editor",
             editor_category: null,
@@ -6451,6 +6452,18 @@ export const mockSchemas = {
             editor_category: "style",
             hidden: false,
           },
+          paragraph_spacing: {
+            type: "text",
+            required: false,
+            default: "sm",
+            options: ["sm", "md", "lg", "xl"],
+            description:
+              "The spacing between paragraphs (not the same as stack spacing). Only used when the markdown element is selected.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
+          },
           alignment: {
             type: "text",
             required: false,
@@ -6523,7 +6536,7 @@ export const mockSchemas = {
             required: true,
             default: "p",
             options: ["p", "li", "markdown"],
-            description: null,
+            description: "The HTML element to use or Markdown.",
             related_to: null,
             editor_type: "short-text-editor",
             editor_category: "advanced",
@@ -6544,7 +6557,8 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: null,
-            description: "The copy (text or markdown)",
+            description:
+              'The copy (text or markdown). Be sure to set Advanced \u003e Element: "Markdown" to render markdown.',
             related_to: null,
             editor_type: "markdown-editor",
             editor_category: null,
@@ -6654,7 +6668,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "00e8357b-94e0-4bf4-8bb2-bbb29f6d6313",
+            default: "3a9efe9d-4864-41b9-98f1-40f7783b4e43",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6906,7 +6920,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "cbd4c4cf-f804-405f-a86d-6f88f87c0434",
+            default: "4f9a8f64-b784-4bf3-a893-dbbdf7064120",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -7126,7 +7140,7 @@ export const mockSchemas = {
             required: false,
             default: null,
             options: null,
-            description: null,
+            description: "The article markdown.",
             related_to: null,
             editor_type: "markdown-editor",
             editor_category: null,
