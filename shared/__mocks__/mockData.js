@@ -1067,27 +1067,6 @@ export const mockSchemas = {
             editor_category: "style",
             hidden: false,
           },
-          icon_url: {
-            type: "text",
-            required: false,
-            default: "",
-            options: null,
-            description: "Optional in place of using actual contentful asset.",
-            related_to: null,
-            editor_type: "short-text-editor",
-            editor_category: null,
-            hidden: true,
-          },
-          icon_asset: {
-            type: "link",
-            required: false,
-            asset_types: ["image"],
-            content_types: [],
-            description: "The image asset to display as a static circled image",
-            related_to: null,
-            editor_category: null,
-            hidden: false,
-          },
           item_components: {
             type: "multi-component",
             required: false,
@@ -1125,6 +1104,17 @@ export const mockSchemas = {
                 },
               },
               {
+                name: "Statistic Shoutout",
+                component_id: "elements/system_text",
+                properties: {
+                  size: "xxl",
+                  stack_size: "sm",
+                  color_token: "variant",
+                  text: "100%",
+                  element: "p",
+                },
+              },
+              {
                 name: "Body (paragraph)",
                 component_id: "elements/paragraph_text",
                 properties: {
@@ -1132,16 +1122,6 @@ export const mockSchemas = {
                   stack_size: null,
                   color_token: "default",
                   text: "Body Text (paragraph)",
-                },
-              },
-              {
-                name: "Statistic Shoutout",
-                component_id: "elements/system_text",
-                properties: {
-                  size: "xxl",
-                  stack_size: null,
-                  color_token: "variant",
-                  text: "100%",
                 },
               },
               {
@@ -1309,6 +1289,17 @@ export const mockSchemas = {
             editor_type: "short-text-editor",
             editor_category: null,
             hidden: true,
+          },
+          alignment: {
+            type: "text",
+            required: false,
+            default: "left",
+            options: ["left", "center"],
+            description: "Text or component alignment. Blank defaults to left.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
           },
           text_components: {
             type: "multi-component",
@@ -3471,7 +3462,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "3b2a5eac-b2fb-41fe-9cda-679d0ac54826",
+            default: "00f9a7d6-e946-411d-8a75-894e7587af0f",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3559,7 +3550,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "68070d81-d242-4308-9c50-05628139c77e",
+            default: "36041d51-d40a-45e5-9ae2-f93319ccbdfb",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3670,7 +3661,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "d69e0dfa-9005-4d54-a3ba-789ce03fc5ba",
+            default: "137202f5-9429-4ee2-98f5-d1724186ad46",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6662,7 +6653,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "daccd070-d7dc-4230-8d4f-dd1f71bffc77",
+            default: "325d9983-23b4-4f3a-8eb0-5f14cd36c9f2",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6827,7 +6818,7 @@ export const mockSchemas = {
             type: "text",
             required: true,
             default: "span",
-            options: ["span", "label", "div", "markdown"],
+            options: ["span", "label", "div", "p", "markdown"],
             description: null,
             related_to: null,
             editor_type: "short-text-editor",
@@ -6914,7 +6905,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "0faf9af7-85bb-41d5-bcb7-9528cde1d89d",
+            default: "21037f18-368b-4f5f-8638-199fa9b5e775",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
