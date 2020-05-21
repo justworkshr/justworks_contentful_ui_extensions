@@ -1056,6 +1056,17 @@ export const mockSchemas = {
             editor_category: null,
             hidden: true,
           },
+          alignment: {
+            type: "text",
+            required: false,
+            default: "left",
+            options: ["left", "center"],
+            description: "Text or component alignment. Blank defaults to left.",
+            related_to: null,
+            editor_type: "short-text-editor",
+            editor_category: "style",
+            hidden: false,
+          },
           icon_url: {
             type: "text",
             required: false,
@@ -1096,7 +1107,6 @@ export const mockSchemas = {
                 name: "Overline",
                 component_id: "elements/heading",
                 properties: {
-                  alignment: "left",
                   size: "xxs",
                   stack_size: "md",
                   color_token: "default",
@@ -1108,7 +1118,6 @@ export const mockSchemas = {
                 name: "Title (heading)",
                 component_id: "elements/heading",
                 properties: {
-                  alignment: "left",
                   size: "md",
                   stack_size: "md",
                   color_token: "variant",
@@ -1119,7 +1128,6 @@ export const mockSchemas = {
                 name: "Body (paragraph)",
                 component_id: "elements/paragraph_text",
                 properties: {
-                  alignment: "left",
                   size: "sm",
                   stack_size: null,
                   color_token: "default",
@@ -1130,7 +1138,6 @@ export const mockSchemas = {
                 name: "Statistic Shoutout",
                 component_id: "elements/system_text",
                 properties: {
-                  alignment: "left",
                   size: "xxl",
                   stack_size: null,
                   color_token: "variant",
@@ -3464,7 +3471,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "98266502-71ef-4a47-966e-74944f7a0bc1",
+            default: "3b2a5eac-b2fb-41fe-9cda-679d0ac54826",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3552,7 +3559,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "98f1af5f-7c17-49fb-99ff-9eeec32478ab",
+            default: "68070d81-d242-4308-9c50-05628139c77e",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -3663,7 +3670,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "89bf9f2b-4d1d-45ef-93c2-59e7a9826eeb",
+            default: "d69e0dfa-9005-4d54-a3ba-789ce03fc5ba",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6655,7 +6662,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "fc47297d-8f0f-46b7-b3c4-37725761c6ac",
+            default: "daccd070-d7dc-4230-8d4f-dd1f71bffc77",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
@@ -6907,7 +6914,7 @@ export const mockSchemas = {
           input_id: {
             type: "text",
             required: false,
-            default: "087a65df-c2c1-4617-ad79-bd5cafd65629",
+            default: "0faf9af7-85bb-41d5-bcb7-9528cde1d89d",
             options: null,
             description:
               "Randomly generated uuid for a form input to associate it with a label.",
