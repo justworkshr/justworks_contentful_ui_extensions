@@ -114,14 +114,19 @@ export class PageComponentBuilder extends React.Component {
     const internalMappingObject = this.parseInternalMapping();
     const newEntries = extractEntries(internalMappingObject, c.ENTRY_LINK_TYPE) || [];
     const newAssets = extractEntries(internalMappingObject, c.ASSET_LINK_TYPE) || [];
+
     await this.onEntriesChangeHandler(newEntries);
     await this.onAssetsChangeHandler(newAssets);
   };
 
   validateInternalMapping(errors = {}) {
+    console.log(errors);
     if (Object.keys(errors).length) {
       this.props.sdk.entry.fields.isValid.setValue('No');
-    } else if (this.props.sdk.entry.fields.isValid.getValue() === 'No') {
+    } else if (
+      this.props.sdk.entry.fields.isValid.getValue() === 'No' ||
+      !this.props.sdk.entry.fields.isValid.getValue()
+    ) {
       this.props.sdk.entry.fields.isValid.setValue('Yes');
     }
   }
@@ -232,6 +237,7 @@ export class PageComponentBuilder extends React.Component {
         this.setState({ entries: value.filter(e => e) });
         this.setState({ updatingEntries: false });
       }
+      if (!value.length) value = undefined; // contentful prefers 'undefined' instead of empty array
       await this.props.sdk.entry.fields.entries.setValue(value);
     } else {
       console.warn('onEntriesChangeHandler called with non-array value');
@@ -245,6 +251,7 @@ export class PageComponentBuilder extends React.Component {
         this.setState({ assets: value.filter(e => e) });
         this.setState({ updatingAssets: false });
       }
+      if (!value.length) value = undefined; // contentful prefers 'undefined' instead of empty array
       await this.props.sdk.entry.fields.assets.setValue(value);
     } else {
       console.warn('onAssetsChangeHandler called with non-array value');
