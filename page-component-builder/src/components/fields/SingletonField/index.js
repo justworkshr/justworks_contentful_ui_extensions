@@ -53,8 +53,22 @@ const SingletonField = props => {
   };
 
   const getTitle = () => {
+    const schema = props.schemas.find(
+      schema => schema.meta.id === props.internalMappingInstance.componentId
+    );
+
+    if (!schema) return '';
+
+    const autoTitlePropKey = Object.keys(schema.properties).find(prop => {
+      return schema.properties[prop].auto_title;
+    });
+
+    // auto_title value, or preset_name value, or meta title
+
     return (
-      (props.internalMappingInstance.properties.preset_name || {}).value || props.schema.meta.title
+      (props.internalMappingInstance.properties[autoTitlePropKey] || {}).value ||
+      (props.internalMappingInstance.properties.preset_name || {}).value ||
+      props.schema.meta.title
     );
   };
 
