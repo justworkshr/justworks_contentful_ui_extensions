@@ -94,6 +94,10 @@ export const BRAND_COLORS = [
     hex: "#243f69",
   },
   {
+    name: "Brand Blue 800",
+    hex: "#2C7FA0",
+  },
+  {
     name: "Cerulean",
     hex: "#39B6E9",
   },
@@ -118,7 +122,19 @@ export const BRAND_COLORS = [
     hex: "#37b375",
   },
   {
+    name: "Brand Green 700",
+    hex: "#2F7D56",
+  },
+  {
+    name: "Brand Purple 500",
+    hex: "#423161",
+  },
+  {
     name: "Goldenrod",
     hex: "#b8b24f",
+  },
+  {
+    name: "Brand Yellow 600",
+    hex: "#A49E40",
   },
 ];
