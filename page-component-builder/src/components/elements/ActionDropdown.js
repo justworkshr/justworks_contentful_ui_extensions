@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { DropdownList, DropdownListItem } from '@contentful/forma-36-react-components';
+import { Dropdown, DropdownList, DropdownListItem } from '@contentful/forma-36-react-components';
 
 const ActionDropdown = props => {
   if (!(props.handleEditClick || props.handleRemoveClick)) return null;
@@ -16,10 +16,27 @@ const ActionDropdown = props => {
           Edit
         </DropdownListItem>
       )}
+      {props.switchVariation && !!props.patternVariations.length && (
+        <Dropdown testId="hydrated-entry-actions" submenuToggleLabel="Switch Variation">
+          <DropdownList>
+            {props.patternVariations.map(variation => {
+              return (
+                <DropdownListItem
+                  key={`variation--${variation.name}`}
+                  testId="action-dropdown--switch"
+                  className="entry-card__action--switch"
+                  onClick={() => props.switchVariation(variation.name)}>
+                  {variation.name}
+                </DropdownListItem>
+              );
+            })}
+          </DropdownList>
+        </Dropdown>
+      )}
       {props.convertToEntry && (
         <DropdownListItem
-          testId="action-dropdown--edit"
-          className="entry-card__action--edit"
+          testId="action-dropdown--convert"
+          className="entry-card__action--convert"
           onClick={props.convertToEntry}>
           Convert to entry
         </DropdownListItem>
@@ -39,8 +56,12 @@ const ActionDropdown = props => {
 ActionDropdown.propTypes = {
   handleEditClick: PropTypes.func,
   handleRemoveClick: PropTypes.func,
-  convertToEntry: PropTypes.func
+  convertToEntry: PropTypes.func,
+  switchVariation: PropTypes.func,
+  patternVariations: PropTypes.array
 };
-ActionDropdown.defaultProps = {};
+ActionDropdown.defaultProps = {
+  patternVariations: []
+};
 
 export default ActionDropdown;

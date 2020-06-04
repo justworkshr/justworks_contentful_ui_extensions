@@ -137,7 +137,6 @@ const MultiComponentField = props => {
       return '< unconfigured >';
     }
   };
-
   return (
     <div className={`multi-component-field ${linkModalOpen ? 'full-height' : ''}`}>
       <SelectPatternModal

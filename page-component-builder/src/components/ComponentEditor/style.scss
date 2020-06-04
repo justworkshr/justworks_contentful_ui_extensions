@@ -1,10 +1,10 @@
 .component-editor {
   &__field {
     border-left: 3px solid #c5d2d8;
-    padding-left: 1em;
+    padding-left: 2em;
     transition: border-color 0.18s linear;
 
-    &:focus-within {
+    &:focus {
       border-color: #4a90e2;
     }
 

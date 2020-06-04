@@ -8,6 +8,7 @@ import ActionDropdown from '../../elements/ActionDropdown';
 import { constructLink, createEntry } from '@shared/utilities/index';
 
 import './style.scss';
+import { newInternalMappingFromSchema } from '../../../../../shared/utilities';
 
 const SingletonField = props => {
   const [singletonCardOpen, toggleSingletonCard] = useState(false);
@@ -50,6 +51,17 @@ const SingletonField = props => {
 
     const newEntryLink = constructLink(newEntry);
     props.onChange(JSON.stringify(newEntryLink));
+  };
+
+  const switchVariation = variationName => {
+    const variation = props.schema.pattern_variations.find(v => v.name === variationName);
+    if (!variation) return;
+    const newValue = newInternalMappingFromSchema({
+      schema: props.schema,
+      presetObject: variation
+    });
+
+    props.onChange(newValue.asJSON());
   };
 
   const getTitle = () => {
@@ -98,6 +110,8 @@ const SingletonField = props => {
           }}
           dropdownListElements={
             <ActionDropdown
+              patternVariations={props.schema.pattern_variations}
+              switchVariation={switchVariation}
               convertToEntry={convertToEntry}
               handleRemoveClick={props.handleRemoveClick}
             />
