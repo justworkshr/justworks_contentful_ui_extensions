@@ -17,7 +17,10 @@ const ActionDropdown = props => {
         </DropdownListItem>
       )}
       {props.switchVariation && !!props.patternVariations.length && (
-        <Dropdown testId="hydrated-entry-actions" submenuToggleLabel="Switch Variation">
+        <Dropdown
+          testId="hydrated-entry-actions"
+          submenuToggleLabel="Switch Variation"
+          position="left">
           <DropdownList>
             {props.patternVariations.map(variation => {
               return (
