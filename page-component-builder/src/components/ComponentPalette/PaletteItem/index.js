@@ -59,7 +59,24 @@ class PaletteItem extends React.Component {
                 Select
               </TextLink>
             </div>
-            <div>
+            {!!this.props.schema.pattern_variations.length && (
+              <div>
+                <SectionHeading className="f36-margin-top--s">Pattern Variations</SectionHeading>
+                {this.props.schema.pattern_variations.map(variation => {
+                  return (
+                    <div key={`palette-item-variation--${variation.name}`}>
+                      <TextLink
+                        linkType="positive"
+                        onClick={() => this.props.selectItem(this.props.schema, variation)}>
+                        {variation.name}
+                      </TextLink>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="f36-margin-top--s">
               <TextLink
                 href={`https://justworks-staging-v2.herokuapp.com${this.props.schema.meta.styleguide_path}`}
                 target="_blank">

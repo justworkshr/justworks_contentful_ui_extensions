@@ -176,16 +176,20 @@ export class PageComponentBuilder extends React.Component {
     this.props.sdk.entry.fields.configObject.setValue(value);
   };
 
-  internalMappingFromComponentId = componentId => {
+  internalMappingFromComponentId = (componentId, patternVariation = null) => {
     const schema = this.state.schemaData.components.find(s => s.meta.id === componentId);
     const internalMapping = schema
-      ? newInternalMappingFromSchema({ schema, configObject: this.state.configObject }).asJSON()
+      ? newInternalMappingFromSchema({
+          schema,
+          presetObject: patternVariation,
+          configObject: this.state.configObject
+        }).asJSON()
       : JSON.stringify({});
 
     return internalMapping;
   };
 
-  onComponentIdChangeHandler = async value => {
+  onComponentIdChangeHandler = async (value, patternVariation = null) => {
     // Completely resets internal mapping w/ new schema and clears all linked entries and assets
     await this.setState(
       oldState => {
@@ -201,7 +205,7 @@ export class PageComponentBuilder extends React.Component {
         await this.props.sdk.entry.fields.componentId.setValue(value);
         await this.props.sdk.entry.fields.entries.setValue([]); // clear entries
         await this.props.sdk.entry.fields.assets.setValue([]); // clear assets
-        const internalMapping = this.internalMappingFromComponentId(value);
+        const internalMapping = this.internalMappingFromComponentId(value, patternVariation);
 
         this.updateInternalMapping(internalMapping, false);
       }

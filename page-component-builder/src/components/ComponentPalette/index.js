@@ -75,8 +75,8 @@ const ComponentPalette = props => {
     );
   };
 
-  const handleSchemaClick = value => {
-    props.onChange(value.meta.id);
+  const handleSchemaClick = (value, patternVariation = null) => {
+    props.onChange(value.meta.id, patternVariation);
     toggleShown(false);
   };
   return (
