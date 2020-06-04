@@ -209,10 +209,10 @@ const ComponentEditor = props => {
         )}
         {isNumberField(property) && (
           <ShortTextField
-            onChange={value => updatePropertyValue(propKey, value, true)}
+            onChange={value => updatePropertyValue(propKey, parseInt(value), true)}
             errors={errors[propKey]}
             type="number"
-            value={value}
+            value={parseInt(value)}
           />
         )}
         {isLongTextField(property) && (
