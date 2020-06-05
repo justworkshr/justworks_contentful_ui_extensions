@@ -43,7 +43,7 @@ const ComponentField = props => {
     toggleLinkModal(true);
   };
 
-  const handleCreateClick = async componentId => {
+  const handleCreateClick = async (componentId, presetObject = null) => {
     const schema = props.schemas.find(s => s.meta.id === componentId);
     const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
       componentId: {
@@ -55,6 +55,7 @@ const ComponentField = props => {
       internalMapping: {
         'en-US': newInternalMappingFromSchema({
           schema,
+          presetObject,
           configObject: props.useConfigObjects
         }).asJSON()
       }

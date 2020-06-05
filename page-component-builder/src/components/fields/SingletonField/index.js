@@ -9,6 +9,7 @@ import { constructLink, createEntry } from '@shared/utilities/index';
 
 import './style.scss';
 import { newInternalMappingFromSchema } from '../../../../../shared/utilities';
+import { parse_underscore } from '../../../utilities/copyUtils';
 
 const SingletonField = props => {
   const [singletonCardOpen, toggleSingletonCard] = useState(false);
@@ -74,13 +75,11 @@ const SingletonField = props => {
     const autoTitlePropKey = Object.keys(schema.properties).find(prop => {
       return schema.properties[prop].auto_title;
     });
-
     // auto_title value, or preset_name value, or meta title
-
-    return (
+    return parse_underscore(
       (props.internalMappingInstance.properties[autoTitlePropKey] || {}).value ||
-      (props.internalMappingInstance.properties.preset_name || {}).value ||
-      props.schema.meta.title
+        (props.internalMappingInstance.properties.preset_name || {}).value ||
+        props.schema.meta.title
     );
   };
 
@@ -110,7 +109,7 @@ const SingletonField = props => {
           }}
           dropdownListElements={
             <ActionDropdown
-              patternVariations={props.schema.pattern_variations}
+              patternVariations={(props.schema || {}).pattern_variations}
               switchVariation={switchVariation}
               convertToEntry={convertToEntry}
               handleRemoveClick={props.handleRemoveClick}

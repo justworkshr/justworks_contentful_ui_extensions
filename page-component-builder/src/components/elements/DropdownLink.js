@@ -55,6 +55,8 @@ class DropdownLink extends React.Component {
           <DropdownList>
             <DropdownListItem isTitle>Options</DropdownListItem>
             {getDropdownOptions(this.props.options, this.props.schemas).map((option, index) => {
+              const schema = this.props.schemas.find(s => s.meta.id === option);
+              console.log(schema);
               if (getExtensions(option, this.props.schemas).length) {
                 // extensions dropdown
                 return (

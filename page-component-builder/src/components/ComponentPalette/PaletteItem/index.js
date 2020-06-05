@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Card, TextLink, SectionHeading } from '@contentful/forma-36-react-components';
 
 import './style.scss';
+import { parse_underscore } from '../../../utilities/copyUtils';
 
 class PaletteItem extends React.Component {
   constructor(props) {
@@ -61,14 +62,17 @@ class PaletteItem extends React.Component {
             </div>
             {!!this.props.schema.pattern_variations.length && (
               <div>
-                <SectionHeading className="f36-margin-top--s">Pattern Variations</SectionHeading>
+                <SectionHeading className="f36-margin-top--s f36-margin-bottom--s">
+                  Pattern Variations
+                </SectionHeading>
                 {this.props.schema.pattern_variations.map(variation => {
                   return (
                     <div key={`palette-item-variation--${variation.name}`}>
                       <TextLink
+                        className="f36-margin-bottom--xs"
                         linkType="positive"
                         onClick={() => this.props.selectItem(this.props.schema, variation)}>
-                        {variation.name}
+                        {parse_underscore(variation.name)}
                       </TextLink>
                     </div>
                   );

@@ -9,6 +9,7 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import { getDropdownOptions, getExtensions, getLabel } from '../../utilities';
+import { parse_underscore } from '../../utilities/copyUtils';
 
 class DropdownCreate extends React.Component {
   constructor(props) {
@@ -67,6 +68,8 @@ class DropdownCreate extends React.Component {
               })}
             <DropdownListItem isTitle>Options</DropdownListItem>
             {getDropdownOptions(this.props.options, this.props.schemas).map((option, index) => {
+              const schema = this.props.schemas.find(s => s.meta.id === option);
+
               if (getExtensions(option, this.props.schemas).length) {
                 // extensions dropdown
                 return (
@@ -89,6 +92,30 @@ class DropdownCreate extends React.Component {
                             key={`dropdown-create-option-extension--${schema.meta.id}`}
                             onClick={() => this.props.handleCreateClick(schema.meta.id)}>
                             {getLabel(schema.meta.id, this.props.schemas)}
+                          </DropdownListItem>
+                        );
+                      })}
+                    </DropdownList>
+                  </Dropdown>
+                );
+              } else if (schema && schema.pattern_variations.length) {
+                return (
+                  <Dropdown
+                    testId="dropdown-link--variations"
+                    submenuToggleLabel={getLabel(option, this.props.schemas)}
+                    position="left">
+                    <DropdownList>
+                      {schema.pattern_variations.map(variation => {
+                        console.log(variation);
+                        return (
+                          <DropdownListItem
+                            key={`variation--${variation.name}`}
+                            testId="action-dropdown--switch"
+                            className="entry-card__action--switch"
+                            onClick={() =>
+                              this.props.handleCreateClick(variation.component_id, variation)
+                            }>
+                            {parse_underscore(variation.name)}
                           </DropdownListItem>
                         );
                       })}
