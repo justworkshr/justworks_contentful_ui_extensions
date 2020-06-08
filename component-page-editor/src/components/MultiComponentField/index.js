@@ -4,7 +4,8 @@ import {
   EntryCard,
   TextLink,
   DropdownList,
-  DropdownListItem
+  DropdownListItem,
+  Paragraph
 } from '@contentful/forma-36-react-components';
 import * as c from '@shared/constants';
 
@@ -194,12 +195,15 @@ const MultiComponentField = props => {
             })
             .filter(e => e)}
       </div>
-      <div className="action-row f36-margin-top--s">
-        <TextLink className="f36-margin-right--xs" onClick={handleCreate}>
-          Create new
-        </TextLink>
-        <TextLink onClick={handleLink}>Link existing</TextLink>
-      </div>
+      {!!props.loadingEntries && <Paragraph>Loading entries...</Paragraph>}
+      {!props.loadingEntries && (
+        <div className="action-row f36-margin-top--s">
+          <TextLink className="f36-margin-right--xs" onClick={handleCreate}>
+            Create new
+          </TextLink>
+          <TextLink onClick={handleLink}>Link existing</TextLink>
+        </div>
+      )}
     </div>
   );
 };
@@ -207,6 +211,7 @@ const MultiComponentField = props => {
 MultiComponentField.propTypes = {
   sdk: PropTypes.object,
   schemaData: PropTypes.object,
+  loadingEntries: PropTypes.bool,
   hydratedEntries: PropTypes.array,
   onChange: PropTypes.func,
   value: PropTypes.array
@@ -218,6 +223,7 @@ MultiComponentField.defaultProps = {
   },
   sdk: {},
   hydratedEntries: [],
+  loadingEntries: false,
   value: []
 };
 

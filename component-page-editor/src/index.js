@@ -54,6 +54,7 @@ export class App extends React.Component {
       modules: props.sdk.entry.fields.modules.getValue() || [],
 
       hydratedEntries: [],
+      loadingEntries: true,
       hydratedMeta: null
     };
 
@@ -140,13 +141,21 @@ export class App extends React.Component {
   };
 
   hydrateEntries = async () => {
-    const entries = await this.props.sdk.space.getEntries({
-      'sys.id[in]': this.state.modules.map(l => l.sys.id).join(',')
-    });
+    this.setState(
+      {
+        loadingEntries: true
+      },
+      async () => {
+        const entries = await this.props.sdk.space.getEntries({
+          'sys.id[in]': this.state.modules.map(l => l.sys.id).join(',')
+        });
 
-    this.setState({
-      hydratedEntries: entries.items
-    });
+        this.setState({
+          hydratedEntries: entries.items,
+          loadingEntries: false
+        });
+      }
+    );
   };
 
   onNameChangeHandler = event => {
@@ -191,7 +200,6 @@ export class App extends React.Component {
     this.props.sdk.entry.fields.modules.setValue(value);
     this.hydrateEntries();
   };
-
   render() {
     return (
       <Form className="editor f36-margin--l">
@@ -292,10 +300,12 @@ export class App extends React.Component {
         </Select>
         <HelpText>The light / dark mode setting for the theme.</HelpText>
         <SectionHeading>Modules</SectionHeading>
+        {!Object.keys(this.state.schemaData) && <Paragraph>Loading schemas...</Paragraph>}
         <MultiComponentField
           sdk={this.props.sdk}
           schemaData={this.state.schemaData}
           hydratedEntries={this.state.hydratedEntries}
+          loadingEntries={this.state.loadingEntries}
           onChange={this.onModulesChangeHandler}
           value={this.state.modules}
         />
