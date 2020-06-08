@@ -19,7 +19,7 @@ const EditorSections = props => {
             if (!props.defaultFields.length) return;
             setSelectedTab(id);
           }}>
-          FIELDS
+          CONTENT
         </Tab>
         <Tab
           id={c.STYLE_CATEGORY}

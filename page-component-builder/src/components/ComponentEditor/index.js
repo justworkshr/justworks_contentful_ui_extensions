@@ -494,6 +494,7 @@ const ComponentEditor = props => {
             })}
         />
       </div>
+      {!props.schemas.length && <Paragraph>Loading schemas...</Paragraph>}
     </div>
   );
 };

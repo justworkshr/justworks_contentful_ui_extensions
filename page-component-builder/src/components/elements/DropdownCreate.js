@@ -103,10 +103,10 @@ class DropdownCreate extends React.Component {
                   <Dropdown
                     testId="dropdown-link--variations"
                     submenuToggleLabel={getLabel(option, this.props.schemas)}
-                    position="left">
+                    position="left"
+                    onClick={() => this.props.handleCreateClick(option)}>
                     <DropdownList>
                       {schema.pattern_variations.map(variation => {
-                        console.log(variation);
                         return (
                           <DropdownListItem
                             key={`variation--${variation.name}`}
