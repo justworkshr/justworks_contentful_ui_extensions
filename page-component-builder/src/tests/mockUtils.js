@@ -11,6 +11,7 @@ export const mockSchema = (id = 'components/mock') => {
       editor_role: '',
       tags: []
     },
+    pattern_variations: [],
     properties: {
       classname: {
         type: 'text',
@@ -55,7 +56,8 @@ export const mockComponentSchema = (
   id,
   properties = {},
   tags = [],
-  editor_role = c.PATTERN_ROLE
+  editor_role = c.PATTERN_ROLE,
+  pattern_variations = []
 ) => {
   return {
     meta: {
@@ -63,7 +65,8 @@ export const mockComponentSchema = (
       tags,
       editor_role
     },
-    properties
+    properties,
+    pattern_variations
   };
 };
 

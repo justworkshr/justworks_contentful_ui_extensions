@@ -8,6 +8,7 @@ export const schemaTitle = schema => {
 };
 
 export const parse_underscore = string => {
+  if (!string) return '';
   return string
     .split('_')
     .map(w => capitalizeString(w))

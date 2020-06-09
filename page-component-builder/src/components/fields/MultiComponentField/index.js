@@ -120,6 +120,30 @@ export const MultiComponentField = props => {
     toggleLinkModal(true);
   };
 
+  const handleDuplicateSingletonClick = (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const entry = props.value[index];
+    const entries = [...props.value, entry];
+
+    updateEntry(entries);
+  };
+
+  const handleDuplicateEntryClick = async (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const entry = props.value[index];
+    const hydratedEntry = props.hydratedEntries.find(e => e.sys.id === entry.sys.id);
+    const newEntry = await createEntry(
+      props.sdk.space,
+      c.CONTENT_TYPE_VIEW_COMPONENT,
+      hydratedEntry.fields
+    );
+    const entries = [...props.value, newEntry];
+
+    updateEntry(entries);
+  };
+
   const handleEditClick = async entry => {
     try {
       const navigation = await props.sdk.navigator.openEntry(entry.sys.id, {
@@ -235,6 +259,7 @@ export const MultiComponentField = props => {
               onClick={() => handleEditClick(entry)}
               handleEditClick={() => handleEditClick(entry)}
               handleRemoveClick={() => handleRemoveClick(index)}
+              handleDuplicateClick={e => handleDuplicateEntryClick(e, index)}
               draggable={true}
               isDragActive={index === dragged}
               onDragStart={onDragStart}
@@ -256,6 +281,7 @@ export const MultiComponentField = props => {
               onChange={(value, timeout, errors) =>
                 updateSingletonEntry(value, timeout, index, errors)
               }
+              handleDuplicateClick={e => handleDuplicateSingletonClick(e, index)}
               hydratedAssets={props.hydratedAssets}
               hydratedEntries={props.hydratedEntries}
               replaceHydratedAsset={props.replaceHydratedAsset}

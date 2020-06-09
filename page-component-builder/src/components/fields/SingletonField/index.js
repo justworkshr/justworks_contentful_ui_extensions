@@ -112,6 +112,7 @@ const SingletonField = props => {
               patternVariations={(props.schema || {}).pattern_variations}
               switchVariation={switchVariation}
               convertToEntry={convertToEntry}
+              handleDuplicateClick={props.handleDuplicateClick}
               handleRemoveClick={props.handleRemoveClick}
             />
           }
@@ -156,6 +157,7 @@ SingletonField.propTypes = {
   replaceHydratedEntry: PropTypes.func,
   replaceHydratedAsset: PropTypes.func,
   handleRemoveClick: PropTypes.func,
+  handleDuplicateClick: PropTypes.func,
   internalMappingInstance: PropTypes.object,
   draggable: PropTypes.bool,
   isDragActive: PropTypes.bool,

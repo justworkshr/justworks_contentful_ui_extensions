@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Dropdown, DropdownList, DropdownListItem } from '@contentful/forma-36-react-components';
+import { parse_underscore } from '../../utilities/copyUtils';
 
 const ActionDropdown = props => {
   if (!(props.handleEditClick || props.handleRemoveClick)) return null;
+
   return (
     <DropdownList testId="hydrated-entry-actions">
       <DropdownListItem isTitle>Actions</DropdownListItem>
@@ -14,6 +16,14 @@ const ActionDropdown = props => {
           className="entry-card__action--edit"
           onClick={props.handleEditClick}>
           Edit
+        </DropdownListItem>
+      )}
+      {props.handleDuplicateClick && (
+        <DropdownListItem
+          testId="action-dropdown--duplicate"
+          className="entry-card__action--duplicate"
+          onClick={props.handleDuplicateClick}>
+          Duplicate
         </DropdownListItem>
       )}
       {props.switchVariation && !!props.patternVariations.length && (
@@ -29,7 +39,7 @@ const ActionDropdown = props => {
                   testId="action-dropdown--switch"
                   className="entry-card__action--switch"
                   onClick={() => props.switchVariation(variation.name)}>
-                  {variation.name}
+                  {parse_underscore(variation.name)}
                 </DropdownListItem>
               );
             })}
@@ -59,6 +69,7 @@ const ActionDropdown = props => {
 ActionDropdown.propTypes = {
   handleEditClick: PropTypes.func,
   handleRemoveClick: PropTypes.func,
+  handleDuplicateClick: PropTypes.func,
   convertToEntry: PropTypes.func,
   switchVariation: PropTypes.func,
   patternVariations: PropTypes.array

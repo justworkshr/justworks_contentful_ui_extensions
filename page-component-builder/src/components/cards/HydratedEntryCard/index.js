@@ -55,7 +55,11 @@ const HydratedEntryCard = props => {
       onDragEnd={props.onDragEnd}
       onClick={props.onClick}
       dropdownListElements={
-        <ActionDropdown handleEditClick={props.handleEditClick} handleRemoveClick={remove} />
+        <ActionDropdown
+          handleDuplicateClick={props.handleDuplicateClick}
+          handleEditClick={props.handleEditClick}
+          handleRemoveClick={remove}
+        />
       }
     />
   );
@@ -68,6 +72,7 @@ HydratedEntryCard.propTypes = {
   onClick: PropTypes.func,
   handleEditClick: PropTypes.func,
   handleRemoveClick: PropTypes.func,
+  handleDuplicateClick: PropTypes.func,
   isLoading: PropTypes.bool,
   draggable: PropTypes.bool,
   isDragActive: PropTypes.bool,
