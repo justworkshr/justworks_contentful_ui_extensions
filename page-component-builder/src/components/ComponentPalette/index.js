@@ -81,8 +81,12 @@ const ComponentPalette = props => {
   };
   return (
     <div className="component-palette" data-test-id="component-palette">
-      <Button testId="component-palette__button" onClick={() => toggleShown(!isShown)}>
-        Change Component
+      <Button
+        testId="component-palette__button"
+        className="f36-margin-top--s"
+        onClick={() => toggleShown(!isShown)}
+        disabled={!props.schemas.length}>
+        {props.schemas.length ? 'Change Component' : 'Loading...'}
       </Button>
       <Modal
         testId="component-palette__modal"
