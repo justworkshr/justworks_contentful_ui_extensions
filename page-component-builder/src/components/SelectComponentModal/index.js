@@ -40,11 +40,10 @@ const SelectComponentModal = props => {
   const performQuery = async (searchText = '') => {
     setCompleted(false);
     setLoading(true);
-
     const response = await props.sdk.space.getEntries({
       content_type: c.CONTENT_TYPE_VIEW_COMPONENT,
       'fields.componentId[in]': props.options.join(','),
-      'fields.configObject': props.useConfigObjects,
+      'fields.configObject': !props.useConfigObjects ? null : true,
       'fields.name[match]': searchText
     });
 
