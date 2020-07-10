@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Card, TextLink, SectionHeading } from '@contentful/forma-36-react-components';
+import { Icon, Card, TextLink, SectionHeading } from '@contentful/forma-36-react-components';
 
 import './style.scss';
 import { parse_underscore } from '../../../utilities/copyUtils';
@@ -67,13 +67,22 @@ class PaletteItem extends React.Component {
                 </SectionHeading>
                 {this.props.schema.pattern_variations.map(variation => {
                   return (
-                    <div key={`palette-item-variation--${variation.name}`}>
+                    <div
+                      key={`palette-item-variation--${variation.name}`}
+                      className="d-flex-row-center-start">
                       <TextLink
                         className="f36-margin-bottom--xs"
                         linkType="positive"
                         onClick={() => this.props.selectItem(this.props.schema, variation)}>
                         {parse_underscore(variation.name)}
                       </TextLink>
+                      <a
+                        href={`https://justworks-staging-v2.herokuapp.com/render-component?component=${this.props.schema.meta.id}&pattern_variation=${variation.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="f36-margin-left--xs">
+                        <Icon icon="ExternalLink" />
+                      </a>
                     </div>
                   );
                 })}
@@ -87,13 +96,11 @@ class PaletteItem extends React.Component {
                 Styleguide Link
               </TextLink>
             </div>
-            <div>
-              <TextLink
-                href={`https://justworks-staging-v2.herokuapp.com/render-component?component=${this.props.schema.meta.id}&example=default`}
-                target="_blank">
-                Preview Link
-              </TextLink>
-            </div>
+            <TextLink
+              href={`https://justworks-staging-v2.herokuapp.com/render-component?component=${this.props.schema.meta.id}&example=default`}
+              target="_blank">
+              Preview Example
+            </TextLink>
             <br />
             {!!this.props.extensions.length && (
               <div className="palette-item__extensions">
