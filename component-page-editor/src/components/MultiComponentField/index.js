@@ -124,6 +124,28 @@ const MultiComponentField = props => {
     }
   };
 
+  const handleDuplicateEntryClick = async (e, index) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const entry = props.value[index];
+      const hydratedEntry = props.hydratedEntries.find(e => e.sys.id === entry.sys.id);
+
+      const fields = {
+        ...hydratedEntry.fields,
+        name: { 'en-US': hydratedEntry.fields.name['en-US'] + ' (duplicate)' }
+      };
+
+      const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, fields);
+      const entries = [...props.value, newEntry];
+
+      props.onChange(entries);
+      props.sdk.notifier.success('Entry duplicated successfully.');
+    } catch (error) {
+      props.sdk.notifier.error(`Error in duplication: "${error.message}"`);
+    }
+  };
+
   const handleRemoveClick = index => {
     let newValue = [...props.value.slice(0, index), ...props.value.slice(index + 1)];
     props.onChange(newValue);
@@ -175,6 +197,12 @@ const MultiComponentField = props => {
                   dropdownListElements={
                     <DropdownList>
                       <DropdownListItem isTitle>Actions</DropdownListItem>
+                      <DropdownListItem
+                        testId="action-dropdown--edit"
+                        className="entry-card__action--edit"
+                        onClick={e => handleDuplicateEntryClick(e, index)}>
+                        Duplicate
+                      </DropdownListItem>
                       <DropdownListItem
                         testId="action-dropdown--edit"
                         className="entry-card__action--edit"
