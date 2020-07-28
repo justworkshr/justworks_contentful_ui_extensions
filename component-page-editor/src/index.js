@@ -200,6 +200,7 @@ export class App extends React.Component {
     this.props.sdk.entry.fields.modules.setValue(value);
     this.hydrateEntries();
   };
+
   render() {
     return (
       <Form className="editor f36-margin--l">
@@ -211,8 +212,11 @@ export class App extends React.Component {
           onChange={this.onNameChangeHandler}
           value={this.state.internalName}
         />
-        <SectionHeading className={!this.state.meta && 'f36-color--negative'}>
-          Meta (required)
+        <SectionHeading
+          className={
+            this.props.sdk.entry.fields.path.meta && !this.state.meta && 'f36-color--negative'
+          }>
+          Meta {this.props.sdk.entry.fields.meta.required && '(Required)'}
         </SectionHeading>
         <MetaEntryField
           hydratedEntry={this.state.hydratedMeta}
@@ -220,8 +224,11 @@ export class App extends React.Component {
           sdk={this.props.sdk}
           value={this.state.meta}
         />
-        <SectionHeading className={!this.state.routing && 'f36-color--negative'}>
-          Routing (required)
+        <SectionHeading
+          className={
+            this.props.sdk.entry.fields.path.routing && !this.state.routing && 'f36-color--negative'
+          }>
+          Routing {this.props.sdk.entry.fields.routing.required && '(Required)'}
         </SectionHeading>
         <Select onChange={this.onRoutingChangeHandler} value={this.state.routing}>
           {this.props.sdk.entry.fields.routing.validations
@@ -238,8 +245,11 @@ export class App extends React.Component {
           The preset site routing address. Format: https://justworks.com/( routing )/( path )
         </HelpText>
 
-        <SectionHeading className={!this.state.path && 'f36-color--negative'}>
-          Path (required)
+        <SectionHeading
+          className={
+            this.props.sdk.entry.fields.path.required && !this.state.path && 'f36-color--negative'
+          }>
+          Path {this.props.sdk.entry.fields.path.required && '(Required)'}
         </SectionHeading>
         <TextInput
           testId="field-path"
@@ -268,8 +278,11 @@ export class App extends React.Component {
           </div>
         )}
 
-        <SectionHeading className={!this.state.theme && 'f36-color--negative'}>
-          Theme (required)
+        <SectionHeading
+          className={
+            this.props.sdk.entry.fields.theme.required && !this.state.theme && 'f36-color--negative'
+          }>
+          Theme {this.props.sdk.entry.fields.theme.required && '(Required)'}
         </SectionHeading>
         <Select onChange={this.onThemeChangeHandler} value={this.state.theme}>
           {this.props.sdk.entry.fields.theme.validations
@@ -284,8 +297,13 @@ export class App extends React.Component {
         </Select>
         <HelpText>The theme which affects color scheming and typography.</HelpText>
 
-        <SectionHeading className={!this.state.themeVariant && 'f36-color--negative'}>
-          Theme Variant (required)
+        <SectionHeading
+          className={
+            this.props.sdk.entry.fields.themeVariant.required &&
+            !this.state.themeVariant &&
+            'f36-color--negative'
+          }>
+          Theme Variant {this.props.sdk.entry.fields.themeVariant.required && '(Required)'}
         </SectionHeading>
         <Select onChange={this.onThemeVariantChangeHandler} value={this.state.themeVariant}>
           {this.props.sdk.entry.fields.themeVariant.validations
