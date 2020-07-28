@@ -17,3 +17,17 @@ div {
 .entry-card {
   max-width: 640px;
 }
+
+.editor__field {
+  border-left: 3px solid #c5d2d8;
+  padding-left: 2em;
+  transition: border-color 0.18s linear;
+}
+
+.editor__field:focus-within {
+  border-color: #4a90e2;
+}
+
+.editor__field.with-error {
+  border-color: #d9453f;
+}

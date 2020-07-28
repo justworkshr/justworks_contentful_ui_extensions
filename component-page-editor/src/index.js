@@ -212,51 +212,68 @@ export class App extends React.Component {
           onChange={this.onNameChangeHandler}
           value={this.state.internalName}
         />
-        <SectionHeading
-          className={
-            this.props.sdk.entry.fields.path.meta && !this.state.meta && 'f36-color--negative'
-          }>
-          Meta {this.props.sdk.entry.fields.meta.required && '(Required)'}
-        </SectionHeading>
-        <MetaEntryField
-          hydratedEntry={this.state.hydratedMeta}
-          onChange={this.onMetaChangeHandler}
-          sdk={this.props.sdk}
-          value={this.state.meta}
-        />
-        <SectionHeading
-          className={
-            this.props.sdk.entry.fields.path.routing && !this.state.routing && 'f36-color--negative'
-          }>
-          Routing {this.props.sdk.entry.fields.routing.required && '(Required)'}
-        </SectionHeading>
-        <Select onChange={this.onRoutingChangeHandler} value={this.state.routing}>
-          {this.props.sdk.entry.fields.routing.validations
-            .find(v => v.in)
-            .in.map(option => {
-              return (
-                <Option key={`routing-option--${option}`} value={option}>
-                  {option}
-                </Option>
-              );
-            })}
-        </Select>
-        <HelpText>
-          The preset site routing address. Format: https://justworks.com/( routing )/( path )
-        </HelpText>
+        <div
+          className={`editor__field ${this.props.sdk.entry.fields.meta.required &&
+            !this.state.meta &&
+            'with-error'}`}>
+          <SectionHeading
+            className={
+              this.props.sdk.entry.fields.meta.required && !this.state.meta && 'f36-color--negative'
+            }>
+            Meta {this.props.sdk.entry.fields.meta.required && '(Required)'}
+          </SectionHeading>
 
-        <SectionHeading
-          className={
-            this.props.sdk.entry.fields.path.required && !this.state.path && 'f36-color--negative'
-          }>
-          Path {this.props.sdk.entry.fields.path.required && '(Required)'}
-        </SectionHeading>
-        <TextInput
-          testId="field-path"
-          onChange={this.onPathChangeHandler}
-          value={this.state.path}
-        />
-        <HelpText>The last part of the URL.</HelpText>
+          <MetaEntryField
+            hydratedEntry={this.state.hydratedMeta}
+            onChange={this.onMetaChangeHandler}
+            sdk={this.props.sdk}
+            value={this.state.meta}
+          />
+        </div>
+        <div
+          className={`editor__field ${this.props.sdk.entry.fields.routing.required &&
+            !this.state.routing &&
+            'with-error'}`}>
+          <SectionHeading
+            className={
+              this.props.sdk.entry.fields.routing.required &&
+              !this.state.routing &&
+              'f36-color--negative'
+            }>
+            Routing {this.props.sdk.entry.fields.routing.required && '(Required)'}
+          </SectionHeading>
+          <Select onChange={this.onRoutingChangeHandler} value={this.state.routing}>
+            {this.props.sdk.entry.fields.routing.validations
+              .find(v => v.in)
+              .in.map(option => {
+                return (
+                  <Option key={`routing-option--${option}`} value={option}>
+                    {option}
+                  </Option>
+                );
+              })}
+          </Select>
+          <HelpText>
+            The preset site routing address. Format: https://justworks.com/( routing )/( path )
+          </HelpText>
+        </div>
+        <div
+          className={`editor__field ${this.props.sdk.entry.fields.path.required &&
+            !this.state.path &&
+            'with-error'}`}>
+          <SectionHeading
+            className={
+              this.props.sdk.entry.fields.path.required && !this.state.path && 'f36-color--negative'
+            }>
+            Path {this.props.sdk.entry.fields.path.required && '(Required)'}
+          </SectionHeading>
+          <TextInput
+            testId="field-path"
+            onChange={this.onPathChangeHandler}
+            value={this.state.path}
+          />
+          <HelpText>The last part of the URL.</HelpText>
+        </div>
         {this.state.schemaData.tokens && (
           <div>
             <SectionHeading>Production URL</SectionHeading>
@@ -277,56 +294,78 @@ export class App extends React.Component {
             }${this.state.path}`}</TextLink>
           </div>
         )}
-
-        <SectionHeading
-          className={
-            this.props.sdk.entry.fields.theme.required && !this.state.theme && 'f36-color--negative'
-          }>
-          Theme {this.props.sdk.entry.fields.theme.required && '(Required)'}
-        </SectionHeading>
-        <Select onChange={this.onThemeChangeHandler} value={this.state.theme}>
-          {this.props.sdk.entry.fields.theme.validations
-            .find(v => v.in)
-            .in.map(option => {
-              return (
-                <Option key={`theme-option--${option}`} value={option}>
-                  {option}
-                </Option>
-              );
-            })}
-        </Select>
-        <HelpText>The theme which affects color scheming and typography.</HelpText>
-
-        <SectionHeading
-          className={
-            this.props.sdk.entry.fields.themeVariant.required &&
+        <div
+          className={`editor__field ${this.props.sdk.entry.fields.theme.required &&
+            !this.state.theme &&
+            'with-error'}`}>
+          <SectionHeading
+            className={
+              this.props.sdk.entry.fields.theme.required &&
+              !this.state.theme &&
+              'f36-color--negative'
+            }>
+            Theme {this.props.sdk.entry.fields.theme.required && '(Required)'}
+          </SectionHeading>
+          <Select onChange={this.onThemeChangeHandler} value={this.state.theme}>
+            {this.props.sdk.entry.fields.theme.validations
+              .find(v => v.in)
+              .in.map(option => {
+                return (
+                  <Option key={`theme-option--${option}`} value={option}>
+                    {option}
+                  </Option>
+                );
+              })}
+          </Select>
+          <HelpText>The theme which affects color scheming and typography.</HelpText>
+        </div>
+        <div
+          className={`editor__field ${this.props.sdk.entry.fields.themeVariant.required &&
             !this.state.themeVariant &&
-            'f36-color--negative'
-          }>
-          Theme Variant {this.props.sdk.entry.fields.themeVariant.required && '(Required)'}
-        </SectionHeading>
-        <Select onChange={this.onThemeVariantChangeHandler} value={this.state.themeVariant}>
-          {this.props.sdk.entry.fields.themeVariant.validations
-            .find(v => v.in)
-            .in.map(option => {
-              return (
-                <Option key={`themeVariant-option--${option}`} value={option}>
-                  {option}
-                </Option>
-              );
-            })}
-        </Select>
-        <HelpText>The light / dark mode setting for the theme.</HelpText>
-        <SectionHeading>Modules</SectionHeading>
-        {!Object.keys(this.state.schemaData) && <Paragraph>Loading schemas...</Paragraph>}
-        <MultiComponentField
-          sdk={this.props.sdk}
-          schemaData={this.state.schemaData}
-          hydratedEntries={this.state.hydratedEntries}
-          loadingEntries={this.state.loadingEntries}
-          onChange={this.onModulesChangeHandler}
-          value={this.state.modules}
-        />
+            'with-error'}`}>
+          <SectionHeading
+            className={
+              this.props.sdk.entry.fields.themeVariant.required &&
+              !this.state.themeVariant &&
+              'f36-color--negative'
+            }>
+            Theme Variant {this.props.sdk.entry.fields.themeVariant.required && '(Required)'}
+          </SectionHeading>
+          <Select onChange={this.onThemeVariantChangeHandler} value={this.state.themeVariant}>
+            {this.props.sdk.entry.fields.themeVariant.validations
+              .find(v => v.in)
+              .in.map(option => {
+                return (
+                  <Option key={`themeVariant-option--${option}`} value={option}>
+                    {option}
+                  </Option>
+                );
+              })}
+          </Select>
+          <HelpText>The light / dark mode setting for the theme.</HelpText>
+        </div>
+        <div
+          className={`editor__field ${this.props.sdk.entry.fields.modules.required &&
+            !this.state.modules &&
+            'with-error'}`}>
+          <SectionHeading
+            className={
+              this.props.sdk.entry.fields.modules.required &&
+              !this.state.themeVariant &&
+              'f36-color--negative'
+            }>
+            Modules {this.props.sdk.entry.fields.modules.required && '(Required)'}
+          </SectionHeading>
+          {!Object.keys(this.state.schemaData) && <Paragraph>Loading schemas...</Paragraph>}
+          <MultiComponentField
+            sdk={this.props.sdk}
+            schemaData={this.state.schemaData}
+            hydratedEntries={this.state.hydratedEntries}
+            loadingEntries={this.state.loadingEntries}
+            onChange={this.onModulesChangeHandler}
+            value={this.state.modules}
+          />
+        </div>
       </Form>
     );
   }
