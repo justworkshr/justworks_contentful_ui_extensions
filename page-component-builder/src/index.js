@@ -120,7 +120,6 @@ export class PageComponentBuilder extends React.Component {
   };
 
   validateInternalMapping(errors = {}) {
-    console.log(errors);
     if (Object.keys(errors).length) {
       this.props.sdk.entry.fields.isValid.setValue('No');
     } else if (
@@ -242,7 +241,9 @@ export class PageComponentBuilder extends React.Component {
         this.setState({ updatingEntries: false });
       }
       if (!value.length) value = undefined; // contentful prefers 'undefined' instead of empty array
-      await this.props.sdk.entry.fields.entries.setValue(value);
+      if (value !== this.props.sdk.entry.fields.entries.getValue()) {
+        await this.props.sdk.entry.fields.entries.setValue(value);
+      }
     } else {
       console.warn('onEntriesChangeHandler called with non-array value');
     }
@@ -256,7 +257,9 @@ export class PageComponentBuilder extends React.Component {
         this.setState({ updatingAssets: false });
       }
       if (!value.length) value = undefined; // contentful prefers 'undefined' instead of empty array
-      await this.props.sdk.entry.fields.assets.setValue(value);
+      if (value !== this.props.sdk.entry.fields.assets.getValue()) {
+        await this.props.sdk.entry.fields.assets.setValue(value);
+      }
     } else {
       console.warn('onAssetsChangeHandler called with non-array value');
     }
