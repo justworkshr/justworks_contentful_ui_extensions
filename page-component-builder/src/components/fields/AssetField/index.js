@@ -51,7 +51,11 @@ const AssetField = props => {
         <HydratedAssetCard
           asset={props.asset}
           handleEditClick={handleEditClick}
-          handleRemoveClick={() => updateAsset(null)}
+          handleRemoveClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            updateAsset(null);
+          }}
         />
       );
     } else {
