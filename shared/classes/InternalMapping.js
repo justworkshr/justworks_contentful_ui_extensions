@@ -2,7 +2,12 @@ import * as c from "../constants";
 import { extractEntries } from "../utilities";
 
 export default class InternalMapping {
-  constructor(componentId, properties, schema = {}, configObject = false) {
+  constructor(
+    componentId,
+    properties,
+    schema = { properties: {} },
+    configObject = false
+  ) {
     this.componentId = componentId;
     this.properties = properties || {};
     this.schema = schema;
@@ -11,6 +16,8 @@ export default class InternalMapping {
     this.validateProperties = this.validateProperties.bind(this);
     this.validateRequired = this.validateRequired.bind(this);
     this.validateOptions = this.validateOptions.bind(this);
+    this.reconcileProperties = this.reconcileProperties.bind(this);
+    this.reconcileProperties();
   }
 
   get class() {
@@ -27,6 +34,26 @@ export default class InternalMapping {
 
   get assets() {
     return extractEntries(this, c.ASSET_LINK_TYPE) || [];
+  }
+
+  reconcileProperties() {
+    // ensures any schema updates are reflected in the properties
+    if ((this.schema || {}).properties === {} || this.properties === {}) return;
+
+    Object.keys(this.schema.properties).forEach((key) => {
+      // populate new fields with schema default value if field is required
+      const schemaProperty = this.schema.properties[key];
+      const propertyValue = (this.properties[key] || {}).value;
+
+      if (
+        !propertyValue &&
+        propertyValue !== false &&
+        !!schemaProperty.required &&
+        !!schemaProperty.default
+      ) {
+        this.addProperty(key, schemaProperty.type, schemaProperty.default);
+      }
+    });
   }
 
   validateProperties() {

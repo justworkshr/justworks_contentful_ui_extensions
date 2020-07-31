@@ -99,7 +99,6 @@ export class PageComponentBuilder extends React.Component {
     await this.fetchSchemas();
     await this.syncEntriesAssets();
     this.onInternalMappingChange(this.state.internalMapping);
-
     const internalMappingInstance = new InternalMapping(
       this.state.componentId,
       this.parseInternalMapping().properties,
