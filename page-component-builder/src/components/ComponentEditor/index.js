@@ -22,6 +22,7 @@ import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
 import SubmitActionField from '../fields/SubmitActionField';
+import CustomValidationField from '../fields/CustomValidationField';
 import ExperimentConditionField from '../fields/ExperimentConditionField';
 
 import ComponentField from '../fields/ComponentField';
@@ -46,7 +47,8 @@ import {
   isConfigProperty,
   isMultiConfigProperty,
   isSubmitActionProperty,
-  isExperimentConditionProperty
+  isExperimentConditionProperty,
+  isCustomValidationProperty
 } from '../../utilities/index';
 
 import { isComponentPropertySingleton } from '@shared/utilities/index.js';
@@ -402,6 +404,13 @@ const ComponentEditor = props => {
         )}
         {isSubmitActionProperty(property) && (
           <SubmitActionField
+            onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
+            tokens={props.tokens}
+            value={value ? JSON.parse(value) : []}
+          />
+        )}
+        {isCustomValidationProperty(property) && (
+          <CustomValidationField
             onChange={(value, timeout) => updatePropertyValue(propKey, value, timeout)}
             tokens={props.tokens}
             value={value ? JSON.parse(value) : []}

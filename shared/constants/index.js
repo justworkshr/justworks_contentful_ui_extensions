@@ -31,6 +31,7 @@ export const TEXT_PROPERTY = "text";
 export const NUMBER_PROPERTY = "number";
 export const BOOL_PROPERTY = "bool";
 export const SUBMIT_ACTION_PROPERTY = "submit-action";
+export const CUSTOM_VALIDATION_PROPERTY = "custom-validation";
 export const EXPERIMENT_CONDITION_PROPERTY = "experiment-condition";
 
 // EDITOR TYPES

@@ -279,6 +279,10 @@ export const isSubmitActionProperty = property => {
   return property.type === c.SUBMIT_ACTION_PROPERTY;
 };
 
+export const isCustomValidationProperty = property => {
+  return property.type === c.CUSTOM_VALIDATION_PROPERTY;
+};
+
 export const isExperimentConditionProperty = property => {
   return property.type === c.EXPERIMENT_CONDITION_PROPERTY;
 };
@@ -329,7 +333,7 @@ export const getFieldIcon = property => {
   if (isMultiConfigProperty(property)) {
     return 'FolderCreate';
   }
-  if (isSubmitActionProperty(property)) {
+  if (isSubmitActionProperty(property) || isCustomValidationProperty(property)) {
     return 'Code';
   }
   if (isExperimentConditionProperty(property)) {
