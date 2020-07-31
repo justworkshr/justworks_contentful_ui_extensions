@@ -7,7 +7,6 @@ import PaletteItem from './PaletteItem';
 
 import {
   Button,
-  Card,
   Modal,
   SectionHeading,
   TextInput,
@@ -16,7 +15,6 @@ import {
 import './style.scss';
 
 const ComponentPalette = props => {
-  const [isShown, toggleShown] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [searchText, setSearchText] = useState('');
 
@@ -77,22 +75,23 @@ const ComponentPalette = props => {
 
   const handleSchemaClick = (value, patternVariation = null) => {
     props.onChange(value.meta.id, patternVariation);
-    toggleShown(false);
+    props.toggleShown(false);
   };
+
   return (
     <div className="component-palette" data-test-id="component-palette">
       <Button
         testId="component-palette__button"
         className="f36-margin-top--s"
-        onClick={() => toggleShown(!isShown)}
+        onClick={() => props.toggleShown(!props.isShown)}
         disabled={!props.schemas.length}>
         {props.schemas.length ? 'Change Component' : 'Loading...'}
       </Button>
       <Modal
         testId="component-palette__modal"
         className="component-palette__modal"
-        isShown={isShown}
-        onClose={() => toggleShown(false)}
+        isShown={props.isShown}
+        onClose={() => props.toggleShown(false)}
         title="Pattern Library"
         size="zen"
         allowHeightOverflow={true}
@@ -188,9 +187,12 @@ ComponentPalette.propTypes = {
   componentId: PropTypes.string,
   onChange: PropTypes.func,
   schemas: PropTypes.array,
-  tags: PropTypes.object
+  tags: PropTypes.object,
+  isShown: PropTypes.bool,
+  toggleShown: PropTypes.func
 };
 ComponentPalette.defaultProps = {
+  isShown: false,
   schemas: [],
   tags: {
     component: [],

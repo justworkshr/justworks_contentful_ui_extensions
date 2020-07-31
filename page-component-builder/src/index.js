@@ -9,13 +9,15 @@ import ComponentPalette from './components/ComponentPalette';
 import ComponentEditor from './components/ComponentEditor';
 
 import {
+  Spinner,
   DisplayText,
   Paragraph,
   FormLabel,
   TextInput,
   Textarea,
   Form,
-  Icon
+  Icon,
+  HelpText
 } from '@contentful/forma-36-react-components';
 
 import RadioGroup from './components/fields/RadioGroup';
@@ -34,6 +36,7 @@ import { schemaTitle } from './utilities/copyUtils';
 import '@contentful/forma-36-react-components/dist/styles.css';
 import '@contentful/forma-36-fcss/dist/styles.css';
 import './index.css';
+import IntroductionBlock from './components/IntroductionBlock';
 
 /**
  * To use this demo create a Content Type with the following fields:
@@ -81,7 +84,8 @@ export class PageComponentBuilder extends React.Component {
       hydratedEntries,
       hydratedAssets,
       updatingAssets: false,
-      updatingEntries: false
+      updatingEntries: false,
+      paletteOpen: false
     };
 
     props.sdk.entry.fields.internalMapping.onValueChanged(this.onInternalMappingChange);
@@ -93,6 +97,7 @@ export class PageComponentBuilder extends React.Component {
     this.validateInternalMapping = this.validateInternalMapping.bind(this);
     this.onInternalMappingChange = this.onInternalMappingChange.bind(this);
     this.internalMappingFromComponentId = this.internalMappingFromComponentId.bind(this);
+    this.togglePalette = this.togglePalette.bind(this);
   }
 
   componentDidMount = async () => {
@@ -108,6 +113,14 @@ export class PageComponentBuilder extends React.Component {
 
     this.validateInternalMapping(internalMappingInstance.errors);
   };
+
+  togglePalette() {
+    this.setState(oldState => {
+      return {
+        paletteOpen: !oldState.paletteOpen
+      };
+    });
+  }
 
   syncEntriesAssets = async () => {
     const internalMappingObject = this.parseInternalMapping();
@@ -377,29 +390,34 @@ export class PageComponentBuilder extends React.Component {
             onChange={this.onNameChangeHandler}
             value={this.state.name}
           />
+          <HelpText>Please note what page it lives on and what content is included.</HelpText>
         </div>
 
-        <div className="component-editor__field">
-          <FormLabel htmlFor="field-componentId">Component ID</FormLabel>
-          <TextInput
-            id="field-componentId"
-            testId="field-componentId"
-            className="f36-margin-bottom--m d-none"
-            disabled={true}
-            onChange={e => this.onComponentIdChangeHandler(e.tar2.value)}
-            value={this.state.componentId}
-          />
-          <TextInput disabled={true} value={schema ? schema.meta.title || schema.meta.id : ''} />
-          {// Only allow palette when this entry isn't serving as a config object
-          !this.state.configObject && (
-            <ComponentPalette
-              componentId={this.state.componentId}
-              onChange={this.onComponentIdChangeHandler}
-              schemas={this.state.schemaData.components}
-              tags={this.state.schemaData.tags}
+        {(this.state.paletteOpen || this.state.componentId) && (
+          <div className="component-editor__field">
+            <FormLabel htmlFor="field-componentId">Component ID</FormLabel>
+            <TextInput
+              id="field-componentId"
+              testId="field-componentId"
+              className="f36-margin-bottom--m d-none"
+              disabled={true}
+              onChange={e => this.onComponentIdChangeHandler(e.tar2.value)}
+              value={this.state.componentId}
             />
-          )}
-        </div>
+            <TextInput disabled={true} value={schema ? schema.meta.title || schema.meta.id : ''} />
+            {// Only allow palette when this entry isn't serving as a config object
+            !this.state.configObject && (
+              <ComponentPalette
+                componentId={this.state.componentId}
+                onChange={this.onComponentIdChangeHandler}
+                schemas={this.state.schemaData.components}
+                tags={this.state.schemaData.tags}
+                isShown={this.state.paletteOpen}
+                toggleShown={this.togglePalette}
+              />
+            )}
+          </div>
+        )}
         {this.state.configObject && (
           <div className="component-editor__field d-flex-row-center-start">
             <Icon icon="Settings" className="f36-margin-right--xs" />
@@ -454,27 +472,38 @@ export class PageComponentBuilder extends React.Component {
           />
         </div>
 
-        <ComponentEditor
-          sdk={this.props.sdk}
-          schemas={this.state.schemaData.components}
-          tokens={this.state.schemaData.tokens}
-          updateInternalMapping={this.updateInternalMapping}
-          hydratedAssets={this.state.hydratedAssets}
-          hydratedEntries={this.state.hydratedEntries}
-          loadingEntries={this.state.loadingEntries}
-          replaceHydratedAsset={this.replaceHydratedAsset}
-          replaceHydratedEntry={this.replaceHydratedEntry}
-          internalMappingInstance={
-            new InternalMapping(
-              this.state.componentId,
-              this.parseInternalMapping().properties,
-              schema,
-              this.state.configObject
-            )
-          }
-          schema={schema}
-          title={schemaTitle(schema)}
-        />
+        {this.state.componentId && (
+          <ComponentEditor
+            sdk={this.props.sdk}
+            schemas={this.state.schemaData.components}
+            tokens={this.state.schemaData.tokens}
+            updateInternalMapping={this.updateInternalMapping}
+            hydratedAssets={this.state.hydratedAssets}
+            hydratedEntries={this.state.hydratedEntries}
+            loadingEntries={this.state.loadingEntries}
+            replaceHydratedAsset={this.replaceHydratedAsset}
+            replaceHydratedEntry={this.replaceHydratedEntry}
+            internalMappingInstance={
+              new InternalMapping(
+                this.state.componentId,
+                this.parseInternalMapping().properties,
+                schema,
+                this.state.configObject
+              )
+            }
+            componentId={this.state.componentId}
+            schema={schema}
+            title={schemaTitle(schema)}
+          />
+        )}
+        {!this.state.schemaData.components.length && (
+          <div>
+            <Spinner size="default" /> Loading schemas...
+          </div>
+        )}
+        {!!this.state.schemaData.components.length && !this.state.componentId && (
+          <IntroductionBlock toggleShown={this.togglePalette} />
+        )}
       </Form>
     );
   }

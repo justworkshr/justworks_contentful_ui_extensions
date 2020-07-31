@@ -69,9 +69,8 @@ class PaletteItem extends React.Component {
                   return (
                     <div
                       key={`palette-item-variation--${variation.name}`}
-                      className="d-flex-row-center-start">
+                      className="d-flex-row-center-start f36-margin-bottom--xs">
                       <TextLink
-                        className="f36-margin-bottom--xs"
                         linkType="positive"
                         onClick={() => this.props.selectItem(this.props.schema, variation)}>
                         {parse_underscore(variation.name)}
@@ -81,7 +80,7 @@ class PaletteItem extends React.Component {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="f36-margin-left--xs">
-                        <Icon icon="ExternalLink" />
+                        <TextLink icon="ExternalLink">Preview</TextLink>
                       </a>
                     </div>
                   );

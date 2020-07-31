@@ -6,6 +6,7 @@ import {
   HelpText,
   TextLink,
   Paragraph,
+  Spinner,
   Subheading,
   FormLabel,
   Icon
@@ -465,45 +466,46 @@ const ComponentEditor = props => {
 
   return (
     <div className="component-editor">
-      <div className="f36-margin-bottom--l">
-        <Subheading>
-          {props.title}{' '}
-          {props.schema.meta && (
-            <HelpText className="d-inline-block">
-              <TextLink
-                target="_blank"
-                href={`https://justworks-staging-v2.herokuapp.com${props.schema.meta.styleguide_path}`}>
-                Styleguide link
-              </TextLink>
-            </HelpText>
-          )}
-        </Subheading>
-        <Paragraph>{props.schema.meta.description}</Paragraph>
-      </div>
+      <div>
+        <div className="f36-margin-bottom--l">
+          <Subheading>
+            {props.title}{' '}
+            {props.schema.meta && (
+              <HelpText className="d-inline-block">
+                <TextLink
+                  target="_blank"
+                  href={`https://justworks-staging-v2.herokuapp.com${props.schema.meta.styleguide_path}`}>
+                  Styleguide link
+                </TextLink>
+              </HelpText>
+            )}
+          </Subheading>
+          <Paragraph>{props.schema.meta.description}</Paragraph>
+        </div>
 
-      <div className="component-editor__fields">
-        {/* style properties */}
+        <div className="component-editor__fields">
+          {/* style properties */}
 
-        <EditorSections
-          selectedTab="DEFAULT"
-          styleFields={Object.keys(styleProperties(props.schema.properties))
-            .filter(propKey => !props.schema.properties[propKey].hidden)
-            .map(propKey => {
-              return renderPropertyField(propKey);
-            })}
-          advancedFields={Object.keys(advancedProperties(props.schema.properties))
-            .filter(propKey => !props.schema.properties[propKey].hidden)
-            .map(propKey => {
-              return renderPropertyField(propKey);
-            })}
-          defaultFields={Object.keys(defaultProperties(props.schema.properties))
-            .filter(propKey => !props.schema.properties[propKey].hidden)
-            .map(propKey => {
-              return renderPropertyField(propKey);
-            })}
-        />
+          <EditorSections
+            selectedTab="DEFAULT"
+            styleFields={Object.keys(styleProperties(props.schema.properties))
+              .filter(propKey => !props.schema.properties[propKey].hidden)
+              .map(propKey => {
+                return renderPropertyField(propKey);
+              })}
+            advancedFields={Object.keys(advancedProperties(props.schema.properties))
+              .filter(propKey => !props.schema.properties[propKey].hidden)
+              .map(propKey => {
+                return renderPropertyField(propKey);
+              })}
+            defaultFields={Object.keys(defaultProperties(props.schema.properties))
+              .filter(propKey => !props.schema.properties[propKey].hidden)
+              .map(propKey => {
+                return renderPropertyField(propKey);
+              })}
+          />
+        </div>
       </div>
-      {!props.schemas.length && <Paragraph>Loading schemas...</Paragraph>}
     </div>
   );
 };
