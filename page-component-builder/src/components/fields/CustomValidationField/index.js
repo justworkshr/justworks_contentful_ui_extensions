@@ -8,7 +8,7 @@ import DropdownField from '../DropdownField';
 
 const actionSchema = () => {
   return {
-    errorMessage: '',
+    error_message: '',
     condition: '', // (equals | matches | gte | lte)
     value: ''
   };
@@ -44,7 +44,7 @@ const CustomValidationField = props => {
   };
 
   const handleErrorMessageChange = (value, action, index) => {
-    action.errorMessage = value;
+    action.error_message = value;
     const newValue = [...props.value.slice(0, index), action, ...props.value.slice(index + 1)];
     updateValue(newValue);
   };
@@ -70,7 +70,7 @@ const CustomValidationField = props => {
             <ShortTextInput
               testId="logic-field__value"
               onChange={value => handleErrorMessageChange(value, action, index)}
-              value={action.errorMessage}
+              value={action.error_message}
             />
           </span>
           <span className="logic-editor__field">
@@ -95,7 +95,7 @@ const CustomValidationField = props => {
   };
 
   const cardTitle = (action, index) => {
-    if (!action.action && !action.action_value) return `New Action ${index + 1}`;
+    if (!action.action && !action.action_value) return `Validation ${index + 1}`;
     if (action.action === 'redirect') {
       return `${action.action || ''} ${action.action_value || ''} if ${action.field ||
         ''} ${action.condtion || ''} = ${action.value || ''}`.trim();

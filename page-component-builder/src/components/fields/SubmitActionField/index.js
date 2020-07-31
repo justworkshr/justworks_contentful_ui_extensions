@@ -172,7 +172,7 @@ const SubmitActionField = props => {
   };
 
   const cardTitle = (action, index) => {
-    if (!action.action && !action.action_value) return `New Action ${index + 1}`;
+    if (!action.action && !action.action_value) return `Action ${index + 1}`;
     if (action.action === 'redirect') {
       return `${action.action || ''} ${action.action_value || ''} if ${action.field ||
         ''} ${action.condtion || ''} = ${action.value || ''}`.trim();
