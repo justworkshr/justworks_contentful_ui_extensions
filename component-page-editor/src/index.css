@@ -12,6 +12,7 @@ div {
 .editor {
   max-width: 768px;
   margin: 0 auto;
+  margin-bottom: 120px;
 }
 
 .entry-card {
