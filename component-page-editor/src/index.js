@@ -328,7 +328,7 @@ export class App extends React.Component {
             </Select>
             <HelpText>The theme which affects color scheming and typography.</HelpText>
           </div>
-          <div
+          {/* <div
             className={`editor__field ${this.props.sdk.entry.fields.themeVariant.required &&
               !this.state.themeVariant &&
               'with-error'}`}>
@@ -352,7 +352,7 @@ export class App extends React.Component {
                 })}
             </Select>
             <HelpText>The light / dark mode setting for the theme.</HelpText>
-          </div>
+          </div> */}
           <div
             className={`editor__field ${this.props.sdk.entry.fields.modules.required &&
               !this.state.modules &&
