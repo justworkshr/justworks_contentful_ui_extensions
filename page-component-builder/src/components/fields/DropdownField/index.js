@@ -25,7 +25,7 @@ const DropdownField = props => {
     if (value === 'true') return true;
     if (value === 'false') return false;
     // coerce numbers
-    if (!isNaN(value)) return parseInt(value);
+    if (!isNaN(value)) return parseFloat(value);
     return value;
   };
 
