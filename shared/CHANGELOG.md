@@ -16,6 +16,12 @@ All changelog entries must be placed under the `## Changes` header with the foll
 
 ## Changes
 
+### 8/26/2020
+
+- Added support for <sup>superscript</sup> and <sub>subscript</sub> within all markdown elements.
+- Added a new component: "Logo Testimonial Item" for testimonials which use logos instead of thumbnail images (ex: Case Study testimonials)
+- Added new logos for Creative Morning, Nomadworks, Transitworks, FluentCity
+
 ### 8/18/2020
 
 - Added Custom Validation to all form input fields. This allows content editors to set custom validation rules on a specific input, such as requiring an input to have a value >= 1.

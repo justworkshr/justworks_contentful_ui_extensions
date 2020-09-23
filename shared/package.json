@@ -13,5 +13,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "marked": "^1.1.1"
+  }
 }
