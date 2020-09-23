@@ -441,6 +441,16 @@ const ComponentEditor = props => {
     }, {});
   };
 
+  const colorProperties = properties => {
+    return Object.keys(properties).reduce((accumulator, propKey) => {
+      if (props.schema.properties[propKey].editor_category === c.COLOR_CATEGORY) {
+        accumulator[propKey] = properties[propKey];
+      }
+
+      return accumulator;
+    }, {});
+  };
+
   const advancedProperties = properties => {
     return Object.keys(properties).reduce((accumulator, propKey) => {
       if (props.schema.properties[propKey].editor_category === c.ADVANCED_CATEGORY) {
@@ -455,6 +465,7 @@ const ComponentEditor = props => {
     return Object.keys(properties).reduce((accumulator, propKey) => {
       if (
         props.schema.properties[propKey].editor_category !== c.STYLE_CATEGORY &&
+        props.schema.properties[propKey].editor_category !== c.COLOR_CATEGORY &&
         props.schema.properties[propKey].editor_category !== c.ADVANCED_CATEGORY
       ) {
         accumulator[propKey] = properties[propKey];
@@ -489,6 +500,11 @@ const ComponentEditor = props => {
           <EditorSections
             selectedTab="DEFAULT"
             styleFields={Object.keys(styleProperties(props.schema.properties))
+              .filter(propKey => !props.schema.properties[propKey].hidden)
+              .map(propKey => {
+                return renderPropertyField(propKey);
+              })}
+            colorFields={Object.keys(colorProperties(props.schema.properties))
               .filter(propKey => !props.schema.properties[propKey].hidden)
               .map(propKey => {
                 return renderPropertyField(propKey);

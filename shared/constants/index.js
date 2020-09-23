@@ -18,6 +18,7 @@ export const HIDDEN_ROLE = "hidden";
 // PROPERTY CATEGORIES
 
 export const STYLE_CATEGORY = "style";
+export const COLOR_CATEGORY = "color";
 export const ADVANCED_CATEGORY = "advanced";
 
 // PROPERTY TYPES

@@ -32,6 +32,16 @@ const EditorSections = props => {
           {c.STYLE_CATEGORY.toUpperCase()}
         </Tab>
         <Tab
+          id={c.COLOR_CATEGORY}
+          disabled={!props.colorFields.length}
+          selected={selectedTab === c.COLOR_CATEGORY}
+          onSelect={id => {
+            if (!props.colorFields.length) return;
+            setSelectedTab(id);
+          }}>
+          {c.COLOR_CATEGORY.toUpperCase()}
+        </Tab>
+        <Tab
           id={c.ADVANCED_CATEGORY}
           disabled={!props.advancedFields.length}
           selected={selectedTab === c.ADVANCED_CATEGORY}
@@ -46,6 +56,9 @@ const EditorSections = props => {
       {selectedTab === c.STYLE_CATEGORY && (
         <TabPanel id={c.STYLE_CATEGORY}>{props.styleFields}</TabPanel>
       )}
+      {selectedTab === c.COLOR_CATEGORY && (
+        <TabPanel id={c.COLOR_CATEGORY}>{props.colorFields}</TabPanel>
+      )}
       {selectedTab === c.ADVANCED_CATEGORY && (
         <TabPanel id={c.ADVANCED_CATEGORY}>{props.advancedFields}</TabPanel>
       )}
@@ -56,14 +69,16 @@ const EditorSections = props => {
 EditorSections.propTypes = {
   selectedTab: PropTypes.string,
   styleFields: PropTypes.array,
+  colorFields: PropTypes.array,
   advancedFields: PropTypes.array,
   defaultFields: PropTypes.array
 };
 EditorSections.defaultProps = {
   selectedTab: 'DEFAULT',
-  styleFields: {},
-  advancedFields: {},
-  defaultFields: {}
+  styleFields: [],
+  advancedFields: [],
+  defaultFields: [],
+  colorFields: []
 };
 
 export default EditorSections;
