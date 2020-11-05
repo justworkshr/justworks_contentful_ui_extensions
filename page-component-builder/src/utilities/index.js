@@ -151,6 +151,12 @@ export const getDropdownOptions = (options, schemas) => {
       .filter(schema => schema.meta.id !== 'patterns/variant_container')
       .filter(schema => !schema.meta.extension_of) // not an extension
       .map(schema => schema.meta.id);
+  } else if (options[0] === '{{ components }}') {
+    options = schemas
+      .filter(schema => schema.meta.id.includes('components'))
+      .filter(schema => schema.meta.id !== 'components/variant_container')
+      .filter(schema => !schema.meta.extension_of) // not an extension
+      .map(schema => schema.meta.id);
   }
 
   return options.filter(id => {
