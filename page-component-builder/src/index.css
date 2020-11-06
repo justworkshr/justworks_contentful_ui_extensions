@@ -35,7 +35,7 @@ div {
 
 /* contentful override */
 
-.jw-dropdown {
-  overflow-y: scroll !important;
+[class*='DropdownContainer__DropdownContainer'] {
+  overflow-y: scroll;
   max-height: 500px;
 }
