@@ -61,10 +61,9 @@ class DropdownLink extends React.Component {
                 return (
                   <Dropdown
                     key={`dropdown-link-menu-extension--${option}`}
-                    className="jw-dropdown"
                     position="right"
                     submenuToggleLabel={getLabel(option, this.props.schemas)}>
-                    <DropdownList>
+                    <DropdownList className="jw-dropdown">
                       <DropdownListItem isTitle>Extensions</DropdownListItem>
                       <DropdownListItem
                         testId={`dropdown-link-extension--${option}`}

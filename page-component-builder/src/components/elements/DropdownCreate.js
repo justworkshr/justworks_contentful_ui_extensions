@@ -75,10 +75,9 @@ class DropdownCreate extends React.Component {
                 return (
                   <Dropdown
                     key={`dropdown-create-menu-extension--${option}`}
-                    className="jw-dropdown"
                     position="right"
                     submenuToggleLabel={getLabel(option, this.props.schemas)}>
-                    <DropdownList>
+                    <DropdownList className="jw-dropdown">
                       <DropdownListItem isTitle>Extensions</DropdownListItem>
                       <DropdownListItem
                         testId={`dropdown-create-extension--${option}`}
