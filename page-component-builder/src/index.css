@@ -32,3 +32,10 @@ div {
   align-items: center;
   justify-content: start;
 }
+
+/* contentful override */
+
+.jw-dropdown {
+  overflow-y: scroll !important;
+  max-height: 500px;
+}
