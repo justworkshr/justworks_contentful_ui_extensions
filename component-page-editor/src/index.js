@@ -62,6 +62,7 @@ export class App extends React.Component {
     this.fetchSchemas = this.fetchSchemas.bind(this);
     this.hydrateEntries = this.hydrateEntries.bind(this);
     this.hydrateMeta = this.hydrateMeta.bind(this);
+    this.purgeMissingModules = this.purgeMissingModules.bind(this);
   }
 
   componentDidMount = async () => {
@@ -92,6 +93,19 @@ export class App extends React.Component {
     if (!this.state.themeVariant) {
       this.onThemeVariantChangeHandler({ target: { value: 'light' } });
     }
+  };
+
+  purgeMissingModules = async (hydratedEntryItems, modules = []) => {
+    if (!hydratedEntryItems) return;
+    const cleanedValue = this.state.modules.reduce((acc, module) => {
+      if (hydratedEntryItems.some(hydratedEntry => hydratedEntry.sys.id === module.sys.id)) {
+        acc.push(module);
+      }
+      return acc;
+    }, []);
+
+    this.setState({ modules: cleanedValue });
+    this.props.sdk.entry.fields.modules.setValue(cleanedValue);
   };
 
   fetchSchemas = async () => {
@@ -155,6 +169,11 @@ export class App extends React.Component {
           hydratedEntries: entries.items,
           loadingEntries: false
         });
+
+        // purge missing entries from the page record
+        // sometimes a weird bug can occur when deleting module entries and not removing from the page entry.
+
+        this.purgeMissingModules(entries.items, this.state.modules);
       }
     );
   };
