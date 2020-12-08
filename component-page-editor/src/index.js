@@ -85,14 +85,6 @@ export class App extends React.Component {
         }
       });
     }
-
-    if (!this.state.theme) {
-      this.onThemeChangeHandler({ target: { value: 'jms__default' } });
-    }
-
-    if (!this.state.themeVariant) {
-      this.onThemeVariantChangeHandler({ target: { value: 'light' } });
-    }
   };
 
   purgeMissingModules = async (hydratedEntryItems, modules = []) => {
@@ -207,12 +199,6 @@ export class App extends React.Component {
     const value = event.target.value;
     this.setState({ theme: value });
     this.props.sdk.entry.fields.theme.setValue(value);
-  };
-
-  onThemeVariantChangeHandler = event => {
-    const value = event.target.value;
-    this.setState({ themeVariant: value });
-    this.props.sdk.entry.fields.themeVariant.setValue(value);
   };
 
   onModulesChangeHandler = value => {
@@ -347,31 +333,7 @@ export class App extends React.Component {
             </Select>
             <HelpText>The theme which affects color scheming and typography.</HelpText>
           </div>
-          {/* <div
-            className={`editor__field ${this.props.sdk.entry.fields.themeVariant.required &&
-              !this.state.themeVariant &&
-              'with-error'}`}>
-            <SectionHeading
-              className={
-                this.props.sdk.entry.fields.themeVariant.required &&
-                !this.state.themeVariant &&
-                'f36-color--negative'
-              }>
-              Theme Variant {this.props.sdk.entry.fields.themeVariant.required && '(Required)'}
-            </SectionHeading>
-            <Select onChange={this.onThemeVariantChangeHandler} value={this.state.themeVariant}>
-              {this.props.sdk.entry.fields.themeVariant.validations
-                .find(v => v.in)
-                .in.map(option => {
-                  return (
-                    <Option key={`themeVariant-option--${option}`} value={option}>
-                      {option}
-                    </Option>
-                  );
-                })}
-            </Select>
-            <HelpText>The light / dark mode setting for the theme.</HelpText>
-          </div> */}
+
           <div
             className={`editor__field ${this.props.sdk.entry.fields.modules.required &&
               !this.state.modules &&
