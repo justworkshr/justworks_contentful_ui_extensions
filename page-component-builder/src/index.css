@@ -35,7 +35,12 @@ div {
 
 /* contentful override */
 
-[class*='DropdownContainer__DropdownContainer'] {
+[class*='DropdownList__DropdownList'] {
   overflow-y: auto;
   max-height: 500px;
+  width: 600px;
+}
+
+[class*='DropdownListItem__DropdownListItem'] {
+  width: 300px;
 }
