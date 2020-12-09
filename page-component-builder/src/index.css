@@ -41,6 +41,11 @@ div {
   width: 600px;
 }
 
+[class*='DropdownContainer__DropdownContainer'] [class*='DropdownContainer__DropdownContainer'] {
+  /* submenu child */
+  width: auto;
+}
+
 [class*='DropdownListItem__DropdownListItem'] {
   width: 300px;
 }
