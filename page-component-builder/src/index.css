@@ -38,7 +38,7 @@ div {
 [class*='DropdownContainer__DropdownContainer'] {
   overflow-y: auto;
   max-height: 500px;
-  width: 600px;
+  width: 680px;
 }
 
 [class*='DropdownContainer__DropdownContainer'] [class*='DropdownContainer__DropdownContainer'] {
@@ -47,5 +47,5 @@ div {
 }
 
 [class*='DropdownListItem__DropdownListItem'] {
-  width: 300px;
+  width: 280px;
 }
