@@ -151,7 +151,6 @@ export class PageComponentBuilder extends React.Component {
     const response = await Axios.get(`${schemaHost}/components.json`, {
       headers: { 'Content-Type': 'application/json', Authorization: auth }
     }).catch(e => {
-      console.log(e);
       this.props.sdk.notifier.error(`Could not load schemas: ${e.message}`);
     });
 

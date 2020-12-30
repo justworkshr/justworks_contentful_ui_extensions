@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import * as c from '@shared/constants';
-
 import ErrorList from '../ErrorList';
 
 import {
@@ -112,7 +110,11 @@ export const MultiLinkField = props => {
     }
   };
 
-  const handleRemoveClick = entry => {
+  const handleRemoveClick = (e, entry) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     const entries = props.entries.filter(e => e.sys.id !== entry.sys.id);
     updateEntry(entries);
   };
@@ -145,7 +147,7 @@ export const MultiLinkField = props => {
           isLoading={!(entry && entry.fields)}
           onClick={() => handleEditClick(entry)}
           handleEditClick={() => handleEditClick(entry)}
-          handleRemoveClick={() => handleRemoveClick(entry)}
+          handleRemoveClick={e => handleRemoveClick(e, entry)}
           draggable={true}
           isDragActive={index === dragged}
           onDragStart={onDragStart}

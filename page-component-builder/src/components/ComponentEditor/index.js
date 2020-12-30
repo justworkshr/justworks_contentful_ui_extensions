@@ -22,6 +22,7 @@ import DropdownField from '../fields/DropdownField';
 import AssetField from '../fields/AssetField';
 import EntryField from '../fields/EntryField';
 import MultiLinkField from '../fields/MultiLinkField';
+import MultiAssetField from '../fields/MultiAssetField';
 import SubmitActionField from '../fields/SubmitActionField';
 import CustomValidationField from '../fields/CustomValidationField';
 import ExperimentConditionField from '../fields/ExperimentConditionField';
@@ -43,6 +44,7 @@ import {
   isAssetLinkProperty,
   isEntryLinkProperty,
   isMultiLinkProperty,
+  isMultiAssetProperty,
   isComponentProperty,
   isMultiComponentProperty,
   isConfigProperty,
@@ -169,7 +171,6 @@ const ComponentEditor = props => {
     const property = props.schema.properties[propKey];
     const value = ((props.internalMappingInstance.properties || {})[propKey] || {}).value;
     const id = `editor-field--${propKey}`;
-
     return (
       <div
         id={id}
@@ -287,6 +288,19 @@ const ComponentEditor = props => {
             })}
             onChange={value => updatePropertyValue(propKey, value, false)}
             replaceHydratedEntry={props.replaceHydratedEntry}
+            errors={errors[propKey]}
+          />
+        )}
+        {isMultiAssetProperty(property) && (
+          <MultiAssetField
+            sdk={props.sdk}
+            propKey={propKey}
+            assetTypes={property.asset_types}
+            assets={(value || []).map(asset => {
+              return fetchHydratedAsset(asset);
+            })}
+            onChange={value => updatePropertyValue(propKey, value, false)}
+            replaceHydratedAsset={props.replaceHydratedAsset}
             errors={errors[propKey]}
           />
         )}

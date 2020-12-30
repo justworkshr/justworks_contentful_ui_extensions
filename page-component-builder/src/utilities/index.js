@@ -258,8 +258,13 @@ export const isEntryLinkProperty = property => {
 export const isMultiLinkProperty = property => {
   return (
     property.type === c.MULTI_LINK_PROPERTY &&
-    ((property.content_types && !!property.content_types.length) ||
-      (property.asset_types && !!property.asset_types.length))
+    property.content_types && !!property.content_types.length
+  );
+};
+
+export const isMultiAssetProperty = property => {
+  return (
+    property.type === c.MULTI_LINK_PROPERTY && property.asset_types && !!property.asset_types.length
   );
 };
 

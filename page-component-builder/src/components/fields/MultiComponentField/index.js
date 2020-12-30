@@ -156,11 +156,15 @@ export const MultiComponentField = props => {
     } catch (error) {
       // entity deleted
       const index = props.value.findIndex(e => (e.sys || {}).id === entry.sys.id);
-      handleRemoveClick(index);
+      handleRemoveClick(null, index);
     }
   };
 
-  const handleRemoveClick = index => {
+  const handleRemoveClick = (e, index) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     let entries = [...props.value.slice(0, index), ...props.value.slice(index + 1)];
     updateEntry(entries);
   };
@@ -257,7 +261,7 @@ export const MultiComponentField = props => {
               isLoading={props.loadingEntries[linkOrSingleton.sys.id]}
               onClick={() => handleEditClick(entry)}
               handleEditClick={() => handleEditClick(entry)}
-              handleRemoveClick={() => handleRemoveClick(index)}
+              handleRemoveClick={e => handleRemoveClick(e, index)}
               handleDuplicateClick={e => handleDuplicateEntryClick(e, index)}
               draggable={true}
               isDragActive={index === dragged}
@@ -294,7 +298,7 @@ export const MultiComponentField = props => {
                 )
               }
               schema={schema}
-              handleRemoveClick={() => handleRemoveClick(index)}
+              handleRemoveClick={e => handleRemoveClick(e, index)}
               draggable={true}
               isDragActive={index === dragged}
               onDragStart={onDragStart}
