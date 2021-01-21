@@ -12,7 +12,7 @@ div {
 .editor {
   max-width: 768px;
   margin: 0 auto;
-  margin-bottom: 140px; /* for some reason the iframe started appearing without enough spacing at the bottom */
+  margin-bottom: 100px; /* for some reason the iframe started appearing without enough spacing at the bottom */
 }
 
 .entry-card {
@@ -34,19 +34,4 @@ div {
   justify-content: start;
 }
 
-/* contentful override */
-
-[class*='DropdownContainer__DropdownContainer'] {
-  overflow-y: auto;
-  max-height: 500px;
-  width: 680px;
-}
-
-[class*='DropdownContainer__DropdownContainer'] [class*='DropdownContainer__DropdownContainer'] {
-  /* submenu child */
-  width: auto;
-}
-
-[class*='DropdownListItem__DropdownListItem'] {
-  width: 280px;
-}
+/* contentful overrides */
