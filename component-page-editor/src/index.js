@@ -75,6 +75,11 @@ export class App extends React.Component {
       this.onRoutingChangeHandler({ target: { value: 'Default' } });
     }
 
+    // set default values
+    if (!this.state.theme) {
+      this.onThemeChangeHandler({ target: { value: 'jms__tlc' } });
+    }
+
     if (!this.state.path) {
       this.onPathChangeHandler({
         target: {
