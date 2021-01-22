@@ -137,7 +137,7 @@ const MultiComponentField = props => {
       };
 
       const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, fields);
-      const entries = [...props.value, newEntry];
+      const entries = [...props.value, constructLink(newEntry)];
 
       props.onChange(entries);
       props.sdk.notifier.success('Entry duplicated successfully.');
