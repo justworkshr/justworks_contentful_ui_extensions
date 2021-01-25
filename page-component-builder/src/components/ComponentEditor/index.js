@@ -13,6 +13,7 @@ import {
 } from '@contentful/forma-36-react-components';
 
 import ShortTextField from '../fields/ShortTextField';
+import MultiTextField from '../fields/MultiTextField';
 import LongTextField from '../fields/LongTextField';
 import MarkdownField from '../fields/MarkdownField';
 import ColorField from '../fields/ColorField';
@@ -33,6 +34,7 @@ import MultiComponentField from '../fields/MultiComponentField';
 import {
   getFieldIcon,
   isShortTextField,
+  isMultiTextField,
   isColorField,
   isNumberField,
   isLongTextField,
@@ -203,9 +205,16 @@ const ComponentEditor = props => {
             value={value}
           />
         )}
+        {isMultiTextField(property) && (
+          <MultiTextField
+            onChange={value => updatePropertyValue(propKey, value, true)}
+            errors={errors[propKey]}
+            value={value}
+          />
+        )}
+
         {isColorField(property) && (
-          <ColorField
-            propKey={propKey}
+          <MultiTextField
             onChange={value => updatePropertyValue(propKey, value, true)}
             errors={errors[propKey]}
             value={value}

@@ -190,6 +190,10 @@ export const isShortTextField = property => {
   );
 };
 
+export const isMultiTextField = property => {
+  return property.type === c.MULTI_TEXT_PROPERTY;
+};
+
 export const isColorField = property => {
   return property.type === c.TEXT_PROPERTY && property.editor_type === c.COLOR_EDITOR;
 };
@@ -258,7 +262,8 @@ export const isEntryLinkProperty = property => {
 export const isMultiLinkProperty = property => {
   return (
     property.type === c.MULTI_LINK_PROPERTY &&
-    property.content_types && !!property.content_types.length
+    property.content_types &&
+    !!property.content_types.length
   );
 };
 
@@ -299,9 +304,10 @@ export const isExperimentConditionProperty = property => {
 };
 
 export const getFieldIcon = property => {
-  if (isShortTextField(property)) {
+  if (isShortTextField(property) || isMultiTextField(property)) {
     return 'Text';
   }
+
   if (isNumberField(property)) {
     return 'LooksOne';
   }

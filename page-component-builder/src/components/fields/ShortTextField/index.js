@@ -13,6 +13,7 @@ const ShortTextField = props => {
         onChange={e => props.onChange(e.target.value)}
         value={props.value || ''}
         error={!!props.errors.length}
+        placeholder={props.placeholder}
       />
       <ErrorList errors={props.errors} />
     </div>
@@ -22,6 +23,7 @@ const ShortTextField = props => {
 ShortTextField.propTypes = {
   errors: PropTypes.array,
   onChange: PropTypes.func,
+  placeholder: PropTypes.string,
   testId: PropTypes.string,
   type: PropTypes.string,
   value: PropTypes.string

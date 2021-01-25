@@ -1,0 +1,16 @@
+.multi-text-field {
+  &__add-row {
+    display: flex;
+  }
+  &__item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    background-color: white;
+    padding: 8px;
+  }
+
+  &__item-menu {
+    flex-shrink: 0;
+  }
+}

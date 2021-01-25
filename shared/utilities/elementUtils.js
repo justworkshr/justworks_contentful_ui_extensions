@@ -1,34 +1,34 @@
-import * as c from "../../customModules/constants";
+import * as c from "../constants";
 
-export const capitalize = string => {
+export const capitalize = (string) => {
   if (!string) return;
   return string
     .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
 
-export const displaySnakeCaseName = string => {
+export const displaySnakeCaseName = (string) => {
   if (!string) return;
   return string
     .split("_")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 };
 
-export const camelToSnakeCase = str => {
+export const camelToSnakeCase = (str) => {
   if (!str) return;
-  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 };
 
-export const displayCamelCaseName = string => {
+export const displayCamelCaseName = (string) => {
   if (!string) return;
   return string
     .replace(/([A-Z])/g, " $1")
-    .replace(/^./, str => str.toUpperCase());
+    .replace(/^./, (str) => str.toUpperCase());
 };
 
-export const getStatus = entry => {
+export const getStatus = (entry) => {
   if (
     entry &&
     entry.sys &&
@@ -50,18 +50,27 @@ export const getStatus = entry => {
   }
 };
 
-export const getAssetType = contentType => {
+export const getAssetType = (contentType) => {
   if (contentType.includes(c.ASSET_TYPE_IMAGE)) return c.ASSET_TYPE_IMAGE;
   if (contentType.includes(c.ASSET_TYPE_VIDEO)) return c.ASSET_TYPE_VIDEO;
   if (contentType.includes(c.ASSET_TYPE_PDF)) return c.ASSET_TYPE_PDF;
 };
 
-export const getCustomTemplateFieldConfig = roleConfig => {
+export const getCustomTemplateFieldConfig = (roleConfig) => {
   if (!roleConfig.fieldConfigs) return;
   return roleConfig.fieldConfigs.find(
-    fc =>
+    (fc) =>
       fc.contentType === c.CONTENT_TYPE_COLLECTION_MODULE ||
       (Array.isArray(fc.contentType) &&
-        fc.contentType.some(ct => ct === c.CONTENT_TYPE_COLLECTION_MODULE))
+        fc.contentType.some((ct) => ct === c.CONTENT_TYPE_COLLECTION_MODULE))
   );
+};
+
+export const arrayMove = (arr, fromIndex, toIndex) => {
+  const newArray = [...arr];
+  var element = newArray[fromIndex];
+  newArray.splice(fromIndex, 1);
+  newArray.splice(toIndex, 0, element);
+
+  return newArray;
 };
