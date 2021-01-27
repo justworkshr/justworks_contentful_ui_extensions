@@ -26,7 +26,7 @@ const ColorField = props => {
         })}
       </div>
       <div>
-        <FormLabel htmlFor={`color-field--${props.propKey}`}>{props.value}</FormLabel>
+        <FormLabel htmlFor={`color-field--${props.propKey}`}>{props.value || '(blank)'}</FormLabel>
         {c.BRAND_COLORS.find(c => props.value === c.hex) && (
           <HelpText className="f36-margin-left--xs d-inline-block">
             {c.BRAND_COLORS.find(c => props.value === c.hex).name}

@@ -214,7 +214,7 @@ const ComponentEditor = props => {
         )}
 
         {isColorField(property) && (
-          <MultiTextField
+          <ColorField
             onChange={value => updatePropertyValue(propKey, value, true)}
             errors={errors[propKey]}
             value={value}

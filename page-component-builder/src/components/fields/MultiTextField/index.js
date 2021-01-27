@@ -75,7 +75,7 @@ const MultiTextField = props => {
         <Button icon={'Plus'} onClick={handleAddItem} buttonType="positive"></Button>
       </div>
       <ErrorList errors={props.errors} />
-      {props.value.map((item, index) => {
+      {(props.value || []).map((item, index) => {
         return TextItem(item, index);
       })}
     </div>
