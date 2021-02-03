@@ -1,5 +1,23 @@
 {
   "id": "page-component-builder",
   "name": "page-component-builder",
-  "srcdoc": "./build/index.html"
+  "srcdoc": "./build/index.html",
+  "parameters": {
+    "installation": [
+      {
+        "id": "productionUrl",
+        "type": "Symbol",
+        "name": "Production URL",
+        "default": "https://justworks.com",
+        "required": true
+      },
+      {
+        "id": "stagingUrl",
+        "type": "Symbol",
+        "name": "Staging URL",
+        "default": "https://justworks-staging-v2.herokuapp.com",
+        "required": true
+      }
+    ]
+  }
 }

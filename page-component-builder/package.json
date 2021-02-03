@@ -38,7 +38,7 @@
     "test": "contentful-extension-scripts test --env=jsdom --watch",
     "test:coverage": "contentful-extension-scripts test --env=jsdom --coverage",
     "deploy": "npm run build && contentful extension update --force",
-    "deploy:prod": "npm run build:prod && contentful extension update --force --src=https://justworks-contentful-extension.herokuapp.com?url=https://raw.githubusercontent.com/justworkshr/justworks_contentful_ui_extensions/master/page-component-builder/build/index.html",
+    "deploy:prod": "npm run build:prod && contentful extension update --force --environment-id='master' --src=https://justworks-contentful-extension.herokuapp.com?url=https://raw.githubusercontent.com/justworkshr/justworks_contentful_ui_extensions/master/page-component-builder/build/index.html",
     "configure": "contentful space use && contentful space environment use",
     "login": "contentful login",
     "logout": "contentful logout",
