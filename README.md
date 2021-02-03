@@ -110,6 +110,11 @@ yarn run deploy:prod
 
 ```
 
+See this link for full list of deployment flags and options.
+https://www.contentful.com/developers/docs/tutorials/cli/extension-management/
+
+You may need to deploy separate spaces and with installation parameters if your extension uses those.
+
 ## Setting up existing extension
 
 1. cd <extension dir>
