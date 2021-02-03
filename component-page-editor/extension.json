@@ -3,7 +3,7 @@
   "name": "component-page-editor",
   "srcdoc": "./build/index.html",
   "parameters": {
-    "instance": [
+    "installation": [
       {
         "id": "productionUrl",
         "type": "Symbol",
