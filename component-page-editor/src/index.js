@@ -297,7 +297,9 @@ export class App extends React.Component {
               onChange={this.onPathChangeHandler}
               value={this.state.path}
             />
-            <HelpText>The last part of the URL.</HelpText>
+            <HelpText>
+              The last part of the URL. Enter {'{{ root }}'} if you want this part to be blank.
+            </HelpText>
           </div>
           {this.state.schemaData.tokens && (
             <div>
@@ -306,17 +308,21 @@ export class App extends React.Component {
                 target="_blank"
                 href={`${this.PRODUCTION_URL}${
                   this.state.schemaData.tokens.routing[this.state.routing]
-                }${this.state.path}`}>{`${this.PRODUCTION_URL}${
-                this.state.schemaData.tokens.routing[this.state.routing]
-              }${this.state.path}`}</TextLink>
+                }${this.state.path === '{{ root }}' ? '' : this.state.path}`}>{`${
+                this.PRODUCTION_URL
+              }${this.state.schemaData.tokens.routing[this.state.routing]}${
+                this.state.path === '{{ root }}' ? '' : this.state.path
+              }`}</TextLink>
               <SectionHeading className="f36-margin-top--xs">Staging URL</SectionHeading>
               <TextLink
                 target="_blank"
                 href={`${this.STAGING_URL}${
                   this.state.schemaData.tokens.routing[this.state.routing]
-                }${this.state.path}`}>{`${this.STAGING_URL}${
-                this.state.schemaData.tokens.routing[this.state.routing]
-              }${this.state.path}`}</TextLink>
+                }${this.state.path === '{{ root }}' ? '' : this.state.path}`}>{`${
+                this.STAGING_URL
+              }${this.state.schemaData.tokens.routing[this.state.routing]}${
+                this.state.path === '{{ root }}' ? '' : this.state.path
+              }`}</TextLink>
             </div>
           )}
           <div
