@@ -51,7 +51,6 @@ export class App extends React.Component {
       routing: props.sdk.entry.fields.routing.getValue(),
       path: props.sdk.entry.fields.path.getValue(),
       theme: props.sdk.entry.fields.theme.getValue(),
-      themeVariant: props.sdk.entry.fields.themeVariant.getValue(),
       modules: props.sdk.entry.fields.modules.getValue() || [],
 
       hydratedEntries: [],
@@ -77,7 +76,10 @@ export class App extends React.Component {
 
     // set default values
     if (!this.state.theme) {
-      this.onThemeChangeHandler({ target: { value: 'jms__tlc' } });
+      const options = this.props.sdk.entry.fields.theme.validations.find(v => v.in).in;
+      if (options.length) {
+        this.onThemeChangeHandler({ target: { value: options[0] } }); // selects first option automatically
+      }
     }
 
     if (!this.state.path) {
@@ -343,12 +345,7 @@ export class App extends React.Component {
             className={`editor__field ${this.props.sdk.entry.fields.modules.required &&
               !this.state.modules &&
               'with-error'}`}>
-            <SectionHeading
-              className={
-                this.props.sdk.entry.fields.modules.required &&
-                !this.state.themeVariant &&
-                'f36-color--negative'
-              }>
+            <SectionHeading>
               Modules {this.props.sdk.entry.fields.modules.required && '(Required)'}
             </SectionHeading>
             {!Object.keys(this.state.schemaData) && <Paragraph>Loading schemas...</Paragraph>}
