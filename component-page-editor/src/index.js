@@ -273,7 +273,8 @@ export class App extends React.Component {
                 })}
             </Select>
             <HelpText>
-              The preset site routing address. Format: https://justworks.com/( routing )/( path )
+              The preset site routing address. Format:{' '}
+              {this.props.sdk.parameters.installation.productionUrl}/( routing )/( path )
             </HelpText>
           </div>
           <div
