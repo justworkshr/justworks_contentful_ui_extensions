@@ -521,7 +521,7 @@ init(sdk => {
         hydratedAssets={null}
         hydratedEntries={null}
         schemas={null}
-        sdk={this.props.sdk}
+        sdk={sdk}
         debug={isDev}
       />,
       document.getElementById('root')
