@@ -110,7 +110,7 @@ export class App extends React.Component {
   fetchSchemas = async () => {
     const schemaHost = this.props.debug
       ? 'http://localhost:3000'
-      : 'https://justworks-staging-v2.herokuapp.com';
+      : this.props.sdk.parameters.installation.stagingUrl;
 
     const auth = `Basic ${btoa('ju$t:w0rks')}`;
     const response = await Axios.get(`${schemaHost}/components.json`, {
@@ -300,17 +300,17 @@ export class App extends React.Component {
               <SectionHeading>Production URL</SectionHeading>
               <TextLink
                 target="_blank"
-                href={`https://justworks.com${
+                href={`${this.props.sdk.parameters.installation.productionUrl}${
                   this.state.schemaData.tokens.routing[this.state.routing]
-                }${this.state.path}`}>{`https://justworks.com${
+                }${this.state.path}`}>{`${this.props.sdk.parameters.installation.productionUrl}${
                 this.state.schemaData.tokens.routing[this.state.routing]
               }${this.state.path}`}</TextLink>
               <SectionHeading className="f36-margin-top--xs">Staging URL</SectionHeading>
               <TextLink
                 target="_blank"
-                href={`https://justworks-staging-v2.herokuapp.com${
+                href={`${this.props.sdk.parameters.installation.stagingUrl}${
                   this.state.schemaData.tokens.routing[this.state.routing]
-                }${this.state.path}`}>{`https://justworks-staging-v2.herokuapp.com${
+                }${this.state.path}`}>{`${this.props.sdk.parameters.installation.stagingUrl}${
                 this.state.schemaData.tokens.routing[this.state.routing]
               }${this.state.path}`}</TextLink>
             </div>
