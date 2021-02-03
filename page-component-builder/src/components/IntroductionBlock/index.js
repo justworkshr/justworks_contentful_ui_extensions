@@ -12,6 +12,9 @@ import {
 import './style.scss';
 
 const IntroductionBlock = props => {
+  const STAGING_URL =
+    ((props.sdk.parameters || {}).installation || {}).stagingUrl ||
+    'https://justworks-staging-v2.herokuapp.com';
   return (
     <div className="introduction-block">
       <div className="f36-margin-bottom--xl">
@@ -23,12 +26,12 @@ const IntroductionBlock = props => {
       <Subheading>Helpful Links</Subheading>
       <ul>
         <li>
-          <TextLink target="_blank" href={`https://justworks-staging-v2.herokuapp.com/styleguide`}>
+          <TextLink target="_blank" href={`${STAGING_URL}/styleguide`}>
             Marketing Styleguide
           </TextLink>
         </li>
         <li>
-          <TextLink target="_blank" href={`https://justworks-staging-v2.herokuapp.com/`}>
+          <TextLink target="_blank" href={`${STAGING_URL}/`}>
             Staging Website
           </TextLink>
         </li>
@@ -45,6 +48,7 @@ const IntroductionBlock = props => {
 };
 
 IntroductionBlock.propTypes = {
+  sdk: PropTypes.string,
   toggleShown: PropTypes.func
 };
 IntroductionBlock.defaultProps = {};

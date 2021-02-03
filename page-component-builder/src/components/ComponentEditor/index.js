@@ -68,6 +68,9 @@ import EditorSections from '../EditorSections';
 const ComponentEditor = props => {
   const [errors, setErrors] = useState({});
   const [openFields, setOpenFields] = useState([]);
+  const STAGING_URL =
+    ((props.sdk.parameters || {}).installation || {}).stagingUrl ||
+    'https://justworks-staging-v2.herokuapp.com';
 
   const updatePropertyValue = (propKey, value, timeout = true, singletonErrors = {}) => {
     props.internalMappingInstance.updateValue(propKey, value);
@@ -508,7 +511,7 @@ const ComponentEditor = props => {
               <HelpText className="d-inline-block">
                 <TextLink
                   target="_blank"
-                  href={`https://justworks-staging-v2.herokuapp.com${props.schema.meta.styleguide_path}`}>
+                  href={`${STAGING_URL}${props.schema.meta.styleguide_path}`}>
                   Styleguide link
                 </TextLink>
               </HelpText>

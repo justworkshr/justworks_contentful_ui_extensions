@@ -56,6 +56,12 @@ export class PageComponentBuilder extends React.Component {
   constructor(props) {
     super(props);
 
+    this.PRODUCTION_URL =
+      ((props.sdk.parameters || {}).installation || {}).productionUrl || 'https://justworks.com';
+    this.STAGING_URL =
+      ((props.sdk.parameters || {}).installation || {}).stagingUrl ||
+      'https://justworks-staging-v2.herokuapp.com';
+
     this.updateTimeout = null;
     const blankSchemaData = {
       components: [],
@@ -143,9 +149,7 @@ export class PageComponentBuilder extends React.Component {
   }
 
   fetchSchemas = async () => {
-    const schemaHost = this.props.debug
-      ? 'http://localhost:3000'
-      : 'https://justworks-staging-v2.herokuapp.com';
+    const schemaHost = this.props.debug ? 'http://localhost:3000' : this.STAGING_URL;
 
     const auth = `Basic ${btoa('ju$t:w0rks')}`;
     const response = await Axios.get(`${schemaHost}/components.json`, {
@@ -411,6 +415,7 @@ export class PageComponentBuilder extends React.Component {
                 onChange={this.onComponentIdChangeHandler}
                 schemas={this.state.schemaData.components}
                 tags={this.state.schemaData.tags}
+                sdk={this.props.sdk}
                 isShown={this.state.paletteOpen}
                 toggleShown={this.togglePalette}
               />
@@ -501,7 +506,7 @@ export class PageComponentBuilder extends React.Component {
           </div>
         )}
         {!!this.state.schemaData.components.length && !this.state.componentId && (
-          <IntroductionBlock toggleShown={this.togglePalette} />
+          <IntroductionBlock sdk={this.props.sdk} toggleShown={this.togglePalette} />
         )}
       </Form>
     );
@@ -516,7 +521,7 @@ init(sdk => {
         hydratedAssets={null}
         hydratedEntries={null}
         schemas={null}
-        sdk={sdk}
+        sdk={this.props.sdk}
         debug={isDev}
       />,
       document.getElementById('root')

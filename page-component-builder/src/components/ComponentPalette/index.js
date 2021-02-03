@@ -171,6 +171,7 @@ const ComponentPalette = props => {
                   extensions={props.schemas.filter(s => s.meta.extension_of === schema.meta.id)}
                   selected={schema.meta.id === props.componentId}
                   selectItem={handleSchemaClick}
+                  sdk={props.sdk}
                   schema={schema}
                   title={schemaTitle(schema)}
                 />
@@ -187,6 +188,7 @@ ComponentPalette.propTypes = {
   componentId: PropTypes.string,
   onChange: PropTypes.func,
   schemas: PropTypes.array,
+  sdk: PropTypes.object,
   tags: PropTypes.object,
   isShown: PropTypes.bool,
   toggleShown: PropTypes.func
@@ -194,6 +196,9 @@ ComponentPalette.propTypes = {
 ComponentPalette.defaultProps = {
   isShown: false,
   schemas: [],
+  toggleShown: () => {},
+  onChange: () => {},
+  sdk: {},
   tags: {
     component: [],
     content: [],

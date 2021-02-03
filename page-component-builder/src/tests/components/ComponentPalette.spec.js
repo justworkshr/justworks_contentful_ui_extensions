@@ -16,6 +16,7 @@ configure({
 });
 
 const mockOnChange = jest.fn();
+const mockToggleShown = jest.fn();
 
 const mockTag = 'test-tag';
 
@@ -37,7 +38,8 @@ const testSchemas = mockSchemas(mockTags, mockComponents);
 const renderComponent = ({
   schemas = testSchemas.components,
   tags = testSchemas.tags,
-  componentId = ''
+  componentId = '',
+  isShown = false
 } = {}) => {
   return render(
     <ComponentPalette
@@ -45,6 +47,8 @@ const renderComponent = ({
       tags={tags}
       componentId={componentId}
       onChange={mockOnChange}
+      isShown={isShown}
+      toggleShown={mockToggleShown}
     />
   );
 };
@@ -52,6 +56,7 @@ const renderComponent = ({
 describe('ComponentPalette', () => {
   beforeEach(() => {
     mockOnChange.mockReset();
+    mockToggleShown.mockReset();
   });
 
   afterEach(cleanup);
@@ -66,7 +71,8 @@ describe('ComponentPalette', () => {
       const componentPalette = renderComponent({
         schemas: undefined,
         tags: undefined,
-        componentId: undefined
+        componentId: undefined,
+        isShown: true
       });
 
       expect(componentPalette).toBeTruthy();
@@ -80,26 +86,25 @@ describe('ComponentPalette', () => {
       expect(getByTestId('component-palette')).toBeTruthy();
     });
 
-    it('opens and closes a modal on button click', async () => {
+    it('fires #toggleShown on button click', async () => {
       const { getByTestId, queryByTestId, getByText } = renderComponent({
         componentId: 'test'
       });
 
-      expect(queryByTestId('component-palette__modal')).toBeNull();
-      openModal(getByTestId);
-      expect(queryByTestId('component-palette__modal')).toBeTruthy();
-      fireEvent.click(getByTestId('cf-ui-icon-button'));
+      const openButton = getByTestId('component-palette__button');
 
-      await waitForElementToBeRemoved(() => queryByTestId('component-palette__modal'));
-      expect(queryByTestId('component-palette__modal')).toBeNull();
+      expect(mockToggleShown.mock.calls).toHaveLength(0);
+
+      fireEvent.click(openButton);
+      expect(mockToggleShown.mock.calls).toHaveLength(1);
     });
 
     it('renders the tags and schemas', () => {
       const componentIdPrefix = 'palette-card--patterns/component';
       const { getByTestId, getByText } = renderComponent({
-        componentId: 'test'
+        componentId: 'test',
+        isShown: true
       });
-      openModal(getByTestId);
       expect(getByText('test-tag')).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
@@ -114,10 +119,10 @@ describe('ComponentPalette', () => {
       const { getByTestId } = renderComponent({
         componentId: componentId,
         schemas: mockComponents,
-        tags: mockTags
+        tags: mockTags,
+        isShown: true
       });
 
-      openModal(getByTestId);
       const selectedCard = getByTestId(`${componentIdPrefix}1`);
       expect(selectedCard.className.includes(selectedClass)).toBeTruthy();
     });
@@ -128,10 +133,10 @@ describe('ComponentPalette', () => {
       const { getByTestId, getByText, queryByTestId } = renderComponent({
         componentId: 'test',
         schemas: mockComponents,
-        tags: mockTags
+        tags: mockTags,
+        isShown: true
       });
       const componentIdPrefix = 'palette-card--patterns/component';
-      openModal(getByTestId);
       expect(getByText('test-tag')).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}1`)).toBeTruthy();
       expect(getByTestId(`${componentIdPrefix}2`)).toBeTruthy();
@@ -148,10 +153,10 @@ describe('ComponentPalette', () => {
       const { getByTestId, getByText, queryByTestId } = renderComponent({
         componentId: 'test',
         schemas: mockComponents,
-        tags: mockTags
+        tags: mockTags,
+        isShown: true
       });
       const componentIdPrefix = 'palette-card--patterns/component';
-      openModal(getByTestId);
       expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
       fireEvent.change(getByTestId('component-palette__search-input'), {
         target: { value: 'component2' }
@@ -166,10 +171,10 @@ describe('ComponentPalette', () => {
       const { getByTestId, getByText, queryByTestId } = renderComponent({
         componentId: 'test',
         schemas: mockComponents,
-        tags: mockTags
+        tags: mockTags,
+        isShown: true
       });
       const componentIdPrefix = 'palette-card--patterns/component';
-      openModal(getByTestId);
       expect(getByText('test-tag')).toBeTruthy();
       expect(getByTestId('component-palette-collection').childNodes.length).toEqual(3);
       fireEvent.click(getByTestId('button'));

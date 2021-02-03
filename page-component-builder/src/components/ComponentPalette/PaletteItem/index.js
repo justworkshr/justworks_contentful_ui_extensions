@@ -9,6 +9,9 @@ import { parse_underscore } from '../../../utilities/copyUtils';
 class PaletteItem extends React.Component {
   constructor(props) {
     super(props);
+    this.STAGING_URL =
+      ((props.sdk.parameters || {}).installation || {}).stagingUrl ||
+      'https://justworks-staging-v2.herokuapp.com';
     this.uuid =
       Math.random()
         .toString(36)
@@ -76,7 +79,7 @@ class PaletteItem extends React.Component {
                         {parse_underscore(variation.name)}
                       </TextLink>
                       <a
-                        href={`https://justworks-staging-v2.herokuapp.com/render-component?component=${this.props.schema.meta.id}&pattern_variation=${variation.name}`}
+                        href={`${this.STAGING_URL}/render-component?component=${this.props.schema.meta.id}&pattern_variation=${variation.name}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="f36-margin-left--xs">
@@ -90,13 +93,13 @@ class PaletteItem extends React.Component {
 
             <div className="f36-margin-top--s">
               <TextLink
-                href={`https://justworks-staging-v2.herokuapp.com${this.props.schema.meta.styleguide_path}`}
+                href={`${this.STAGING_URL}${this.props.schema.meta.styleguide_path}`}
                 target="_blank">
                 Styleguide Link
               </TextLink>
             </div>
             <TextLink
-              href={`https://justworks-staging-v2.herokuapp.com/render-component?component=${this.props.schema.meta.id}&example=default`}
+              href={`${this.STAGING_URL}/render-component?component=${this.props.schema.meta.id}&example=default`}
               target="_blank">
               Preview Example
             </TextLink>
@@ -127,6 +130,7 @@ class PaletteItem extends React.Component {
 PaletteItem.propTypes = {
   className: PropTypes.string,
   extensions: PropTypes.array,
+  sdk: PropTypes.object,
   selected: PropTypes.bool,
   selectItem: PropTypes.func,
   schema: PropTypes.object,
