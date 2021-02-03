@@ -44,6 +44,12 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.PRODUCTION_URL =
+      ((props.sdk.parameters || {}).installation || {}).productionUrl || 'https://justworks.com';
+    this.STAGING_URL =
+      ((props.sdk.parameters || {}).installation || {}).stagingUrl ||
+      'https://justworks-staging-v2.herokuapp.com';
+
     this.state = {
       schemaData: props.schemas,
       internalName: props.sdk.entry.fields.internalName.getValue() || '',
@@ -108,9 +114,7 @@ export class App extends React.Component {
   };
 
   fetchSchemas = async () => {
-    const schemaHost = this.props.debug
-      ? 'http://localhost:3000'
-      : this.props.sdk.parameters.instance.stagingUrl;
+    const schemaHost = this.props.debug ? 'http://localhost:3000' : this.STAGING_URL;
 
     const auth = `Basic ${btoa('ju$t:w0rks')}`;
     const response = await Axios.get(`${schemaHost}/components.json`, {
@@ -273,8 +277,7 @@ export class App extends React.Component {
                 })}
             </Select>
             <HelpText>
-              The preset site routing address. Format:{' '}
-              {this.props.sdk.parameters.instance.productionUrl}/( routing )/( path )
+              The preset site routing address. Format: {this.PRODUCTION_URL}/( routing )/( path )
             </HelpText>
           </div>
           <div
@@ -301,17 +304,17 @@ export class App extends React.Component {
               <SectionHeading>Production URL</SectionHeading>
               <TextLink
                 target="_blank"
-                href={`${this.props.sdk.parameters.instance.productionUrl}${
+                href={`${this.PRODUCTION_URL}${
                   this.state.schemaData.tokens.routing[this.state.routing]
-                }${this.state.path}`}>{`${this.props.sdk.parameters.instance.productionUrl}${
+                }${this.state.path}`}>{`${this.PRODUCTION_URL}${
                 this.state.schemaData.tokens.routing[this.state.routing]
               }${this.state.path}`}</TextLink>
               <SectionHeading className="f36-margin-top--xs">Staging URL</SectionHeading>
               <TextLink
                 target="_blank"
-                href={`${this.props.sdk.parameters.instance.stagingUrl}${
+                href={`${this.STAGING_URL}${
                   this.state.schemaData.tokens.routing[this.state.routing]
-                }${this.state.path}`}>{`${this.props.sdk.parameters.instance.stagingUrl}${
+                }${this.state.path}`}>{`${this.STAGING_URL}${
                 this.state.schemaData.tokens.routing[this.state.routing]
               }${this.state.path}`}</TextLink>
             </div>
