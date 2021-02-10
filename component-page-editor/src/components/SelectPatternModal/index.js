@@ -24,7 +24,11 @@ const SelectPatternModal = (props) => {
   const [selected, setSelected] = useState([]);
   const [searchTimeout, setSearchTimeout] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [searchingRawHtml, setSearchingRawHtml] = useState(false);
+  const [componentIdRegex, setComponentIdRegex] = useState('patterns/');
+
+  React.useEffect(() => {
+    handleInputChange(inputValue);
+  }, [componentIdRegex]);
 
   const onClose = () => {
     setCompleted(false);
@@ -34,7 +38,7 @@ const SelectPatternModal = (props) => {
     props.handleClose();
   };
 
-  const handleInputChange = async (value, componentIdRegex = 'patterns/') => {
+  const handleInputChange = async (value) => {
     setMatchingEntries([]);
     setInputValue(value);
 
@@ -47,7 +51,7 @@ const SelectPatternModal = (props) => {
     setSearchTimeout(null);
   };
 
-  const performQuery = async (searchText = '', componentIdRegex = 'patterns/') => {
+  const performQuery = async (searchText = '') => {
     setCompleted(false);
     setLoading(true);
 
@@ -114,13 +118,11 @@ const SelectPatternModal = (props) => {
   };
 
   const handleRawHtmlClick = () => {
-    if (searchingRawHtml) {
-      // disabling so return old results
-      handleInputChange(inputValue);
+    if (componentIdRegex == 'patterns/') {
+      setComponentIdRegex('elements/raw_html');
     } else {
-      handleInputChange(inputValue, 'elements/raw_html');
+      setComponentIdRegex('patterns/');
     }
-    setSearchingRawHtml(!searchingRawHtml);
   };
 
   return (
@@ -137,7 +139,6 @@ const SelectPatternModal = (props) => {
           className="f36-margin-bottom--m"
           type="text"
           width="full"
-          disabled={searchingRawHtml}
           onChange={(e) => handleInputChange(e.target.value)}
           value={inputValue}
         />
@@ -147,7 +148,7 @@ const SelectPatternModal = (props) => {
               return (
                 <ToggleButton
                   className="tag f36-margin-bottom--xs f36-margin-right--xs"
-                  isActive={selectedTags.some((t) => t === tag) && !searchingRawHtml}
+                  isActive={selectedTags.some((t) => t === tag)}
                   onClick={() => handleTagClick(tag)}>
                   {tag}
                 </ToggleButton>
@@ -159,7 +160,7 @@ const SelectPatternModal = (props) => {
               return (
                 <ToggleButton
                   className="tag f36-margin-bottom--xs f36-margin-right--xs"
-                  isActive={selectedTags.some((t) => t === tag) && !searchingRawHtml}
+                  isActive={selectedTags.some((t) => t === tag)}
                   onClick={() => handleTagClick(tag)}>
                   {tag}
                 </ToggleButton>
@@ -170,8 +171,8 @@ const SelectPatternModal = (props) => {
           <div className="tag-section f36-margin-bottom--s">
             <ToggleButton
               className="tag f36-margin-bottom--xs f36-margin-right--xs"
-              isActive={searchingRawHtml}
-              onClick={() => handleRawHtmlClick()}>
+              isActive={componentIdRegex === 'elements/raw_html'}
+              onClick={handleRawHtmlClick}>
               {'Raw HTML elements'}
             </ToggleButton>
           </div>
