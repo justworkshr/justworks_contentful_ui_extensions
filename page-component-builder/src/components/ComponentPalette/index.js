@@ -44,7 +44,7 @@ const ComponentPalette = props => {
       .filter(
         schema =>
           schema.meta.editor_role ===
-            ((props.sdk.parameters || {}).instance || {}).patternLibraryScope || c.PATTERN_ROLE
+          ((props.sdk.parameters || {}).instance || {}).patternLibraryScope // SET INSTANCE VARIABLE IN CONTENT_TYPE INTERFACE
       ) // patterns only
       .filter(schema => !schema.meta.extension_of) // non-extensions only
       .sort((a, b) => {
