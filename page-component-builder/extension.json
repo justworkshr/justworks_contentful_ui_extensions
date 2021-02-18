@@ -3,6 +3,18 @@
   "name": "page-component-builder",
   "srcdoc": "./build/index.html",
   "parameters": {
+    "instance": [
+      {
+        "id": "patternLibraryScope",
+        "name": "Pattern Library Scope",
+        "description": "Define the scope of patterns that should be available in the library.",
+        "type": "Enum",
+        "options": [{"pattern": "Patterns"}, {"lesson": "Lesson Blocks"}],
+        "default": "pattern",
+        "labels": {"empty": "Choose the pattern library scope."},
+        "required": true
+      }
+    ],
     "installation": [
       {
         "id": "productionUrl",
