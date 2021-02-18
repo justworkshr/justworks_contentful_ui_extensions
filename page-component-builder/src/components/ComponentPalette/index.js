@@ -41,7 +41,11 @@ const ComponentPalette = props => {
 
   const patternSchemas = schemas => {
     return schemas
-      .filter(schema => schema.meta.editor_role === c.PATTERN_ROLE) // patterns only
+      .filter(
+        schema =>
+          schema.meta.editor_role ===
+            ((props.sdk.parameters || {}).instance || {}).patternLibraryScope || c.PATTERN_ROLE
+      ) // patterns only
       .filter(schema => !schema.meta.extension_of) // non-extensions only
       .sort((a, b) => {
         // alphabetical sort

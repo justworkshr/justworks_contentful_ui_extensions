@@ -11,6 +11,7 @@ export const CONTENT_TYPE_META = "meta";
 
 // COMPONENT ROLES
 export const PATTERN_ROLE = "pattern";
+export const LESSON_ROLE = "lesson";
 export const COMPONENT_ROLE = "component";
 export const SINGLETON_ROLE = "singleton";
 export const HIDDEN_ROLE = "hidden";
