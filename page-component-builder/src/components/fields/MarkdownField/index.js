@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactMde from 'react-mde';
 import ErrorList from '../ErrorList';
 
-import TextLink from '@contentful/forma-36-react-components';
+import { TextLink } from '@contentful/forma-36-react-components';
 
 const MarkdownField = props => {
   const STAGING_URL =
