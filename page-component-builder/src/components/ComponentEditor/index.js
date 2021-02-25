@@ -243,6 +243,7 @@ const ComponentEditor = props => {
             onChange={value => updatePropertyValue(propKey, value, true)}
             value={value}
             errors={errors[propKey]}
+            sdk={props.sdk}
           />
         )}
         {isBoolProperty(property) && (
