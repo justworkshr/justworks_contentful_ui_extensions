@@ -18,6 +18,15 @@
         "default": "https://justworks-staging-v2.herokuapp.com",
         "required": true
       }
+    ],
+    "instance": [
+      {
+        "id": "moduleContentType",
+        "type": "Symbol",
+        "name": "Module Content Type ID",
+        "default": "viewComponent",
+        "required": true
+      }
     ]
   }
 }

@@ -44,6 +44,8 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.MODULE_CONTENT_TYPE_ID =
+      ((props.sdk.parameters || {}).instance || {}).moduleContentType || 'video';
     this.PRODUCTION_URL =
       ((props.sdk.parameters || {}).installation || {}).productionUrl || 'https://justworks.com';
     this.STAGING_URL =
@@ -52,12 +54,16 @@ export class App extends React.Component {
 
     this.state = {
       schemaData: props.schemas,
-      internalName: props.sdk.entry.fields.internalName.getValue() || '',
-      meta: props.sdk.entry.fields.meta.getValue(),
-      routing: props.sdk.entry.fields.routing.getValue(),
-      path: props.sdk.entry.fields.path.getValue(),
-      theme: props.sdk.entry.fields.theme.getValue(),
-      modules: props.sdk.entry.fields.modules.getValue() || [],
+      internalName: props.sdk.entry.fields.internalName
+        ? props.sdk.entry.fields.internalName.getValue() || ''
+        : '',
+      meta: props.sdk.entry.fields.meta ? props.sdk.entry.fields.meta.getValue() : null,
+      routing: props.sdk.entry.fields.routing ? props.sdk.entry.fields.routing.getValue() : '',
+      path: props.sdk.entry.fields.path ? props.sdk.entry.fields.path.getValue() : '',
+      theme: props.sdk.entry.fields.theme ? props.sdk.entry.fields.theme.getValue() : '',
+      modules: props.sdk.entry.fields.modules
+        ? props.sdk.entry.fields.modules.getValue() || []
+        : [],
 
       hydratedEntries: [],
       loadingEntries: true,
@@ -233,75 +239,82 @@ export class App extends React.Component {
             onChange={this.onNameChangeHandler}
             value={this.state.internalName}
           />
-          <div
-            className={`editor__field ${this.props.sdk.entry.fields.meta.required &&
-              !this.state.meta &&
-              'with-error'}`}>
-            <SectionHeading
-              className={
-                this.props.sdk.entry.fields.meta.required &&
+          {this.props.sdk.entry.fields.meta && (
+            <div
+              className={`editor__field ${this.props.sdk.entry.fields.meta.required &&
                 !this.state.meta &&
-                'f36-color--negative'
-              }>
-              Meta {this.props.sdk.entry.fields.meta.required && '(Required)'}
-            </SectionHeading>
+                'with-error'}`}>
+              <SectionHeading
+                className={
+                  this.props.sdk.entry.fields.meta.required &&
+                  !this.state.meta &&
+                  'f36-color--negative'
+                }>
+                Meta {this.props.sdk.entry.fields.meta.required && '(Required)'}
+              </SectionHeading>
 
-            <MetaEntryField
-              hydratedEntry={this.state.hydratedMeta}
-              onChange={this.onMetaChangeHandler}
-              sdk={this.props.sdk}
-              value={this.state.meta}
-            />
-          </div>
-          <div
-            className={`editor__field ${this.props.sdk.entry.fields.routing.required &&
-              !this.state.routing &&
-              'with-error'}`}>
-            <SectionHeading
-              className={
-                this.props.sdk.entry.fields.routing.required &&
+              <MetaEntryField
+                hydratedEntry={this.state.hydratedMeta}
+                onChange={this.onMetaChangeHandler}
+                sdk={this.props.sdk}
+                value={this.state.meta}
+              />
+            </div>
+          )}
+          {this.props.sdk.entry.fields.routing && (
+            <div
+              className={`editor__field ${this.props.sdk.entry.fields.routing.required &&
                 !this.state.routing &&
-                'f36-color--negative'
-              }>
-              Routing {this.props.sdk.entry.fields.routing.required && '(Required)'}
-            </SectionHeading>
-            <Select onChange={this.onRoutingChangeHandler} value={this.state.routing}>
-              {this.props.sdk.entry.fields.routing.validations
-                .find(v => v.in)
-                .in.map(option => {
-                  return (
-                    <Option key={`routing-option--${option}`} value={option}>
-                      {option}
-                    </Option>
-                  );
-                })}
-            </Select>
-            <HelpText>
-              The preset site routing address. Format: {this.PRODUCTION_URL}/( routing )/( path )
-            </HelpText>
-          </div>
-          <div
-            className={`editor__field ${this.props.sdk.entry.fields.path.required &&
-              !this.state.path &&
-              'with-error'}`}>
-            <SectionHeading
-              className={
-                this.props.sdk.entry.fields.path.required &&
+                'with-error'}`}>
+              <SectionHeading
+                className={
+                  this.props.sdk.entry.fields.routing.required &&
+                  !this.state.routing &&
+                  'f36-color--negative'
+                }>
+                Routing {this.props.sdk.entry.fields.routing.required && '(Required)'}
+              </SectionHeading>
+              <Select onChange={this.onRoutingChangeHandler} value={this.state.routing}>
+                {this.props.sdk.entry.fields.routing.validations
+                  .find(v => v.in)
+                  .in.map(option => {
+                    return (
+                      <Option key={`routing-option--${option}`} value={option}>
+                        {option}
+                      </Option>
+                    );
+                  })}
+              </Select>
+              <HelpText>
+                The preset site routing address. Format: {this.PRODUCTION_URL}/( routing )/( path )
+              </HelpText>
+            </div>
+          )}
+          {this.props.sdk.entry.fields.path && (
+            <div
+              className={`editor__field ${this.props.sdk.entry.fields.path.required &&
                 !this.state.path &&
-                'f36-color--negative'
-              }>
-              Path {this.props.sdk.entry.fields.path.required && '(Required)'}
-            </SectionHeading>
-            <TextInput
-              testId="field-path"
-              onChange={this.onPathChangeHandler}
-              value={this.state.path}
-            />
-            <HelpText>
-              The last part of the URL. Enter {'{{ root }}'} if you want this part to be blank.
-            </HelpText>
-          </div>
-          {this.state.schemaData.tokens && (
+                'with-error'}`}>
+              <SectionHeading
+                className={
+                  this.props.sdk.entry.fields.path.required &&
+                  !this.state.path &&
+                  'f36-color--negative'
+                }>
+                Path {this.props.sdk.entry.fields.path.required && '(Required)'}
+              </SectionHeading>
+              <TextInput
+                testId="field-path"
+                onChange={this.onPathChangeHandler}
+                value={this.state.path}
+              />
+              <HelpText>
+                The last part of the URL. Enter {'{{ root }}'} if you want this part to be blank.
+              </HelpText>
+            </div>
+          )}
+
+          {this.props.sdk.entry.fields.path && this.state.schemaData.tokens && (
             <div>
               <SectionHeading>Production URL</SectionHeading>
               <TextLink
@@ -325,32 +338,34 @@ export class App extends React.Component {
               }`}</TextLink>
             </div>
           )}
-          <div
-            className={`editor__field ${this.props.sdk.entry.fields.theme.required &&
-              !this.state.theme &&
-              'with-error'}`}>
-            <SectionHeading
-              className={
-                this.props.sdk.entry.fields.theme.required &&
-                !this.state.theme &&
-                'f36-color--negative'
-              }>
-              Theme {this.props.sdk.entry.fields.theme.required && '(Required)'}
-            </SectionHeading>
-            <Select onChange={this.onThemeChangeHandler} value={this.state.theme}>
-              {this.props.sdk.entry.fields.theme.validations
-                .find(v => v.in)
-                .in.map(option => {
-                  return (
-                    <Option key={`theme-option--${option}`} value={option}>
-                      {option}
-                    </Option>
-                  );
-                })}
-            </Select>
-            <HelpText>The theme which affects color scheming and typography.</HelpText>
-          </div>
 
+          {this.props.sdk.entry.fields.theme && (
+            <div
+              className={`editor__field ${this.props.sdk.entry.fields.theme.required &&
+                !this.state.theme &&
+                'with-error'}`}>
+              <SectionHeading
+                className={
+                  this.props.sdk.entry.fields.theme.required &&
+                  !this.state.theme &&
+                  'f36-color--negative'
+                }>
+                Theme {this.props.sdk.entry.fields.theme.required && '(Required)'}
+              </SectionHeading>
+              <Select onChange={this.onThemeChangeHandler} value={this.state.theme}>
+                {this.props.sdk.entry.fields.theme.validations
+                  .find(v => v.in)
+                  .in.map(option => {
+                    return (
+                      <Option key={`theme-option--${option}`} value={option}>
+                        {option}
+                      </Option>
+                    );
+                  })}
+              </Select>
+              <HelpText>The theme which affects color scheming and typography.</HelpText>
+            </div>
+          )}
           <div
             className={`editor__field ${this.props.sdk.entry.fields.modules.required &&
               !this.state.modules &&
@@ -361,6 +376,7 @@ export class App extends React.Component {
             {!Object.keys(this.state.schemaData) && <Paragraph>Loading schemas...</Paragraph>}
             <MultiComponentField
               sdk={this.props.sdk}
+              contentTypeId={this.MODULE_CONTENT_TYPE_ID}
               schemaData={this.state.schemaData}
               hydratedEntries={this.state.hydratedEntries}
               loadingEntries={this.state.loadingEntries}
@@ -375,6 +391,7 @@ export class App extends React.Component {
 }
 
 init(sdk => {
+  console.log('INIT');
   const isDev = window.location.href.includes('localhost');
 
   if (sdk.location.is(locations.LOCATION_ENTRY_EDITOR)) {

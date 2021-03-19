@@ -9,14 +9,14 @@ import {
   Checkbox,
   TextInput,
   EntryCard,
-  SectionHeading,
+  SectionHeading
 } from '@contentful/forma-36-react-components';
 // import HydratedEntryCard from '../cards/HydratedEntryCard';
 import { getLabel, getStatus } from '@shared/utilities';
 
 import './style.scss';
 
-const SelectPatternModal = (props) => {
+const SelectPatternModal = props => {
   const [isLoading, setLoading] = useState(false);
   const [isCompleted, setCompleted] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -38,7 +38,7 @@ const SelectPatternModal = (props) => {
     props.handleClose();
   };
 
-  const handleInputChange = async (value) => {
+  const handleInputChange = async value => {
     setMatchingEntries([]);
     setInputValue(value);
 
@@ -56,9 +56,9 @@ const SelectPatternModal = (props) => {
     setLoading(true);
 
     const response = await props.sdk.space.getEntries({
-      content_type: c.CONTENT_TYPE_VIEW_COMPONENT,
+      content_type: props.contentTypeId || c.CONTENT_TYPE_VIEW_COMPONENT,
       'fields.componentId[match]': componentIdRegex,
-      'fields.name[match]': searchText,
+      'fields.name[match]': searchText
     });
 
     setMatchingEntries(response.items);
@@ -73,14 +73,14 @@ const SelectPatternModal = (props) => {
 
   const getOnClickFunction = () => {
     if (props.type === 'single') {
-      return (value) => {
+      return value => {
         props.handleSubmit(value);
         onClose();
       };
     } else if (props.type === 'multiple') {
-      return (value) => {
+      return value => {
         if (selected.includes(value)) {
-          setSelected(selected.filter((e) => e.sys.id !== value.sys.id));
+          setSelected(selected.filter(e => e.sys.id !== value.sys.id));
         } else {
           setSelected([...selected, value]);
         }
@@ -88,29 +88,29 @@ const SelectPatternModal = (props) => {
     }
   };
 
-  const handleTagClick = (value) => {
-    if (selectedTags.some((tag) => tag === value)) {
-      setSelectedTags(selectedTags.filter((tag) => tag !== value));
+  const handleTagClick = value => {
+    if (selectedTags.some(tag => tag === value)) {
+      setSelectedTags(selectedTags.filter(tag => tag !== value));
     } else {
       setSelectedTags([...selectedTags, value]);
     }
   };
 
-  const tagsInUse = (tags) => {
-    return tags.filter((tag) =>
+  const tagsInUse = tags => {
+    return tags.filter(tag =>
       props.schemaData.components
-        .filter((s) => s.meta.editor_role === c.PATTERN_ROLE)
-        .some((component) => component.meta.tags.includes(tag))
+        .filter(s => s.meta.editor_role === c.PATTERN_ROLE)
+        .some(component => component.meta.tags.includes(tag))
     );
   };
 
   const filterResultsByTag = (results = []) => {
     if (selectedTags.length) {
-      return results.filter((e) => {
+      return results.filter(e => {
         const componentId = e.fields.componentId['en-US'];
-        const schema = props.schemaData.components.find((schema) => schema.meta.id === componentId);
+        const schema = props.schemaData.components.find(schema => schema.meta.id === componentId);
 
-        return selectedTags.every((tag) => schema.meta.tags.includes(tag));
+        return selectedTags.every(tag => schema.meta.tags.includes(tag));
       });
     } else {
       return results;
@@ -139,16 +139,16 @@ const SelectPatternModal = (props) => {
           className="f36-margin-bottom--m"
           type="text"
           width="full"
-          onChange={(e) => handleInputChange(e.target.value)}
+          onChange={e => handleInputChange(e.target.value)}
           value={inputValue}
         />
         <div className="tags">
           <div className="tag-section f36-margin-bottom--s">
-            {tagsInUse(props.schemaData.tags['component']).map((tag) => {
+            {tagsInUse(props.schemaData.tags['component']).map(tag => {
               return (
                 <ToggleButton
                   className="tag f36-margin-bottom--xs f36-margin-right--xs"
-                  isActive={selectedTags.some((t) => t === tag)}
+                  isActive={selectedTags.some(t => t === tag)}
                   onClick={() => handleTagClick(tag)}>
                   {tag}
                 </ToggleButton>
@@ -156,11 +156,11 @@ const SelectPatternModal = (props) => {
             })}
           </div>
           <div className="tag-section f36-margin-bottom--s">
-            {tagsInUse(props.schemaData.tags['location']).map((tag) => {
+            {tagsInUse(props.schemaData.tags['location']).map(tag => {
               return (
                 <ToggleButton
                   className="tag f36-margin-bottom--xs f36-margin-right--xs"
-                  isActive={selectedTags.some((t) => t === tag)}
+                  isActive={selectedTags.some(t => t === tag)}
                   onClick={() => handleTagClick(tag)}>
                   {tag}
                 </ToggleButton>
@@ -192,7 +192,7 @@ const SelectPatternModal = (props) => {
       </div>
       <div className="select-component-modal__results">
         {filterResultsByTag(matchingEntries)
-          .filter((e) => !e.sys.archivedAt)
+          .filter(e => !e.sys.archivedAt)
           .map((entry, index) => {
             return (
               <EntryCard
@@ -240,12 +240,14 @@ SelectPatternModal.propTypes = {
   options: PropTypes.array,
   useConfigObjects: PropTypes.bool,
   schemas: PropTypes.array,
+  contentTypeId: PropTypes.string
 };
 SelectPatternModal.defaultProps = {
   type: 'single',
   isShown: false,
   options: [],
   schemas: [],
+  contentTypeId: 'viewComponent'
 };
 
 export default SelectPatternModal;

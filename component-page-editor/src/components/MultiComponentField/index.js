@@ -88,11 +88,15 @@ const MultiComponentField = props => {
 
   const handleCreate = async () => {
     const pageName = props.sdk.entry.fields.internalName.getValue();
-    const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, {
-      name: {
-        'en-US': `${pageName} - Component`
+    const newEntry = await createEntry(
+      props.sdk.space,
+      props.contentTypeId || c.CONTENT_TYPE_VIEW_COMPONENT,
+      {
+        name: {
+          'en-US': `${pageName} - Component`
+        }
       }
-    });
+    );
     const newValue = [...props.value, constructLink(newEntry)];
     props.onChange(newValue);
 
@@ -136,7 +140,11 @@ const MultiComponentField = props => {
         name: { 'en-US': hydratedEntry.fields.name['en-US'] + ' (duplicate)' }
       };
 
-      const newEntry = await createEntry(props.sdk.space, c.CONTENT_TYPE_VIEW_COMPONENT, fields);
+      const newEntry = await createEntry(
+        props.sdk.space,
+        props.contentTypeId || c.CONTENT_TYPE_VIEW_COMPONENT,
+        fields
+      );
       const entries = [...props.value, constructLink(newEntry)];
       console.log(entries);
       props.onChange(entries);
@@ -167,6 +175,7 @@ const MultiComponentField = props => {
         type="multiple"
         handleClose={() => toggleLinkModal(false)}
         handleSubmit={handleModalSubmit}
+        contentTypeId={props.contentTypeId}
         isShown={linkModalOpen}
         options={['patterns/']}
         schemaData={props.schemaData}
@@ -242,6 +251,7 @@ MultiComponentField.propTypes = {
   loadingEntries: PropTypes.bool,
   hydratedEntries: PropTypes.array,
   onChange: PropTypes.func,
+  contentTypeId: PropTypes.string,
   value: PropTypes.array
 };
 MultiComponentField.defaultProps = {
@@ -250,6 +260,7 @@ MultiComponentField.defaultProps = {
     components: []
   },
   sdk: {},
+  contentTypeId: 'viewComponent',
   hydratedEntries: [],
   loadingEntries: false,
   value: []
