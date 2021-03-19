@@ -26,6 +26,13 @@
         "name": "Module Content Type ID",
         "default": "viewComponent",
         "required": true
+      },
+      {
+        "id": "title",
+        "type": "Symbol",
+        "name": "Extension Title",
+        "default": "Component Page Builder",
+        "required": false
       }
     ]
   }

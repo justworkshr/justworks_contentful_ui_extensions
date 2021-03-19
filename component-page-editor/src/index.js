@@ -44,6 +44,7 @@ export class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.TITLE = ((props.sdk.parameters || {}).instance || {}).title || 'Component Page Builder';
     this.MODULE_CONTENT_TYPE_ID =
       ((props.sdk.parameters || {}).instance || {}).moduleContentType || 'video';
     this.PRODUCTION_URL =
@@ -227,7 +228,7 @@ export class App extends React.Component {
   render() {
     return (
       <div className="editor">
-        <DisplayText className="f36-margin-top--l f36-margin-top--m">Component Page</DisplayText>
+        <DisplayText className="f36-margin-top--l f36-margin-top--m">{this.TITLE}</DisplayText>
         <Paragraph className="f36-margin-bottom--s">
           Create your new page here with the page-builder extension.
         </Paragraph>
