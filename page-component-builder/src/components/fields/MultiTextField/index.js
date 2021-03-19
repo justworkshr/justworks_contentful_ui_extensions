@@ -15,7 +15,7 @@ const MultiTextField = props => {
 
   const handleAddItem = e => {
     // only accept "enter" key strokes
-    if (!e.keyCode || e.keyCode !== 13) return;
+    if (e.keyCode && e.keyCode !== 13) return;
     const newItem = addInputValue;
 
     if (!newItem) return;
