@@ -9,6 +9,7 @@ import ChangelogReader from '@shared/components/ChangelogReader';
 
 import MetaEntryField from './components/MetaEntryField';
 import MultiComponentField from './components/MultiComponentField';
+import MarkdownField from './components/MarkdownField';
 
 import {
   DisplayText,
@@ -36,6 +37,11 @@ import './index.css';
  *  See https://github.com/contentful/create-contentful-extension/blob/master/docs/examples/entry-editor-content-model.json for details.
  */
 
+const convertCamelToSentence = text => {
+  const result = text.replace(/([A-Z])/g, ' $1');
+  return result.charAt(0).toUpperCase() + result.slice(1);
+};
+
 export class App extends React.Component {
   static propTypes = {
     sdk: PropTypes.object.isRequired
@@ -43,7 +49,7 @@ export class App extends React.Component {
 
   constructor(props) {
     super(props);
-
+    console.log('hello', props.sdk.entry.fields);
     this.TITLE = ((props.sdk.parameters || {}).instance || {}).title || 'Component Page Builder';
     this.MODULE_CONTENT_TYPE_ID =
       ((props.sdk.parameters || {}).instance || {}).moduleContentType || 'video';
@@ -53,19 +59,22 @@ export class App extends React.Component {
       ((props.sdk.parameters || {}).installation || {}).stagingUrl ||
       'https://justworks-staging-v2.herokuapp.com';
 
+    this.getDefaultTypeValue = this.getDefaultTypeValue.bind(this);
+    const initialValues = Object.assign(
+      {},
+      ...Object.keys(props.sdk.entry.fields).map(key => {
+        return {
+          [key]:
+            props.sdk.entry.fields[key].getValue() ||
+            this.getDefaultTypeValue(props.sdk.entry.fields[key].type)
+        };
+      })
+    );
+
     this.state = {
       schemaData: props.schemas,
-      internalName: props.sdk.entry.fields.internalName
-        ? props.sdk.entry.fields.internalName.getValue() || ''
-        : '',
-      meta: props.sdk.entry.fields.meta ? props.sdk.entry.fields.meta.getValue() : null,
-      routing: props.sdk.entry.fields.routing ? props.sdk.entry.fields.routing.getValue() : '',
-      path: props.sdk.entry.fields.path ? props.sdk.entry.fields.path.getValue() : '',
-      theme: props.sdk.entry.fields.theme ? props.sdk.entry.fields.theme.getValue() : '',
-      modules: props.sdk.entry.fields.modules
-        ? props.sdk.entry.fields.modules.getValue() || []
-        : [],
 
+      ...initialValues,
       hydratedEntries: [],
       loadingEntries: true,
       hydratedMeta: null
@@ -75,6 +84,7 @@ export class App extends React.Component {
     this.hydrateEntries = this.hydrateEntries.bind(this);
     this.hydrateMeta = this.hydrateMeta.bind(this);
     this.purgeMissingModules = this.purgeMissingModules.bind(this);
+    this.handleFieldChange = this.handleFieldChange.bind(this);
   }
 
   componentDidMount = async () => {
@@ -83,19 +93,19 @@ export class App extends React.Component {
     await this.hydrateMeta();
 
     // set default values
-    if (!this.state.routing) {
+    if (!!this.props.sdk.entry.fields.routing && !this.state.routing) {
       this.onRoutingChangeHandler({ target: { value: 'Default' } });
     }
 
     // set default values
-    if (!this.state.theme) {
+    if (!!this.props.sdk.entry.fields.theme && !this.state.theme) {
       const options = this.props.sdk.entry.fields.theme.validations.find(v => v.in).in;
       if (options.length) {
         this.onThemeChangeHandler({ target: { value: options[0] } }); // selects first option automatically
       }
     }
 
-    if (!this.state.path) {
+    if (!!this.props.sdk.entry.fields.path && !this.state.path) {
       this.onPathChangeHandler({
         target: {
           value: this.state.internalName
@@ -107,8 +117,16 @@ export class App extends React.Component {
     }
   };
 
+  getDefaultTypeValue = type => {
+    if (type === 'Array') {
+      return [];
+    } else {
+      return null;
+    }
+  };
+
   purgeMissingModules = async (hydratedEntryItems, modules = []) => {
-    if (!hydratedEntryItems) return;
+    if (!hydratedEntryItems || !this.state.modules) return;
     const cleanedValue = this.state.modules.reduce((acc, module) => {
       if (hydratedEntryItems.some(hydratedEntry => hydratedEntry.sys.id === module.sys.id)) {
         acc.push(module);
@@ -171,6 +189,7 @@ export class App extends React.Component {
         loadingEntries: true
       },
       async () => {
+        if (!this.state.modules) return;
         const entries = await this.props.sdk.space.getEntries({
           'sys.id[in]': this.state.modules.map(l => l.sys.id).join(',')
         });
@@ -186,6 +205,12 @@ export class App extends React.Component {
         this.purgeMissingModules(entries.items, this.state.modules);
       }
     );
+  };
+
+  handleFieldChange = (value, fieldId) => {
+    this.setState({ [fieldId]: value }, () => {
+      this.props.sdk.entry.fields[fieldId].setValue(value);
+    });
   };
 
   onNameChangeHandler = event => {
@@ -226,6 +251,7 @@ export class App extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className="editor">
         <DisplayText className="f36-margin-top--l f36-margin-top--m">{this.TITLE}</DisplayText>
@@ -367,6 +393,41 @@ export class App extends React.Component {
               <HelpText>The theme which affects color scheming and typography.</HelpText>
             </div>
           )}
+
+          {Object.keys(this.props.sdk.entry.fields)
+            .map(field => {
+              // skip over old fields which already have markup
+              if (field.id === 'internalName') return null;
+              if (field.id === 'meta') return null;
+              if (field.id === 'routing') return null;
+              if (field.id === 'theme') return null;
+              if (field.id === 'modules') return null;
+
+              // Symbol = short text
+              // Text = long text
+              if (this.props.sdk.entry.fields[field].type === 'Text') {
+                return (
+                  <>
+                    <SectionHeading
+                      className={
+                        this.props.sdk.entry.fields[field].required &&
+                        !this.state.theme &&
+                        'f36-color--negative'
+                      }>
+                      {convertCamelToSentence(field)}{' '}
+                      {this.props.sdk.entry.fields[field].required && '(Required)'}
+                    </SectionHeading>
+
+                    <MarkdownField
+                      sdk={this.props.sdk}
+                      value={this.state[field]}
+                      onChange={value => this.handleFieldChange(value, field)}
+                    />
+                  </>
+                );
+              }
+            })
+            .filter(e => e)}
           <div
             className={`editor__field ${this.props.sdk.entry.fields.modules.required &&
               !this.state.modules &&
@@ -382,7 +443,7 @@ export class App extends React.Component {
               hydratedEntries={this.state.hydratedEntries}
               loadingEntries={this.state.loadingEntries}
               onChange={this.onModulesChangeHandler}
-              value={this.state.modules}
+              value={this.state.modules || []}
             />
           </div>
         </Form>
