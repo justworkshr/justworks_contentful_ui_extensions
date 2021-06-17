@@ -56,6 +56,166 @@ export const SITE_ROUTING = {
   "Landing Page": "/lp",
 };
 
+
+export const JMS__TLC_COLORS = [
+  {
+    name: "Black",
+    hex: "#000",
+  },
+  {
+    name: "White",
+    hex: "#FFF",
+  },
+  {
+    name: "Light Gray",
+    hex: "#f7f8fb",
+  },
+  {
+    name: "Dark Gray",
+    hex: "#303640",
+  },
+  {
+    name: "Light Red",
+    hex: "#ff9f82",
+  },
+  {
+    name: "Red",
+    hex: "#df5a31",
+  },
+  {
+    name: "Dark Red",
+    hex: "#8e2f19",
+  },
+  {
+    name: "Light Yellow",
+    hex: "#ffdb7b",
+  },
+  {
+    name: "Yellow",
+    hex: "#f3b715",
+  },
+  {
+    name: "Dark Yellow",
+    hex: "#9e6405",
+  },
+  {
+    name: "Light Green",
+    hex: "#65c9a3",
+  },
+  {
+    name: "Green",
+    hex: "#00a66c",
+  },
+  {
+    name: "Dark Green",
+    hex: "#017a4e",
+  },
+  {
+    name: "Light Blue",
+    hex: "#b6e5ff",
+  },
+  {
+    name: "Blue",
+    hex: "#1e98ff",
+  },
+  {
+    name: "Dark Blue",
+    hex: "#15246d",
+  },
+  {
+    name: "Light Purple",
+    hex: "#baaaf9",
+  },
+  {
+    name: "Purple",
+    hex: "#8a73e6",
+  },
+  {
+    name: "Dark Purple",
+    hex: "#452c6c",
+  },
+]
+
+export const GUIDEPOST__DEFAULT_COLORS = [
+  {
+    name: "Black",
+    hex: "#241b15",
+  },
+  {
+    name: "White",
+    hex: "#FFF",
+  },
+  {
+    name: "Light Gray",
+    hex: "#cdd6da",
+  },
+  {
+    name: "Dark Gray",
+    hex: "#303640",
+  },
+  {
+    name: "Light Red",
+    hex: "#ffb4ac",
+  },
+  {
+    name: "Red",
+    hex: "#f08e84",
+  },
+  {
+    name: "Dark Red",
+    hex: "#d44242",
+  },
+  {
+    name: "Light Yellow",
+    hex: "#f6e78e",
+  },
+  {
+    name: "Yellow",
+    hex: "#ffc773",
+  },
+  {
+    name: "Dark Yellow",
+    hex: "#e69f33",
+  },
+  {
+    name: "Light Green",
+    hex: "#68b4a6",
+  },
+  {
+    name: "Green",
+    hex: "#4f978a",
+  },
+  {
+    name: "Dark Green",
+    hex: "#086856",
+  },
+  {
+    name: "Light Blue",
+    hex: "#7eb9e3",
+  },
+  {
+    name: "Blue",
+    hex: "#64ade1",
+  },
+  {
+    name: "Dark Blue",
+    hex: "#4971d7",
+  },
+  {
+    name: "Light Purple",
+    hex: "#c5c4e8",
+  },
+  {
+    name: "Purple",
+    hex: "#9997d3",
+  },
+  {
+    name: "Dark Purple",
+    hex: "#4d49ab",
+  }
+]
+
+
 export const BRAND_COLORS = [
   {
     name: "Brand Black",
