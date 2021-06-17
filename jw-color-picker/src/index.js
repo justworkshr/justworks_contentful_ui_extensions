@@ -10,7 +10,6 @@ import './index.css';
 
 export const App = ({ sdk }) => {
   const [value, setValue] = useState(sdk.field.getValue() || '');
-
   const onExternalChange = value => {
     setValue(value);
   }
@@ -35,7 +34,7 @@ export const App = ({ sdk }) => {
   });
 
   return (
-    <ColorField theme={sdk.parameters.installation.theme} errors={[]} onChange={onChange} value={value} />
+    <ColorField propKey={sdk.field.id} theme={sdk.parameters.installation.theme} errors={[]} onChange={onChange} value={value} />
   );
 }
 

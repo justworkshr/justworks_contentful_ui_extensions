@@ -29,6 +29,15 @@
         "name": "Staging URL",
         "default": "https://justworks-staging-v2.herokuapp.com",
         "required": true
+      },
+      {
+        "id": "theme",
+        "type": "Enum",
+        "name": "Theme",
+        "description": "The color theme to use for the color pickers",
+        "options": [{"jms__tlc": "Justworks Marketing Site"}, {"guidepost__default": "Guidepost"}],
+        "default": "jms__tlc",
+        "required": true
       }
     ]
   }
