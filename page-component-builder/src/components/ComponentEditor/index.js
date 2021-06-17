@@ -16,7 +16,7 @@ import ShortTextField from '../fields/ShortTextField';
 import MultiTextField from '../fields/MultiTextField';
 import LongTextField from '../fields/LongTextField';
 import MarkdownField from '../fields/MarkdownField';
-import ColorField from '../fields/ColorField';
+import ColorField from '@shared/components/ColorField';
 
 import RadioGroup from '../fields/RadioGroup';
 import DropdownField from '../fields/DropdownField';
@@ -181,9 +181,8 @@ const ComponentEditor = props => {
         id={id}
         key={`component-editor-field--${propKey}`}
         data-test-id={id}
-        className={`component-editor__field f36-margin-bottom--l ${
-          openFields.includes(propKey) ? 'field-open f36-background-color--element-lightest' : ''
-        } ${errors[propKey] && errors[propKey].length ? 'with-error' : ''}`}>
+        className={`component-editor__field f36-margin-bottom--l ${openFields.includes(propKey) ? 'field-open f36-background-color--element-lightest' : ''
+          } ${errors[propKey] && errors[propKey].length ? 'with-error' : ''}`}>
         <div className="component-editor__field-heading">
           <Icon icon={getFieldIcon(property)} className="f36-margin-right--xs" />
           <FormLabel
@@ -218,6 +217,8 @@ const ComponentEditor = props => {
 
         {isColorField(property) && (
           <ColorField
+            theme={props.sdk.parameters.installation.theme}
+            propKey={propKey}
             onChange={value => updatePropertyValue(propKey, value, true)}
             errors={errors[propKey]}
             value={value}
@@ -331,11 +332,11 @@ const ComponentEditor = props => {
             internalMappingInstance={
               isComponentPropertySingleton(value)
                 ? new InternalMapping(
-                    value.componentId,
-                    value.properties,
-                    props.schemas.find(s => s.meta.id === value.componentId),
-                    false
-                  )
+                  value.componentId,
+                  value.properties,
+                  props.schemas.find(s => s.meta.id === value.componentId),
+                  false
+                )
                 : null
             }
             onChange={(value, timeout = false, singletonErrors) =>
@@ -386,11 +387,11 @@ const ComponentEditor = props => {
             internalMappingInstance={
               isComponentPropertySingleton(value)
                 ? new InternalMapping(
-                    value.componentId,
-                    value.properties,
-                    props.schemas.find(s => s.meta.id === value.componentId),
-                    true
-                  )
+                  value.componentId,
+                  value.properties,
+                  props.schemas.find(s => s.meta.id === value.componentId),
+                  true
+                )
                 : null
             }
             onChange={(value, timeout = false, singletonErrors) =>

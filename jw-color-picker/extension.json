@@ -1,0 +1,21 @@
+{
+  "id": "jw-color-picker",
+  "name": "jw-color-picker",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": [
+    "Symbol"
+  ],
+  "parameters": {
+    "installation": [
+      {
+        "id": "theme",
+        "type": "Enum",
+        "name": "Theme",
+        "description": "The color theme to use for the color pickers",
+        "options": [{"jms__tlc": "Justworks Marketing Site"}, {"guidepost__default": "Guidepost"}],
+        "default": "jms__tlc",
+        "required": true
+      }
+    ]
+  }
+}
