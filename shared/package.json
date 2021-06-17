@@ -14,7 +14,10 @@
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
+    "cssnano": "^5.0.6",
+    "is-number": "^7.0.0",
     "marked": "^1.1.1",
+    "postcss": "^8.2.15",
     "sass": "^1.35.1"
   }
 }
