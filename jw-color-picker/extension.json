@@ -1,0 +1,8 @@
+{
+  "id": "jw-color-picker",
+  "name": "jw-color-picker",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": [
+    "Symbol"
+  ]
+}
