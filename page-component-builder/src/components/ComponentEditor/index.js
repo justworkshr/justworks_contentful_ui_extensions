@@ -217,6 +217,8 @@ const ComponentEditor = props => {
 
         {isColorField(property) && (
           <ColorField
+            theme={props.sdk.parameters.installation.theme}
+            propKey={propKey}
             onChange={value => updatePropertyValue(propKey, value, true)}
             errors={errors[propKey]}
             value={value}

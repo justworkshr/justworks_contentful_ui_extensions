@@ -16,10 +16,10 @@ const ColorField = props => {
       <HelpText>Theme: {props.theme.toUpperCase()}</HelpText>
       <div className="color-field__swatches f36-margin-bottom--s">
         {COLOR_TOKENS.map(color => {
-          const id = `color-swatch--${props.propKey}-${color.name}`;
+          const id = `color-swatch--${props.propKey}-${color.name.replace(/\s/g, "")}`;
           return (
             <div key={id} className="color-field__swatch-container">
-              <Tooltip place="top" id={id} content={color.name}>
+              <Tooltip id={id} content={color.name} >
                 <TextLink
                   id={id}
                   className="color-field__swatch"
