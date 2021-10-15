@@ -10,8 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@contentful/forma-36-react-components": "3.11.3",
-    "react": "16.8.6",
-    "react-dom": "16.8.6"
+    "react": "16.14.0",
+    "react-dom": "16.14.0"
   },
   "devDependencies": {
     "cssnano": "^5.0.6",
